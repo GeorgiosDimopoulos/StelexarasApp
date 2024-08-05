@@ -1,0 +1,64 @@
+# Build Folders
+bin/
+obj/
+platforms/
+.idea/
+.vscode/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.designer.cs
+*.designer.vb
+Generated_Code/
+*.g.cs
+*.g.vb
+*.g.i.cs
+*.g.i.vb
+
+# Debug and Release configurations
+Debug/
+Release/
+
+# Distribution files
+*.vsix
+*.app
+*.ipa
+*.apk
+*.ap_
+
+# Xamarin
+packages/
+*.pkg
+*.app.dSYM
+*.app/Contents/_CodeSignature/
+
+# Visual Studio for Mac
+.vscode/
+.vscode/
+
+# Rider
+.idea/
+.idea
+
+# CodeRush
+.cr/
+
+# NCrunch
+.ncrunchsolution
+.ncrunchproject
+.ncrunchpipeline
+
+# Other build and temporary files
+TYPET.dll
+TYPET.pdb
+*.dbmdl
+*.cache
+*.pdb
+*.log
+/.vs

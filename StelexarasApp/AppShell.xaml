@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:StelexarasApp.Presentation.Views"
+       Shell.FlyoutBehavior="Disabled"
+       Title="Stelexaras"
+       x:Class="StelexarasApp.Presentation.AppShell">
+
+    <ShellContent Title="Εκπαιδευτής"
+                  ContentTemplate="{DataTemplate local:MainPage}"
+                  Route="MainPage" />
+</Shell>

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="StelexarasApp.Presentation.Views.DomiPage" Padding="10">
+	<ContentPage.Content>
+		<VerticalStackLayout Padding="20">
+			<toolkit:Expander>
+				<toolkit:Expander.Header>
+					<Label Text="Tap to Expand/Collapse" FontSize="18" />
+				</toolkit:Expander.Header>
+				<toolkit:Expander.Content>
+					<VerticalStackLayout Padding="10">
+						<Label Text="Here is some expandable content." />
+						<Label Text="You can add more controls here." />
+					</VerticalStackLayout>
+				</toolkit:Expander.Content>
+			</toolkit:Expander>
+			<CollectionView ItemsSource="{Binding Ekpaideuomenoi}">
+				<CollectionView.Header>
+					<Grid Padding="10">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="0" Text="Ονομα" FontAttributes="Bold" />
+					</Grid>
+				</CollectionView.Header>
+				<CollectionView.ItemTemplate>
+					<DataTemplate>
+						<StackLayout Padding="10">
+							<Label Text="{Binding FullName}" FontSize="20"/>
+						</StackLayout>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+		</VerticalStackLayout>		
+	</ContentPage.Content>
+</ContentPage>
