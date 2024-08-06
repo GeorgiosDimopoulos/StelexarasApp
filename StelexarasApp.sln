@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Library", "St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.DataAccess", "StelexarasApp.DataAccess\StelexarasApp.DataAccess.csproj", "{DCBDB39A-F2B3-430E-8D36-91340B37E069}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StelexarasApp.Services", "StelexarasApp.Services\StelexarasApp.Services.csproj", "{2BD53259-CC86-416D-93AD-026FA458B0FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Services", "StelexarasApp.Services\StelexarasApp.Services.csproj", "{2BD53259-CC86-416D-93AD-026FA458B0FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA92051C-4811-46C7-8A16-A1F6F3611193}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

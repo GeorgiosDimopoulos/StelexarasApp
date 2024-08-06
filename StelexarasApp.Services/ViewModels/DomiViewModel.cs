@@ -1,6 +1,6 @@
 ﻿using StelexarasApp.Library.Models.Atoma.Paidia;
-using System.Collections.ObjectModel;
 using StelexarasApp.Library.Models.Domi;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -8,28 +8,63 @@ namespace StelexarasApp.Services.ViewModels
 {
     public class DomiViewModel
     {
-        public ObservableCollection<Ekpaideuomenos> Ekpaideuomenoi { get; set; }
+        public ObservableCollection<Skini> Skines { get; set; }
 
         public DomiViewModel()
         {
-            Ekpaideuomenoi =
-            [
-                new Ekpaideuomenos {
-                    FullName = "Georg Dimopoulos",
-                    Sex = Library.Models.Atoma.Sex.Male,
-                    // Skini = new Skini { Name = "Πίνδος"}
+            Skines = new ObservableCollection<Skini>
+            {
+                new Skini
+                {
+                     //Omadarxis = new Library.Models.Atoma.Stelexi.Omadarxis
+                     //{
+                     //    Skini = new Skini { Name = "Πίνδος" },
+                     //    FullName = "Georg Dimopoulos",
+                     //},
+                    Name = "Πίνδος",
+                    Koinotita = new Koinotita { Name = "Ήπειρος" },
+                    Paidia = new ObservableCollection<Ekpaideuomenos>
+                    {
+                        new Ekpaideuomenos {
+
+                            FullName = "ΒασιληςΛαμπαδιτης",
+                            Sex = Library.Models.Atoma.Sex.Male,
+                            Age = 16,
+                            // Skini = new Skini { Name = "Πίνδος"}
+                        },
+                        new Ekpaideuomenos {
+                            FullName = "Άγγελος Γεωργόπουλος",
+                            Age = 16,
+                            Sex = Library.Models.Atoma.Sex.Female ,
+                        },
+                        new Ekpaideuomenos {
+                            FullName = "Δημήτρης Στεφάς",
+                            Age = 16,
+                            Sex = Library.Models.Atoma.Sex.Male,
+                        },
+                    },
                 },
-                new Ekpaideuomenos {
-                    FullName = "Entzi Kurti",
-                    Sex = Library.Models.Atoma.Sex.Female ,
-                    // Skini = new Skini { Name = "Πίνδος" }
-                },
-                new Ekpaideuomenos {
-                    FullName = "Kostis Alimpertis",
-                    Sex = Library.Models.Atoma.Sex.Male,
-                    // Skini = new Skini { Name = "Πίνδος" }
-                },
-            ];
+                new Skini 
+                {
+                    Name = "Πίνδος 2",
+                    Koinotita = new Koinotita { Name = "Ήπειρος" },
+                    Paidia = new ObservableCollection<Ekpaideuomenos>
+                    {
+                        new Ekpaideuomenos {
+
+                            FullName = "Φίλιππος Σταφυλάς",
+                            Sex = Library.Models.Atoma.Sex.Male,
+                            Age = 16,
+                            // Skini = new Skini { Name = "Πίνδος"}
+                        },
+                        new Ekpaideuomenos {
+                            FullName = "Διαουρτας Βασιλης",
+                            Age = 16,
+                            Sex = Library.Models.Atoma.Sex.Male,
+                        },
+                    },
+                }
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -4,6 +4,7 @@ obj/
 platforms/
 .idea/
 .vscode/
+.vs/
 
 # User-specific files
 *.rsuser
@@ -61,4 +62,3 @@ TYPET.pdb
 *.cache
 *.pdb
 *.log
-/.vs
