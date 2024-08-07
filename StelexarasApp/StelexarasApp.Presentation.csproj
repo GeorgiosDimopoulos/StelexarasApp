@@ -68,31 +68,37 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\ToDoPage.xaml.cs">
+	  <Compile Update="Views\MainViews\ToDoPage.xaml.cs">
 	    <DependentUpon>ToDoPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\ExpensesPage.xaml.cs">
+	  <Compile Update="Views\MainViews\ExpensesPage.xaml.cs">
 	    <DependentUpon>ExpensesPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\DomiPage.xaml.cs">
+	  <Compile Update="Views\MainViews\DomiPage.xaml.cs">
 	    <DependentUpon>DomiPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\ProswpikaPage.xaml.cs">
+	  <Compile Update="Views\MainViews\ProswpikaPage.xaml.cs">
 	    <DependentUpon>ProswpikaPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\SecondViews\ChildInfoPage.xaml.cs">
+	    <DependentUpon>ChildInfoPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\ToDoPage.xaml">
+	  <MauiXaml Update="Views\MainViews\ToDoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ExpensesPage.xaml">
+	  <MauiXaml Update="Views\MainViews\ExpensesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\DomiPage.xaml">
+	  <MauiXaml Update="Views\MainViews\DomiPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ProswpikaPage.xaml">
+	  <MauiXaml Update="Views\MainViews\ProswpikaPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SecondViews\ChildInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

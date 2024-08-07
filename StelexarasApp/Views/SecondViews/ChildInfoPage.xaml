@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StelexarasApp.Presentation.Views.ChildInfoPage" Title="Εκπαιδευόμενος">
+	<ContentPage.Content>
+		<Grid Padding="10">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Label Text="Όνοματεπώνυμο:" Grid.Column="0" Grid.Row="0"/>
+			<Entry Text="{Binding FullName}" Grid.Column="1" Grid.Row="0"/>
+			<Label Text="Σκηνή:" Grid.Column="0" Grid.Row="1"/>
+			<Entry Text="{Binding Skini.Name}" Grid.Column="1" Grid.Row="1"/>
+			<Label Text="Ηλικία:" Grid.Column="0" Grid.Row="2"/>
+			<Entry Grid.Column="1" Text="{Binding Age}" Grid.Row="2"/>
+			<Button Text="Διαγραφή" Clicked="OnDeleteClicked" Grid.Row="4" Padding="10" Grid.ColumnSpan="2" VerticalOptions="End"/>
+		</Grid>
+	</ContentPage.Content>
+</ContentPage>

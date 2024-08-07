@@ -13,7 +13,7 @@
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="*" />
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="0" Text="Ονομα Σκηνής" FontAttributes="Bold" />
+						<Label Grid.Column="0" Text="Σκηνές" FontAttributes="Bold" Padding="0,0,0,10" FontSize="20"/>
 					</Grid>
 				</CollectionView.Header>
 				<CollectionView.ItemTemplate>
@@ -23,7 +23,7 @@
 								<toolkit:Expander.Header>
 									<Grid ColumnDefinitions="*,*">
 										<Label Text = "{Binding Name}" FontSize="18" Grid.Column="0"/>
-										<Label Text = ">" FontSize="18" Grid.Column="1"/>
+										<Label Text = ">" FontSize="18" Grid.Column="1" IsVisible="False"/>
 									</Grid>
 								</toolkit:Expander.Header>
 								<toolkit:Expander.Content>
