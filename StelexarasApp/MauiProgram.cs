@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 
-namespace StelexarasApp.Presentation
+namespace StelexarasApp.UI
 {
     public static class MauiProgram
     {

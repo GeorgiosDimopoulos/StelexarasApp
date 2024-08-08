@@ -1,4 +1,4 @@
-﻿namespace StelexarasApp.Presentation.Views
+﻿namespace StelexarasApp.UI.Views
 {
     public partial class MainPage : ContentPage
     {

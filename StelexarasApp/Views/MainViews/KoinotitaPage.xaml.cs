@@ -1,7 +1,8 @@
-﻿using StelexarasApp.Library.Models.Atoma.Paidia;
-using StelexarasApp.Services.ViewModels;
+﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+using StelexarasApp.UI.Views.SecondViews;
+using StelexarasApp.ViewModels;
 
-namespace StelexarasApp.Presentation.Views
+namespace StelexarasApp.UI.Views
 {
     public partial class KoinotitaPage : ContentPage
     {

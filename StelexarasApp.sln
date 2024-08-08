@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Presentation", "StelexarasApp\StelexarasApp.Presentation.csproj", "{FF1494B4-ADF6-4F45-A578-F85973EF26B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.UI", "StelexarasApp\StelexarasApp.UI.csproj", "{FF1494B4-ADF6-4F45-A578-F85973EF26B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Library", "StelexarasApp.Library\StelexarasApp.Library.csproj", "{266675D0-45DB-4C88-BA9A-0FC8334F44E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.ViewModels", "StelexarasApp.Library\StelexarasApp.ViewModels.csproj", "{266675D0-45DB-4C88-BA9A-0FC8334F44E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.DataAccess", "StelexarasApp.DataAccess\StelexarasApp.DataAccess.csproj", "{DCBDB39A-F2B3-430E-8D36-91340B37E069}"
 EndProject

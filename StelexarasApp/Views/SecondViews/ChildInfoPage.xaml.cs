@@ -1,9 +1,9 @@
-﻿using StelexarasApp.Services.ViewModels;
-using StelexarasApp.Library.Models.Atoma.Paidia;
+﻿using StelexarasApp.ViewModels;
+using StelexarasApp.DataAccess.Models.Atoma.Paidia;
 using System.Collections.ObjectModel;
-using StelexarasApp.Library.Models.Domi;
+using StelexarasApp.DataAccess.Models.Domi;
 
-namespace StelexarasApp.Presentation.Views
+namespace StelexarasApp.UI.Views.SecondViews
 {
     public partial class ChildInfoPage : ContentPage
     {

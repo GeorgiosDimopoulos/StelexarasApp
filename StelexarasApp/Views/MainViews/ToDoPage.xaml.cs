@@ -1,6 +1,6 @@
-﻿using StelexarasApp.Services.ViewModels;
+﻿using StelexarasApp.ViewModels;
 
-namespace StelexarasApp.Presentation.Views
+namespace StelexarasApp.UI.Views
 {
     public partial class ToDoPage : ContentPage
     {

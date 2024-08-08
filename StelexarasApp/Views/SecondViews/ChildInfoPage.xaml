@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StelexarasApp.Presentation.Views.ChildInfoPage" Title="Εκπαιδευόμενος">
+             x:Class="StelexarasApp.UI.Views.SecondViews.ChildInfoPage" Title="Εκπαιδευόμενος">
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Διαγραφή" Order="Primary" Priority="0" Clicked="OnDeleteClicked" />
 	</ContentPage.ToolbarItems>
