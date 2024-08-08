@@ -8,6 +8,8 @@ namespace StelexarasApp.Library.Models.Atoma.Paidia
         public string Id { get; set; } = string.Empty;
         public int Age { get; set; } = 16;
         public Sex Sex { get; set; }
+
+        public bool SeAdeia { get; set; }
         public Skini Skini { get; set; } // = new Skini();
     }
 }

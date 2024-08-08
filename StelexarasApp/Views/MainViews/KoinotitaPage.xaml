@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="StelexarasApp.Presentation.Views.KoinotitaPage" 
+             Padding="10" 
+             Title="{Binding Koinotita.Name}">
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="Προσθήκη" IconImageSource="plus.png" Order="Primary" Priority="0" Clicked="OnAddClicked" />
+	</ContentPage.ToolbarItems>
+	<ContentPage.Content>
+		<ScrollView>
+			<VerticalStackLayout Padding="20" Spacing="10">
+				<CollectionView ItemsSource="{Binding Skines}">
+					<CollectionView.Header>
+						<Grid Padding="0,0,0,10">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+							<Label Grid.Column="0" Text="Σκηνές" FontAttributes="Bold" FontSize="24" Padding="0,10" />
+						</Grid>
+					</CollectionView.Header>
+					<CollectionView.ItemTemplate>
+						<DataTemplate>
+							<StackLayout Spacing="10">
+								<toolkit:Expander IsExpanded="True">
+									<toolkit:Expander.Header>
+										<Grid ColumnDefinitions="*,*,*" VerticalOptions="Center">
+											<Label Text="{Binding Name}" FontSize="22" Grid.Column="0" VerticalOptions="Center"/>
+											<Label Text="{Binding Paidia.Count}" FontSize="22" Grid.Column="1" VerticalOptions="Center"/>
+											<Label Text=">" FontSize="22" Grid.Column="2" WidthRequest="25" VerticalOptions="Center" HorizontalOptions="End"/>
+										</Grid>
+									</toolkit:Expander.Header>
+									<toolkit:Expander.Content>
+										<CollectionView ItemsSource="{Binding Paidia}">
+											<CollectionView.ItemTemplate>
+												<DataTemplate>
+													<StackLayout Spacing="0">
+														<!--<BoxView HeightRequest="1" BackgroundColor="Gray" Margin="0,10,0,0"/>-->
+														<Grid ColumnDefinitions="150,*,Auto" Padding="5,0">
+															<Label Text="{Binding FullName}" Grid.Column="0" VerticalOptions="Center">
+																<Label.Triggers>
+																	<DataTrigger TargetType="Label" Binding="{Binding SeAdeia}" Value="True">
+																		<Setter Property="TextDecorations" Value="Strikethrough" />
+																	</DataTrigger>
+																</Label.Triggers>
+															</Label>
+															<Label Text="{Binding Age}" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center"/>
+															<Button Text=">" Grid.Column="2" Clicked="Paidi_Clicked" WidthRequest="35" HeightRequest="35" BackgroundColor="Transparent" HorizontalOptions="End" TextColor="AliceBlue" CommandParameter="{Binding}"/>
+														</Grid>														
+													</StackLayout>
+												</DataTemplate>
+											</CollectionView.ItemTemplate>
+										</CollectionView>
+									</toolkit:Expander.Content>
+								</toolkit:Expander>
+								<BoxView HeightRequest="1" BackgroundColor="LightGray" Margin="0,10,0,0"/>
+							</StackLayout>
+						</DataTemplate>
+					</CollectionView.ItemTemplate>
+				</CollectionView>
+			</VerticalStackLayout>
+		</ScrollView>
+	</ContentPage.Content>
+</ContentPage>

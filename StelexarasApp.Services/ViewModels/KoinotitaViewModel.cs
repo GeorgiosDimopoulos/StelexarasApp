@@ -6,13 +6,13 @@ using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.Services.ViewModels
 {
-    public class DomiViewModel
+    public class KoinotitaViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Skini> Skines { get; set; }
 
-        public ObservableCollection<Ekpaideuomenos> Ekpaideuomenoi { get; set; }
+        public Koinotita Koinotita { get; set; }
 
-        public DomiViewModel()
+        public KoinotitaViewModel()
         {
             InitializeSkines();
         }
@@ -49,6 +49,28 @@ namespace StelexarasApp.Services.ViewModels
             OnPropertyChanged(nameof(Skines));
         }
 
+        public void UpdateEkpaideuomenos(string fullName, string age, string skiniName)
+        {
+            var skini = Skines.FirstOrDefault(s => s.Name == skiniName);
+            if (skini == null)
+                return;
+
+            foreach (var skini1 in Skines)
+            {
+                foreach (var ekpaide in skini1.Paidia)
+                {
+                    if (ekpaide.FullName.Equals(fullName))
+                    {
+                        ekpaide.FullName = fullName;
+                        ekpaide.Age = int.Parse(age);
+                        ekpaide.Skini = skini;
+                    }
+                }
+            }
+
+            OnPropertyChanged(nameof(Skines));
+        }
+
         private void InitializeSkines()
         {
             var skini1 = new Skini
@@ -62,18 +84,21 @@ namespace StelexarasApp.Services.ViewModels
                         FullName = "Βασιλης Λαμπαδιτης",
                         Sex = Library.Models.Atoma.Sex.Male,
                         Age = 16,
+                        SeAdeia = false
                     },
                     new Ekpaideuomenos
                     {
                         FullName = "Άγγελος Γεωργόπουλος",
                         Age = 16,
                         Sex = Library.Models.Atoma.Sex.Female,
+                        SeAdeia = false
                     },
                     new Ekpaideuomenos
                     {
                         FullName = "Δημήτρης Στεφάς",
                         Age = 16,
                         Sex = Library.Models.Atoma.Sex.Male,
+                        SeAdeia = false
                     },
                 }
             };
@@ -85,7 +110,7 @@ namespace StelexarasApp.Services.ViewModels
 
             var skini2 = new Skini
             {
-                Name = "Πίνδος 2",
+                Name = "Κορυτσά",
                 Koinotita = new Koinotita { Name = "Ήπειρος" },
                 Paidia = new ObservableCollection<Ekpaideuomenos>
                 {
@@ -94,12 +119,14 @@ namespace StelexarasApp.Services.ViewModels
                         FullName = "Φίλιππος Σταφυλάς",
                         Sex = Library.Models.Atoma.Sex.Male,
                         Age = 16,
+                        SeAdeia = true
                     },
                     new Ekpaideuomenos
                     {
                         FullName = "Διαουρτας Βασιλης",
                         Age = 16,
                         Sex = Library.Models.Atoma.Sex.Male,
+                        SeAdeia = false
                     },
                 }
             };
@@ -113,9 +140,11 @@ namespace StelexarasApp.Services.ViewModels
             { 
                 skini1, skini2 
             };
+
+            Koinotita = skini1.Koinotita;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

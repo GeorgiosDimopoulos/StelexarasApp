@@ -47,13 +47,17 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\typet.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\typet.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -74,8 +78,8 @@
 	  <Compile Update="Views\MainViews\ExpensesPage.xaml.cs">
 	    <DependentUpon>ExpensesPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MainViews\DomiPage.xaml.cs">
-	    <DependentUpon>DomiPage.xaml</DependentUpon>
+	  <Compile Update="Views\MainViews\KoinotitaPage.xaml.cs">
+	    <DependentUpon>KoinotitaPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\MainViews\ProswpikaPage.xaml.cs">
 	    <DependentUpon>ProswpikaPage.xaml</DependentUpon>
@@ -92,7 +96,7 @@
 	  <MauiXaml Update="Views\MainViews\ExpensesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MainViews\DomiPage.xaml">
+	  <MauiXaml Update="Views\MainViews\KoinotitaPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\MainViews\ProswpikaPage.xaml">

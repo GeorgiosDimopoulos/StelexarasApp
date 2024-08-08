@@ -2,9 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StelexarasApp.Presentation.Views.ChildInfoPage" Title="Εκπαιδευόμενος">
-	<ContentPage.Content>
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="Διαγραφή" Order="Primary" Priority="0" Clicked="OnDeleteClicked" />
+	</ContentPage.ToolbarItems>
+	<ContentPage.Content>		
 		<Grid Padding="10">
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
@@ -16,12 +20,27 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Label Text="Όνοματεπώνυμο:" Grid.Column="0" Grid.Row="0"/>
-			<Entry Text="{Binding FullName}" Grid.Column="1" Grid.Row="0"/>
+			<Entry Text="{Binding FullName}" x:Name="ChildName" Grid.Column="1" Grid.Row="0" Focused="OnEntryFocused"/>
 			<Label Text="Σκηνή:" Grid.Column="0" Grid.Row="1"/>
-			<Entry Text="{Binding Skini.Name}" Grid.Column="1" Grid.Row="1"/>
+			<!--<Entry Text="{Binding Skini.Name}" x:Name="SkiniName" Grid.Column="1" Grid.Row="1" Focused="OnEntryFocused"/>-->
+			<Picker ItemsSource="{Binding Skines}"
+					Title="Σκηνές"
+					ItemDisplayBinding="{Binding Name}"
+					SelectedItem="{Binding Skini}"
+					x:Name="SkiniPicker"
+					Grid.Column="1"
+					Grid.Row="1"/>
 			<Label Text="Ηλικία:" Grid.Column="0" Grid.Row="2"/>
-			<Entry Grid.Column="1" Text="{Binding Age}" Grid.Row="2"/>
-			<Button Text="Διαγραφή" Clicked="OnDeleteClicked" Grid.Row="4" Padding="10" Grid.ColumnSpan="2" VerticalOptions="End"/>
+			<Entry Text="{Binding Age}" Grid.Column="1" x:Name="ChildAge" Grid.Row="2" TextColor="White" Focused="OnEntryFocused"/>
+			<Label Text="Σε αδεια;" Grid.Column="0" Grid.Row="3"/>
+			<Entry Grid.Column="1" x:Name="ChildAdeia" Grid.Row="3" TextColor="White" Focused="OnEntryFocused">
+				<Entry.Triggers>
+					<DataTrigger TargetType="Entry" Binding="{Binding SeAdeia}" Value="True">
+						<Setter Property="Text" Value="ΣΕ ΑΔΕΙΑ" />
+					</DataTrigger>
+				</Entry.Triggers>
+			</Entry>
+			<Button x:Name="SaveButton" Text="Αποθήκευση" IsEnabled="False" Clicked="OnSaveClicked" Grid.Row="5" Padding="10" Grid.ColumnSpan="2" VerticalOptions="End"/>
 		</Grid>
 	</ContentPage.Content>
 </ContentPage>

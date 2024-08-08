@@ -1,19 +1,16 @@
 ﻿using StelexarasApp.Library.Models.Atoma.Paidia;
-using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Services.ViewModels;
 
 namespace StelexarasApp.Presentation.Views
 {
-    public partial class DomiPage : ContentPage
+    public partial class KoinotitaPage : ContentPage
     {
-        private DomiViewModel _viewModel;
+        private KoinotitaViewModel _viewModel;
 
-        public DomiPage()
+        public KoinotitaPage()
         {
             InitializeComponent();
-            
-            // BindingContext = new DomiViewModel();
-            _viewModel = new DomiViewModel();
+            _viewModel = new KoinotitaViewModel();
             BindingContext = _viewModel;
         }
 
@@ -24,7 +21,6 @@ namespace StelexarasApp.Presentation.Views
 
             if (paidi != null)
             {
-                // DisplayAlert("Στοιχεία παιδιού", $"Όνομα: {paidi.FullName}", "OK");
                 await Navigation.PushAsync(new ChildInfoPage(paidi, _viewModel.Skines));
             }
         }
