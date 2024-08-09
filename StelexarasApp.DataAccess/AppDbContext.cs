@@ -23,7 +23,7 @@ namespace StelexarasApp.DataAccess
 
         public string? ConnectionString { get; set; }
 
-        // ACTIVATE WHEN RUNNING API OR WEB LAYER, NOT ON MIGRATING DB ENTITIES
+        // ACTIVATE WHEN RUNNING API OR WEB, NOT ON MIGRATING DB ENTITIES
         public AppDbContext(DbContextOptions<AppDbContext> optionsBuilder) : base(optionsBuilder)
         {
         }
@@ -32,57 +32,43 @@ namespace StelexarasApp.DataAccess
         {
             base.OnModelCreating(modelBuilder);
 
-            OnStelexiModelsCreating(modelBuilder);
-            OnDomiModelsCreating(modelBuilder);
-            // OnStelexiRulesCreating(modelBuilder);
+            OnModelsRulesCreating(modelBuilder);
+            OnModelsRelationsCreating(modelBuilder);
         }
-        
-        //private void OnStelexiRulesCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
-        //    modelBuilder.Entity<Skini>().Property(sk => sk.Stelexos).IsRequired();
 
-        //    modelBuilder.Entity<Koinotita>().Property(k => k.Id).IsRequired();
-        //    modelBuilder.Entity<Koinotita>().Property(k => k.Stelexos).IsRequired();
-
-        //    modelBuilder.Entity<Tomeas>().HasKey(t => t.Id);
-        //    modelBuilder.Entity<Tomeas>().Property(t => t.Stelexos).IsRequired();
-        //}
-
-        private void OnDomiModelsCreating(ModelBuilder modelBuilder)
+        private void OnModelsRelationsCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
-            modelBuilder.Entity<Skini>().Property(k => k.Omadarxis).HasConversion<string>().IsRequired();
+            modelBuilder.Entity<Skini>()
+                .HasOne(sk => sk.Omadarxis)
+                .WithOne(om => om.Skini)
+                .HasForeignKey<Skini>(sk => sk.OmadarxisId);
 
+            modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Koinotita>()
                 .HasOne(k => k.Koinotarxis)
                 .WithOne(kt => kt.Koinotita)
-                .HasForeignKey<Koinotarxis>(kt => kt.KoinotitaId);
-            
-            // modelBuilder.Entity<Koinotita>().Property(k => k.Id).IsRequired();
-            // modelBuilder.Entity<Koinotita>().Property(k => k.Koinotarxis).HasConversion<string>().IsRequired();
+                .HasForeignKey<Koinotita>(kt => kt.KoinotarxisId);
 
             modelBuilder.Entity<Tomeas>().HasKey(t => t.Id);
-            modelBuilder.Entity<Tomeas>().Property(t => t.Tomearxis).HasConversion<string>().IsRequired();
-        }                          
-            
-        private void OnStelexiModelsCreating(ModelBuilder modelBuilder)
+            modelBuilder.Entity<Tomeas>()
+                .HasOne(t => t.Tomearxis)
+                .WithOne(t => t.Tomeas)
+                .HasForeignKey<Tomeas>(kt => kt.TomearxisId);
+        }
+
+        private void OnModelsRulesCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Ekpaideuomenos>().HasKey(k => k.Id);
+            modelBuilder.Entity<Kataskinotis>().HasKey(k => k.Id);
             modelBuilder.Entity<Omadarxis>().HasKey(o => o.Id);
-            modelBuilder.Entity<Omadarxis>().Property(o => o.Skini);
-                // .HasConversion(v => ConvertToString(v), v => (Skini)ConvertToXwros(v!, 1));
-
-            modelBuilder.Entity<Koinotarxis>().Property(k => k.Id).IsRequired();
-            modelBuilder.Entity<Koinotarxis>().Property(k => k.Koinotita).HasConversion<string>().IsRequired();
-            modelBuilder.Entity<Koinotarxis>().Property(k => k.Koinotita);
-                // .HasConversion(v => ConvertToString(v), v => (Koinotita) ConvertToXwros(v!, 1));
-            // modelBuilder.Entity<Koinotarxis>().HasOne(k => k.Koinotita).WithOne(k => k.Stelexos as Koinotarxis).HasForeignKey<Koinotarxis>(k => k.KoinotitaId);
-
             modelBuilder.Entity<Tomearxis>().HasKey(t => t.Id);
-            modelBuilder.Entity<Tomearxis>().Property(k => k.Tomeas);
-                // .HasConversion(v => ConvertToString(v), v => (Tomeas)ConvertToXwros(v!, 1));
+            modelBuilder.Entity<Koinotarxis>().HasKey(k => k.Id);
+            modelBuilder.Entity<Ekpaideutis>().HasKey(k => k.Id);
 
-            modelBuilder.Entity<Ekpaideutis>().Property(e => e.Id).HasConversion<string>().IsRequired();
+            modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
+            modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);
+            modelBuilder.Entity<Tomeas>().HasKey(t => t.Id);
         }
 
         // OnConfiguring method can be omitted or removed

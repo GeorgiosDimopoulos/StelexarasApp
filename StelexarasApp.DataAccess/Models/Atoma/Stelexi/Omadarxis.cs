@@ -9,7 +9,6 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
         public int Age { get; set ; }
         public Sex Sex { get; set ; }
         public Skini Skini { get; set; } = new Skini();
-        public int SkiniId { get; set; }
         public Thesi Thesi { get; set; } = Thesi.Omadarxis;
     }
 }

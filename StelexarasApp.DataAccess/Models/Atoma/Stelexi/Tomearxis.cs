@@ -10,7 +10,7 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
         public Sex Sex { get; set; }
         public Tomeas Tomeas { get; set; }  = new Tomeas();
         public Thesi Thesi { get; set; } = Thesi.Tomearxis;
-        public int TomeasId { get; set; }
+        // public int TomeasId { get; set; }
         public IEnumerable<Koinotarxis> Koinotarxes { get; set; } = null!;
     }
 }

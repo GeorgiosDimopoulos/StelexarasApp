@@ -7,6 +7,7 @@ namespace StelexarasApp.DataAccess.Models.Domi
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public Tomearxis Tomearxis { get; set; } = new Tomearxis();
-        public IEnumerable<Koinotarxis> Koinotarxes { get; set; } = null!;
+        public int TomearxisId { get; set; }
+        public IEnumerable<Koinotita> Koinotites { get; set; } = null!;
     }
 }
