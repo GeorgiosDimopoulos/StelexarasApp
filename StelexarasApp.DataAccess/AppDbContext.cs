@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Models.Atoma.Paidia;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
@@ -23,9 +24,27 @@ namespace StelexarasApp.DataAccess
 
         public string? ConnectionString { get; set; }
 
-        // ACTIVATE WHEN RUNNING API OR WEB, NOT ON MIGRATING DB ENTITIES
+        // Constructor for runtime
         public AppDbContext(DbContextOptions<AppDbContext> optionsBuilder) : base(optionsBuilder)
         {
+        }
+
+        // Constructor for migrations
+#if DEBUG
+        public AppDbContext()
+        {
+        }
+#endif
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+#if DEBUG
+            if (!optionsBuilder.IsConfigured)
+            {
+                ConnectionString = $"Server=(LocalDb)\\MSSQLLocalDB;Database=TYPET;TrustServerCertificate=True;Trusted_Connection=True;";
+                optionsBuilder.UseSqlServer(ConnectionString).LogTo(Console.WriteLine, new [] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
+            }
+#endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,16 +89,6 @@ namespace StelexarasApp.DataAccess
             modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Tomeas>().HasKey(t => t.Id);
         }
-
-        // OnConfiguring method can be omitted or removed
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        ConnectionString = $"Server=(LocalDb)\\MSSQLLocalDB;Database=TYPET;TrustServerCertificate=True;Trusted_Connection=True;";
-        //        optionsBuilder.UseSqlServer(ConnectionString).LogTo(Console.WriteLine, new [] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
-        //    }            
-        //}
 
         private static string? ConvertToString(Xwros xwros)
         {
