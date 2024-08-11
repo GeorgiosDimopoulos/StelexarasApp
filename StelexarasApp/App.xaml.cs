@@ -21,14 +21,23 @@ namespace StelexarasApp.UI
         private void ConfigureServices()
         {
             var services = new ServiceCollection();
-
             services.AddSingleton<IDatabasePathProvider, DatabasePathProvider>();
-            services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+
+#if DEBUG
+            // Use SQLite in Debug mode
+            var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "app.db");
+            services.AddDbContext<AppDbContext>(options =>
             {
-                var pathProvider = serviceProvider.GetRequiredService<IDatabasePathProvider>();
-                var dbPath = pathProvider.GetDatabasePath();
                 options.UseSqlite($"Data Source={dbPath}");
             });
+#else
+        // Use SQL Server in Release mode
+        services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+        });
+#endif
+
             services.AddScoped<IDutyService, DutyService>();
             services.AddScoped<IKoinotitaService, KoinotitaService>();
             services.AddScoped<IExpenseService, ExpenseService>();
