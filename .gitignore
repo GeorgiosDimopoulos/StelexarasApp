@@ -62,3 +62,29 @@ TYPET.pdb
 *.cache
 *.pdb
 *.log
+
+# Ignore build output
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore temporary files
+*.tmp
+*.log
+*.vspscc
+*.vssscc
+
+# Ignore packages
+packages/
+*.nupkg
+*.snupkg
+
+# Ignore test results
+TestResults/
+*.trx
+*.coverage

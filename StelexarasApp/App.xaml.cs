@@ -39,7 +39,7 @@ namespace StelexarasApp.UI
 #endif
 
             services.AddScoped<IDutyService, DutyService>();
-            services.AddScoped<IKoinotitaService, KoinotitaService>();
+            services.AddScoped<IPeopleService, PeopleService>();
             services.AddScoped<IExpenseService, ExpenseService>();
 
             ServiceProvider = services.BuildServiceProvider();

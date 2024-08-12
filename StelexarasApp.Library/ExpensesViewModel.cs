@@ -2,15 +2,18 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.ViewModels
 {
     public class ExpensesViewModel : INotifyPropertyChanged
     {
+        private IExpenseService _expenseService;
         public ObservableCollection<Expense> Expenses { get; set; }
 
-        public ExpensesViewModel()
+        public ExpensesViewModel(IExpenseService expenseService)
         {
+            _expenseService = expenseService;
             Expenses = new ObservableCollection<Expense>
             {
                 new Expense { Description = "Coffee", Date = new DateTime(2024, 12, 24), Amount = 2 },
@@ -20,9 +23,11 @@ namespace StelexarasApp.ViewModels
 
         public void AddExpense(string name, int price)
         {
-            Expenses.Add(new Expense
+            _expenseService.AddExpenseAsync(new Expense
             {
-                Description = name, Date = DateTime.Today, Amount = price
+                Description = name,
+                Date = DateTime.Today,
+                Amount = price
             });
         }
 

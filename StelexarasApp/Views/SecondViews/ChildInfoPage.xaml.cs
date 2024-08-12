@@ -2,6 +2,7 @@
 using StelexarasApp.DataAccess.Models.Atoma.Paidia;
 using System.Collections.ObjectModel;
 using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.UI.Views.SecondViews
 {
@@ -10,23 +11,24 @@ namespace StelexarasApp.UI.Views.SecondViews
         private ChildInfoViewModel? _viewModel;
         private Ekpaideuomenos _paidi;
 
-        public ChildInfoPage(Ekpaideuomenos paidi, ObservableCollection<Skini> allSkines)
+        public ChildInfoPage(IPeopleService peopleService,Ekpaideuomenos paidi, ObservableCollection<Skini> allSkines)
         {
             InitializeComponent();
             _paidi = paidi;
-            BindingContext = new ChildInfoViewModel(paidi, allSkines);
+            _viewModel= new ChildInfoViewModel(peopleService, paidi, allSkines);
+            BindingContext = _viewModel;
         }
 
         private async void OnDeleteClicked(object sender, EventArgs e)
         {
-            new KoinotitaViewModel().DeleteEkpaideuomenos(_paidi.FullName);
+            await _viewModel.DeleteEkpaideuomenosAsync();
             await Navigation.PopAsync();
         }
 
-        private void OnSaveClicked(object sender, EventArgs e)
+        private async void OnSaveClicked(object sender, EventArgs e)
         {
             Skini sk = (Skini) SkiniPicker.SelectedItem;
-            new KoinotitaViewModel().UpdateEkpaideuomenos(ChildName.Text, ChildAge.Text, sk.Name);
+            await _viewModel.UpdateEkpaideuomenosAsync(ChildName.Text, ChildAge.Text, sk.Name);
             SaveButton.IsEnabled = false;
         }
 

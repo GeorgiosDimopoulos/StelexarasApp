@@ -1,73 +1,44 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+﻿using Microsoft.EntityFrameworkCore;
+using StelexarasApp.DataAccess.Models.Atoma.Paidia;
 using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.ViewModels
 {
-    public class KoinotitaViewModel : INotifyPropertyChanged
+    public class PeopleViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Skini> Skines { get; set; }
-
-        public Koinotita Koinotita { get; set; }
-
-        public KoinotitaViewModel()
+        private readonly IPeopleService _peopleService;
+        public ObservableCollection<Skini>? Skines { get; set; }
+        public Koinotita? Koinotita { get; set; }
+        public PeopleViewModel(IPeopleService peopleService)
         {
+            _peopleService = peopleService;
             InitializeSkines();
         }
 
-        public int AddNewEkpaideuomenos(string fullName, string skiniName)
+        public async Task<int> AddPaidiAsync(string fullName, string skiniName)
         {
-            var skini = Skines.FirstOrDefault(s => s.Name == skiniName);
-            if (skini == null)
-                return -1;
-
-            var newEkpaideuomenos = new Ekpaideuomenos
+            var paidi = new Kataskinotis
             {
                 FullName = fullName,
-                Age = 16,
-                Skini = skini
+                Skini = new Skini { Name = skiniName }
             };
-            OnPropertyChanged(nameof(Skines));
-            return 1;
-        }
-
-        public void DeleteEkpaideuomenos(string fullName)
-        {
-            foreach (var skini in Skines)
+            var result = await _peopleService.AddPaidiInDbAsync(paidi, skiniName);
+            if (result)
             {
-                foreach (var ekpaide in skini.Paidia)
-                {
-                    if (ekpaide.FullName.Equals(fullName))
-                    {
-                        skini.Paidia.Remove(ekpaide);
-                    }
-                }
+                await LoadSkinesAsync();
+                OnPropertyChanged(nameof(Skines));
+                return 1;
             }
-
-            OnPropertyChanged(nameof(Skines));
+            return -1;
         }
-
-        public void UpdateEkpaideuomenos(string fullName, string age, string skiniName)
+        
+        private async Task LoadSkinesAsync()
         {
-            var skini = Skines.FirstOrDefault(s => s.Name == skiniName);
-            if (skini == null)
-                return;
-
-            foreach (var skini1 in Skines)
-            {
-                foreach (var ekpaide in skini1.Paidia)
-                {
-                    if (ekpaide.FullName.Equals(fullName))
-                    {
-                        ekpaide.FullName = fullName;
-                        ekpaide.Age = int.Parse(age);
-                        ekpaide.Skini = skini;
-                    }
-                }
-            }
-
+            Skines = new ObservableCollection<Skini>(await _peopleService.GetSkinesAsync());
             OnPropertyChanged(nameof(Skines));
         }
 

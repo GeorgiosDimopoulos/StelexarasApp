@@ -1,4 +1,5 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+using StelexarasApp.Services.IServices;
 using StelexarasApp.UI.Views.SecondViews;
 using StelexarasApp.ViewModels;
 
@@ -6,12 +7,14 @@ namespace StelexarasApp.UI.Views
 {
     public partial class KoinotitaPage : ContentPage
     {
-        private KoinotitaViewModel _viewModel;
+        private PeopleViewModel _viewModel; 
+        private IPeopleService _peopleService;
 
-        public KoinotitaPage()
+        public KoinotitaPage(IPeopleService peopleService)
         {
             InitializeComponent();
-            _viewModel = new KoinotitaViewModel();
+            _peopleService = peopleService;
+            _viewModel = new PeopleViewModel(peopleService);
             BindingContext = _viewModel;
         }
 
@@ -22,7 +25,7 @@ namespace StelexarasApp.UI.Views
 
             if (paidi != null)
             {
-                await Navigation.PushAsync(new ChildInfoPage(paidi, _viewModel.Skines));
+                await Navigation.PushAsync(new ChildInfoPage(_peopleService, paidi, _viewModel.Skines));
             }
         }
 
@@ -37,7 +40,7 @@ namespace StelexarasApp.UI.Views
             }
             else 
             {
-                if(_viewModel.AddNewEkpaideuomenos(fullName, skiniName) == 1)
+                if(await _viewModel.AddPaidiAsync(fullName, skiniName) == 1)
                 {
                     await DisplayAlert("Στοιχεία νέου παιδιού", fullName, "OK");
                 }

@@ -37,6 +37,9 @@ namespace StelexarasApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PaidiType")
+                        .HasColumnType("int");
+
                     b.Property<bool>("SeAdeia")
                         .HasColumnType("bit");
 
@@ -50,7 +53,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.HasIndex("SkiniId");
 
-                    b.ToTable("Ekpaideuomenos");
+                    b.ToTable("Ekpaideuomenoi");
                 });
 
             modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Kataskinotis", b =>
@@ -68,10 +71,18 @@ namespace StelexarasApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PaidiType")
+                        .HasColumnType("int");
+
                     b.Property<int>("Sex")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SkiniId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SkiniId");
 
                     b.ToTable("Kataskinotes");
                 });
@@ -324,6 +335,15 @@ namespace StelexarasApp.DataAccess.Migrations
                         .HasForeignKey("SkiniId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Skini");
+                });
+
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Kataskinotis", b =>
+                {
+                    b.HasOne("StelexarasApp.DataAccess.Models.Domi.Skini", "Skini")
+                        .WithMany()
+                        .HasForeignKey("SkiniId");
 
                     b.Navigation("Skini");
                 });

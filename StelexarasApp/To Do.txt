@@ -1,0 +1,2 @@
+- set possibility in Ekpaideuomeno to be Omadarxis at the same time
+- set in the UI accordingly, who Ekpaideuomenos is Omadarxis daily

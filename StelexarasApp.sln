@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StelexarasApp.Tests", "..\StelexarasApp.Tests\TestProject1\StelexarasApp.Tests.csproj", "{3C3F0754-A190-4ADF-8965-FB8FDB611E48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{2BD53259-CC86-416D-93AD-026FA458B0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BD53259-CC86-416D-93AD-026FA458B0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BD53259-CC86-416D-93AD-026FA458B0FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C3F0754-A190-4ADF-8965-FB8FDB611E48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C3F0754-A190-4ADF-8965-FB8FDB611E48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C3F0754-A190-4ADF-8965-FB8FDB611E48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C3F0754-A190-4ADF-8965-FB8FDB611E48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,15 +1,15 @@
 ﻿using StelexarasApp.ViewModels;
-using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Services.IServices;
 namespace StelexarasApp.UI.Views
 {
     public partial class ExpensesPage : ContentPage
     {
         private ExpensesViewModel _viewModel;
 
-        public ExpensesPage()
+        public ExpensesPage(IExpenseService expenseService)
         {
             InitializeComponent();
-            _viewModel = new ExpensesViewModel();
+            _viewModel = new ExpensesViewModel(expenseService);
             BindingContext = _viewModel;
         }
 

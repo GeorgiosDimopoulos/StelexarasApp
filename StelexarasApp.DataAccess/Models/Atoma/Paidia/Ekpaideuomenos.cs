@@ -11,5 +11,6 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Paidia
 
         public bool SeAdeia { get; set; }
         public Skini Skini { get; set; } // = new Skini();
+        public PaidiType PaidiType { get; set; } = PaidiType.Ekpaideuomenos;
     }
 }

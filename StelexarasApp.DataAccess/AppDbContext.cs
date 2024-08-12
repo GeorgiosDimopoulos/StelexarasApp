@@ -17,6 +17,7 @@ namespace StelexarasApp.DataAccess
         public DbSet<Koinotarxis>? Koinotarxes { get; set; }
         public DbSet<Tomearxis>? Tomearxes { get; set; }
         public DbSet<Kataskinotis>? Kataskinotes { get; set; }
+        public DbSet<Ekpaideuomenos>? Ekpaideuomenoi { get; set; }
 
         public DbSet<Koinotita>? Koinotites { get; set; }
         public DbSet<Skini>? Skines { get; set; }

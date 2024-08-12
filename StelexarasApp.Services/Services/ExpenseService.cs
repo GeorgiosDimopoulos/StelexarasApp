@@ -14,23 +14,26 @@ namespace StelexarasApp.Services.Services
             _dbContext = dbContext;
         }
 
-        public async Task AddExpenseAsync(Expense expense)
+        public async Task<bool> AddExpenseAsync(Expense expense)
         {
 
             _dbContext.Expenses?.Add(expense);
             await _dbContext.SaveChangesAsync();
+            return true;
         }
-        public async Task DeleteExpenseAsync(int expenseId)
+        public async Task<bool> DeleteExpenseAsync(int expenseId)
         {
             var expense = await _dbContext.Expenses.FindAsync(expenseId);
             if (expense != null)
             {
                 _dbContext.Expenses.Remove(expense);
                 await _dbContext.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
 
-        public async Task UpdateExpenseAsync(int expenseId,Expense expense)
+        public async Task<bool> UpdateExpenseAsync(int expenseId,Expense expense)
         {
             var existingExpense = await _dbContext.Expenses.FindAsync(expenseId);
             if (existingExpense != null)
@@ -39,7 +42,9 @@ namespace StelexarasApp.Services.Services
                 existingExpense.Amount = expense.Amount;
                 _dbContext.Expenses.Update(existingExpense);
                 await _dbContext.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
 
         public async Task<IEnumerable<Expense>> GetExpensesAsync()
