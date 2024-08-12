@@ -1,0 +1,42 @@
+﻿@StelexarasApp.Web_HostAddress = http://localhost:5030
+
+# GET all duties
+GET {{StelexarasApp.Web_HostAddress}}/api/duties
+Accept: application/json
+
+###
+
+# GET a specific duty by ID
+GET {{StelexarasApp.Web_HostAddress}}/api/duties/1
+Accept: application/json
+
+###
+
+# POST a new duty
+POST {{StelexarasApp.Web_HostAddress}}/api/duties
+Content-Type: application/json
+Accept: application/json
+
+{
+  "description": "New Duty"
+}
+
+###
+
+# PUT to update an existing duty
+PUT {{StelexarasApp.Web_HostAddress}}/api/duties/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": 1,
+  "description": "Updated Duty"
+}
+
+###
+
+# DELETE a duty by ID
+DELETE {{StelexarasApp.Web_HostAddress}}/api/duties/1
+Accept: application/json
+
+###

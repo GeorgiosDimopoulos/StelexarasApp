@@ -1,0 +1,44 @@
+﻿@StelexarasApp.Web_HostAddress = http://localhost:5030
+
+# GET all kataskinotes
+GET {{StelexarasApp.Web_HostAddress}}/kataskinotes/
+Accept: application/json
+
+###
+
+# GET a specific kataskinotis by ID
+GET {{StelexarasApp.Web_HostAddress}}/kataskinotes/1
+Accept: application/json
+
+###
+
+# POST a new kataskinotis
+POST {{StelexarasApp.Web_HostAddress}}/kataskinotes
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "New Kataskinotis",
+  "age": 20
+}
+
+###
+
+# PUT to update an existing kataskinotis
+PUT {{StelexarasApp.Web_HostAddress}}/kataskinotes/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": 1,
+  "name": "Updated Kataskinotis",
+  "age": 21
+}
+
+###
+
+# DELETE a kataskinotis by ID
+DELETE {{StelexarasApp.Web_HostAddress}}/kataskinotes/1
+Accept: application/json
+
+###
