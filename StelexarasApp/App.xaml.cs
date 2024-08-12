@@ -9,14 +9,14 @@ namespace StelexarasApp.UI
     public partial class App : Application
     {
         public static IServiceProvider ServiceProvider { get; private set; } = null!;
-        private AppDbContext _dbContext;
+        private AppDbContext? _dbContext;
 
         public App()
         {
             InitializeComponent();
             ConfigureServices();
-            ListTablesAsync();
             InitializeDatabaseAsync(ServiceProvider).Wait();
+            ListTablesAsync();
 
             MainPage = new AppShell();
         }
@@ -34,11 +34,11 @@ namespace StelexarasApp.UI
                 options.UseSqlite($"Data Source={dbPath}");
             });
 #else
-        // Use SQL Server in Release mode
-        services.AddDbContext<AppDbContext>(options =>
-        {
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-        });
+            // Use SQL Server in Release mode
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 #endif
 
             services.AddScoped<IDutyService, DutyService>();
@@ -64,18 +64,26 @@ namespace StelexarasApp.UI
             }
         }
 
-        public async Task ListTablesAsync()
+        public void ListTablesAsync()
         {
+            if (_dbContext == null)
+            {
+                throw new InvalidOperationException("Database context is not initialized.");
+            }
+
+            var tableNames = new List<string>();
             var sql = "SELECT name FROM sqlite_master WHERE type='table';";
+
             using (var command = _dbContext.Database.GetDbConnection().CreateCommand())
             {
                 command.CommandText = sql;
                 _dbContext.Database.OpenConnection();
-                using (var result = await command.ExecuteReaderAsync())
+
+                using (var result = command.ExecuteReader())
                 {
-                    while (await result.ReadAsync())
+                    while (result.Read())
                     {
-                        Console.WriteLine(result.GetString(0));
+                        tableNames.Add(result.GetString(0));
                     }
                 }
             }
