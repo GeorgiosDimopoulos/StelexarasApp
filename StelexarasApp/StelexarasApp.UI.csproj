@@ -80,11 +80,11 @@
 	  <Compile Update="Views\MainViews\ExpensesPage.xaml.cs">
 	    <DependentUpon>ExpensesPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MainViews\KoinotitaPage.xaml.cs">
-	    <DependentUpon>KoinotitaPage.xaml</DependentUpon>
+	  <Compile Update="Views\MainViews\PeoplePage.xaml.cs">
+	    <DependentUpon>PeoplePage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MainViews\ProswpikaPage.xaml.cs">
-	    <DependentUpon>ProswpikaPage.xaml</DependentUpon>
+	  <Compile Update="Views\MainViews\PersonalPage.xaml.cs">
+	    <DependentUpon>PersonalPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\SecondViews\ChildInfoPage.xaml.cs">
 	    <DependentUpon>ChildInfoPage.xaml</DependentUpon>
@@ -98,10 +98,10 @@
 	  <MauiXaml Update="Views\MainViews\ExpensesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MainViews\KoinotitaPage.xaml">
+	  <MauiXaml Update="Views\MainViews\PeoplePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MainViews\ProswpikaPage.xaml">
+	  <MauiXaml Update="Views\MainViews\PersonalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SecondViews\ChildInfoPage.xaml">

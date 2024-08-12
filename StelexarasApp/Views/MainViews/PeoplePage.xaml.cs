@@ -5,12 +5,12 @@ using StelexarasApp.ViewModels;
 
 namespace StelexarasApp.UI.Views
 {
-    public partial class KoinotitaPage : ContentPage
+    public partial class PeoplePage : ContentPage
     {
         private PeopleViewModel _viewModel; 
         private IPeopleService _peopleService;
 
-        public KoinotitaPage(IPeopleService peopleService)
+        public PeoplePage(IPeopleService peopleService)
         {
             InitializeComponent();
             _peopleService = peopleService;

@@ -1,6 +1,6 @@
 ﻿using StelexarasApp.Services.IServices;
 
-namespace StelexarasApp.Services.Services
+namespace StelexarasApp.Services
 {
     public class DatabasePathProvider : IDatabasePathProvider
     {
