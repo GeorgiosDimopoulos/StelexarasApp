@@ -1,3 +1,4 @@
+- add docker support in servive layer
 - set possibility for the Ekpaideuomenos object to be Omadarxis at the same time
 - set Web layer with a simple SwaggerPage accordingly
 - set in the UI accordingly, who Ekpaideuomenos is Omadarxis daily
