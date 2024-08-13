@@ -16,11 +16,16 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> AddExpenseAsync(Expense expense)
         {
+            if (expense.Amount < 0)
+            {
+                throw new ArgumentException("Amount cannot be negative", nameof(expense.Amount));
+            }
 
             _dbContext.Expenses?.Add(expense);
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
         public async Task<bool> DeleteExpenseAsync(int expenseId)
         {
             var expense = await _dbContext.Expenses.FindAsync(expenseId);
@@ -30,21 +35,29 @@ namespace StelexarasApp.Services.Services
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
-            return false;
+
+            throw new ArgumentException($"Expense with ID {expenseId} not found in the database.");
         }
 
-        public async Task<bool> UpdateExpenseAsync(int expenseId,Expense expense)
+        public async Task<bool> UpdateExpenseAsync(int expenseId, Expense expense)
         {
+            if (expense.Amount <= 0)
+            {
+                return false;
+            }
+
             var existingExpense = await _dbContext.Expenses.FindAsync(expenseId);
             if (existingExpense != null)
             {
                 existingExpense.Description = expense.Description;
                 existingExpense.Amount = expense.Amount;
                 _dbContext.Expenses.Update(existingExpense);
+
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
-            return false;
+
+            throw new ArgumentException($"Expense with ID {expenseId} not updated in the database.");
         }
 
         public async Task<IEnumerable<Expense>> GetExpensesAsync()
