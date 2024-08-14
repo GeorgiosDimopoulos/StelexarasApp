@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma.Paidia;
 using StelexarasApp.DataAccess.Models.Domi;
@@ -16,9 +15,24 @@ namespace StelexarasApp.Services.Services
             _dbContext = dbContext;
         }
 
+        public async Task<bool> AddSkinesInDbAsync (Skini skini)
+        {
+            if (skini is null || string.IsNullOrEmpty(skini.Name))
+            {
+                return false;
+            }
+
+            _dbContext.Skines.Add(skini);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> AddPaidiInDbAsync(Paidi paidi, string skiniName)
         {
-            if (paidi is null) return false;
+            if (paidi is null || string.IsNullOrEmpty(paidi.FullName))
+            {
+                return false;
+            }
 
             var skini = await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skiniName);
             if (skini == null)

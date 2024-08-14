@@ -2,7 +2,6 @@
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.Services.Services;
 using Microsoft.EntityFrameworkCore;
-using Xunit.Sdk;
 
 namespace StelexarasApp.Tests.ServicesTests
 {
@@ -39,7 +38,7 @@ namespace StelexarasApp.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task DeleteExpenseAsync_ShouldRemoveExpenseFromDatabase()
+        public async Task DeleteExpenseAsync_ShouldRemoveFromDatabase()
         {
             var expense = new Expense { Id = 21, Description = "Test", Amount = 100 };
             _dbContext.Expenses.Add(expense);
