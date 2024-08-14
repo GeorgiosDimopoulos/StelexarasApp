@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services;
 using Xunit;
 
@@ -53,6 +54,13 @@ namespace StelexarasApp.Tests.Services
         }
 
         [Fact]
+        public async Task AddDutyAsync_ShouldThrow_WhenExpenseIsInvalid()
+        {
+            var invalidExpense = new Duty { Id = 10, Name = string.Empty };
+            await Assert.ThrowsAsync<ArgumentException>(() => _dutyService.AddDutyAsync(invalidExpense));
+        }
+
+        [Fact]
         public async Task UpdateDutyAsync_ShouldUpdateDuty()
         {
             // Arrange
@@ -68,6 +76,34 @@ namespace StelexarasApp.Tests.Services
 
             // Assert
             Assert.Equal("Updated Duty", result.Name);
+        }
+
+        [Fact]
+        public async Task UpdateDutyAsync_ShouldNotUpdateDuty_WhenDutyNotFound()
+        {
+            // Arrange
+            var randomId = 9;
+            var updatedDuty = new Duty { Name = "New Name", Id = -1};
+
+            // Act
+            var result = await _dutyService.UpdateDutyAsync(randomId, updatedDuty);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task UpdateDutyAsync_ShouldNotUpdateDuty_WhenInvalidNewId()
+        {
+            // Arrange
+            var nonExistentExpenseId = -1;
+            var updatedDuty = new Duty { Name = "New Name", Id = 1 };
+
+            // Act
+            var result = await _dutyService.UpdateDutyAsync(nonExistentExpenseId, updatedDuty);
+
+            // Assert
+            Assert.False(result);
         }
 
         [Fact]

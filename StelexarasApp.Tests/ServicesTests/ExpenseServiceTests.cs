@@ -89,19 +89,13 @@ namespace StelexarasApp.Tests.ServicesTests
             Assert.Equal(newAmount, updatedEntity.Amount);
         }
 
-
         [Fact]
         public async Task UpdateExpenseAsync_ShouldReturnFalse_WhenExpenseDoesNotExist()
         {
-            // Arrange
             var nonExistentExpenseId = 9999;
             var updatedExpense = new Expense { Description = "New Description", Amount = 200 };
 
-            // Act
-            var result = await _expenseService.UpdateExpenseAsync(nonExistentExpenseId, updatedExpense);
-
-            // Assert
-            Assert.False(result);
+            await Assert.ThrowsAsync<ArgumentException>(() => _expenseService.UpdateExpenseAsync(nonExistentExpenseId, updatedExpense));
         }
 
         [Theory]

@@ -4,9 +4,9 @@ namespace StelexarasApp.Services.IServices
 {
     public interface IDutyService
     {
-        Task AddDutyAsync(Duty duty);
-        Task DeleteDutyAsync(int dutyId);
-        Task UpdateDutyAsync(int dutyId, Duty duty);
+        Task<bool> AddDutyAsync(Duty duty);
+        Task<bool> DeleteDutyAsync(int dutyId);
+        Task<bool> UpdateDutyAsync(int dutyId, Duty duty);
         Task<IEnumerable<Duty>> GetDutiesAsync();
     }
 }
