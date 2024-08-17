@@ -29,7 +29,7 @@ namespace StelexarasApp.Tests.Services
             var duty = new Duty { Name = "Test Duty", Date = DateTime.Now };
 
             // Act
-            await _dutyService.AddDutyAsync(duty);
+            await _dutyService.AddDutyInDbAsync(duty);
             var duties = await _dbContext.Duties.ToListAsync();
 
             // Assert
@@ -46,7 +46,7 @@ namespace StelexarasApp.Tests.Services
             await _dbContext.SaveChangesAsync();
 
             // Act
-            await _dutyService.DeleteDutyAsync(duty.Id);
+            await _dutyService.DeleteDutyInDbAsync(duty.Name);
             var duties = await _dbContext.Duties.ToListAsync();
 
             // Assert
@@ -57,7 +57,7 @@ namespace StelexarasApp.Tests.Services
         public async Task AddDutyAsync_ShouldThrow_WhenExpenseIsInvalid()
         {
             var invalidExpense = new Duty { Id = 10, Name = string.Empty };
-            await Assert.ThrowsAsync<ArgumentException>(() => _dutyService.AddDutyAsync(invalidExpense));
+            await Assert.ThrowsAsync<ArgumentException>(() => _dutyService.AddDutyInDbAsync(invalidExpense));
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace StelexarasApp.Tests.Services
             var updatedDuty = new Duty { Name = "Updated Duty" };
 
             // Act
-            await _dutyService.UpdateDutyAsync(duty.Id, updatedDuty);
+            await _dutyService.UpdateDutyInDbAsync(duty.Name, updatedDuty);
             var result = await _dbContext.Duties.FindAsync(duty.Id);
 
             // Assert
@@ -82,11 +82,11 @@ namespace StelexarasApp.Tests.Services
         public async Task UpdateDutyAsync_ShouldNotUpdateDuty_WhenDutyNotFound()
         {
             // Arrange
-            var randomId = 9;
+            var randomName= "mplah";
             var updatedDuty = new Duty { Name = "New Name", Id = -1};
 
             // Act
-            var result = await _dutyService.UpdateDutyAsync(randomId, updatedDuty);
+            var result = await _dutyService.UpdateDutyInDbAsync(randomName, updatedDuty);
 
             // Assert
             Assert.False(result);
@@ -96,11 +96,11 @@ namespace StelexarasApp.Tests.Services
         public async Task UpdateDutyAsync_ShouldNotUpdateDuty_WhenInvalidNewId()
         {
             // Arrange
-            var nonExistentExpenseId = -1;
+            var nonExistentExpenseName = "mplah";
             var updatedDuty = new Duty { Name = "New Name", Id = 1 };
 
             // Act
-            var result = await _dutyService.UpdateDutyAsync(nonExistentExpenseId, updatedDuty);
+            var result = await _dutyService.UpdateDutyInDbAsync(nonExistentExpenseName, updatedDuty);
 
             // Assert
             Assert.False(result);
@@ -118,7 +118,7 @@ namespace StelexarasApp.Tests.Services
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var duties = await _dutyService.GetDutiesAsync();
+            var duties = await _dutyService.GetDutiesFromDbAsync();
 
             // Assert
             Assert.Equal(2, duties.Count());

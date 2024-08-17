@@ -14,7 +14,7 @@ namespace StelexarasApp.Services.Services
             _dbContext = dbContext;
         }
 
-        public async Task<bool> AddDutyAsync(Duty duty)
+        public async Task<bool> AddDutyInDbAsync(Duty duty)
         {
             if (string.IsNullOrEmpty(duty.Name))
             {
@@ -25,9 +25,9 @@ namespace StelexarasApp.Services.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> DeleteDutyAsync(int dutyId)
+        public async Task<bool> DeleteDutyInDbAsync(string dutyName)
         {
-            var duty = await _dbContext.Duties.FindAsync(dutyId);
+            var duty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Name.Equals(dutyName));
             if (duty != null)
             {
                 _dbContext.Duties.Remove(duty);
@@ -38,14 +38,14 @@ namespace StelexarasApp.Services.Services
             return false;
         }
 
-        public async Task<bool> UpdateDutyAsync(int dutyId, Duty updatedDuty)
+        public async Task<bool> UpdateDutyInDbAsync(string dutyName, Duty updatedDuty)
         {
-            var duties = await _dbContext.Duties.ToListAsync();
-            var existingDuty = await _dbContext.Duties.FindAsync(dutyId);
+            var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Name.Equals(dutyName));
             if (existingDuty != null)
             {
                 existingDuty.Name = updatedDuty.Name;
                 existingDuty.Date = DateTime.Now;
+                
                 _dbContext.Duties.Update(existingDuty);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -54,7 +54,7 @@ namespace StelexarasApp.Services.Services
             return false;
         }
 
-        public async Task<IEnumerable<Duty>> GetDutiesAsync()
+        public async Task<IEnumerable<Duty>> GetDutiesFromDbAsync()
         {
             return await _dbContext.Duties.ToListAsync();
         }

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
@@ -19,21 +18,28 @@ namespace StelexarasApp.ViewModels
             InitializeSkines();
         }
 
-        public async Task<int> AddPaidiAsync(string fullName, string skiniName)
+        public async Task<bool> AddPaidiAsync(string fullName, string skiniName)
         {
+            if(string.IsNullOrEmpty(fullName)|| string.IsNullOrEmpty(skiniName))
+            {
+                return false;
+            }
+
             var paidi = new Kataskinotis
             {
                 FullName = fullName,
                 Skini = new Skini { Name = skiniName }
             };
+
             var result = await _peopleService.AddPaidiInDbAsync(paidi, skiniName);
             if (result)
             {
                 await LoadSkinesAsync();
                 OnPropertyChanged(nameof(Skines));
-                return 1;
+                return true;
             }
-            return -1;
+
+            return false;
         }
         
         private async Task LoadSkinesAsync()

@@ -3,3 +3,5 @@
 - set Web layer with a simple SwaggerPage accordingly
 - set in the UI accordingly, who Ekpaideuomenos is Omadarxis daily
 - add Dockerfile in the backend layers
+- check for duplicates via Unit Tests
+- check for the id of the Duty, not the name
