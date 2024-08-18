@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
+using StelexarasApp.Services;
+using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.UI.Views;
 using StelexarasApp.ViewModels;
-using StelexarasApp.ViewModels.Interfaces;
 
 namespace StelexarasApp.UI
 {
@@ -51,6 +52,11 @@ namespace StelexarasApp.UI
             services.AddTransient<ExpensesPage>();
             services.AddTransient<PersonalPage>();
             services.AddTransient<ToDoPage>();
+
+            services.AddScoped<IDutyService, DutyService>();
+            services.AddScoped<IPersonalService, PersonalService>();
+            services.AddScoped<IPeopleService, PeopleService>();
+            services.AddScoped<IExpenseService, ExpenseService>();
 
             ServiceProvider = services.BuildServiceProvider();
 
