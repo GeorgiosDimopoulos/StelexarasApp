@@ -40,7 +40,7 @@ namespace StelexarasApp.UI.Views
             }
             else 
             {
-                if(await _viewModel.AddPaidiAsync(fullName, skiniName))
+                if(await _viewModel.AddPaidiAsync(fullName, skiniName, PaidiType.Kataskinotis))
                 {
                     await DisplayAlert("Στοιχεία νέου παιδιού", fullName, "OK");
                 }
