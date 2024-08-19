@@ -5,16 +5,16 @@ using StelexarasApp.ViewModels;
 
 namespace StelexarasApp.UI.Views
 {
-    public partial class PeoplePage : ContentPage
+    public partial class TeamsPage : ContentPage
     {
-        private PeopleViewModel _viewModel; 
-        private IPeopleService _peopleService;
+        private TeamsViewModel _viewModel; 
+        private ITeamsService _peopleService;
 
-        public PeoplePage(IPeopleService peopleService)
+        public TeamsPage(ITeamsService peopleService)
         {
             InitializeComponent();
             _peopleService = peopleService;
-            _viewModel = new PeopleViewModel(peopleService);
+            _viewModel = new TeamsViewModel(peopleService);
             BindingContext = _viewModel;
         }
 

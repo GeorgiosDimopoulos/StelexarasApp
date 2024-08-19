@@ -8,7 +8,7 @@ namespace StelexarasApp.ViewModels
 {
     public class ChildInfoViewModel : INotifyPropertyChanged
     {
-        private readonly IPeopleService _peopleService;
+        private readonly ITeamsService _peopleService;
         public Paidi Paidi { get; set; }
         public Skini Skini { get; set; }
 
@@ -17,7 +17,7 @@ namespace StelexarasApp.ViewModels
         public string FullName { get; set; }
         public int Age { get; set; }
 
-        public ChildInfoViewModel(IPeopleService peopleService, Paidi paidi, ObservableCollection<Skini> skines)
+        public ChildInfoViewModel(ITeamsService peopleService, Paidi paidi, ObservableCollection<Skini> skines)
         {
             _peopleService = peopleService;
 
@@ -28,9 +28,9 @@ namespace StelexarasApp.ViewModels
             Skines = skines;
         }
 
-        public async Task DeleteEkpaideuomenosAsync()
+        public async Task DeletePaidiAsync(Paidi _paidi)
         {
-            bool isDeleted = await _peopleService.DeletePaidiInDbAsync(Paidi);
+            bool isDeleted = await _peopleService.DeletePaidiInDbAsync(_paidi);
 
             if (isDeleted)
             {
@@ -39,14 +39,27 @@ namespace StelexarasApp.ViewModels
             }
         }
 
-        public async Task UpdateEkpaideuomenosAsync(string fullName, string age, string skiniName)
+        public async Task<bool> UpdatePaidiAsync(string id, string fullName, Skini skini, int age)
         {
-            var result = await _peopleService.UpdatePaidiInDbAsync(Paidi, skiniName);
+            if (skini is null)
+            {
+                return false;
+            }
+
+            Paidi.Age = age;
+            Paidi.FullName = fullName;
+            Paidi.Skini = skini;
+
+            var result = await _peopleService.UpdatePaidiInDbAsync(Paidi);
+            
             if (result)
             {
                 await _peopleService.GetSkinesAsync();
                 OnPropertyChanged(nameof(Skines));
+                return true;
             }
+
+            return false;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

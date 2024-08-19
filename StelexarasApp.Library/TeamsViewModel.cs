@@ -7,42 +7,70 @@ using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.ViewModels
 {
-    public class PeopleViewModel : INotifyPropertyChanged
+    public class TeamsViewModel : INotifyPropertyChanged
     {
-        private readonly IPeopleService _peopleService;
+        private readonly ITeamsService _peopleService;
         public ObservableCollection<Skini>? Skines { get; set; }
         public Koinotita? Koinotita { get; set; }
-        public PeopleViewModel(IPeopleService peopleService)
+        public TeamsViewModel(ITeamsService peopleService)
         {
             _peopleService = peopleService;
-            InitializeSkines();
+            
+            // InitializeSkines();
+            GetAllSkinesAsync();
         }
 
-        public async Task<bool> AddPaidiAsync(string fullName, string skiniName)
+        public async Task<bool> AddPaidiAsync(string fullName, string skiniName, PaidiType paidiType)
         {
             if(string.IsNullOrEmpty(fullName)|| string.IsNullOrEmpty(skiniName))
             {
                 return false;
             }
 
+            Koinotita koinotita = Skines.FirstOrDefault(s => s.Name == skiniName)?.Koinotita ?? new Koinotita { Name = "Ήπειρος" };
+
             var paidi = new Kataskinotis
             {
                 FullName = fullName,
-                Skini = new Skini { Name = skiniName }
+                Skini = new Skini 
+                {
+                    Name = skiniName,
+                    Koinotita = Koinotita
+                }
             };
 
-            var result = await _peopleService.AddPaidiInDbAsync(paidi, skiniName);
+            var result = await _peopleService.AddPaidiInDbAsync(paidi);
             if (result)
             {
-                await LoadSkinesAsync();
+                await GetAllSkinesAsync();
                 OnPropertyChanged(nameof(Skines));
                 return true;
             }
 
             return false;
+        }        
+
+        public async Task<bool> DeletePaidiAsync(string paidiId, PaidiType paidiType)
+        {
+            if (paidiId == null)
+            {
+                return false;
+            }
+
+            var paidi = await _peopleService.GetPaidiByIdAsync(int.Parse(paidiId), paidiType);
+
+            var result = await _peopleService.DeletePaidiInDbAsync(paidi);
+            if (result)
+            {
+                await GetAllSkinesAsync();
+                OnPropertyChanged(nameof(Skines));
+                return true;
+            }
+            
+            return false;
         }
         
-        private async Task LoadSkinesAsync()
+        private async Task GetAllSkinesAsync()
         {
             Skines = new ObservableCollection<Skini>(await _peopleService.GetSkinesAsync());
             OnPropertyChanged(nameof(Skines));
@@ -54,7 +82,7 @@ namespace StelexarasApp.ViewModels
             {
                 Name = "Πίνδος",
                 Koinotita = new Koinotita { Name = "Ήπειρος" },
-                Paidia = new ObservableCollection<Ekpaideuomenos>
+                Paidia = new ObservableCollection<Paidi>
                 {
                     new Ekpaideuomenos
                     {
@@ -89,7 +117,7 @@ namespace StelexarasApp.ViewModels
             {
                 Name = "Κορυτσά",
                 Koinotita = new Koinotita { Name = "Ήπειρος" },
-                Paidia = new ObservableCollection<Ekpaideuomenos>
+                Paidia = new ObservableCollection<Paidi>
                 {
                     new Ekpaideuomenos
                     {

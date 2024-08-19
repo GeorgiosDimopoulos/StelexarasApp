@@ -20,10 +20,12 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Label Text="Όνοματεπώνυμο:" Grid.Column="0" Grid.Row="0"/>
-			<Entry Text="{Binding FullName}" x:Name="ChildName" Grid.Column="1" Grid.Row="0" Focused="OnEntryFocused"/>
+			<Entry Text="{Binding FullName}" x:Name="ChildName" Grid.Column="1" Grid.Row="0" Focused="OnChildEntryFocused"/>
 			<Label Text="Σκηνή:" Grid.Column="0" Grid.Row="1"/>
-			<!--<Entry Text="{Binding Skini.Name}" x:Name="SkiniName" Grid.Column="1" Grid.Row="1" Focused="OnEntryFocused"/>-->
+			<Entry Text="{Binding Skini.Name}" x:Name="SkiniName" Grid.Column="1" Grid.Row="1" Focused="OnSkiniEntryFocused"/>
 			<Picker ItemsSource="{Binding Skines}"
+					IsVisible="False"
+					Unfocused="OnSkiniPickerUnfocused"
 					Title="Σκηνές"
 					ItemDisplayBinding="{Binding Name}"
 					SelectedItem="{Binding Skini}"
@@ -31,9 +33,9 @@
 					Grid.Column="1"
 					Grid.Row="1"/>
 			<Label Text="Ηλικία:" Grid.Column="0" Grid.Row="2"/>
-			<Entry Text="{Binding Age}" Grid.Column="1" x:Name="ChildAge" Grid.Row="2" TextColor="White" Focused="OnEntryFocused"/>
+			<Entry Text="{Binding Age}" Grid.Column="1" x:Name="ChildAge" Grid.Row="2" TextColor="White" Focused="OnAgeEntryFocused"/>
 			<Label Text="Σε αδεια;" Grid.Column="0" Grid.Row="3"/>
-			<Entry Grid.Column="1" x:Name="ChildAdeia" Grid.Row="3" TextColor="White" Focused="OnEntryFocused">
+			<Entry Grid.Column="1" x:Name="ChildAdeia" Grid.Row="3" TextColor="White" Focused="OnAdeiaEntryFocused">
 				<Entry.Triggers>
 					<DataTrigger TargetType="Entry" Binding="{Binding SeAdeia}" Value="True">
 						<Setter Property="Text" Value="ΣΕ ΑΔΕΙΑ" />

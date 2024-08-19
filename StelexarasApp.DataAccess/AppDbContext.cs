@@ -79,6 +79,7 @@ namespace StelexarasApp.DataAccess
 
         private void OnModelsRulesCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Paidi>().HasKey(p => p.Id);
             modelBuilder.Entity<Ekpaideuomenos>().HasKey(k => k.Id);
             modelBuilder.Entity<Kataskinotis>().HasKey(k => k.Id);
             modelBuilder.Entity<Omadarxis>().HasKey(o => o.Id);

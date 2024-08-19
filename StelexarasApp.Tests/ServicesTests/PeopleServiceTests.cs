@@ -8,7 +8,7 @@ namespace StelexarasApp.Tests.ServicesTests
 {
     public class PeopleServiceTests
     {
-        private readonly PeopleService _peopleService;
+        private readonly TeamsService _peopleService;
         private readonly AppDbContext _dbContext;
 
         public PeopleServiceTests()
@@ -16,7 +16,7 @@ namespace StelexarasApp.Tests.ServicesTests
             var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "TestDatabase").Options;
 
             _dbContext = new AppDbContext(options);
-            _peopleService = new PeopleService(_dbContext);
+            _peopleService = new TeamsService(_dbContext);
         }
 
         [Fact]

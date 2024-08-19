@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services;
-using Xunit;
 
 namespace StelexarasApp.Tests.Services
 {
@@ -113,8 +111,7 @@ namespace StelexarasApp.Tests.Services
             var duty1 = new Duty { Name = "Duty 1", Date = DateTime.Now };
             var duty2 = new Duty { Name = "Duty 2", Date = DateTime.Now };
 
-            _dbContext.Duties.Add(duty1);
-            _dbContext.Duties.Add(duty2);
+            _dbContext.Duties.AddRange(duty1, duty2);
             await _dbContext.SaveChangesAsync();
 
             // Act
