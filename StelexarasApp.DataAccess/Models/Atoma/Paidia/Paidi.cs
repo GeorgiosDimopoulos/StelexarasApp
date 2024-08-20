@@ -2,10 +2,14 @@
 
 namespace StelexarasApp.DataAccess.Models.Atoma.Paidia
 {
-    public interface Paidi : Atomo
+    public abstract class Paidi : Atomo
     {
         public string FullName { get; set; }
         public int Id { get; set; }
+
+        public int Age { get; set; }
+
+        public Sex Sex { get; set; }
 
         public PaidiType PaidiType { get; set; }
         

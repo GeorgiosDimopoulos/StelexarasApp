@@ -75,10 +75,20 @@ namespace StelexarasApp.DataAccess
                 .HasOne(t => t.Tomearxis)
                 .WithOne(t => t.Tomeas)
                 .HasForeignKey<Tomeas>(kt => kt.TomearxisId);
+
+            modelBuilder.Entity<Paidi>()
+                .HasDiscriminator<PaidiType>("PaidiType")
+                .HasValue<Kataskinotis>(PaidiType.Kataskinotis)
+                .HasValue<Ekpaideuomenos>(PaidiType.Ekpaideuomenos);
+
+            // modelBuilder.Entity<Skini>().ToTable("Skines");
         }
 
         private void OnModelsRulesCreating(ModelBuilder modelBuilder)
-        {
+        {            
+            modelBuilder.Entity<Kataskinotis>().HasBaseType<Paidi>();
+            modelBuilder.Entity<Ekpaideuomenos>().HasBaseType<Paidi>();
+
             modelBuilder.Entity<Paidi>().HasKey(p => p.Id);
             modelBuilder.Entity<Ekpaideuomenos>().HasKey(k => k.Id);
             modelBuilder.Entity<Kataskinotis>().HasKey(k => k.Id);
