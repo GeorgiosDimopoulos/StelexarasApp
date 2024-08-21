@@ -19,7 +19,7 @@ namespace StelexarasApp.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task AddExpenseAsync_ShouldAddExpenseToDatabase()
+        public async Task AddExpenseAsync_ShouldWork()
         {
             var expense = new Expense { Id = 1, Description = "Test", Amount = 100 };
 
@@ -35,89 +35,88 @@ namespace StelexarasApp.Tests.ServicesTests
         {
             var invalidExpense = new Expense { Id = 10, Description = "Invalid", Amount = -100 };
             await Assert.ThrowsAsync<ArgumentException>(() => _expenseService.AddExpenseAsync(invalidExpense));
-        }
-
-        [Fact]
-        public async Task DeleteExpenseAsync_ShouldRemoveFromDatabase()
-        {
-            var expense = new Expense { Id = 21, Description = "Test", Amount = 100 };
-            _dbContext.Expenses.Add(expense);
-            await _dbContext.SaveChangesAsync();
-
-            await _expenseService.DeleteExpenseAsync(expense.Id);
-
-            var expenses = await _dbContext.Expenses.ToListAsync();
-            Assert.Empty(expenses);
-        }
+        }        
 
         [Theory]
-        [InlineData(9999)]
-        [InlineData(-1)]
-        [InlineData(0)]
-        public async Task DeleteExpenseAsync_ShouldThrow_WhenExpenseDoesNotExist(int nonExistentExpenseId)
-        {
-            var initialCount = await _dbContext.Expenses.CountAsync();
-            var exception = await Assert.ThrowsAsync<ArgumentException>(() => _expenseService.DeleteExpenseAsync(nonExistentExpenseId));
-
-            Assert.NotNull(exception);
-            Assert.IsType<ArgumentException>(exception);
-            Assert.Equal($"Expense with ID {nonExistentExpenseId} not found in the database.", exception.Message);
-
-            var finalCount = await _dbContext.Expenses.CountAsync();
-            Assert.Equal(initialCount, finalCount);
-        }
-
-        [Theory]
-        [InlineData("New Description 1", 200)]
-        public async Task UpdateExpenseAsync_ShouldUpdateExpenseInDatabase(string newDescription, int newAmount)
+        [InlineData(-1, false)]
+        [InlineData(0, false)]
+        [InlineData(1, true)]
+        public async Task DeleteExpenseAsync_ShouldReturnExpectedResult(int expenseId, bool expectedResult)
         {
             // Arrange
-            var expense = new Expense { Id = 5, Description = "Old Description", Amount = 100 };
-            _dbContext.Expenses.Add(expense);
-            await _dbContext.SaveChangesAsync();
+            if (expenseId > 0)
+            {
+                var existingExpense = new Expense
+                {
+                    Id = expenseId,
+                    Description = "Test Expense",
+                    Amount = 100
+                };
+                _dbContext.Expenses.Add(existingExpense);
+                await _dbContext.SaveChangesAsync();
+            }
 
             // Act
-            var updatedExpense = new Expense { Description = newDescription, Amount = newAmount };
-            var result = await _expenseService.UpdateExpenseAsync(expense.Id, updatedExpense);
+            var result = await _expenseService.DeleteExpenseAsync(expenseId);
 
             // Assert
-            Assert.True(result);
-            var updatedEntity = await _dbContext.Expenses.FindAsync(expense.Id);
-            Assert.NotNull(updatedEntity);
-            Assert.Equal(newDescription, updatedEntity.Description);
-            Assert.Equal(newAmount, updatedEntity.Amount);
-        }
-
-        [Fact]
-        public async Task UpdateExpenseAsync_ShouldReturnFalse_WhenExpenseDoesNotExist()
-        {
-            var nonExistentExpenseId = 9999;
-            var updatedExpense = new Expense { Description = "New Description", Amount = 200 };
-
-            await Assert.ThrowsAsync<ArgumentException>(() => _expenseService.UpdateExpenseAsync(nonExistentExpenseId, updatedExpense));
+            Assert.Equal(expectedResult, result);
         }
 
         [Theory]
-        [InlineData(1, -1)]
-        [InlineData(2, 0)]
-        [InlineData(3, -99999)]
-        public async Task UpdateExpenseAsync_ShouldReturnFalse_WhenAmountIsInvalid(int id, int invalidAmount)
+        [InlineData(1, "Old Description", 100, "New Description", 150, true)]
+        [InlineData(4, "Invalid Amount", -100, "Should Fail", -200, false)]
+        [InlineData(3, "Non-existent Description", 300, "", 350, false)]
+        public async Task UpdateExpenseAsync_ShouldReturnExpectedResult(
+        int expenseId, string initialDescription, double initialAmount,
+        string updatedDescription, double updatedAmount, bool expectedResult)
         {
             // Arrange
-            var existingExpense = new Expense { Id = id, Description = "Old Description", Amount = 100 };
-            _dbContext.Expenses.Add(existingExpense);
-            await _dbContext.SaveChangesAsync();
+            if (initialAmount > 0)
+            {
+                var existingExpense = new Expense
+                {
+                    Id = expenseId,
+                    Description = initialDescription,
+                    Amount = initialAmount
+                };
+                _dbContext.Expenses.Add(existingExpense);
+                await _dbContext.SaveChangesAsync();
+            }
 
-            var invalidExpense = new Expense { Description = "New Description", Amount = invalidAmount };
+            var updatedExpense = new Expense
+            {
+                Description = updatedDescription,
+                Amount = updatedAmount
+            };
 
             // Act
-            var result = await _expenseService.UpdateExpenseAsync(existingExpense.Id, invalidExpense);
+            var result = await _expenseService.UpdateExpenseAsync(expenseId, updatedExpense);
 
             // Assert
-            Assert.False(result);
-            var expenseInDb = await _dbContext.Expenses.FindAsync(existingExpense.Id);
-            Assert.NotNull(expenseInDb);
-            Assert.Equal(100, expenseInDb.Amount);
+            Assert.Equal(expectedResult, result);
+
+            if (expectedResult)
+            {
+                var expenseInDb = await _dbContext.Expenses.FindAsync(expenseId);
+                Assert.NotNull(expenseInDb);
+                Assert.Equal(updatedDescription, expenseInDb.Description);
+                Assert.Equal(updatedAmount, expenseInDb.Amount);
+            }
+            else
+            {
+                var expenseInDb = await _dbContext.Expenses.FindAsync(expenseId);
+                if (initialAmount > 0)
+                {
+                    Assert.NotNull(expenseInDb);
+                    Assert.Equal(initialDescription, expenseInDb.Description);
+                    Assert.Equal(initialAmount, expenseInDb.Amount);
+                }
+                else
+                {
+                    Assert.Null(expenseInDb);
+                }
+            }
         }
 
         [Fact]

@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+﻿using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.Services.IServices
@@ -6,17 +6,19 @@ namespace StelexarasApp.Services.IServices
     public interface ITeamsService
     {
         Task<bool> AddPaidiInDbAsync(Paidi paidi);
+        // Task<bool> AddEkpaideuomenosInDb(Ekpaideuomenos ekpaideuomenos);
+        // Task<bool> AddKataskinotisInDb(Kataskinotis kataskinotis);
 
-        Task<bool> DeletePaidiInDbAsync(Paidi paidi);
-        Task<bool> UpdatePaidiInDbAsync(Paidi paidi);
-        Task<IEnumerable<Skini>> GetSkinesAsync();
+        Task<bool> DeletePaidiInDb(Paidi paidi);
+        Task<bool> UpdatePaidiInDb(Paidi paidi);
+        Task<IEnumerable<Skini>> GetSkines();
 
-        Task<IEnumerable<Paidi>> GetPaidiaAsync(PaidiType type);
+        Task<IEnumerable<Paidi>> GetPaidia(PaidiType type);
 
-        Task<Skini> GetSkiniByNameAsync(string name);
+        Task<Skini> GetSkiniByName(string name);
 
-        Task<Paidi> GetPaidiByIdAsync(int id, PaidiType type);
+        Task<Paidi> GetPaidiById(int id, PaidiType type);
 
-        Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId);
+        // Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId);
     }
 }

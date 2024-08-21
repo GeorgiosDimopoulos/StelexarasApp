@@ -1,10 +1,7 @@
 ﻿using Moq;
 using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Paidia;
-using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.ViewModels;
-using System.Collections.ObjectModel;
 
 namespace StelexarasApp.Tests.ViewModelsTests
 {

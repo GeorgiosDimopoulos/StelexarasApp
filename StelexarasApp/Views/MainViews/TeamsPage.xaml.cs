@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+﻿using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.UI.Views.SecondViews;
 using StelexarasApp.ViewModels;
@@ -21,7 +21,7 @@ namespace StelexarasApp.UI.Views
         private async void Paidi_Clicked(object sender, EventArgs e)
         {
             var button = sender as Button;
-            Ekpaideuomenos? paidi = button?.CommandParameter as Ekpaideuomenos;
+            Paidi? paidi = button?.CommandParameter as Paidi;
 
             if (paidi != null)
             {

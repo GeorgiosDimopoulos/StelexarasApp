@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+﻿using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
@@ -19,7 +19,7 @@ namespace StelexarasApp.ViewModels
             // InitializeSkines();
             GetAllSkinesAsync();
         }
-
+        
         public async Task<bool> AddPaidiAsync(string fullName, string skiniName, PaidiType paidiType)
         {
             if(string.IsNullOrEmpty(fullName)|| string.IsNullOrEmpty(skiniName))
@@ -28,18 +28,21 @@ namespace StelexarasApp.ViewModels
             }
 
             Koinotita koinotita = Skines.FirstOrDefault(s => s.Name == skiniName)?.Koinotita ?? new Koinotita { Name = "Ήπειρος" };
+            bool result;
 
-            var paidi = new Kataskinotis
+            var paidi = new Paidi
             {
                 FullName = fullName,
-                Skini = new Skini 
+                PaidiType = PaidiType.Ekpaideuomenos,
+                Skini = new Skini
                 {
                     Name = skiniName,
                     Koinotita = Koinotita
                 }
             };
 
-            var result = await _peopleService.AddPaidiInDbAsync(paidi);
+            result = await _peopleService.AddPaidiInDbAsync(paidi);
+
             if (result)
             {
                 await GetAllSkinesAsync();
@@ -57,9 +60,9 @@ namespace StelexarasApp.ViewModels
                 return false;
             }
 
-            var paidi = await _peopleService.GetPaidiByIdAsync(int.Parse(paidiId), paidiType);
+            var paidi = await _peopleService.GetPaidiById(int.Parse(paidiId), paidiType);
 
-            var result = await _peopleService.DeletePaidiInDbAsync(paidi);
+            var result = await _peopleService.DeletePaidiInDb(paidi);
             if (result)
             {
                 await GetAllSkinesAsync();
@@ -72,7 +75,7 @@ namespace StelexarasApp.ViewModels
         
         private async Task GetAllSkinesAsync()
         {
-            Skines = new ObservableCollection<Skini>(await _peopleService.GetSkinesAsync());
+            Skines = new ObservableCollection<Skini>(await _peopleService.GetSkines());
             OnPropertyChanged(nameof(Skines));
         }
 
@@ -84,25 +87,28 @@ namespace StelexarasApp.ViewModels
                 Koinotita = new Koinotita { Name = "Ήπειρος" },
                 Paidia = new ObservableCollection<Paidi>
                 {
-                    new Ekpaideuomenos
+                    new Paidi
                     {
                         FullName = "Βασιλης Λαμπαδιτης",
+                        PaidiType = PaidiType.Ekpaideuomenos,
                         Sex = DataAccess.Models.Atoma.Sex.Male,
                         Age = 16,
                         SeAdeia = false
                     },
-                    new Ekpaideuomenos
+                    new Paidi
                     {
                         FullName = "Άγγελος Γεωργόπουλος",
                         Age = 16,
+                        PaidiType = PaidiType.Ekpaideuomenos,
                         Sex = DataAccess.Models.Atoma.Sex.Female,
                         SeAdeia = false
                     },
-                    new Ekpaideuomenos
+                    new Paidi
                     {
                         FullName = "Δημήτρης Στεφάς",
                         Age = 16,
                         Sex = DataAccess.Models.Atoma.Sex.Male,
+                        PaidiType = PaidiType.Ekpaideuomenos,
                         SeAdeia = false
                     },
                 }
@@ -119,17 +125,19 @@ namespace StelexarasApp.ViewModels
                 Koinotita = new Koinotita { Name = "Ήπειρος" },
                 Paidia = new ObservableCollection<Paidi>
                 {
-                    new Ekpaideuomenos
+                    new Paidi
                     {
                         FullName = "Φίλιππος Σταφυλάς",
-                        Sex = DataAccess.Models.Atoma.Sex.Male,
+                        Sex = Sex.Male,
                         Age = 16,
+                        PaidiType = PaidiType.Ekpaideuomenos,
                         SeAdeia = true
                     },
-                    new Ekpaideuomenos
+                    new Paidi
                     {
                         FullName = "Διαουρτας Βασιλης",
                         Age = 16,
+                        PaidiType = PaidiType.Ekpaideuomenos,
                         Sex = DataAccess.Models.Atoma.Sex.Male,
                         SeAdeia = false
                     },

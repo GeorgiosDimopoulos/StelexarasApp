@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+﻿using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
@@ -30,11 +30,11 @@ namespace StelexarasApp.ViewModels
 
         public async Task DeletePaidiAsync(Paidi _paidi)
         {
-            bool isDeleted = await _peopleService.DeletePaidiInDbAsync(_paidi);
+            bool isDeleted = await _peopleService.DeletePaidiInDb(_paidi);
 
             if (isDeleted)
             {
-                await _peopleService.GetSkinesAsync();
+                await _peopleService.GetSkines();
                 OnPropertyChanged(nameof(Skines));
             }
         }
@@ -50,11 +50,11 @@ namespace StelexarasApp.ViewModels
             Paidi.FullName = fullName;
             Paidi.Skini = skini;
 
-            var result = await _peopleService.UpdatePaidiInDbAsync(Paidi);
+            var result = await _peopleService.UpdatePaidiInDb(Paidi);
             
             if (result)
             {
-                await _peopleService.GetSkinesAsync();
+                await _peopleService.GetSkines();
                 OnPropertyChanged(nameof(Skines));
                 return true;
             }

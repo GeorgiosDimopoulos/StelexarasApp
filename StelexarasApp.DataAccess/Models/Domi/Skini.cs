@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+﻿using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using System.Collections.ObjectModel;
 

@@ -1,9 +1,9 @@
 ﻿using Moq;
-using StelexarasApp.DataAccess.Models.Atoma.Paidia;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.ViewModels;
 using System.Collections.ObjectModel;
 using StelexarasApp.Services.IServices;
+using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.Tests.ViewModelsTests
 {
@@ -32,7 +32,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             var newName = "New Name";
             var newAge = 12;
 
-            _mockPeopleService.Setup(s => s.UpdatePaidiInDbAsync(It.IsAny<Paidi>())).ReturnsAsync(true);
+            _mockPeopleService.Setup(s => s.UpdatePaidiInDb(It.IsAny<Paidi>())).ReturnsAsync(true);
             
             // Act
             var result = await _childInfoViewModel.UpdatePaidiAsync("1", newName, skini, newAge);
@@ -43,15 +43,15 @@ namespace StelexarasApp.Tests.ViewModelsTests
             Assert.Equal(12, _childInfoViewModel.Paidi.Age);
             Assert.Same(skini, _childInfoViewModel.Paidi.Skini);
 
-            _mockPeopleService.Verify(s => s.UpdatePaidiInDbAsync(It.Is<Paidi>(p => p.FullName == "New Name" && p.Age == 12 && p.Skini == skini)), Times.Once);
-            _mockPeopleService.Verify(s => s.GetSkinesAsync(), Times.Once);
+            _mockPeopleService.Verify(s => s.UpdatePaidiInDb(It.Is<Paidi>(p => p.FullName == "New Name" && p.Age == 12 && p.Skini == skini)), Times.Once);
+            _mockPeopleService.Verify(s => s.GetSkines(), Times.Once);
         }
 
         [Fact]
         public async Task UpdatePaidiAsync_ShouldNotWorkWhenFullNameNull()
         {
             // Arrange
-            _mockPeopleService.Setup(service => service.UpdatePaidiInDbAsync(_paidi)).ReturnsAsync(false);
+            _mockPeopleService.Setup(service => service.UpdatePaidiInDb(_paidi)).ReturnsAsync(false);
 
             // Act
             var result = await _childInfoViewModel.UpdatePaidiAsync(_paidi.Id.ToString(), string.Empty, GetMockUpSkini(), _paidi.Age);
@@ -64,7 +64,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
         public async Task UpdatePaidiAsync_ShouldNotWorkWhenSkiniNull()
         {
             // Arrange
-            _mockPeopleService.Setup(service => service.UpdatePaidiInDbAsync(_paidi)).ReturnsAsync(false);
+            _mockPeopleService.Setup(service => service.UpdatePaidiInDb(_paidi)).ReturnsAsync(false);
 
             // Act
             var result = await _childInfoViewModel.UpdatePaidiAsync(_paidi.Id.ToString(), _paidi.FullName, null, _paidi.Age);
@@ -77,21 +77,22 @@ namespace StelexarasApp.Tests.ViewModelsTests
         public async Task DeletePaidiAsync_ShouldUpdateSkines_WhenPaidiIsDeleted()
         {
             // Arrange
-            _mockPeopleService.Setup(service => service.DeletePaidiInDbAsync(_paidi)).ReturnsAsync(true);
+            _mockPeopleService.Setup(service => service.DeletePaidiInDb(_paidi)).ReturnsAsync(true);
 
             // Act
             await _childInfoViewModel.DeletePaidiAsync(_paidi);
 
             // Assert
-            _mockPeopleService.Verify(service => service.DeletePaidiInDbAsync(_paidi), Times.Once);
+            _mockPeopleService.Verify(service => service.DeletePaidiInDb(_paidi), Times.Once);
         }
 
-        private Kataskinotis GetMockUpPaidi(Skini skini)
+        private Paidi GetMockUpPaidi(Skini skini)
         {
-            return new Kataskinotis
+            return new Paidi
             {
                 Id = 1,
                 FullName = "Βασιλης Λαμπαδιτης",
+                PaidiType = PaidiType.Kataskinotis,
                 Age = 10,
                 Skini = skini
             };

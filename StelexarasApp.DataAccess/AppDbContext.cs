@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Models;
-using StelexarasApp.DataAccess.Models.Atoma.Paidia;
+using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using StelexarasApp.DataAccess.Models.Domi;
 
@@ -16,8 +16,7 @@ namespace StelexarasApp.DataAccess
         public DbSet<Omadarxis>? Omadarxes { get; set; }
         public DbSet<Koinotarxis>? Koinotarxes { get; set; }
         public DbSet<Tomearxis>? Tomearxes { get; set; }
-        public DbSet<Kataskinotis>? Kataskinotes { get; set; }
-        public DbSet<Ekpaideuomenos>? Ekpaideuomenoi { get; set; }
+        public DbSet<Paidi>? Paidia { get; set; }
 
         public DbSet<Koinotita>? Koinotites { get; set; }
         public DbSet<Skini>? Skines { get; set; }
@@ -44,6 +43,8 @@ namespace StelexarasApp.DataAccess
             {
                 ConnectionString = $"Server=(LocalDb)\\MSSQLLocalDB;Database=TYPET;TrustServerCertificate=True;Trusted_Connection=True;";
                 optionsBuilder.UseSqlServer(ConnectionString).LogTo(Console.WriteLine, new [] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
+                optionsBuilder.EnableSensitiveDataLogging();
+                optionsBuilder.LogTo(Console.WriteLine, new [] { DbLoggerCategory.Database.Command.Name });
             }
 #endif
         }
@@ -76,22 +77,13 @@ namespace StelexarasApp.DataAccess
                 .WithOne(t => t.Tomeas)
                 .HasForeignKey<Tomeas>(kt => kt.TomearxisId);
 
-            modelBuilder.Entity<Paidi>()
-                .HasDiscriminator<PaidiType>("PaidiType")
-                .HasValue<Kataskinotis>(PaidiType.Kataskinotis)
-                .HasValue<Ekpaideuomenos>(PaidiType.Ekpaideuomenos);
-
             // modelBuilder.Entity<Skini>().ToTable("Skines");
         }
 
         private void OnModelsRulesCreating(ModelBuilder modelBuilder)
-        {            
-            modelBuilder.Entity<Kataskinotis>().HasBaseType<Paidi>();
-            modelBuilder.Entity<Ekpaideuomenos>().HasBaseType<Paidi>();
-
+        {
             modelBuilder.Entity<Paidi>().HasKey(p => p.Id);
-            modelBuilder.Entity<Ekpaideuomenos>().HasKey(k => k.Id);
-            modelBuilder.Entity<Kataskinotis>().HasKey(k => k.Id);
+
             modelBuilder.Entity<Omadarxis>().HasKey(o => o.Id);
             modelBuilder.Entity<Tomearxis>().HasKey(t => t.Id);
             modelBuilder.Entity<Koinotarxis>().HasKey(k => k.Id);

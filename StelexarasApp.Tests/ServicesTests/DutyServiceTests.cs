@@ -3,7 +3,7 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.Services.Services;
 
-namespace StelexarasApp.Tests.Services
+namespace StelexarasApp.Tests.ServicesTests
 {
     public class DutyServiceTests
     {

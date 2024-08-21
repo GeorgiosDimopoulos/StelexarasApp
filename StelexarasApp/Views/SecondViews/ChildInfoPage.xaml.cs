@@ -1,8 +1,8 @@
 ﻿using StelexarasApp.ViewModels;
-using StelexarasApp.DataAccess.Models.Atoma.Paidia;
 using System.Collections.ObjectModel;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
+using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.UI.Views.SecondViews
 {

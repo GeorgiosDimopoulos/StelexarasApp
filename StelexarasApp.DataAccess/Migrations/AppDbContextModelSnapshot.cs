@@ -22,7 +22,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Ekpaideuomenos", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Paidi", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,38 +53,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.HasIndex("SkiniId");
 
-                    b.ToTable("Ekpaideuomenoi");
-                });
-
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Kataskinotis", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PaidiType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Sex")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SkiniId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SkiniId");
-
-                    b.ToTable("Kataskinotes");
+                    b.ToTable("Paidia");
                 });
 
             modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Ekpaideutis", b =>
@@ -328,22 +297,13 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Ekpaideuomenos", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Paidi", b =>
                 {
                     b.HasOne("StelexarasApp.DataAccess.Models.Domi.Skini", "Skini")
                         .WithMany("Paidia")
                         .HasForeignKey("SkiniId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Skini");
-                });
-
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Kataskinotis", b =>
-                {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Domi.Skini", "Skini")
-                        .WithMany()
-                        .HasForeignKey("SkiniId");
 
                     b.Navigation("Skini");
                 });

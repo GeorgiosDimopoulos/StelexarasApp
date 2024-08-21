@@ -2,6 +2,7 @@
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.Services.IServices;
+using System.Globalization;
 
 namespace StelexarasApp.Services.Services
 {
@@ -28,20 +29,27 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> DeleteExpenseAsync(int expenseId)
         {
-            var expense = await _dbContext.Expenses.FindAsync(expenseId);
-            if (expense != null)
+            try
             {
-                _dbContext.Expenses.Remove(expense);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
+                var expense = await _dbContext.Expenses.FindAsync(expenseId);
+                if (expense != null)
+                {
+                    _dbContext.Expenses.Remove(expense);
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
 
-            throw new ArgumentException($"Expense with ID {expenseId} not found in the database.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"Expense with ID {expenseId} not deleted in the database. Reason: ", ex.Message);
+            }
         }
 
         public async Task<bool> UpdateExpenseAsync(int expenseId, Expense expense)
         {
-            if (expense.Amount <= 0)
+            if (expense.Amount <= 0 || string.IsNullOrEmpty(expense.Description))
             {
                 return false;
             }
