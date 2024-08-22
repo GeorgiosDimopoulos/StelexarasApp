@@ -53,14 +53,14 @@ namespace StelexarasApp.ViewModels
             return false;
         }        
 
-        public async Task<bool> DeletePaidiAsync(string paidiId, PaidiType paidiType)
+        public async Task<bool> DeletePaidiAsync(string paidiId)
         {
             if (paidiId == null)
             {
                 return false;
             }
 
-            var paidi = await _peopleService.GetPaidiById(int.Parse(paidiId), paidiType);
+            var paidi = await _peopleService.GetPaidiById(int.Parse(paidiId));
 
             var result = await _peopleService.DeletePaidiInDb(paidi);
             if (result)

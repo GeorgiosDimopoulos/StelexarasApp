@@ -6,8 +6,6 @@ namespace StelexarasApp.Services.IServices
     public interface ITeamsService
     {
         Task<bool> AddPaidiInDbAsync(Paidi paidi);
-        // Task<bool> AddEkpaideuomenosInDb(Ekpaideuomenos ekpaideuomenos);
-        // Task<bool> AddKataskinotisInDb(Kataskinotis kataskinotis);
 
         Task<bool> DeletePaidiInDb(Paidi paidi);
         Task<bool> UpdatePaidiInDb(Paidi paidi);
@@ -17,7 +15,7 @@ namespace StelexarasApp.Services.IServices
 
         Task<Skini> GetSkiniByName(string name);
 
-        Task<Paidi> GetPaidiById(int id, PaidiType type);
+        Task<Paidi> GetPaidiById(int id);
 
         Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId);
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Models.Atoma;
@@ -39,12 +40,22 @@ namespace StelexarasApp.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 #if DEBUG
+            // Use SQL Server for creating migrations in debug mode
             if (!optionsBuilder.IsConfigured)
             {
                 ConnectionString = $"Server=(LocalDb)\\MSSQLLocalDB;Database=TYPET;TrustServerCertificate=True;Trusted_Connection=True;";
                 optionsBuilder.UseSqlServer(ConnectionString).LogTo(Console.WriteLine, new [] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
                 optionsBuilder.EnableSensitiveDataLogging();
                 optionsBuilder.LogTo(Console.WriteLine, new [] { DbLoggerCategory.Database.Command.Name });
+            }
+#else
+            if (!optionsBuilder.IsConfigured)
+            {            
+                // Use SQL Server for production or other environments
+                ConnectionString = $"Server=(LocalDb)\\MSSQLLocalDB;Database=TYPET;TrustServerCertificate=True;Trusted_Connection=True;";
+                optionsBuilder.UseSqlServer("YourProductionOrDevelopmentConnectionString")
+                    .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
+                    .EnableSensitiveDataLogging();
             }
 #endif
         }
@@ -59,6 +70,12 @@ namespace StelexarasApp.DataAccess
 
         private void OnModelsRelationsCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Paidi>()
+                .HasOne(p => p.Skini)
+                .WithMany(s => s.Paidia)
+                .HasForeignKey(p => p.SkiniId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Skini>()
                 .HasOne(sk => sk.Omadarxis)

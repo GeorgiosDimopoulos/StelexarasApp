@@ -7,3 +7,4 @@
 - check for the id of the Duty, not the name
 - check for unused methods and call them properly (also check for relevant UT)
 - add logger and output the logs in services
+- change UT: use Mock of AppDbContext too

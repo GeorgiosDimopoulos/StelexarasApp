@@ -10,7 +10,7 @@ namespace StelexarasApp.DataAccess.Models.Domi
         public string Name { get; set; } = string.Empty;
         public Omadarxis Omadarxis { get; set; } = null!;
         public int OmadarxisId { get; set; }
-        public ObservableCollection<Paidi> Paidia { get; set; } = null!;
+        public ICollection<Paidi> Paidia { get; set; } = null!;
         public Koinotita Koinotita { get; set; } = null!;
     }
 }

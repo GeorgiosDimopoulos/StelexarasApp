@@ -10,7 +10,9 @@ namespace StelexarasApp.DataAccess.Models.Atoma
         public bool SeAdeia { get; set; }
         public Sex Sex { get; set; }
         public PaidiType PaidiType { get; set; }
-        public Skini Skini { get; set; }
+        public int SkiniId { get; set; }
+
+        public Skini Skini { get; set; } = new Skini();
     }
 
     public enum PaidiType
