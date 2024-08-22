@@ -19,6 +19,6 @@ namespace StelexarasApp.Services.IServices
 
         Task<Paidi> GetPaidiById(int id, PaidiType type);
 
-        // Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId);
+        Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId);
     }
 }

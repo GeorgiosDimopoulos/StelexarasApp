@@ -5,3 +5,5 @@
 - add Dockerfile in the backend layers
 - check for duplicates via Unit Tests
 - check for the id of the Duty, not the name
+- check for unused methods and call them properly (also check for relevant UT)
+- add logger and output the logs in services

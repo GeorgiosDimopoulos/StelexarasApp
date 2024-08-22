@@ -42,18 +42,28 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> DeletePaidiInDb(Paidi paidi)
         {
-            if (paidi == null || paidi.Id <= 0)
-                return false;
+            // using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-            var existingPaidi = await _dbContext.Paidia.FindAsync(paidi.Id);
-            if (existingPaidi != null)
+            try
             {
-                _dbContext.Paidia.Remove(existingPaidi);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
+                if (paidi == null || paidi.Id <= 0)
+                    return false;
 
-            return false;
+                var existingPaidi = await _dbContext.Paidia.FindAsync(paidi.Id);
+                if (existingPaidi != null)
+                {
+                    _dbContext.Paidia.Remove(existingPaidi);
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                // await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<bool> UpdatePaidiInDb(Paidi paidi)
@@ -66,46 +76,52 @@ namespace StelexarasApp.Services.Services
             return true;
         }
 
-        //public async Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId)
-        //{
-        //    var paidi = await _dbContext.Paidia
-        //        .Include(p => p.Skini)
-        //        .FirstOrDefaultAsync(p => p.Id == paidiId);
+        public async Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId)
+        {
+            var paidi = await _dbContext.Paidia
+                .Include(p => p.Skini)
+                .FirstOrDefaultAsync(p => p.Id == paidiId);
 
-        //    if (paidi == null)
-        //    {
-        //        return false;
-        //    }
+            if (paidi == null)
+            {
+                return false;
+            }
 
-        //    var oldSkini = paidi.Skini;
+            var newSkini = await _dbContext.Skines
+                .Include(s => s.Paidia)
+                .FirstOrDefaultAsync(s => s.Id == newSkiniId);
 
-        //    var newSkini = await _dbContext.Skines
-        //        .Include(s => s.Paidia)
-        //        .FirstOrDefaultAsync(s => s.Id == newSkiniId);
+            if (newSkini == null)
+            {
+                return false;
+            }
 
-        //    if (newSkini == null)
-        //    {
-        //        return false;
-        //    }
+            if (newSkini.Paidia.Contains(paidi))
+            {
+                return false;
+            }
 
-        //    if (oldSkini != null && oldSkini.Paidia != null)
-        //    {
-        //        oldSkini.Paidia.Remove(paidi);
-        //    }
+            var oldSkini = paidi.Skini;
 
-        //    newSkini.Paidia.Add(paidi);
-        //    paidi.Skini = newSkini;
+            if (oldSkini != null)
+            {
+                oldSkini.Paidia.Remove(paidi);
+            }
 
-        //    try
-        //    {
-        //        await _dbContext.SaveChangesAsync();
-        //        return true;
-        //    }
-        //    catch (DbUpdateException ex)
-        //    {
-        //        return false;
-        //    }
-        //}
+            newSkini.Paidia.Add(paidi);
+            paidi.Skini = newSkini;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
 
         public async Task<Paidi> GetPaidiById(int id, PaidiType type)
         {

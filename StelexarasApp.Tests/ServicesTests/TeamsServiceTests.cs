@@ -93,6 +93,54 @@ namespace StelexarasApp.Tests.ServicesTests
             }
         }
 
+        [Theory]
+        [InlineData(1, 2, true)]
+        [InlineData(1, 9999, false)]
+        [InlineData(9999, 2, false)]
+        [InlineData(9999, 9999, false)]
+        public async Task MovePaidiToNewSkini_ShouldReturnExpectedResult(int paidiId, int newSkiniId, bool expectedResult)
+        {
+            // Arrange
+            if (paidiId == 1)
+            {
+                var existingPaidi = new Paidi
+                {
+                    Id = paidiId,
+                    FullName = "Test Paidi",
+                    Age = 25,
+                    Sex = Sex.Male,
+                    PaidiType = PaidiType.Kataskinotis,
+                    Skini = new Skini { Id = 1, Name = "Old Skini" }
+                };
+                _dbContext.Paidia.Add(existingPaidi);
+            }
+
+            if (newSkiniId == 2)
+            {
+                var newSkini = new Skini
+                {
+                    Id = newSkiniId,
+                    Name = "New Skini"
+                };
+                _dbContext.Skines.Add(newSkini);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _peopleService.MovePaidiToNewSkini(paidiId, newSkiniId);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+
+            if (expectedResult)
+            {
+                var movedPaidi = await _dbContext.Paidia.FindAsync(paidiId);
+                Assert.NotNull(movedPaidi);
+                Assert.Equal(newSkiniId, movedPaidi.Skini.Id);
+            }
+        }
+
         private Paidi GetMockUpKataskinotis(int id)
         {
             return new Paidi
