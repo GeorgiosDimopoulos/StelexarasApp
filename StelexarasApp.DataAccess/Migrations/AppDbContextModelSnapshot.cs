@@ -22,7 +22,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Paidi", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidi", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,7 +297,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidia.Paidi", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidi", b =>
                 {
                     b.HasOne("StelexarasApp.DataAccess.Models.Domi.Skini", "Skini")
                         .WithMany("Paidia")
