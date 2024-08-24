@@ -25,11 +25,11 @@ namespace StelexarasApp.DataAccess
 
         public string? ConnectionString { get; set; }
 
-        // Constructor for runtime
+        // Constructor for runtime projects, like web layer
         public AppDbContext(DbContextOptions<AppDbContext> optionsBuilder) : base(optionsBuilder)
         {
         }
-
+        
         // Constructor for migrations
 #if DEBUG
         public AppDbContext()

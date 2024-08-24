@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StelexarasApp.DataAccess\StelexarasApp.DataAccess.csproj" />
+    <ProjectReference Include="..\StelexarasApp.Library\StelexarasApp.ViewModels.csproj" />
+    <ProjectReference Include="..\StelexarasApp.Services\StelexarasApp.Services.csproj" />
   </ItemGroup>
 
 </Project>

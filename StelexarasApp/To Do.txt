@@ -8,3 +8,4 @@
 - check for unused methods and call them properly (also check for relevant UT)
 - add logger and output the logs in services
 - change UT: use Mock of AppDbContext too
+- add UT for logging like: Logger_ShouldLogErrorCorrectly()
