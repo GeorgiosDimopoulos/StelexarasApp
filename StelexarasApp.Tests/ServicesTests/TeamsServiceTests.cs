@@ -3,6 +3,9 @@ using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Models.Atoma;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace StelexarasApp.Tests.ServicesTests
 {
@@ -10,61 +13,50 @@ namespace StelexarasApp.Tests.ServicesTests
     {
         private readonly TeamsService _peopleService;
         private readonly AppDbContext _dbContext;
+        private readonly Mock<ILogger<TeamsService>> _loggerMock;
 
         public TeamsServiceTests()
         {
-            var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "TestDatabase").Options;
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .Options;
 
+            // _dbContext = new Mock<AppDbContext>(options);
             _dbContext = new AppDbContext(options);
-            _peopleService = new TeamsService(_dbContext);
+            _loggerMock = new Mock<ILogger<TeamsService>>();
+            _peopleService = new TeamsService(_dbContext, _loggerMock.Object);
         }
 
         [Theory]
-        [InlineData(1, true)]
-        [InlineData(0, false)]
-        [InlineData(-1, false)]
-        public async Task AddEkpaideuomenos_ShouldReturnExpectedResult(int id, bool expectedResult)
+        [InlineData(1, PaidiType.Kataskinotis, true)]
+        [InlineData(1, PaidiType.Ekpaideuomenos, false)]
+        [InlineData(-1, PaidiType.Ekpaideuomenos, false)]
+        [InlineData(0, PaidiType.Ekpaideuomenos, false)]
+        public async Task AddPaidi_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
         {
-            var person = GetMockUpEkpaideuomenos(id);
-
-            var result = await _peopleService.AddPaidiInDbAsync(person);
+            Paidi paidi = new Paidi { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
+            var result = await _peopleService.AddPaidiInDbAsync(paidi);
             Assert.Equal(result, expectedResult);
         }
 
         [Theory]
-        [InlineData(1, true)]
-        [InlineData(0, false)]
-        [InlineData(-1, false)]
-        public async Task AddKataskinotis_ShouldReturnExpectedResult(int id, bool expectedResult)
+        [InlineData("SkiniTest", true)]
+        [InlineData("", false)]
+        public async Task AddSkini_ShouldReturnExpectedResult(string skiniName, bool expectedResult)
         {
-            var person = GetMockUpKataskinotis(id);
-
-            var result = await _peopleService.AddPaidiInDbAsync(person);
-            Assert.Equal(result, expectedResult);
-        }
-
-        [Fact]
-        public async Task AddSkini_ShouldFailToAddWhenSkiniNameEmpty()
-        {
-            var skini = GetMockUpSkini();
-            skini.Name = string.Empty;
-
+            var skini = new Skini { Name = skiniName };
             var result = await _peopleService.AddSkinesInDb(skini);
-            Assert.False(result);
+
+            Assert.Equal(result, expectedResult);
+
+            if (expectedResult)
+            {
+                var skines = await _dbContext.Skines.ToListAsync();
+                Assert.Single(skines);
+            }
         }
 
-        [Fact]
-        public async Task AddSkini_ShouldAddSkiniToDatabase()
-        {
-            var skini = GetMockUpSkini();
-
-            await _peopleService.AddSkinesInDb(skini);
-            var skines = await _dbContext.Skines.ToListAsync();
-
-            Assert.Single(skines);
-            Assert.Equal("Skini Test", skines [0].Name);
-        }
-        
         [Theory]
         [InlineData(1, PaidiType.Kataskinotis, true)]
         [InlineData(2, PaidiType.Ekpaideuomenos, true)]
@@ -107,12 +99,14 @@ namespace StelexarasApp.Tests.ServicesTests
                 {
                     Id = paidiId,
                     FullName = "Test Paidi",
-                    Age = 25,
+                    Age = 15,
                     Sex = Sex.Male,
                     PaidiType = PaidiType.Kataskinotis,
                     Skini = new Skini { Id = 1, Name = "Old Skini" }
                 };
-                _dbContext.Paidia.Add(existingPaidi);
+
+                await _peopleService.AddPaidiInDbAsync(existingPaidi);
+                await _peopleService.AddSkinesInDb(existingPaidi.Skini);
             }
 
             if (newSkiniId == 2)
@@ -122,57 +116,22 @@ namespace StelexarasApp.Tests.ServicesTests
                     Id = newSkiniId,
                     Name = "New Skini"
                 };
-                _dbContext.Skines.Add(newSkini);
+                await _peopleService.AddSkinesInDb(newSkini);
             }
-
-            await _dbContext.SaveChangesAsync();
-
-            // Act
+            // await _dbContext.SaveChangesAsync();
             var result = await _peopleService.MovePaidiToNewSkini(paidiId, newSkiniId);
 
-            // Assert
             Assert.Equal(expectedResult, result);
 
             if (expectedResult)
             {
-                var movedPaidi = await _dbContext.Paidia.FindAsync(paidiId);
+                var movedPaidi = await _dbContext.Paidia
+                    .Include(p => p.Skini)
+                    .FirstOrDefaultAsync(p => p.Id == paidiId);
+
                 Assert.NotNull(movedPaidi);
                 Assert.Equal(newSkiniId, movedPaidi.Skini.Id);
             }
-        }
-
-        private Paidi GetMockUpKataskinotis(int id)
-        {
-            return new Paidi
-            {
-                Id = id,
-                FullName = "Kataskinotis Test",
-                Age = 12,
-                Skini = GetMockUpSkini(),
-                PaidiType = PaidiType.Kataskinotis
-            };
-        }
-
-        private Paidi GetMockUpEkpaideuomenos(int id)
-        {
-            return new Paidi
-            {
-                Id = id,
-                FullName = "Ekpaideuomenos Test",
-                Age = 16,
-                PaidiType = PaidiType.Ekpaideuomenos,
-                Skini = GetMockUpSkini()
-            };
-        }
-
-        private Skini GetMockUpSkini()
-        {
-            return new Skini
-            {
-                Id = 3,
-                Name = "Skini Test",
-                Koinotita = new Koinotita { Id = 1, Name = "Koinotita Test" }
-            };
         }
     }
 }

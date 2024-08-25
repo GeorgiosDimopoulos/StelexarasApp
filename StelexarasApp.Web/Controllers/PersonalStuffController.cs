@@ -10,5 +10,11 @@ namespace StelexarasApp.Web.Controllers
         {
             _appDbContext = context;
         }
+
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<PersonalStuff>>> GetPersonalStuff()
+        //{
+        //    return await _appDbContext.Mythings.ToListAsync();
+        //}
     }
 }

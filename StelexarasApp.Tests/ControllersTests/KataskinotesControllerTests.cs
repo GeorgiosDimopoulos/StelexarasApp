@@ -10,12 +10,12 @@ namespace StelexarasApp.Tests.ControllersTests
     public class KataskinotisControllerTests
     {
         private readonly Mock<AppDbContext> _mockContext;
-        private readonly PaidiaController _controller;
+        private readonly PeopleController _controller;
 
         public KataskinotisControllerTests()
         {
             _mockContext = new Mock<AppDbContext>();
-            _controller = new PaidiaController(_mockContext.Object);
+            _controller = new PeopleController(_mockContext.Object);
         }
 
         [Fact]
