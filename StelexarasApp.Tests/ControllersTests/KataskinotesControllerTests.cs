@@ -2,7 +2,7 @@
 using Moq;
 using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.DataAccess;
-using StelexarasApp.Web.Controllers;
+using StelexarasApp.Web.ApiControllers;
 using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.Tests.ControllersTests

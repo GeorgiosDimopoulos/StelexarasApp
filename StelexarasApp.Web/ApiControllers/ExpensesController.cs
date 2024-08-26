@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
 
-namespace StelexarasApp.Web.Controllers
+namespace StelexarasApp.Web.ApiControllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = false)]
     public class ExpensesController : ControllerBase
     {
         private readonly AppDbContext _context;

@@ -4,10 +4,11 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 
-namespace StelexarasApp.Web.Controllers
+namespace StelexarasApp.Web.ApiControllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = false)]
     public class PeopleController : ControllerBase
     {
         private readonly AppDbContext _context;

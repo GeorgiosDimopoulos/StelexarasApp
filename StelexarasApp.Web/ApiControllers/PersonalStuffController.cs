@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.DataAccess;
 
-namespace StelexarasApp.Web.Controllers
+namespace StelexarasApp.Web.ApiControllers
 {
     public class PersonalStuffController : ControllerBase
     {
