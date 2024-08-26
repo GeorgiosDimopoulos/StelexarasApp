@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
 using StelexarasApp.Services.IServices;
@@ -10,16 +9,40 @@ ConfigureServives(builder);
 
 var app = builder.Build();
 
+app.UseRouting();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
+        // c.RoutePrefix = "swagger";
+        c.RoutePrefix = string.Empty;
+
+    });
     app.UseDeveloperExceptionPage();
 }
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/Koinotitas/Index");
+        return;
+    }
+
+    await next();
+});
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Koinotitas}/{action=Index}/{id?}");
 
 app.Run();
 
@@ -45,5 +68,6 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddTransient<PersonalViewModel>();
     builder.Services.AddTransient<DutyViewModel>();
 
+    builder.Services.AddControllersWithViews();
     builder.Services.AddControllers();
 }
