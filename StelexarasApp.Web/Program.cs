@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
+using StelexarasApp.Services.Helpers;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.ViewModels;
@@ -20,16 +21,21 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
         c.RoutePrefix = "swagger";
-
     });
+
     app.UseDeveloperExceptionPage();
 }
+
+// var redirectUrl = Environment.GetEnvironmentVariable("DEFAULT_REDIRECT_URL") ?? "/KoinotitaWeb/Index";
+// var redirectUrl = ResourceHelper.GetValue("DefaultRedirectUrl");
+var redirectUrl = builder.Configuration ["DefaultRedirectUrl"];
 
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/")
     {
-        context.Response.Redirect("/Koinotita/Index");
+        // context.Response.Redirect("/Koinotita/Index");
+        context.Response.Redirect(redirectUrl);
         return;
     }
 
@@ -43,12 +49,12 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
-// Map Controllers
-app.MapControllers();
-
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=koinotitaweb}/{action=Index}/{id?}");
+    pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
+
+// Map Controllers
+app.MapControllers();
 
 app.Run();
 
