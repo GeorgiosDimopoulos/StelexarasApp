@@ -23,7 +23,7 @@ namespace StelexarasApp.Web.ApiControllers
             return await _context.Expenses.ToListAsync();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("Duty/{id}")]
         public async Task<ActionResult<Expense>> GetExpense(int id)
         {
             var expense = await _context.Expenses.FindAsync(id);
@@ -31,7 +31,7 @@ namespace StelexarasApp.Web.ApiControllers
             return expense;
         }
 
-        [HttpPost]
+        [HttpPost("Duty")]
         public async Task<ActionResult<Expense>> PostExpense(Expense expense)
         {
             _context.Expenses.Add(expense);
@@ -39,7 +39,7 @@ namespace StelexarasApp.Web.ApiControllers
             return CreatedAtAction(nameof(GetExpense), new { id = expense.Id }, expense);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Duty/{id}")]
         public async Task<IActionResult> PutExpense(int id, Expense expense)
         {
             if (id != expense.Id) return BadRequest();
@@ -48,7 +48,7 @@ namespace StelexarasApp.Web.ApiControllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Duty/{id}")]
         public async Task<IActionResult> DeleteExpense(int id)
         {
             var expense = await _context.Expenses.FindAsync(id);

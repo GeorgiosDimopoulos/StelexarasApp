@@ -1,12 +1,15 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
-using StelexarasApp.Services.Helpers;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServives(builder);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 
@@ -64,6 +67,8 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddControllersWithViews();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
     // Add DbContext with SQL Server
     builder.Services.AddDbContext<AppDbContext>(options =>
