@@ -1,4 +1,5 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma;
+﻿using StelexarasApp.DataAccess.DtosModels;
+using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.UI.Views.SecondViews;
 using StelexarasApp.ViewModels;
@@ -8,24 +9,24 @@ namespace StelexarasApp.UI.Views
     public partial class TeamsPage : ContentPage
     {
         private TeamsViewModel _viewModel; 
-        private ITeamsService _peopleService;
+        private IPaidiaService _paidiaService;
 
-        public TeamsPage(ITeamsService peopleService)
+        public TeamsPage(IPaidiaService paidiaService)
         {
             InitializeComponent();
-            _peopleService = peopleService;
-            _viewModel = new TeamsViewModel(peopleService);
+            _paidiaService = paidiaService;
+            _viewModel = new TeamsViewModel(_paidiaService);
             BindingContext = _viewModel;
         }
 
         private async void Paidi_Clicked(object sender, EventArgs e)
         {
             var button = sender as Button;
-            Paidi? paidi = button?.CommandParameter as Paidi;
+            PaidiDto? paidi = button?.CommandParameter as PaidiDto;
 
             if (paidi != null)
             {
-                await Navigation.PushAsync(new ChildInfoPage(_peopleService, paidi, _viewModel.Skines));
+                await Navigation.PushAsync(new ChildInfoPage(_paidiaService, paidi, _viewModel.Skines));
             }
         }
 

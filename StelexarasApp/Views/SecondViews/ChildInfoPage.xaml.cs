@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.DataAccess.DtosModels;
 
 namespace StelexarasApp.UI.Views.SecondViews
 {
@@ -10,19 +11,19 @@ namespace StelexarasApp.UI.Views.SecondViews
     {
         private ChildInfoViewModel? _viewModel;
         private Skini? _skini;
-        private Paidi _paidi;
+        private PaidiDto _paidiDto;
 
-        public ChildInfoPage(ITeamsService peopleService, Paidi paidi, ObservableCollection<Skini> allSkines)
+        public ChildInfoPage(IPaidiaService peopleService, PaidiDto paidi, ObservableCollection<Skini> allSkines)
         {
             InitializeComponent();
-            _paidi = paidi;
+            _paidiDto = paidi;
             _viewModel = new ChildInfoViewModel(peopleService, paidi, allSkines);
             BindingContext = _viewModel;
         }
 
         private async void OnDeleteClicked(object sender, EventArgs e)
         {
-            await _viewModel.DeletePaidiAsync(_paidi);
+            await _viewModel.DeletePaidiAsync(_paidiDto);
             await Navigation.PopAsync();
         }
 

@@ -55,7 +55,8 @@ namespace StelexarasApp.UI
 
             services.AddScoped<IDutyService, DutyService>();
             services.AddScoped<IPersonalService, PersonalService>();
-            services.AddScoped<ITeamsService, TeamsService>();
+            services.AddScoped<IStelexiService, StelexiService>();
+            services.AddScoped<IPaidiaService, PaidiaService>();
             services.AddScoped<IExpenseService, ExpenseService>();
 
             ServiceProvider = services.BuildServiceProvider();

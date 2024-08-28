@@ -1,0 +1,184 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Services.IServices;
+using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using StelexarasApp.DataAccess.DtosModels;
+using StelexarasApp.Services.Services;
+
+namespace StelexarasApp.Web.ApiControllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = false)]
+    public class StelexiController : ControllerBase
+    {
+        private readonly IStelexiService _stelexiService;
+
+        public StelexiController(IStelexiService stelexiService)
+        {
+            _stelexiService = stelexiService;
+        }
+
+        [HttpGet("Omadarxes")]
+        public async Task<ActionResult<IEnumerable<Stelexos>>> GetOmadarxes()
+        {
+            var result = await _stelexiService.GetStelexoi(Thesi.Omadarxis);
+
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("Omadarxi/{id}")]
+        public async Task<ActionResult<Omadarxis>> GetOmadarxis(int id)
+        {
+            var result = await _stelexiService.GetStelexosById(id, Thesi.Omadarxis);
+
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPost("Omadarxi")]
+        public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] OmadarxisDto omadarxisDto)
+        {
+            var result = await _stelexiService.AddStelexosInDbAsync(omadarxisDto, Thesi.Omadarxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPut("Omadarxi/{id}")]
+        public async Task<IActionResult> PutOmadarxi(int id, [FromBody] OmadarxisDto omadarxisDto)
+        {
+            var result = await _stelexiService.UpdateStelexosInDb(id, omadarxisDto, Thesi.Omadarxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpDelete("Omadarxi/{id}")]
+        public async Task<IActionResult> DeleteOmadarxi(int id)
+        {
+            var result = await _stelexiService.DeleteStelexosInDb(id, Thesi.Omadarxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("Koinotarxes")]
+        public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes()
+        {
+            var result =  _stelexiService.GetStelexoi(Thesi.Koinotarxis);
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("Koinotarxi/{id}")]
+        public async Task<ActionResult<Koinotarxis>> GetKoinotarxis(int id)
+        {
+            var result = await _stelexiService.GetStelexosById(id, Thesi.Koinotarxis);
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPost("Koinotarxi")]
+        public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] KoinotarxisDto koinotarxisDto)
+        {
+            var result = await _stelexiService.AddStelexosInDbAsync(koinotarxisDto, Thesi.Koinotarxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPut("Koinotarxi/{id}")]
+        public async Task<IActionResult> PutKoinotarxi([FromBody] int id, KoinotarxisDto koinotarxisDto)
+        {
+            var result = await _stelexiService.UpdateStelexosInDb(id, koinotarxisDto, Thesi.Koinotarxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpDelete("Koinotarxi/{id}")]
+        public async Task<IActionResult> DeleteKoinotarxi(int id)
+        {
+            var result = await _stelexiService.DeleteStelexosInDb(id, Thesi.Koinotarxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("Tomearxes")]
+        public async Task<ActionResult<IEnumerable<Tomearxis>>> GetTomearxes()
+        {
+            var result = await _stelexiService.GetStelexoi(Thesi.Tomearxis);
+
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("Tomearxi/{id}")]
+        public async Task<ActionResult<Tomearxis>> GetTomearxis(int id)
+        {
+            var result = await _stelexiService.GetStelexosById(id, Thesi.Tomearxis);
+
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPost("Tomearxi")]
+        public async Task<ActionResult<Tomearxis>> PostTomearxi([FromBody] TomearxisDto tomearxisDto)
+        {
+            var result = await _stelexiService.AddStelexosInDbAsync(tomearxisDto, Thesi.Tomearxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPut("Tomearxi/{id}")]
+        public async Task<IActionResult> PutTomearxi(int id, [FromBody] TomearxisDto tomearxisDto)
+        {
+            var result = await _stelexiService.UpdateStelexosInDb(id, tomearxisDto, Thesi.Tomearxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpDelete("Tomearxi/{id}")]
+        public async Task<IActionResult> DeleteTomearxi(int id)
+        {
+            var result = await _stelexiService.DeleteStelexosInDb(id, Thesi.Tomearxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+    }
+}

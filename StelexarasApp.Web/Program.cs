@@ -76,7 +76,8 @@ void ConfigureServives(WebApplicationBuilder builder)
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
     // Register your own application services
-    builder.Services.AddScoped<ITeamsService, TeamsService>();
+    builder.Services.AddScoped<IStelexiService, StelexiService>();
+    builder.Services.AddScoped<IPaidiaService, PaidiaService>();
     builder.Services.AddScoped<IExpenseService, ExpenseService>();
     builder.Services.AddScoped<IPersonalService, PersonalService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
