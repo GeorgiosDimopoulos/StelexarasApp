@@ -3,13 +3,13 @@ using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.DataAccess.DtosModels
 {
-    public class TomearxisDto
+    public class KoinotarxisDto
     {
         public string FullName { get; set; } = null!;
         public int Age { get; set; }
         public Sex Sex { get; set; }
-        public int TomeasId { get; set; }
-        public Thesi Thesi { get; set; } = Thesi.Tomearxis;
-        public List<int> KoinotarxesIds { get; set; } = new List<int>();
+        public int KoinotitaId { get; set; }
+        public Thesi Thesi { get; set; } = Thesi.Koinotarxis;
+        public List<int> OmadarxesIds { get; set; } = new List<int>();
     }
 }

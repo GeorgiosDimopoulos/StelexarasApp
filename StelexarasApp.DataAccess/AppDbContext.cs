@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Models.Atoma;
