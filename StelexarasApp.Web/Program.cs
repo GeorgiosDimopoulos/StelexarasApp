@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
+using StelexarasApp.DataAccess.Repositories;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
@@ -63,6 +65,8 @@ app.Run();
 
 void ConfigureServives(WebApplicationBuilder builder)
 {
+    builder.Services.AddScoped<IPaidiRepository, PaidiRepository>();
+
     builder.Services.AddControllers();
     builder.Services.AddControllersWithViews();
     builder.Services.AddEndpointsApiExplorer();

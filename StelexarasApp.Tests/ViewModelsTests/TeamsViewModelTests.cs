@@ -1,4 +1,5 @@
 ﻿using Moq;
+using StelexarasApp.DataAccess.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.ViewModels;
@@ -8,13 +9,13 @@ namespace StelexarasApp.Tests.ViewModelsTests
     public class TeamsViewModelTests
     {
         private readonly TeamsViewModel peopleViewModel;
-        private readonly Mock<ITeamsService> mockPeopleService;
+        private readonly Mock<IPaidiaService> paidiaServiceMock;
 
 
         public TeamsViewModelTests()
         {
-            mockPeopleService = new Mock<ITeamsService>();
-            peopleViewModel = new TeamsViewModel(mockPeopleService.Object);
+            paidiaServiceMock = new Mock<IPaidiaService>();
+            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object);
         }
 
         [Fact]
@@ -26,7 +27,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             var paidiType = PaidiType.Kataskinotis;
 
             // Act
-            mockPeopleService.Setup(service => service.AddPaidiInDbAsync(It.IsAny<Paidi>())).ReturnsAsync(true);
+            paidiaServiceMock.Setup(service => service.AddPaidiInDbAsync(It.IsAny<PaidiDto>())).ReturnsAsync(true);
             var result = await peopleViewModel.AddPaidiAsync(fullName, skiniName, paidiType);
 
             // Assert
@@ -42,7 +43,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             var paidiType = PaidiType.Kataskinotis;
 
             // Act
-            mockPeopleService.Setup(service => service.AddPaidiInDbAsync(It.IsAny<Paidi>())).ReturnsAsync(false);
+            paidiaServiceMock.Setup(service => service.AddPaidiInDbAsync(It.IsAny<PaidiDto>())).ReturnsAsync(false);
             var result = await peopleViewModel.AddPaidiAsync(fullName, skiniName, paidiType);
 
             // Assert
@@ -58,7 +59,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             PaidiType paidiType = PaidiType.Kataskinotis;
 
             // Act
-            mockPeopleService.Setup(service => service.AddPaidiInDbAsync(It.IsAny<Paidi>())).ReturnsAsync(false);
+            paidiaServiceMock.Setup(service => service.AddPaidiInDbAsync(It.IsAny<PaidiDto>())).ReturnsAsync(false);
             var result = await peopleViewModel.AddPaidiAsync(fullName, skiniName, paidiType);
 
             // Assert

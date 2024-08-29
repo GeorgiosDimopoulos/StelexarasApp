@@ -2,7 +2,6 @@
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using System.Collections;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
