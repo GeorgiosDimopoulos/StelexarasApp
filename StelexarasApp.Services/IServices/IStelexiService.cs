@@ -1,5 +1,4 @@
-﻿using StelexarasApp.DataAccess.DtosModels;
-using StelexarasApp.DataAccess.Models.Atoma;
+﻿using StelexarasApp.DataAccess.DtosModels.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 
 namespace StelexarasApp.Services.IServices
@@ -10,10 +9,10 @@ namespace StelexarasApp.Services.IServices
 
         Task<bool> DeleteStelexosInDb(int id, Thesi thesi);
         Task<bool> UpdateStelexosInDb(int id, StelexosDto stelexosDto, Thesi thesi);
-        Task<IEnumerable<Stelexos>> GetStelexoi(Thesi thesi);
+        Task<IEnumerable<Stelexos>> GetStelexoiAnaThesi(Thesi thesi);
 
         Task<Stelexos> GetStelexosById(int id, Thesi thesi);
 
-        Task<bool> MoveStelexosToNewSkini(int Id, int newSkiniId);
+        Task<bool> MoveOmadarxisToAnotherSkini(int Id, int newSkiniId);
     }
 }

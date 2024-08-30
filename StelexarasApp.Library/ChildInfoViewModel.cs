@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma;
+﻿using StelexarasApp.DataAccess.DtosModels;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
@@ -8,8 +8,8 @@ namespace StelexarasApp.ViewModels
 {
     public class ChildInfoViewModel : INotifyPropertyChanged
     {
-        private readonly ITeamsService _peopleService;
-        public Paidi Paidi { get; set; }
+        private readonly IPaidiaService _paidiaService;
+        public PaidiDto PaidiDto { get; set; }
         public Skini Skini { get; set; }
 
         public ObservableCollection<Skini> Skines { get; set; }
@@ -17,24 +17,23 @@ namespace StelexarasApp.ViewModels
         public string FullName { get; set; }
         public int Age { get; set; }
 
-        public ChildInfoViewModel(ITeamsService peopleService, Paidi paidi, ObservableCollection<Skini> skines)
+        public ChildInfoViewModel(IPaidiaService peopleService, PaidiDto paidiDto, ObservableCollection<Skini> skines)
         {
-            _peopleService = peopleService;
+            _paidiaService = peopleService;
 
-            Paidi = paidi;
-            FullName = paidi.FullName;
-            Age = paidi.Age;
-            Skini = paidi.Skini;
+            PaidiDto = paidiDto;
+            FullName = paidiDto.FullName;
+            Age = paidiDto.Age;
             Skines = skines;
         }
 
-        public async Task DeletePaidiAsync(Paidi _paidi)
+        public async Task DeletePaidiAsync(PaidiDto paidi)
         {
-            bool isDeleted = await _peopleService.DeletePaidiInDb(_paidi);
+            bool isDeleted = await _paidiaService.DeletePaidiInDb(paidi.Id);
 
             if (isDeleted)
             {
-                await _peopleService.GetSkines();
+                // await _paidiaService.GetSkines();
                 OnPropertyChanged(nameof(Skines));
             }
         }
@@ -46,15 +45,15 @@ namespace StelexarasApp.ViewModels
                 return false;
             }
 
-            Paidi.Age = age;
-            Paidi.FullName = fullName;
-            Paidi.Skini = skini;
+            PaidiDto.SkiniName = skini.Name;
+            PaidiDto.Age = age;
+            PaidiDto.FullName = fullName;
 
-            var result = await _peopleService.UpdatePaidiInDb(Paidi);
+            var result = await _paidiaService.UpdatePaidiInDb(PaidiDto);
             
             if (result)
             {
-                await _peopleService.GetSkines();
+                // await _paidiaService.GetSkines();
                 OnPropertyChanged(nameof(Skines));
                 return true;
             }

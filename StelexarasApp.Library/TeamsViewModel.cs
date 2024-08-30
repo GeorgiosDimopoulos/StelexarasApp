@@ -1,4 +1,5 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma;
+﻿using StelexarasApp.DataAccess.DtosModels;
+using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
@@ -9,20 +10,23 @@ namespace StelexarasApp.ViewModels
 {
     public class TeamsViewModel : INotifyPropertyChanged
     {
-        private readonly ITeamsService _peopleService;
+        private readonly ITeamsService _teamsService;
+
+        private readonly IPaidiaService _paidiaService;
         public ObservableCollection<Skini>? Skines { get; set; }
         public Koinotita? Koinotita { get; set; }
-        public TeamsViewModel(ITeamsService peopleService)
+
+        public TeamsViewModel(IPaidiaService paidiaService, ITeamsService teamsService)
         {
-            _peopleService = peopleService;
-            
+            _paidiaService = paidiaService;
+            _teamsService = teamsService;
             // InitializeSkines();
-            GetAllSkinesAsync();
+            // GetAllSkinesAsync();
         }
-        
+
         public async Task<bool> AddPaidiAsync(string fullName, string skiniName, PaidiType paidiType)
         {
-            if(string.IsNullOrEmpty(fullName)|| string.IsNullOrEmpty(skiniName))
+            if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(skiniName))
             {
                 return false;
             }
@@ -30,28 +34,23 @@ namespace StelexarasApp.ViewModels
             Koinotita koinotita = Skines.FirstOrDefault(s => s.Name == skiniName)?.Koinotita ?? new Koinotita { Name = "Ήπειρος" };
             bool result;
 
-            var paidi = new Paidi
+            var paidi = new PaidiDto
             {
                 FullName = fullName,
                 PaidiType = PaidiType.Ekpaideuomenos,
-                Skini = new Skini
-                {
-                    Name = skiniName,
-                    Koinotita = Koinotita
-                }
             };
 
-            result = await _peopleService.AddPaidiInDbAsync(paidi);
+            result = await _paidiaService.AddPaidiInDbAsync(paidi);
 
             if (result)
             {
-                await GetAllSkinesAsync();
+                // await GetAllSkinesAsync();
                 OnPropertyChanged(nameof(Skines));
                 return true;
             }
 
             return false;
-        }        
+        }
 
         public async Task<bool> DeletePaidiAsync(string paidiId)
         {
@@ -60,23 +59,15 @@ namespace StelexarasApp.ViewModels
                 return false;
             }
 
-            var paidi = await _peopleService.GetPaidiById(int.Parse(paidiId));
-
-            var result = await _peopleService.DeletePaidiInDb(paidi);
+            var result = await _paidiaService.DeletePaidiInDb(int.Parse(paidiId));
             if (result)
             {
-                await GetAllSkinesAsync();
+                // await GetAllSkinesAsync();
                 OnPropertyChanged(nameof(Skines));
                 return true;
             }
-            
+
             return false;
-        }
-        
-        private async Task GetAllSkinesAsync()
-        {
-            Skines = new ObservableCollection<Skini>(await _peopleService.GetSkines());
-            OnPropertyChanged(nameof(Skines));
         }
 
         private void InitializeSkines()

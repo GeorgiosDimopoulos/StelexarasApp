@@ -14,25 +14,7 @@ namespace StelexarasApp.DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Paidi> FindPaidiAsync(int id)
-        {
-            return await _dbContext.Paidia.FindAsync(id);
-        }
-
-        public async Task<bool> RemovePaidiAsync(Paidi paidi)
-        {
-            var res = _dbContext.Paidia?.Remove(paidi);
-
-            if (res == null)
-            {
-                return false;
-            }
-
-            await SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId)
+        public async Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
@@ -81,7 +63,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> AddPaidiInDbAsync(Paidi paidi)
+        public async Task<bool> AddPaidiInDb(Paidi paidi)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
@@ -112,7 +94,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async IAsyncEnumerable<Paidi> GetPaidiaAsync()
+        public async IAsyncEnumerable<Paidi> GetPaidiaFromDb()
         {
             await foreach (var paidi in _dbContext.Paidia.AsAsyncEnumerable())
             {
@@ -192,20 +174,12 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<Paidi> GetPaidiById(int id)
+        public async Task<Paidi> GetPaidiByIdFromDb(int id)
         {
             return await _dbContext.Paidia.FirstAsync(p => p.Id == id);
         }
 
-        public async Task<IEnumerable<Skini>> GetSkines()
-        {
-            return await _dbContext.Skines
-                .Include(s => s.Paidia)
-                .Include(s => s.Koinotita)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Paidi>> GetPaidia(PaidiType type)
+        public async Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType type)
         {
             if (type == PaidiType.Kataskinotis)
                 return await _dbContext.Paidia.Where(p => p.PaidiType == PaidiType.Kataskinotis).ToListAsync();
@@ -213,21 +187,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 return await _dbContext.Paidia.Where(p => p.PaidiType == PaidiType.Ekpaideuomenos).ToListAsync();
         }
 
-        public Task<Skini> GetSkiniByName(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException("Name cannot be null or empty.", nameof(name));
-            }
-            if (_dbContext?.Skines == null)
-            {
-                throw new InvalidOperationException("The DbSet<Skini> is not initialized.");
-            }
-
-            return _dbContext.Skines?.FirstOrDefaultAsync(s => s.Name.Equals(name));
-        }
-
-        public async Task<bool> SaveChangesAsync()
+        public async Task<bool> SaveChangesInDb()
         {
             var res = await _dbContext.SaveChangesAsync();
             return res > 0;

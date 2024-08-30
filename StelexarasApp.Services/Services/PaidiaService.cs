@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using StelexarasApp.DataAccess.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
 
@@ -29,50 +28,38 @@ namespace StelexarasApp.Services.Services
         public async Task<bool> AddPaidiInDbAsync(PaidiDto paidiDto)
         {
             var paidi = _mapper.Map<Paidi>(paidiDto);
-            var result = await _paidiRepository.RemovePaidiAsync(paidi);
-
-            if (!result)
+            if (paidi == null)
             {
                 return false;
             }
 
-            return true;
+            return await _paidiRepository.AddPaidiInDb(paidi);
         }
 
         public async Task<bool> DeletePaidiInDb(int id)
         {
-            var result = await _paidiRepository.GetPaidiById(id);
-            if (result == null)
+            var paidi = await _paidiRepository.GetPaidiByIdFromDb(id);
+            if (paidi == null)
             {
                 return false;
             }
-            
-            return true;
+
+            return await _paidiRepository.DeletePaidiInDb(paidi);
         }
 
         public Task<IEnumerable<Paidi>> GetPaidia(PaidiType type)
         {
-            return _paidiRepository.GetPaidia(type);
+            return _paidiRepository.GetPaidiaFromDb(type);
         }
 
         public Task<Paidi> GetPaidiById(int id)
         {
-            return _paidiRepository.GetPaidiById(id);
-        }
-
-        public Task<IEnumerable<Skini>> GetSkines()
-        {
-            return _paidiRepository.GetSkines();
-        }
-
-        public Task<Skini> GetSkiniByName(string name)
-        {
-            return _paidiRepository.GetSkiniByName(name);
+            return _paidiRepository.GetPaidiByIdFromDb(id);
         }
 
         public async Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId)
         {
-            var result = await _paidiRepository.MovePaidiToNewSkini(paidiId, newSkiniId);
+            var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
 
             if (!result)
             {
