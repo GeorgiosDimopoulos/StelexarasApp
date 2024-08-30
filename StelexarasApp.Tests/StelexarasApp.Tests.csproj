@@ -27,4 +27,8 @@
     <ProjectReference Include="..\StelexarasApp.Web\StelexarasApp.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ServicesTests\" />
+  </ItemGroup>
+
 </Project>

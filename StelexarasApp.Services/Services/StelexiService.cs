@@ -1,137 +1,66 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.DtosModels;
-using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.DataAccess.DtosModels.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.Services.Services
 {
     public class StelexiService : IStelexiService
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IStelexiRepository _stelexiRepository;
         private readonly IMapper _mapper;
 
-        public StelexiService(AppDbContext dbContext, IMapper mapper)
+        public StelexiService(IMapper mapper, IStelexiRepository stelexiRepository)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            try
+            {
+                _mapper = mapper;
+                _stelexiRepository = stelexiRepository;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public async Task<bool> AddStelexosInDbAsync(StelexosDto stelexosDto, Thesi thesi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var paidi = _mapper.Map<Stelexos>(stelexosDto);
+            var result = await _stelexiRepository.AddStelexosInDb(paidi);
 
-            Stelexos? stelexos = MapDtoToEntity(stelexosDto, thesi);
-
-            if (stelexos == null)
+            if (!result)
             {
-                await transaction.RollbackAsync();
                 return false;
             }
 
-            try
-            {
-                switch (thesi)
-                {
-                    case Thesi.Omadarxis:
-                        _dbContext.Omadarxes.Add((Omadarxis)stelexos);
-                        break;
-                    case Thesi.Koinotarxis:
-                        _dbContext.Koinotarxes.Add((Koinotarxis)stelexos);
-                        break;
-                    case Thesi.Tomearxis:
-                        _dbContext.Tomearxes.Add((Tomearxis)stelexos);
-                        break;
-                    default:
-                        throw new ArgumentException("Invalid Thesi value", nameof(thesi));
-                }
-
-                await _dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
-                return false;
-            }
+            return true;
         }
 
         public async Task<bool> DeleteStelexosInDb(int id, Thesi thesi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                switch (thesi)
-                {
-                    case Thesi.Omadarxis:
-                        var omadarxis = await _dbContext.Omadarxes.FindAsync(id);
-                        if(omadarxis != null)
-                            _dbContext.Omadarxes.Remove(omadarxis);
-                        break;
-                    case Thesi.Koinotarxis:
-                        var koinotarxis = await _dbContext.Koinotarxes.FindAsync(id);
-                        if (koinotarxis != null)
-                            _dbContext.Koinotarxes.Remove(koinotarxis);
-                        break;
-                    case Thesi.Tomearxis:
-                        var tomearxis = await _dbContext.Tomearxes.FindAsync(id);
-                        if (tomearxis != null)
-                            _dbContext.Tomearxes.Remove(tomearxis); 
-                        break;
-                    default:
-                        throw new ArgumentException("Invalid Thesi value", nameof(thesi));
-                }
-
-                var changes = await _dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-                return changes > 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
-                return false;
-            }
+            return await _stelexiRepository.DeleteStelexosInDb(id, thesi);
         }
 
-        public async Task<IEnumerable<Stelexos>> GetStelexoi(Thesi thesi)
+        public async Task<IEnumerable<Stelexos>> GetStelexoiAnaThesi(Thesi thesi)
         {
             try
             {
-                return thesi switch
-                {
-                    Thesi.Omadarxis => await _dbContext.Omadarxes.ToListAsync(),
-                    Thesi.Koinotarxis => await _dbContext.Koinotarxes.ToListAsync(),
-                    Thesi.Tomearxis => await _dbContext.Tomearxes.ToListAsync(),
-                };
+                return await _stelexiRepository.GetStelexoiAnaThesiFromDb(thesi);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return null;
             }
+            
         }
 
         public async Task<Stelexos> GetStelexosById(int id, Thesi thesi)
         {
             try
             {
-                if (thesi == Thesi.None|| id <= 0 || _dbContext is null)
-                    return null;
-
-                return thesi switch
-                {
-                    Thesi.Omadarxis => await _dbContext.Omadarxes.FindAsync(id),
-                    Thesi.Koinotarxis => await _dbContext.Koinotarxes.FindAsync(id),
-                    Thesi.Tomearxis => await _dbContext.Tomearxes.FindAsync(id),
-                    Thesi.None => throw new NotImplementedException(),
-                    Thesi.Ekpaideutis => throw new NotImplementedException(),
-                };
+                return await _stelexiRepository.FindStelexosByIdInDb(id, thesi);
             }
             catch (Exception ex)
             {
@@ -140,46 +69,32 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        public async Task<bool> MoveStelexosToNewSkini(int Id, int newSkiniId)
+        public async Task<bool> MoveOmadarxisToAnotherSkini(int Id, int newSkiniId)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var result = await _stelexiRepository.MoveOmadarxisToAnotherSkiniInDb(Id, newSkiniId);
 
-            try
+            if (!result)
             {
-                // ToDo: implementation is missing!
-                return true;
-            }
-            catch (Exception ex)
-            {
-
                 return false;
             }
+
+            return true;
         }
 
         public async Task<bool> UpdateStelexosInDb(int id, StelexosDto stelexosDto, Thesi thesi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                // ToDo: implementation is missing!
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            var stelexos = MapDtoToEntity(stelexosDto);
+            return await _stelexiRepository.UpdateStelexosInDb(stelexos);
         }
 
-        private Stelexos MapDtoToEntity(StelexosDto dto, Thesi thesi)
+        private Stelexos MapDtoToEntity(StelexosDto stelexosDto)
         {
-            return thesi switch
+            return stelexosDto.Thesi switch
             {
-                Thesi.Omadarxis => _mapper.Map<Omadarxis>(dto),
-                Thesi.Koinotarxis => _mapper.Map<Koinotarxis>(dto),
-                Thesi.Tomearxis => _mapper.Map<Tomearxis>(dto),
-                _ => _mapper.Map<Stelexos>(dto),
+                Thesi.Omadarxis => _mapper.Map<Omadarxis>(stelexosDto),
+                Thesi.Koinotarxis => _mapper.Map<Koinotarxis>(stelexosDto),
+                Thesi.Tomearxis => _mapper.Map<Tomearxis>(stelexosDto),
+                _ => _mapper.Map<Stelexos>(stelexosDto),
             };
         }
     }

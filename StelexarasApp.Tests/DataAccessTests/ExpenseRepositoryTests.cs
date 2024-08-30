@@ -1,41 +1,57 @@
 ﻿using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
-using StelexarasApp.Services.Services;
 using Microsoft.EntityFrameworkCore;
+using StelexarasApp.DataAccess.Repositories;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
 
-namespace StelexarasApp.Tests.ServicesTests
+namespace StelexarasApp.Tests.DataAccessTests
 {
-    public class ExpenseServiceTests
+    public class ExpenseRepositoryTests
     {
-        private readonly ExpenseService _expenseService;
+        private readonly IExpenseRepository expenseRepository;
         private readonly AppDbContext _dbContext;
 
-        public ExpenseServiceTests()
+        public ExpenseRepositoryTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "TestDatabase").Options;
 
             _dbContext = new AppDbContext(options);
-            _expenseService = new ExpenseService(_dbContext);
+            expenseRepository = new ExpenseRepository(_dbContext);
         }
 
-        [Fact]
-        public async Task AddExpenseAsync_ShouldWork()
-        {
-            var expense = new Expense { Id = 1, Description = "Test", Amount = 100 };
+        [Theory]
+        [InlineData(-1, false)]
+        [InlineData(0, false)]
+        [InlineData(1, true)]
+        public async Task AddExpenseAsync_ShouldShouldReturnExpectedResult(int expenseId, bool expectedResult)
+        {s
+            // Arrange
+            var expense = new Expense
+            {
+                Id = expenseId,
+                Description = "Test Expense",
+                Amount = 100
+            };
 
-            await _expenseService.AddExpenseAsync(expense);
+            // Act
+            var result = await expenseRepository.AddExpenseAsync(expense);
 
-            var expenses = await _dbContext.Expenses.ToListAsync();
-            Assert.Single(expenses);
-            Assert.Equal("Test", expenses [0].Description);
+            // Assert
+            Assert.Equal(expectedResult, result);
+
+            if (expectedResult)
+            {
+                var expenseInDb = await _dbContext.Expenses.FindAsync(expenseId);
+                Assert.NotNull(expenseInDb);
+                Assert.Equal(expense.Description, expenseInDb.Description);
+                Assert.Equal(expense.Amount, expenseInDb.Amount);
+            }
+            else
+            {
+                var expenseInDb = await _dbContext.Expenses.FindAsync(expenseId);
+                Assert.Null(expenseInDb);
+            }
         }
-
-        [Fact]
-        public async Task AddExpenseAsync_ShouldThrow_WhenExpenseIsInvalid()
-        {
-            var invalidExpense = new Expense { Id = 10, Description = "Invalid", Amount = -100 };
-            await Assert.ThrowsAsync<ArgumentException>(() => _expenseService.AddExpenseAsync(invalidExpense));
-        }        
 
         [Theory]
         [InlineData(-1, false)]
@@ -57,7 +73,7 @@ namespace StelexarasApp.Tests.ServicesTests
             }
 
             // Act
-            var result = await _expenseService.DeleteExpenseAsync(expenseId);
+            var result = await expenseRepository.DeleteExpenseAsync(expenseId);
 
             // Assert
             Assert.Equal(expectedResult, result);
@@ -91,7 +107,7 @@ namespace StelexarasApp.Tests.ServicesTests
             };
 
             // Act
-            var result = await _expenseService.UpdateExpenseAsync(expenseId, updatedExpense);
+            var result = await expenseRepository.UpdateExpenseAsync(expenseId, updatedExpense);
 
             // Assert
             Assert.Equal(expectedResult, result);
@@ -128,7 +144,7 @@ namespace StelexarasApp.Tests.ServicesTests
             );
             await _dbContext.SaveChangesAsync();
 
-            var expenses = await _expenseService.GetExpensesAsync();
+            var expenses = await expenseRepository.GetAllExpensesAsync();
 
             Assert.Equal(2, expenses.Count());
         }

@@ -1,6 +1,7 @@
 ﻿using StelexarasApp.DataAccess.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services;
 using StelexarasApp.UI.Views.SecondViews;
 using StelexarasApp.ViewModels;
 
@@ -10,12 +11,14 @@ namespace StelexarasApp.UI.Views
     {
         private TeamsViewModel _viewModel; 
         private IPaidiaService _paidiaService;
+        private ITeamsService _teamsService;
 
-        public TeamsPage(IPaidiaService paidiaService)
+        public TeamsPage(IPaidiaService paidiaService, ITeamsService teamsService)
         {
             InitializeComponent();
             _paidiaService = paidiaService;
-            _viewModel = new TeamsViewModel(_paidiaService);
+            _teamsService = teamsService;
+            _viewModel = new TeamsViewModel(_paidiaService, _teamsService);
             BindingContext = _viewModel;
         }
 

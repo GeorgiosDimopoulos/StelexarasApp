@@ -1,23 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
-using StelexarasApp.Services.Services;
+using StelexarasApp.DataAccess.Repositories;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
+using System;
 
-namespace StelexarasApp.Tests.ServicesTests
+namespace StelexarasApp.Tests.DataAccessTests
 {
-    public class DutyServiceTests
+    public class DutyRepositoryTests
     {
-        private readonly DutyService _dutyService;
+        private readonly IDutyRepository dutyRepository;
         private readonly AppDbContext _dbContext;
 
-        public DutyServiceTests()
+        public DutyRepositoryTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
 
             _dbContext = new AppDbContext(options);
-            _dutyService = new DutyService(_dbContext);
+            dutyRepository = new DutyRepository(_dbContext);
         }
 
         [Fact]
@@ -27,7 +29,7 @@ namespace StelexarasApp.Tests.ServicesTests
             var duty = new Duty { Name = "Test Duty", Date = DateTime.Now };
 
             // Act
-            await _dutyService.AddDutyInDbAsync(duty);
+            await dutyRepository.AddDutyAsync(duty);
             var duties = await _dbContext.Duties.ToListAsync();
 
             // Assert
@@ -44,7 +46,7 @@ namespace StelexarasApp.Tests.ServicesTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            await _dutyService.DeleteDutyInDbAsync(duty.Name);
+            await dutyRepository.DeleteDutyAsync(duty.Id);
             var duties = await _dbContext.Duties.ToListAsync();
 
             // Assert
@@ -55,7 +57,7 @@ namespace StelexarasApp.Tests.ServicesTests
         public async Task AddDutyAsync_ShouldThrow_WhenExpenseIsInvalid()
         {
             var invalidExpense = new Duty { Id = 10, Name = string.Empty };
-            await Assert.ThrowsAsync<ArgumentException>(() => _dutyService.AddDutyInDbAsync(invalidExpense));
+            await Assert.ThrowsAsync<ArgumentException>(() => dutyRepository.AddDutyAsync(invalidExpense));
         }
 
         [Fact]
@@ -69,7 +71,7 @@ namespace StelexarasApp.Tests.ServicesTests
             var updatedDuty = new Duty { Name = "Updated Duty" };
 
             // Act
-            await _dutyService.UpdateDutyInDbAsync(duty.Name, updatedDuty);
+            await dutyRepository.UpdateDutyAsync(duty.Id, updatedDuty);
             var result = await _dbContext.Duties.FindAsync(duty.Id);
 
             // Assert
@@ -80,11 +82,11 @@ namespace StelexarasApp.Tests.ServicesTests
         public async Task UpdateDutyAsync_ShouldNotUpdateDuty_WhenDutyNotFound()
         {
             // Arrange
-            var randomName= "mplah";
-            var updatedDuty = new Duty { Name = "New Name", Id = -1};
+            var randomId = 0;
+            var updatedDuty = new Duty { Name = "New Name", Id = -1 };
 
             // Act
-            var result = await _dutyService.UpdateDutyInDbAsync(randomName, updatedDuty);
+            var result = await dutyRepository.UpdateDutyAsync(randomId, updatedDuty);
 
             // Assert
             Assert.False(result);
@@ -94,11 +96,11 @@ namespace StelexarasApp.Tests.ServicesTests
         public async Task UpdateDutyAsync_ShouldNotUpdateDuty_WhenInvalidNewId()
         {
             // Arrange
-            var nonExistentExpenseName = "mplah";
+            var randomId = 0;
             var updatedDuty = new Duty { Name = "New Name", Id = 1 };
 
             // Act
-            var result = await _dutyService.UpdateDutyInDbAsync(nonExistentExpenseName, updatedDuty);
+            var result = await dutyRepository.UpdateDutyAsync(randomId, updatedDuty);
 
             // Assert
             Assert.False(result);
@@ -115,7 +117,7 @@ namespace StelexarasApp.Tests.ServicesTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var duties = await _dutyService.GetDutiesFromDbAsync();
+            var duties = await dutyRepository.GetDutiesAsync();
 
             // Assert
             Assert.Equal(2, duties.Count());

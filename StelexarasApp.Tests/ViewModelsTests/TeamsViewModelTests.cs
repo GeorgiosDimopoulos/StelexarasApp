@@ -10,12 +10,14 @@ namespace StelexarasApp.Tests.ViewModelsTests
     {
         private readonly TeamsViewModel peopleViewModel;
         private readonly Mock<IPaidiaService> paidiaServiceMock;
+        private readonly Mock<ITeamsService> teamsServicemock;
 
 
         public TeamsViewModelTests()
         {
             paidiaServiceMock = new Mock<IPaidiaService>();
-            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object);
+            teamsServicemock = new Mock<ITeamsService>();
+            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object, teamsServicemock.Object);
         }
 
         [Fact]

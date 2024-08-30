@@ -20,6 +20,8 @@ namespace StelexarasApp.ViewModels
         {
             _paidiaService = paidiaService;
             _teamsService = teamsService;
+            Skines = new ObservableCollection<Skini>();
+            Koinotita = new Koinotita();
             // InitializeSkines();
             // GetAllSkinesAsync();
         }
@@ -31,16 +33,18 @@ namespace StelexarasApp.ViewModels
                 return false;
             }
 
-            Koinotita koinotita = Skines.FirstOrDefault(s => s.Name == skiniName)?.Koinotita ?? new Koinotita { Name = "Ήπειρος" };
-            bool result;
-
             var paidi = new PaidiDto
             {
                 FullName = fullName,
                 PaidiType = PaidiType.Ekpaideuomenos,
             };
 
-            result = await _paidiaService.AddPaidiInDbAsync(paidi);
+            if (paidiType == PaidiType.Ekpaideuomenos)
+            {
+                paidi.PaidiType = PaidiType.Ekpaideuomenos;
+            }
+
+            var result = await _paidiaService.AddPaidiInDbAsync(paidi);
 
             if (result)
             {

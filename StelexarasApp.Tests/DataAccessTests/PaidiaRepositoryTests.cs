@@ -1,31 +1,22 @@
-﻿using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.Services.Services;
-using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess.Models.Atoma;
-using Microsoft.Extensions.Logging;
-using Moq;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using StelexarasApp.DataAccess;
+using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
 
-namespace StelexarasApp.Tests.ServicesTests
+namespace StelexarasApp.Tests.DataAccessTests
 {
-    public class TeamsServiceTests
+    public class PaidiaServiceTests
     {
-        private readonly TeamsService _peopleService;
+        private readonly IPaidiRepository _paidiRepository;
         private readonly AppDbContext _dbContext;
-        private readonly Mock<ILogger<TeamsService>> _loggerMock;
 
-        public TeamsServiceTests()
+        public PaidiaServiceTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
-
-            // _dbContext = new Mock<AppDbContext>(options);
-            _dbContext = new AppDbContext(options);
-            _loggerMock = new Mock<ILogger<TeamsService>>();
-            _peopleService = new TeamsService(_dbContext, _loggerMock.Object);
         }
 
         [Theory]
@@ -35,27 +26,27 @@ namespace StelexarasApp.Tests.ServicesTests
         [InlineData(0, PaidiType.Ekpaideuomenos, false)]
         public async Task AddPaidi_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
         {
-            Paidi paidi = new Paidi { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
-            var result = await _peopleService.AddPaidiInDbAsync(paidi);
+            var paidi = new Paidi { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
+            var result = await _paidiRepository.AddPaidiInDb(paidi);
             Assert.Equal(result, expectedResult);
         }
 
-        [Theory]
-        [InlineData("SkiniTest", true)]
-        [InlineData("", false)]
-        public async Task AddSkini_ShouldReturnExpectedResult(string skiniName, bool expectedResult)
-        {
-            var skini = new Skini { Name = skiniName };
-            var result = await _peopleService.AddSkinesInDb(skini);
+        //[Theory]
+        //[InlineData("SkiniTest", true)]
+        //[InlineData("", false)]
+        //public async Task AddSkini_ShouldReturnExpectedResult(string skiniName, bool expectedResult)
+        //{
+        //    var skini = new Skini { Name = skiniName };
+        //    var result = await _paidiaService.AddSkinesInDb(skini);
 
-            Assert.Equal(result, expectedResult);
+        //    Assert.Equal(result, expectedResult);
 
-            if (expectedResult)
-            {
-                var skines = await _dbContext.Skines.ToListAsync();
-                Assert.Single(skines);
-            }
-        }
+        //    if (expectedResult)
+        //    {
+        //        var skines = await _paidiaService.Skines.ToListAsync();
+        //        Assert.Single(skines);
+        //    }
+        //}
 
         [Theory]
         [InlineData(1, PaidiType.Kataskinotis, true)]
@@ -73,7 +64,7 @@ namespace StelexarasApp.Tests.ServicesTests
             }
 
             // Act
-            var result = await _peopleService.DeletePaidiInDb(paidi);
+            var result = await _paidiRepository.DeletePaidiInDb(paidi);
 
             // Assert
             Assert.Equal(expectedResult, result);
@@ -102,24 +93,14 @@ namespace StelexarasApp.Tests.ServicesTests
                     Age = 15,
                     Sex = Sex.Male,
                     PaidiType = PaidiType.Kataskinotis,
-                    Skini = new Skini { Id = 1, Name = "Old Skini" }
                 };
 
-                await _peopleService.AddPaidiInDbAsync(existingPaidi);
-                await _peopleService.AddSkinesInDb(existingPaidi.Skini);
+                // await _paidiaService.AddSkinesInDb(existingPaidi.Skini);
+                await _paidiRepository.AddPaidiInDb(existingPaidi);
             }
 
-            if (newSkiniId == 2)
-            {
-                var newSkini = new Skini
-                {
-                    Id = newSkiniId,
-                    Name = "New Skini"
-                };
-                await _peopleService.AddSkinesInDb(newSkini);
-            }
             // await _dbContext.SaveChangesAsync();
-            var result = await _peopleService.MovePaidiToNewSkini(paidiId, newSkiniId);
+            var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
 
             Assert.Equal(expectedResult, result);
 

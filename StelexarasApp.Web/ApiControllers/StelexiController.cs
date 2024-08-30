@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using StelexarasApp.DataAccess.DtosModels;
-using StelexarasApp.Services.Services;
+using StelexarasApp.DataAccess.DtosModels.Atoma;
 
 namespace StelexarasApp.Web.ApiControllers
 {
@@ -21,7 +20,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpGet("Omadarxes")]
         public async Task<ActionResult<IEnumerable<Stelexos>>> GetOmadarxes()
         {
-            var result = await _stelexiService.GetStelexoi(Thesi.Omadarxis);
+            var result = await _stelexiService.GetStelexoiAnaThesi(Thesi.Omadarxis);
 
             if (result is null)
                 return NotFound();
@@ -76,7 +75,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpGet("Koinotarxes")]
         public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes()
         {
-            var result =  _stelexiService.GetStelexoi(Thesi.Koinotarxis);
+            var result =  _stelexiService.GetStelexoiAnaThesi(Thesi.Koinotarxis);
             if (result is null)
                 return NotFound();
 
@@ -105,8 +104,12 @@ namespace StelexarasApp.Web.ApiControllers
         }
 
         [HttpPut("Koinotarxi/{id}")]
-        public async Task<IActionResult> PutKoinotarxi([FromBody] int id, KoinotarxisDto koinotarxisDto)
+        public async Task<IActionResult> PutKoinotarxi(int id, [FromBody] KoinotarxisDto koinotarxisDto)
         {
+            // if (id != koinotarxisDto.Id)
+            // {
+            //    return BadRequest("ID in the route does not match ID in the body.");
+            // }
             var result = await _stelexiService.UpdateStelexosInDb(id, koinotarxisDto, Thesi.Koinotarxis);
 
             if (!result)
@@ -129,7 +132,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpGet("Tomearxes")]
         public async Task<ActionResult<IEnumerable<Tomearxis>>> GetTomearxes()
         {
-            var result = await _stelexiService.GetStelexoi(Thesi.Tomearxis);
+            var result = await _stelexiService.GetStelexoiAnaThesi(Thesi.Tomearxis);
 
             if (result is null)
                 return NotFound();
