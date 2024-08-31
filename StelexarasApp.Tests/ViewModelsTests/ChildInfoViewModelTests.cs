@@ -1,7 +1,6 @@
 ﻿using Moq;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.ViewModels;
-using System.Collections.ObjectModel;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.DataAccess.DtosModels;
 
@@ -21,7 +20,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _skini = GetMockUpSkini();
             _paidi = GetMockUpPaidi(_skini);
 
-            _childInfoViewModel = new ChildInfoViewModel(_mockPaidiaService.Object, _paidi, new ObservableCollection<Skini>() { _skini });
+            _childInfoViewModel = new ChildInfoViewModel(_mockPaidiaService.Object, [_skini]);
         }
 
         [Fact]
@@ -35,7 +34,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Setup(s => s.UpdatePaidiInDb(It.IsAny<PaidiDto>())).ReturnsAsync(true);
 
             // Act
-            var result = await _childInfoViewModel.UpdatePaidiAsync("1", newName, skini, newAge);
+            var result = await _childInfoViewModel.UpdatePaidiAsync(It.IsAny<PaidiDto>(), skini);
 
             // Assert
             Assert.True(result);
@@ -55,7 +54,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(_paidi)).ReturnsAsync(false);
 
             // Act
-            var result = await _childInfoViewModel.UpdatePaidiAsync(_paidi.Id.ToString(), string.Empty, GetMockUpSkini(), _paidi.Age);
+            var result = await _childInfoViewModel.UpdatePaidiAsync(_paidi, GetMockUpSkini());
 
             // Assert
             Assert.False(result);
@@ -68,7 +67,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(_paidi)).ReturnsAsync(false);
 
             // Act
-            var result = await _childInfoViewModel.UpdatePaidiAsync(_paidi.Id.ToString(), _paidi.FullName, null, _paidi.Age);
+            var result = await _childInfoViewModel.UpdatePaidiAsync(_paidi, null);
 
             // Assert
             Assert.False(result);

@@ -9,21 +9,14 @@ namespace StelexarasApp.ViewModels
     public class ChildInfoViewModel : INotifyPropertyChanged
     {
         private readonly IPaidiaService _paidiaService;
+        
         public PaidiDto PaidiDto { get; set; }
-        public Skini Skini { get; set; }
-
         public ObservableCollection<Skini> Skines { get; set; }
 
-        public string FullName { get; set; }
-        public int Age { get; set; }
-
-        public ChildInfoViewModel(IPaidiaService peopleService, PaidiDto paidiDto, ObservableCollection<Skini> skines)
+        public ChildInfoViewModel(IPaidiaService peopleService, ObservableCollection<Skini> skines)
         {
             _paidiaService = peopleService;
-
-            PaidiDto = paidiDto;
-            FullName = paidiDto.FullName;
-            Age = paidiDto.Age;
+            PaidiDto = new PaidiDto();
             Skines = skines;
         }
 
@@ -38,16 +31,14 @@ namespace StelexarasApp.ViewModels
             }
         }
 
-        public async Task<bool> UpdatePaidiAsync(string id, string fullName, Skini skini, int age)
+        public async Task<bool> UpdatePaidiAsync(PaidiDto paidiDto, Skini skini)
         {
             if (skini is null)
             {
                 return false;
             }
-
+            PaidiDto = paidiDto;
             PaidiDto.SkiniName = skini.Name;
-            PaidiDto.Age = age;
-            PaidiDto.FullName = fullName;
 
             var result = await _paidiaService.UpdatePaidiInDb(PaidiDto);
             

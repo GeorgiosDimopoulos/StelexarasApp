@@ -20,7 +20,7 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Label Text="Όνοματεπώνυμο:" Grid.Column="0" Grid.Row="0"/>
-			<Entry Text="{Binding FullName}" x:Name="ChildName" Grid.Column="1" Grid.Row="0" Focused="OnChildEntryFocused"/>
+			<Entry Text="{Binding FullName}" x:Name="ChildName" Grid.Column="1" Grid.Row="0" Focused="OnChildNameEntryFocused" Unfocused="OnChildNameEntryUnfocused"/>
 			<Label Text="Σκηνή:" Grid.Column="0" Grid.Row="1"/>
 			<Entry Text="{Binding Skini.Name}" x:Name="SkiniName" Grid.Column="1" Grid.Row="1" Focused="OnSkiniEntryFocused"/>
 			<Picker ItemsSource="{Binding Skines}"

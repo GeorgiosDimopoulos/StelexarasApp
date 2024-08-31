@@ -24,7 +24,7 @@ namespace StelexarasApp.Tests.DataAccessTests
         [InlineData(0, false)]
         [InlineData(1, true)]
         public async Task AddExpenseAsync_ShouldShouldReturnExpectedResult(int expenseId, bool expectedResult)
-        {s
+        {
             // Arrange
             var expense = new Expense
             {
