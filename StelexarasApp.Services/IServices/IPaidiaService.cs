@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.DtosModels;
+﻿using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.Services.IServices
@@ -8,12 +8,10 @@ namespace StelexarasApp.Services.IServices
         Task<bool> AddPaidiInDbAsync(PaidiDto paidiDto);
 
         Task<bool> DeletePaidiInDb(int id);
+
         Task<bool> UpdatePaidiInDb(PaidiDto paidiDto);
 
-        //Task<Skini> GetSkiniByName(string name);
-        //Task<IEnumerable<Skini>> GetSkines();
-
-        Task<IEnumerable<Paidi>> GetPaidia(PaidiType type);        
+        Task<IEnumerable<Paidi>> GetPaidia(PaidiType type);
 
         Task<Paidi> GetPaidiById(int id);
 

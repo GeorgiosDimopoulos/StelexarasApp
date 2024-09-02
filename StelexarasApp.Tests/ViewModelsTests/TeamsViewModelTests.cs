@@ -1,5 +1,5 @@
 ﻿using Moq;
-using StelexarasApp.DataAccess.DtosModels;
+using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.ViewModels;
@@ -10,14 +10,11 @@ namespace StelexarasApp.Tests.ViewModelsTests
     {
         private readonly TeamsViewModel peopleViewModel;
         private readonly Mock<IPaidiaService> paidiaServiceMock;
-        private readonly Mock<ITeamsService> teamsServicemock;
-
 
         public TeamsViewModelTests()
         {
             paidiaServiceMock = new Mock<IPaidiaService>();
-            teamsServicemock = new Mock<ITeamsService>();
-            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object, teamsServicemock.Object);
+            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object);
         }
 
         [Fact]

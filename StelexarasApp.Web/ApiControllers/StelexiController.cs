@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using StelexarasApp.DataAccess.DtosModels.Atoma;
+using StelexarasApp.Services.DtosModels.Atoma;
 
 namespace StelexarasApp.Web.ApiControllers
 {
@@ -75,7 +75,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpGet("Koinotarxes")]
         public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes()
         {
-            var result =  _stelexiService.GetStelexoiAnaThesi(Thesi.Koinotarxis);
+            var result = await _stelexiService.GetStelexoiAnaThesi(Thesi.Koinotarxis);
             if (result is null)
                 return NotFound();
 
@@ -106,10 +106,6 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPut("Koinotarxi/{id}")]
         public async Task<IActionResult> PutKoinotarxi(int id, [FromBody] KoinotarxisDto koinotarxisDto)
         {
-            // if (id != koinotarxisDto.Id)
-            // {
-            //    return BadRequest("ID in the route does not match ID in the body.");
-            // }
             var result = await _stelexiService.UpdateStelexosInDb(id, koinotarxisDto, Thesi.Koinotarxis);
 
             if (!result)
@@ -177,6 +173,61 @@ namespace StelexarasApp.Web.ApiControllers
         public async Task<IActionResult> DeleteTomearxi(int id)
         {
             var result = await _stelexiService.DeleteStelexosInDb(id, Thesi.Tomearxis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("Ekpaideutes")]
+        public async Task<ActionResult<IEnumerable<Ekpaideutis>>> GetEkpaideutes()
+        {
+            var result = await _stelexiService.GetStelexoiAnaThesi(Thesi.Ekpaideutis);
+
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("Ekpaideutis/{id}")]
+        public async Task<ActionResult<Ekpaideutis>> GetEkpaideutis(int id)
+        {
+            var result = await _stelexiService.GetStelexosById(id, Thesi.Ekpaideutis);
+
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPost("Ekpaideutis")]
+        public async Task<ActionResult<Ekpaideutis>> PostEkpaideutis([FromBody] EkpaideutisDto ekpaideutisDto)
+        {
+            var result = await _stelexiService.AddStelexosInDbAsync(ekpaideutisDto, Thesi.Ekpaideutis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPut("Ekpaideutis/{id}")]
+        public async Task<IActionResult> PutEkpaideutis(int id, [FromBody] EkpaideutisDto ekpaideutisDto)
+        {
+            var result = await _stelexiService.UpdateStelexosInDb(id, ekpaideutisDto, Thesi.Ekpaideutis);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpDelete("Ekpaideutis/{id}")]
+        public async Task<IActionResult> DeleteEkpaideutis(int id)
+        {
+            var result = await _stelexiService.DeleteStelexosInDb(id, Thesi.Ekpaideutis);
 
             if (!result)
                 return NotFound();

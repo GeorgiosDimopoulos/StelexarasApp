@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using StelexarasApp.DataAccess.Models.Atoma;
 
-namespace StelexarasApp.DataAccess.DtosModels.Atoma
+namespace StelexarasApp.Services.DtosModels.Atoma
 {
     public class KoinotarxisDto : StelexosDto
     {
@@ -10,6 +10,5 @@ namespace StelexarasApp.DataAccess.DtosModels.Atoma
         public Sex Sex { get; set; }
         public int KoinotitaId { get; set; }
         public Thesi Thesi { get; set; } = Thesi.Koinotarxis;
-        public List<int> OmadarxesIds { get; set; } = new List<int>();
     }
 }

@@ -3,50 +3,40 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.DataAccess.Repositories;
+using System.Dynamic;
+using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.Tests.DataAccessTests
 {
-    public class PaidiaServiceTests
+    public class PaidiaRepositoryTests
     {
         private readonly IPaidiRepository _paidiRepository;
         private readonly AppDbContext _dbContext;
 
-        public PaidiaServiceTests()
+        public PaidiaRepositoryTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
+
+            _dbContext = new AppDbContext(options);
+            _paidiRepository = new PaidiRepository(_dbContext);
         }
 
         [Theory]
         [InlineData(1, PaidiType.Kataskinotis, true)]
-        [InlineData(1, PaidiType.Ekpaideuomenos, false)]
+        [InlineData(2, PaidiType.Ekpaideuomenos, true)]
         [InlineData(-1, PaidiType.Ekpaideuomenos, false)]
-        [InlineData(0, PaidiType.Ekpaideuomenos, false)]
+        [InlineData(0, PaidiType.Kataskinotis, false)]
         public async Task AddPaidi_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
         {
             var paidi = new Paidi { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
             var result = await _paidiRepository.AddPaidiInDb(paidi);
             Assert.Equal(result, expectedResult);
         }
-
-        //[Theory]
-        //[InlineData("SkiniTest", true)]
-        //[InlineData("", false)]
-        //public async Task AddSkini_ShouldReturnExpectedResult(string skiniName, bool expectedResult)
-        //{
-        //    var skini = new Skini { Name = skiniName };
-        //    var result = await _paidiaService.AddSkinesInDb(skini);
-
-        //    Assert.Equal(result, expectedResult);
-
-        //    if (expectedResult)
-        //    {
-        //        var skines = await _paidiaService.Skines.ToListAsync();
-        //        Assert.Single(skines);
-        //    }
-        //}
 
         [Theory]
         [InlineData(1, PaidiType.Kataskinotis, true)]
@@ -86,16 +76,20 @@ namespace StelexarasApp.Tests.DataAccessTests
             // Arrange
             if (paidiId == 1)
             {
+                var existingSkini = new Skini { Id = 4, Name = "Πίνδος" };
+
+                await _paidiRepository.AddSkinesInDb(existingSkini);
+
                 var existingPaidi = new Paidi
                 {
                     Id = paidiId,
                     FullName = "Test Paidi",
                     Age = 15,
                     Sex = Sex.Male,
+                    Skini = existingSkini,
                     PaidiType = PaidiType.Kataskinotis,
                 };
-
-                // await _paidiaService.AddSkinesInDb(existingPaidi.Skini);
+                
                 await _paidiRepository.AddPaidiInDb(existingPaidi);
             }
 

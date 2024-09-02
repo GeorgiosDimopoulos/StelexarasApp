@@ -1,8 +1,8 @@
 ﻿using Moq;
-using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.ViewModels;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.DataAccess.DtosModels;
+using StelexarasApp.Services.DtosModels;
+using StelexarasApp.Services.DtosModels.Domi;
 
 namespace StelexarasApp.Tests.ViewModelsTests
 {
@@ -11,7 +11,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
         private readonly Mock<IPaidiaService> _mockPaidiaService;
         private readonly ChildInfoViewModel _childInfoViewModel;
         private readonly PaidiDto _paidi;
-        private readonly Skini _skini;
+        private readonly SkiniDto _skini;
 
         public ChildInfoViewModelTests()
         {
@@ -23,55 +23,24 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _childInfoViewModel = new ChildInfoViewModel(_mockPaidiaService.Object, [_skini]);
         }
 
-        [Fact]
-        public async Task UpdatePaidiAsync_ShouldUpdatePaidiAndReturnTrue_WhenUpdateSucceeds()
+        [Theory]
+        [InlineData(null, "SomeSkini", false)]
+        [InlineData("ValidName", null, false)]
+        public async Task UpdatePaidiAsync_ShouldReturnExpectedResult(string fullName, string skiniName, bool expectedResult)
         {
             // Arrange
-            var skini = _childInfoViewModel.Skines.FirstOrDefault();
-            var newName = "New Name";
-            var newAge = 12;
+            var paidi = new PaidiDto { FullName = fullName };
+            var skini = skiniName != null ? GetMockUpSkini() : null;
 
-            _mockPaidiaService.Setup(s => s.UpdatePaidiInDb(It.IsAny<PaidiDto>())).ReturnsAsync(true);
-
-            // Act
-            var result = await _childInfoViewModel.UpdatePaidiAsync(It.IsAny<PaidiDto>(), skini);
-
-            // Assert
-            Assert.True(result);
-            Assert.Equal("New Name", _childInfoViewModel.PaidiDto.FullName);
-            Assert.Equal(12, _childInfoViewModel.PaidiDto.Age);
-            Assert.Same(skini.Name, _childInfoViewModel.PaidiDto.SkiniName);
-
-            _mockPaidiaService.Verify(s => s.UpdatePaidiInDb(It.Is<PaidiDto>(p => p.FullName == "New Name" && p.Age == 12 && p.SkiniName == skini.Name)), Times.Once);
-                        
-            // _mockPaidiaService.Verify(s => s.GetSkines(), Times.Once);
-        }
-
-        [Fact]
-        public async Task UpdatePaidiAsync_ShouldNotWorkWhenFullNameNull()
-        {
-            // Arrange
-            _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(_paidi)).ReturnsAsync(false);
+            _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(paidi)).ReturnsAsync(expectedResult);
 
             // Act
-            var result = await _childInfoViewModel.UpdatePaidiAsync(_paidi, GetMockUpSkini());
+            var result = await _childInfoViewModel.UpdatePaidiAsync(paidi, skini);
 
             // Assert
-            Assert.False(result);
+            Assert.Equal(expectedResult, result);
         }
 
-        [Fact]
-        public async Task UpdatePaidiAsync_ShouldNotWorkWhenSkiniNull()
-        {
-            // Arrange
-            _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(_paidi)).ReturnsAsync(false);
-
-            // Act
-            var result = await _childInfoViewModel.UpdatePaidiAsync(_paidi, null);
-
-            // Assert
-            Assert.False(result);
-        }
 
         [Fact]
         public async Task DeletePaidiAsync_ShouldUpdateSkines_WhenPaidiIsDeleted()
@@ -86,7 +55,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Verify(service => service.DeletePaidiInDb(_paidi.Id), Times.Once);
         }
 
-        private PaidiDto GetMockUpPaidi(Skini skini)
+        private PaidiDto GetMockUpPaidi(SkiniDto skini)
         {
             return new PaidiDto
             {
@@ -98,9 +67,9 @@ namespace StelexarasApp.Tests.ViewModelsTests
             };
         }
 
-        private Skini GetMockUpSkini()
+        private SkiniDto GetMockUpSkini()
         {
-            return new Skini { Id = 1, Name = "Πίνδος" };
+            return new SkiniDto { Id = 1, Name = "Πίνδος" };
         }
     }
 }

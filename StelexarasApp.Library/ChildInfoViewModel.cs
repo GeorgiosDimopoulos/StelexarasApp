@@ -1,5 +1,5 @@
-﻿using StelexarasApp.DataAccess.DtosModels;
-using StelexarasApp.DataAccess.Models.Domi;
+﻿using StelexarasApp.Services.DtosModels;
+using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,9 +11,9 @@ namespace StelexarasApp.ViewModels
         private readonly IPaidiaService _paidiaService;
         
         public PaidiDto PaidiDto { get; set; }
-        public ObservableCollection<Skini> Skines { get; set; }
+        public ObservableCollection<SkiniDto> Skines { get; set; }
 
-        public ChildInfoViewModel(IPaidiaService peopleService, ObservableCollection<Skini> skines)
+        public ChildInfoViewModel(IPaidiaService peopleService, ObservableCollection<SkiniDto> skines)
         {
             _paidiaService = peopleService;
             PaidiDto = new PaidiDto();
@@ -31,7 +31,7 @@ namespace StelexarasApp.ViewModels
             }
         }
 
-        public async Task<bool> UpdatePaidiAsync(PaidiDto paidiDto, Skini skini)
+        public async Task<bool> UpdatePaidiAsync(PaidiDto paidiDto, SkiniDto skini)
         {
             if (skini is null)
             {

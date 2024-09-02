@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using AutoMapper;
 using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.DataAccess.DtosModels.Atoma;
+using StelexarasApp.Services.DtosModels.Atoma;
 
 namespace StelexarasApp.Services.Mappers
 {

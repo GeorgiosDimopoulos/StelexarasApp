@@ -1,6 +1,5 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using System.Collections.ObjectModel;
 
 namespace StelexarasApp.DataAccess.Models.Domi
 {

@@ -75,13 +75,15 @@ namespace StelexarasApp.DataAccess.Repositories
                     return false;
                 }
 
-                var existingPaidi = await _dbContext.Paidia.FindAsync(paidi.Id);
-                if (existingPaidi != null)
+                if(_dbContext?.Paidia is not null)
                 {
-                    return false;
+                    var existingPaidi = await _dbContext.Paidia.FindAsync(paidi.Id);
+                    if (existingPaidi is not null)
+                        return false;
+                    
                 }
 
-                _dbContext.Paidia.Add(paidi);
+                _dbContext!.Paidia!.Add(paidi);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

@@ -2,7 +2,8 @@
 using System.Collections.ObjectModel;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.DataAccess.DtosModels;
+using StelexarasApp.Services.DtosModels;
+using StelexarasApp.Services.DtosModels.Domi;
 
 namespace StelexarasApp.UI.Views.SecondViews
 {
@@ -12,16 +13,16 @@ namespace StelexarasApp.UI.Views.SecondViews
         private bool isSkiniPickerFilled = false;
         private bool isChildAdeiaFieldFilled = false;
         private PaidiDto _paidiDto;
-        private Skini _skini;
+        private SkiniDto _skini;
         private bool isChildNameFilled = false;
         private bool isChildAgeFilled = false;
 
-        public ChildInfoPage(IPaidiaService peopleService, PaidiDto paidi, ObservableCollection<Skini> allSkines)
+        public ChildInfoPage(IPaidiaService peopleService, PaidiDto paidi, ObservableCollection<SkiniDto> allSkines)
         {
             InitializeComponent();
             _childviewModel = new ChildInfoViewModel(peopleService, allSkines);
             _paidiDto = paidi;
-            _skini = new Skini();
+            _skini = new SkiniDto();
             BindingContext = _childviewModel;
         }
 
@@ -83,7 +84,7 @@ namespace StelexarasApp.UI.Views.SecondViews
 
             try
             {
-                _skini = (Skini)SkiniPicker.SelectedItem;
+                _skini = (SkiniDto)SkiniPicker.SelectedItem;
                 SaveButton.IsEnabled = true;
             }
             catch (Exception ex)

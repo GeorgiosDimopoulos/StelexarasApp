@@ -1,6 +1,5 @@
-﻿using StelexarasApp.DataAccess.DtosModels.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using StelexarasApp.DataAccess.DtosModels.Domi;
+﻿using StelexarasApp.Services.DtosModels.Domi;
+using System.Collections.ObjectModel;
 
 namespace StelexarasApp.Services.IServices
 {
@@ -10,7 +9,8 @@ namespace StelexarasApp.Services.IServices
 
         Task<bool> DeleteSkiniInDb(SkiniDto skini);
         Task<bool> UpdateSkiniInDb(SkiniDto skini);
-
-        // ToDo: implement the rest of the methods for Koinotites and Tomeis
+        Task<ObservableCollection<SkiniDto>> GetSkines();
+        Task<SkiniDto> GetSkini();
+        Task<bool> AddKoinotita(KoinotitaDto skini);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using StelexarasApp.DataAccess.DtosModels.Atoma;
+using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;

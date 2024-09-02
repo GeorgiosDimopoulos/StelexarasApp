@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 
-namespace StelexarasApp.DataAccess.DtosModels
+namespace StelexarasApp.Services.DtosModels
 {
     public class PaidiDto
     {

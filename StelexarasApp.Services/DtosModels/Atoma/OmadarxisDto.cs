@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using StelexarasApp.DataAccess.Models.Atoma;
 
-namespace StelexarasApp.DataAccess.DtosModels.Atoma
+namespace StelexarasApp.Services.DtosModels.Atoma
 {
     public class OmadarxisDto : StelexosDto
     {

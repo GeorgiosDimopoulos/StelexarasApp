@@ -1,10 +1,6 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.DtosModels;
+using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using StelexarasApp.Services.IServices;
 namespace StelexarasApp.Web.ApiControllers
 {
