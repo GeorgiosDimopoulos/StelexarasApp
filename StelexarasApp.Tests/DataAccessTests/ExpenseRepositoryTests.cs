@@ -53,30 +53,43 @@ namespace StelexarasApp.Tests.DataAccessTests
             }
         }
 
-        [Theory]
-        [InlineData(-1, false)]
-        [InlineData(0, false)]
-        [InlineData(1, true)]
-        public async Task DeleteExpenseAsync_ShouldReturnExpectedResult(int expenseId, bool expectedResult)
+        [Fact]
+        public async Task DeleteExpenseAsync_ShouldWorkWhenExpenseFound()
         {
             // Arrange
-            if (expenseId > 0)
+            var existingExpense = new Expense
             {
-                var existingExpense = new Expense
-                {
-                    Id = expenseId,
-                    Description = "Test Expense",
-                    Amount = 100
-                };
-                _dbContext.Expenses.Add(existingExpense);
-                await _dbContext.SaveChangesAsync();
-            }
+                Id = 1,
+                Description = "Test Expense",
+                Amount = 100
+            };
+            _dbContext.Expenses.Add(existingExpense);
+            await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await expenseRepository.DeleteExpenseAsync(expenseId);
+            var result = await expenseRepository.DeleteExpenseAsync(existingExpense);
 
             // Assert
-            Assert.Equal(expectedResult, result);
+            Assert.True(result);
+
+            var deletedExpense = await _dbContext.Expenses.FindAsync(1);
+            Assert.Null(deletedExpense);
+        }
+
+        [Fact]
+        public async Task DeleteExpenseAsync_ShouldNotWorkWhenExpenseNotFound()
+        {
+            // Arrange
+            var existingExpense = new Expense { Id = 1, Description = "Test Expense", Amount = 100 };
+            var notIdDbExpense = new Expense { Id = 2, Description = "Test Expense2", Amount = 20 };
+            _dbContext.Expenses.Add(existingExpense);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            var result = await expenseRepository.DeleteExpenseAsync(notIdDbExpense);
+
+            // Assert
+            Assert.False(result);
         }
 
         [Theory]
@@ -136,7 +149,7 @@ namespace StelexarasApp.Tests.DataAccessTests
         }
 
         [Fact]
-        public async Task GetExpensesAsync_ShouldReturnAllExpenses()
+        public async Task GetExpensesAsync_ShouldReturnAllExpensesWhenExisted()
         {
             _dbContext.Expenses.AddRange(
                 new Expense { Id = 11, Description = "ExpenseTest1", Amount = 100 },
@@ -147,6 +160,17 @@ namespace StelexarasApp.Tests.DataAccessTests
             var expenses = await expenseRepository.GetAllExpensesAsync();
 
             Assert.Equal(2, expenses.Count());
+        }
+
+        [Fact]
+        public async Task GetExpensesAsync_ShouldReturnNoExpensesWhenEmptyDb()
+        {
+            _dbContext.Expenses = null;
+            await _dbContext.SaveChangesAsync();
+
+            var expenses = await expenseRepository.GetAllExpensesAsync();
+
+            Assert.Null(expenses);
         }
     }
 }

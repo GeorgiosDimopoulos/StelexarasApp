@@ -29,12 +29,22 @@ namespace StelexarasApp.Tests.DataAccessTests
             var duty = new Duty { Name = "Test Duty", Date = DateTime.Now };
 
             // Act
-            await dutyRepository.AddDutyAsync(duty);
-            var duties = await _dbContext.Duties.ToListAsync();
+            var rest = await dutyRepository.AddDutyInDb(duty);
 
             // Assert
+            Assert.True(rest);
+            var duties = await _dbContext.Duties.ToListAsync();
             Assert.Single(duties);
-            Assert.Equal("Test Duty", duties.First().Name);
+        }
+
+        [Fact]
+        public async Task AddDutyAsync_ShouldNotAddDutyWhenDutyEmpty()
+        {
+            // Act
+            var rest = await dutyRepository.AddDutyInDb(null);
+
+            // Assert
+            Assert.False(rest);
         }
 
         [Fact]
@@ -46,7 +56,7 @@ namespace StelexarasApp.Tests.DataAccessTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            await dutyRepository.DeleteDutyAsync(duty.Id);
+            await dutyRepository.DeleteDutyInDb(duty.Id);
             var duties = await _dbContext.Duties.ToListAsync();
 
             // Assert
@@ -57,7 +67,8 @@ namespace StelexarasApp.Tests.DataAccessTests
         public async Task AddDutyAsync_ShouldThrow_WhenExpenseIsInvalid()
         {
             var invalidExpense = new Duty { Id = 10, Name = string.Empty };
-            await Assert.ThrowsAsync<ArgumentException>(() => dutyRepository.AddDutyAsync(invalidExpense));
+            var result = dutyRepository.AddDutyInDb(invalidExpense);
+            Assert.False(await result);
         }
 
         [Fact]
@@ -71,7 +82,7 @@ namespace StelexarasApp.Tests.DataAccessTests
             var updatedDuty = new Duty { Name = "Updated Duty" };
 
             // Act
-            await dutyRepository.UpdateDutyAsync(duty.Id, updatedDuty);
+            await dutyRepository.UpdateDutyInDb(duty.Id, updatedDuty);
             var result = await _dbContext.Duties.FindAsync(duty.Id);
 
             // Assert
@@ -86,7 +97,7 @@ namespace StelexarasApp.Tests.DataAccessTests
             var updatedDuty = new Duty { Name = "New Name", Id = -1 };
 
             // Act
-            var result = await dutyRepository.UpdateDutyAsync(randomId, updatedDuty);
+            var result = await dutyRepository.UpdateDutyInDb(randomId, updatedDuty);
 
             // Assert
             Assert.False(result);
@@ -100,7 +111,7 @@ namespace StelexarasApp.Tests.DataAccessTests
             var updatedDuty = new Duty { Name = "New Name", Id = 1 };
 
             // Act
-            var result = await dutyRepository.UpdateDutyAsync(randomId, updatedDuty);
+            var result = await dutyRepository.UpdateDutyInDb(randomId, updatedDuty);
 
             // Assert
             Assert.False(result);
@@ -117,7 +128,7 @@ namespace StelexarasApp.Tests.DataAccessTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var duties = await dutyRepository.GetDutiesAsync();
+            var duties = await dutyRepository.GetDutiesFromDb();
 
             // Assert
             Assert.Equal(2, duties.Count());

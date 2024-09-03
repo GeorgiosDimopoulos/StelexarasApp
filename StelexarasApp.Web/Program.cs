@@ -66,6 +66,11 @@ app.Run();
 void ConfigureServives(WebApplicationBuilder builder)
 {
     builder.Services.AddScoped<IPaidiRepository, PaidiRepository>();
+    builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+    builder.Services.AddScoped<IDutyRepository, DutyRepository>();
+    builder.Services.AddScoped<ITeamsRepository, TeamsRepository>();
+    builder.Services.AddScoped<IStelexiRepository, StelexiRepository>();
+
 
     builder.Services.AddControllers();
     builder.Services.AddControllersWithViews();

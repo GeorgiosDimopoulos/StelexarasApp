@@ -10,7 +10,8 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> AddExpenseAsync(Expense expense)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
@@ -27,23 +28,37 @@ namespace StelexarasApp.DataAccess.Repositories
 
                 _dbContext.Expenses?.Add(expense);
                 await _dbContext.SaveChangesAsync();
+
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
                 return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
                 return false;
             }
         }
 
-        public async Task<bool> DeleteExpenseAsync(int id)
+        public async Task<bool> DeleteExpenseAsync(Expense expense)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
-                var existingExpense = await _dbContext.Expenses.FindAsync(id);
+                if (_dbContext.Expenses is null)
+                {
+                    return false;
+                }
+
+                var existingExpense = await _dbContext.Expenses.FirstOrDefaultAsync(e => e.Id == expense.Id);
                 if (existingExpense == null)
                 {
                     return false;
@@ -51,19 +66,29 @@ namespace StelexarasApp.DataAccess.Repositories
 
                 _dbContext.Expenses?.Remove(existingExpense);
                 await _dbContext.SaveChangesAsync();
+
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+
                 return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
+
                 return false;
             }
         }
 
         public async Task<IEnumerable<Expense>> GetAllExpensesAsync()
         {
-            if(_dbContext.Expenses is null)
+            if (_dbContext.Expenses is null)
             {
                 return null!;
             }
@@ -83,12 +108,13 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> UpdateExpenseAsync(int id, Expense newExpense)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
                 var existingExpense = await _dbContext.Expenses.FindAsync(id);
-                if (existingExpense == null)
+                if (existingExpense == null || string.IsNullOrEmpty(newExpense.Description) || newExpense.Id <= 0)
                 {
                     return false;
                 }
@@ -97,13 +123,20 @@ namespace StelexarasApp.DataAccess.Repositories
                 existingExpense.Amount = newExpense.Amount;
                 existingExpense.Date = newExpense.Date;
 
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+
+                _dbContext.Expenses.Update(existingExpense);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
+                if (transaction != null)
+                    await transaction.RollbackAsync();
                 return false;
             }
         }

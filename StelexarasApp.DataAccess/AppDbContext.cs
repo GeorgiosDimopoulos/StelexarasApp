@@ -28,7 +28,7 @@ namespace StelexarasApp.DataAccess
         public AppDbContext(DbContextOptions<AppDbContext> optionsBuilder) : base(optionsBuilder)
         {
         }
-        
+
         // Constructor for migrations
 #if DEBUG
         public AppDbContext()

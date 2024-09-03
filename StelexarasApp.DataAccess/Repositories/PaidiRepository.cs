@@ -131,7 +131,7 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (skini is null || string.IsNullOrEmpty(skini.Name))
+                if (skini is null || string.IsNullOrEmpty(skini.Name) || skini.Id > 100)
                 {
                     // _logger.LogWarning("Attempted to add a null skini ");
                     return false;
