@@ -1,22 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
-    public class PaidiRepository : IPaidiRepository
+    public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactory) : IPaidiRepository
     {
-        private readonly AppDbContext _dbContext;
-
-        public PaidiRepository(AppDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        private readonly AppDbContext _dbContext = dbContext;
+        private readonly ILogger<PaidiRepository> _logger = loggerFactory.CreateLogger<PaidiRepository>();
 
         public async Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            if (_dbContext.Paidia is null || _dbContext.Skines is null)
+                return false;
 
             try
             {
@@ -54,24 +57,35 @@ namespace StelexarasApp.DataAccess.Repositories
                 paidi.Skini = newSkini;
 
                 await _dbContext.SaveChangesAsync();
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+                
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
+
                 return false;
             }
         }
 
         public async Task<bool> AddPaidiInDb(Paidi paidi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
                 if (paidi is null || paidi.Id <= 0)
                 {
-                    // _logger.LogWarning("Attempted to add a null paidi");
+                    _logger.LogWarning("Attempted to add a null paidi or this nullable Id");
                     return false;
                 }
 
@@ -89,15 +103,22 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                // _logger.logError("Attempted to add a null skini ");
-                Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
+                _logger.LogError("Attempted to add Paidi, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+                
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
                 return false;
             }
         }
 
         public async IAsyncEnumerable<Paidi> GetPaidiaFromDb()
         {
+            if (_dbContext.Skines is null)
+                yield return null!;
+
             await foreach (var paidi in _dbContext.Paidia.AsAsyncEnumerable())
             {
                 yield return paidi;
@@ -106,9 +127,10 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> UpdatePaidiInDb(Paidi paidi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-            if (paidi is null)
+            if (paidi is null || _dbContext.Paidia is null)
                 return false;
 
             try
@@ -117,41 +139,70 @@ namespace StelexarasApp.DataAccess.Repositories
                     return false;
 
                 _dbContext.Paidia.Update(paidi);
+                await _dbContext.SaveChangesAsync();
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                await transaction.RollbackAsync();
-                throw;
+                _logger.LogError("Attempted to UpdatePaidiInDb, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+                
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
+                return false;
             }
         }
         public async Task<bool> AddSkinesInDb(Skini skini)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            if (skini is null || _dbContext.Skines is null)
+                return false;
 
             try
             {
                 if (skini is null || string.IsNullOrEmpty(skini.Name) || skini.Id > 100)
                 {
-                    // _logger.LogWarning("Attempted to add a null skini ");
+                    _logger.LogWarning("Attempted to add a null skini ");
                     return false;
                 }
 
                 _dbContext.Skines.Add(skini);
                 await _dbContext.SaveChangesAsync();
+
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
+                _logger.LogError("Attempted to AddSkinesInDb, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+                
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
                 return false;
             }
         }
 
         public async Task<bool> DeletePaidiInDb(Paidi paidi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+            
+            if (_dbContext.Paidia == null)
+                return false;
 
             try
             {
@@ -164,15 +215,21 @@ namespace StelexarasApp.DataAccess.Repositories
                 {
                     _dbContext.Paidia.Remove(existingPaidi);
                     await _dbContext.SaveChangesAsync();
+                    if (transaction != null)
+                    {
+                        await transaction.CommitAsync();
+                    }
                     return true;
                 }
 
                 return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError("Attempted to DeletePaidiInDb, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 await transaction.RollbackAsync();
-                throw;
+                return false;
             }
         }
 
@@ -183,6 +240,9 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType type)
         {
+            if(_dbContext.Paidia == null)
+                return null!;
+
             if (type == PaidiType.Kataskinotis)
                 return await _dbContext.Paidia.Where(p => p.PaidiType == PaidiType.Kataskinotis).ToListAsync();
             else

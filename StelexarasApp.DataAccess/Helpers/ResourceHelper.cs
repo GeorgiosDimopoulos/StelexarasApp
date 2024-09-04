@@ -1,6 +1,6 @@
 ﻿using System.Resources;
 
-namespace StelexarasApp.Services.Helpers
+namespace StelexarasApp.DataAccess.Helpers
 {
     public class ResourceHelper
     {
