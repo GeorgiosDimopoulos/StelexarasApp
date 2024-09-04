@@ -3,6 +3,7 @@ using StelexarasApp.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using Microsoft.Extensions.Logging;
 
 namespace StelexarasApp.Tests.DataAccessTests
 {
@@ -10,13 +11,14 @@ namespace StelexarasApp.Tests.DataAccessTests
     {
         private readonly IExpenseRepository expenseRepository;
         private readonly AppDbContext _dbContext;
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
         public ExpenseRepositoryTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "TestDatabase").Options;
 
             _dbContext = new AppDbContext(options);
-            expenseRepository = new ExpenseRepository(_dbContext);
+            expenseRepository = new ExpenseRepository(_dbContext, loggerFactory);
         }
 
         [Theory]

@@ -1,45 +1,51 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
-    public class TeamsRepository : ITeamsRepository
+    public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFactory) : ITeamsRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _dbContext = appDbContext;
+        private readonly ILogger<TeamsRepository> _logger = loggerFactory.CreateLogger<TeamsRepository>();
 
-        public TeamsRepository(AppDbContext appDbContext)
-        {
-            _dbContext = appDbContext;
-        }
-
-        public async Task<IEnumerable<Koinotita>> GetKoinotites()
+        public async Task<IEnumerable<Koinotita>> GetKoinotitesInDb()
         {
             try
             {
-                return await _dbContext.Koinotites!.ToListAsync();
+                if (await _dbContext.Koinotites!.ToListAsync() != null)
+                {
+                    LogFileWriter.WriteToLog("GetKoinotites completed!", TypeOfOutput.DbSuccessMessage);
+                    return await _dbContext.Koinotites!.ToListAsync();
+                }
+
+                return null!;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
 
-        public async Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomea(int tomeaId)
+        public async Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(int tomeaId)
         {
             try
-            { 
+            {
                 return await _dbContext.Koinotites!.Include(k => k.Tomeas).Where(k => k.Tomeas.Id == tomeaId).ToListAsync();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
 
-        public async Task<IEnumerable<Skini>> GetSkines()
+        public async Task<IEnumerable<Skini>> GetSkinesInDb()
         {
             try
             {
@@ -50,25 +56,26 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return null!;
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager); return null!;
             }
         }
 
-        public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotita(int KoinotitaId)
+        public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInDb(string KoinotitaName)
         {
             try
             {
-                return await _dbContext.Skines!.Include(s => s.Koinotita).Where(s => s.Koinotita.Id == KoinotitaId).ToListAsync();
+                return await _dbContext.Skines!.Include(s => s.Koinotita).Where(s => s.Koinotita.Name == KoinotitaName).ToListAsync();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
 
-        public async Task<IEnumerable<Skini>> GetSkinesEkpaideuomenon()
+        public async Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb()
         {
             try
             {
@@ -76,12 +83,13 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
 
-        public Task<Skini> GetSkiniByName(string name)
+        public async Task<Skini> GetSkiniByNameInDb(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -92,10 +100,10 @@ namespace StelexarasApp.DataAccess.Repositories
                 throw new InvalidOperationException("The DbSet<Skini> is not initialized.");
             }
 
-            return _dbContext.Skines.FirstOrDefaultAsync(s => s.Name.Equals(name));
+            return await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name.Equals(name));
         }
 
-        public async Task<IEnumerable<Tomeas>> GetTomeis()
+        public async Task<IEnumerable<Tomeas>> GetTomeisInDb()
         {
             try
             {
@@ -103,8 +111,205 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return null!;
+            }
+        }
+
+        public async Task<bool> UpdateKoinotitaInDb(Koinotita koinotita)
+        {
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            if (koinotita is null || _dbContext.Koinotites is null)
+                return false;
+
+            try
+            {
+                _dbContext.Koinotites.Update(koinotita);
+                await _dbContext.SaveChangesAsync();
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateSkiniInDb(Skini skini)
+        {
+
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            if (skini is null || _dbContext.Skines is null)
+                return false;
+
+            try
+            {
+                _dbContext.Skines.Update(skini);
+                await _dbContext.SaveChangesAsync();
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateTomeasInDb(Tomeas tomeas)
+        {
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            if (tomeas is null || _dbContext.Tomeis is null)
+                return false;
+
+            try
+            {
+                _dbContext.Tomeis.Update(tomeas);
+                await _dbContext.SaveChangesAsync();
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteKoinotitaInDb(int koinotitaId)
+        {
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            if (koinotitaId == 0 || _dbContext.Koinotites is null)
+                return false;
+
+            try
+            {
+                var koinotita = await _dbContext.Koinotites.FindAsync(koinotitaId);
+                if (koinotita == null)
+                    return false;
+
+                _dbContext.Koinotites.Remove(koinotita);
+                await _dbContext.SaveChangesAsync();
+
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteSkiniInDb(int skiniId)
+        {
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                if (skiniId == 0 || _dbContext.Skines is null)
+                    return false;
+
+                var skini = await _dbContext.Skines.FindAsync(skiniId);
+                if (skini == null)
+                    return false;
+
+                _dbContext.Skines.Remove(skini);
+                await _dbContext.SaveChangesAsync();
+
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteTomeasInDb(int tomeasId)
+        {
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                if (tomeasId == 0 || _dbContext.Tomeis is null)
+                    return false;
+
+                var tomeas = await _dbContext.Tomeis.FindAsync(tomeasId);
+                if (tomeas == null)
+                    return false;
+
+                _dbContext.Tomeis.Remove(tomeas);
+                await _dbContext.SaveChangesAsync();
+
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+
+                return false;
             }
         }
     }

@@ -5,6 +5,8 @@ using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Models.Domi;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace StelexarasApp.Tests.DataAccessTests
 {
@@ -12,16 +14,20 @@ namespace StelexarasApp.Tests.DataAccessTests
     {
         private readonly IPaidiRepository _paidiRepository;
         private readonly AppDbContext _dbContext;
-
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        
         public PaidiaRepositoryTests()
         {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
-                .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-                .Options;
+            var mockLogger = new Mock<ILogger<PaidiRepository>>();
+            var mockLoggerFactory = new Mock<ILoggerFactory>();
+            mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
+            _dbContext = new Mock<AppDbContext>().Object;
 
-            _dbContext = new AppDbContext(options);
-            _paidiRepository = new PaidiRepository(_dbContext);
+            // var options = new DbContextOptionsBuilder<AppDbContext>()
+            //    .UseInMemoryDatabase(databaseName: "TestDatabase")
+            //    .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+            //    .Options;
+            _paidiRepository = new PaidiRepository(_dbContext, mockLoggerFactory.Object);
         }
 
         [Theory]

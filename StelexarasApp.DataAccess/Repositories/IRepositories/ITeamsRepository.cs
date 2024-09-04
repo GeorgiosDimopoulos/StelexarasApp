@@ -4,18 +4,30 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface ITeamsRepository
     {
-        Task<IEnumerable<Skini>> GetSkines();
+        Task<IEnumerable<Skini>> GetSkinesInDb();
 
-        Task<Skini> GetSkiniByName(string name);
+        Task<Skini> GetSkiniByNameInDb(string name);
 
-        Task<IEnumerable<Skini>> GetSkinesAnaKoinotita(int KoinotitaId);
+        Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInDb(string Koinotitaname);
 
-        Task<IEnumerable<Skini>> GetSkinesEkpaideuomenon();
+        Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb();
 
-        Task<IEnumerable<Koinotita>> GetKoinotites();
+        Task<IEnumerable<Koinotita>> GetKoinotitesInDb();
 
-        Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomea(int tomeaId);
+        Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(int tomeaId);
 
-        Task<IEnumerable<Tomeas>> GetTomeis();
+        Task<IEnumerable<Tomeas>> GetTomeisInDb();
+
+        Task<bool> UpdateKoinotitaInDb(Koinotita koinotita);
+
+        Task<bool> UpdateSkiniInDb(Skini skini);
+
+        Task<bool> UpdateTomeasInDb(Tomeas tomeas);
+
+        Task<bool> DeleteSkiniInDb(int id);
+        
+        Task<bool> DeleteKoinotitaInDb(int id);
+
+        Task<bool> DeleteTomeasInDb(int id);
     }
 }

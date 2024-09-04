@@ -1,12 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
-    public class DutyRepository(AppDbContext dbContext) : IDutyRepository
+    public class DutyRepository(AppDbContext dbContext, ILoggerFactory loggerFactory) : IDutyRepository
     {
         private readonly AppDbContext _dbContext = dbContext;
+        private readonly ILogger<DutyRepository> _logger = loggerFactory.CreateLogger<DutyRepository>();
 
         public async Task<bool> AddDutyInDb(Duty newDuty)
         {
@@ -24,11 +27,17 @@ namespace StelexarasApp.DataAccess.Repositories
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
                     await transaction.CommitAsync();
+
+                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                string className = this.GetType().Name;
+                string className2 = typeof(DutyRepository).Name;
+                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " " + ex.Message, TypeOfOutput.DbErroMessager);
+                _logger.LogError("Attempted to AddDutyInDb, exception: " + ex.Message);
+
                 if (transaction != null)
                     await transaction.RollbackAsync();
                 return false;
@@ -57,6 +66,8 @@ namespace StelexarasApp.DataAccess.Repositories
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
                     await transaction.CommitAsync();
+
+                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed!", TypeOfOutput.DbSuccessMessage);
                 return true;
             }
             catch (Exception ex)

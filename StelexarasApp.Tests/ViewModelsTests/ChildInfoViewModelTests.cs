@@ -49,7 +49,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Setup(service => service.DeletePaidiInDb(_paidi.Id)).ReturnsAsync(true);
 
             // Act
-            await _childInfoViewModel.DeletePaidiAsync(_paidi);
+            await _childInfoViewModel.DeletePaidiAsync(_paidi.Id);
 
             // Assert
             _mockPaidiaService.Verify(service => service.DeletePaidiInDb(_paidi.Id), Times.Once);

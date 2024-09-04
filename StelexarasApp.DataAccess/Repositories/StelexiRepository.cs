@@ -1,27 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
-    public class StelexiRepository : IStelexiRepository
+    public class StelexiRepository(AppDbContext dbContext, ILoggerFactory loggerFactory) : IStelexiRepository
     {
-        private readonly AppDbContext _dbContext;
-
-        public StelexiRepository(AppDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }        
+        private readonly AppDbContext _dbContext = dbContext;
+        private readonly ILogger<StelexiRepository> _logger = loggerFactory.CreateLogger<StelexiRepository>();
 
         public async Task<bool> AddStelexosInDb(Stelexos stelexi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             if (stelexi == null)
-            {
-                await transaction.RollbackAsync();
-                return false;
-            }
+                return false;            
 
             try
             {
@@ -45,20 +41,27 @@ namespace StelexarasApp.DataAccess.Repositories
                 }
 
                 await _dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
+                if (transaction != null)
+                    await transaction.CommitAsync();
+                
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+                
                 return false;
             }
         }
 
         public async Task<bool> DeleteStelexosInDb(int id, Thesi thesi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
@@ -84,13 +87,18 @@ namespace StelexarasApp.DataAccess.Repositories
                 }
 
                 var changes = await _dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
+                if (transaction != null)
+                    await transaction.CommitAsync();
                 return changes > 0;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
                 return false;
             }
         }
@@ -111,7 +119,8 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
@@ -154,7 +163,8 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> UpdateStelexosInDb(Stelexos stelexi)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
@@ -178,62 +188,62 @@ namespace StelexarasApp.DataAccess.Repositories
                 }
 
                 var changes = await _dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-                return changes > 0;
+                if (transaction != null)
+                    await transaction.CommitAsync(); return changes > 0;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                await transaction.RollbackAsync();
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
+
                 return false;
             }
         }
 
         public async Task<bool> MoveOmadarxisToAnotherSkiniInDb(int id, int newSkiniId)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+            if (id <= 0 || newSkiniId <= 0 || _dbContext.Skines is null || _dbContext.Omadarxes is null)
+            {
+                return false;
+            }
 
             try
             {
-                var omadarxis = await _dbContext.Omadarxes
-                .Include(o => o.Skini)
-                .FirstOrDefaultAsync(o => o.Id == id);
+                var omadarxisInDb = await _dbContext.Omadarxes.Include(o => o.Skini).FirstOrDefaultAsync(o => o.Id == id);
+                var newSkini = await _dbContext.Skines.FirstOrDefaultAsync(s => s.Id == newSkiniId);
 
-                if (omadarxis == null)
-                {
+                if (newSkini == null || newSkini.Omadarxis == omadarxisInDb || omadarxisInDb == null)
                     return false;
-                }
 
-                var newSkini = await _dbContext.Skines
-                    .FirstOrDefaultAsync(s => s.Id == newSkiniId);
-
-                if (newSkini == null)
-                {
-                    return false;
-                }
-
-                if (newSkini.Omadarxis == omadarxis)
-                {
-                    return false;
-                }
-
-                var oldSkini = omadarxis.Skini;
+                var oldSkini = omadarxisInDb.Skini;
 
                 if (oldSkini != null)
                 {
-                    // ToDo: add another omadarxis to the existing Skini
-                    oldSkini.Omadarxis = null;
+                    newSkini.Omadarxis = omadarxisInDb;
+                    oldSkini.Omadarxis = null!;
+                    omadarxisInDb.Skini = newSkini;
                 }
 
-                newSkini.Omadarxis = omadarxis;
-                omadarxis.Skini = newSkini;
-
                 await _dbContext.SaveChangesAsync();
+                if (transaction != null)
+                    await transaction.CommitAsync();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+                
                 return false;
             }
         }

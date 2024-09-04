@@ -4,14 +4,19 @@ using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
-    public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactory) : IPaidiRepository
+    public class PaidiRepository : IPaidiRepository
     {
-        private readonly AppDbContext _dbContext = dbContext;
-        private readonly ILogger<PaidiRepository> _logger = loggerFactory.CreateLogger<PaidiRepository>();
+        private readonly AppDbContext _dbContext;
+        private readonly ILogger<PaidiRepository> _logger;
+
+        public PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactory)
+        {
+            _dbContext = dbContext;
+            _logger = loggerFactory.CreateLogger<PaidiRepository>();
+        }
 
         public async Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId)
         {
@@ -83,22 +88,24 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (paidi is null || paidi.Id <= 0)
+                if (paidi is null || paidi.Id <= 0|| _dbContext.Paidia is null)
                 {
                     _logger.LogWarning("Attempted to add a null paidi or this nullable Id");
                     return false;
                 }
 
-                if(_dbContext?.Paidia is not null)
+                var existingPaidi = await _dbContext.Paidia.FindAsync(paidi.Id);
+                if (existingPaidi != null)
                 {
-                    var existingPaidi = await _dbContext.Paidia.FindAsync(paidi.Id);
-                    if (existingPaidi is not null)
-                        return false;
-                    
+                    _logger.LogWarning("Paidi with the same Id already exists.");
+                    return false;
                 }
 
                 _dbContext!.Paidia!.Add(paidi);
                 await _dbContext.SaveChangesAsync();
+                
+                if (transaction != null)
+                    await transaction.CommitAsync();
                 return true;
             }
             catch (Exception ex)

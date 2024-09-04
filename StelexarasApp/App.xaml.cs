@@ -45,16 +45,15 @@ namespace StelexarasApp.UI
             
             services.AddTransient<TeamsViewModel>();
             services.AddTransient<ExpensesViewModel>();
-            services.AddTransient<PersonalViewModel>();
+            services.AddTransient<StaffViewModel>();
             services.AddTransient<DutyViewModel>();
 
             services.AddTransient<TeamsPage>();
             services.AddTransient<ExpensesPage>();
-            services.AddTransient<PersonalPage>();
+            services.AddTransient<StuffPage>();
             services.AddTransient<ToDoPage>();
 
             services.AddScoped<IDutyService, DutyService>();
-            services.AddScoped<IPersonalService, PersonalService>();
             services.AddScoped<IStelexiService, StelexiService>();
             services.AddScoped<IPaidiaService, PaidiaService>();
             services.AddScoped<IExpenseService, ExpenseService>();

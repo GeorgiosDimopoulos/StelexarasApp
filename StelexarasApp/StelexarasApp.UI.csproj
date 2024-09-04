@@ -83,8 +83,12 @@
 	  <Compile Update="Views\MainViews\TeamsPage.xaml.cs">
 	    <DependentUpon>TeamsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MainViews\PersonalPage.xaml.cs">
-	    <DependentUpon>PersonalPage.xaml</DependentUpon>
+	  <Compile Update="Views\MainViews\StuffPage.xaml.cs">
+	    <DependentUpon>StuffPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\SecondViews\StelexosInfoPage.xaml.cs">
+	    <SubType>Code</SubType>
+	    <DependentUpon>StelexosInfoPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\SecondViews\ChildInfoPage.xaml.cs">
 	    <DependentUpon>ChildInfoPage.xaml</DependentUpon>
@@ -101,7 +105,11 @@
 	  <MauiXaml Update="Views\MainViews\TeamsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MainViews\PersonalPage.xaml">
+	  <MauiXaml Update="Views\MainViews\StuffPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SecondViews\StelexosInfoPage.xaml">
+	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SecondViews\ChildInfoPage.xaml">

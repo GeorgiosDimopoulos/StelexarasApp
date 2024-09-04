@@ -1,12 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
-    public class ExpenseRepository(AppDbContext dbContext) : IExpenseRepository
+    public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFactory) : IExpenseRepository
     {
         private readonly AppDbContext _dbContext = dbContext;
+        private readonly ILogger<ExpenseRepository> _logger = loggerFactory.CreateLogger<ExpenseRepository>();
 
         public async Task<bool> AddExpenseAsync(Expense expense)
         {
@@ -15,12 +18,12 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (expense is null || expense.Id <= 0)
+                if (expense is null || expense.Id <= 0 || _dbContext.Expenses is null)
                 {
                     return false;
                 }
 
-                var existingPaidi = await _dbContext.Paidia.FindAsync(expense.Id);
+                var existingPaidi = await _dbContext.Expenses.FindAsync(expense.Id);
                 if (existingPaidi != null)
                 {
                     return false;
@@ -37,7 +40,8 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
                 if (transaction != null)
                 {
                     await transaction.RollbackAsync();
@@ -76,7 +80,8 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 if (transaction != null)
                 {
                     await transaction.RollbackAsync();
@@ -98,12 +103,21 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<Expense> GetExpenseByIdAsync(int id)
         {
-            if (_dbContext.Expenses is null)
+            try
             {
+                if (_dbContext.Expenses is null)
+                {
+                    return null!;
+                }
+
+                return await _dbContext.Expenses.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 return null!;
             }
-
-            return await _dbContext.Expenses!.FindAsync(id);
         }
 
         public async Task<bool> UpdateExpenseAsync(int id, Expense newExpense)
@@ -113,6 +127,11 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
+               if (_dbContext.Expenses is null)
+                {
+                    return false;
+                }
+
                 var existingExpense = await _dbContext.Expenses.FindAsync(id);
                 if (existingExpense == null || string.IsNullOrEmpty(newExpense.Description) || newExpense.Id <= 0)
                 {
@@ -134,7 +153,10 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 Console.WriteLine(ex.Message);
+                
                 if (transaction != null)
                     await transaction.RollbackAsync();
                 return false;

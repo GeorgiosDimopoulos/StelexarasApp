@@ -6,4 +6,11 @@ namespace StelexarasApp.DataAccess.Models.Domi
         int Id { get; set; }
         string Name { get; set; }
     }
+
+    public enum EidosXwrou
+    {
+        Skini = 0,
+        Koinotita = 1,
+        Tomeas = 2
+    }
 }

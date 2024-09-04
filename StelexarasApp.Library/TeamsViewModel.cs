@@ -15,11 +15,32 @@ namespace StelexarasApp.ViewModels
         public ObservableCollection<SkiniDto>? Skines { get; set; }
         public Koinotita? Koinotita { get; set; }
 
-        public TeamsViewModel(IPaidiaService paidiaService)
+        private EidosXwrou _eidosXwrou;
+        public EidosXwrou EidosXwrou
+        {
+            get => _eidosXwrou;
+            set
+            {
+                _eidosXwrou = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Title));
+            }
+        }
+
+        public string Title => EidosXwrou switch
+        {
+            EidosXwrou.Koinotita => "Koinotita",
+            EidosXwrou.Skini => "Skini",
+            EidosXwrou.Tomeas => "Tomeas",
+            _ => "Unknown Title"
+        };
+
+        public TeamsViewModel(IPaidiaService paidiaService, EidosXwrou eidosXwrou)
         {
             _paidiaService = paidiaService;
-            Skines = new ObservableCollection<SkiniDto>();
+            Skines = [];
             Koinotita = new Koinotita();
+            EidosXwrou = eidosXwrou;
         }
 
         public async Task<bool> AddPaidiAsync(string fullName, string skiniName, PaidiType paidiType)
@@ -71,6 +92,7 @@ namespace StelexarasApp.ViewModels
         }
         
         public event PropertyChangedEventHandler? PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

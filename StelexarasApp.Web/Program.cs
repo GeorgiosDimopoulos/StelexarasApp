@@ -88,12 +88,11 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddScoped<IStelexiService, StelexiService>();
     builder.Services.AddScoped<IPaidiaService, PaidiaService>();
     builder.Services.AddScoped<IExpenseService, ExpenseService>();
-    builder.Services.AddScoped<IPersonalService, PersonalService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
 
     // Register your ViewModels if they are used in the web layer (e.g., in controllers or Razor pages)
     builder.Services.AddTransient<TeamsViewModel>();
     builder.Services.AddTransient<ExpensesViewModel>();
-    builder.Services.AddTransient<PersonalViewModel>();
+    builder.Services.AddTransient<StaffViewModel>();
     builder.Services.AddTransient<DutyViewModel>();
 }

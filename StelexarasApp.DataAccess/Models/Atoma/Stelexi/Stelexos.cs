@@ -1,6 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Domi;
-
-namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
+﻿namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
 {
     public interface Stelexos : Atomo
     {

@@ -7,6 +7,7 @@ namespace StelexarasApp.Services.DtosModels.Atoma
     {
         public string FullName { get; set; } = null!;
         public int Age { get; set; }
+        public int? Id { get; set; }
         public Sex Sex { get; set; }
         public int TomeasId { get; set; }
         public Thesi Thesi { get; set; } = Thesi.Tomearxis;

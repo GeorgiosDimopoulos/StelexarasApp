@@ -3,6 +3,7 @@ using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.ViewModels;
+using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.Tests.ViewModelsTests
 {
@@ -14,7 +15,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
         public TeamsViewModelTests()
         {
             paidiaServiceMock = new Mock<IPaidiaService>();
-            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object);
+            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object, It.IsAny<EidosXwrou>);
         }
 
         [Fact]

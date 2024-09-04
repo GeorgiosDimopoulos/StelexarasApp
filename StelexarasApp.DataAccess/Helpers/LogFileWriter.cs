@@ -9,11 +9,6 @@ namespace StelexarasApp.DataAccess.Helpers
         private static readonly string LogFileUiWarrningsPath = "path/to/your/uiWarning.txt";
         private static readonly string logFilePath = @"C:\Projects\GitHub\StelexarasApp\Logs.txt";
 
-        public static void WriteToLog(string message)
-        {
-            File.AppendAllText(logFilePath, message);
-        }
-
         public static void WriteToLog(string message, TypeOfOutput typeOfOutput)
         {
             switch (typeOfOutput)

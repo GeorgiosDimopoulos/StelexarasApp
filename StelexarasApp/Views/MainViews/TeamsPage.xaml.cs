@@ -3,6 +3,7 @@ using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.UI.Views.SecondViews;
 using StelexarasApp.ViewModels;
+using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.UI.Views
 {
@@ -11,11 +12,11 @@ namespace StelexarasApp.UI.Views
         private TeamsViewModel _viewModel; 
         private IPaidiaService _paidiaService;
 
-        public TeamsPage(IPaidiaService paidiaService)
+        public TeamsPage(IPaidiaService paidiaService, EidosXwrou eidosXwrou)
         {
             InitializeComponent();
             _paidiaService = paidiaService;
-            _viewModel = new TeamsViewModel(_paidiaService);
+            _viewModel = new TeamsViewModel(_paidiaService, eidosXwrou);
             BindingContext = _viewModel;
         }
 

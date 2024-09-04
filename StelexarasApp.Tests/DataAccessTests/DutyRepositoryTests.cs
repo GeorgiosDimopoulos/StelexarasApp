@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Repositories;
@@ -11,6 +12,7 @@ namespace StelexarasApp.Tests.DataAccessTests
     {
         private readonly IDutyRepository dutyRepository;
         private readonly AppDbContext _dbContext;
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
         public DutyRepositoryTests()
         {
@@ -19,7 +21,7 @@ namespace StelexarasApp.Tests.DataAccessTests
                 .Options;
 
             _dbContext = new AppDbContext(options);
-            dutyRepository = new DutyRepository(_dbContext);
+            dutyRepository = new DutyRepository(_dbContext, loggerFactory);
         }
 
         [Fact]

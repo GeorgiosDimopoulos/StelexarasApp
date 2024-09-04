@@ -18,7 +18,7 @@ namespace StelexarasApp.Services.Mappers
             CreateMap<KoinotarxisDto, Koinotarxis>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId }))
+                .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId ?? 0}))
                 .ForMember(dest => dest.Omadarxes, opt => opt.Ignore());
 
             CreateMap<OmadarxisDto, Omadarxis>()

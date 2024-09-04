@@ -53,7 +53,7 @@ namespace StelexarasApp.Services.Services
                 Console.WriteLine(ex.Message);
                 return null;
             }
-            
+
         }
 
         public async Task<Stelexos> GetStelexosById(int id, Thesi thesi)
@@ -74,10 +74,7 @@ namespace StelexarasApp.Services.Services
             var result = await _stelexiRepository.MoveOmadarxisToAnotherSkiniInDb(Id, newSkiniId);
 
             if (!result)
-            {
                 return false;
-            }
-
             return true;
         }
 

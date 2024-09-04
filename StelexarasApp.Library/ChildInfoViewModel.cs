@@ -6,34 +6,21 @@ using System.ComponentModel;
 
 namespace StelexarasApp.ViewModels
 {
-    public class ChildInfoViewModel : INotifyPropertyChanged
+    public class ChildInfoViewModel(IPaidiaService peopleService, ObservableCollection<SkiniDto> skines) : INotifyPropertyChanged
     {
-        private readonly IPaidiaService _paidiaService;
-        
-        public PaidiDto PaidiDto { get; set; }
-        public ObservableCollection<SkiniDto> Skines { get; set; }
+        private readonly IPaidiaService _paidiaService = peopleService;
 
-        public ChildInfoViewModel(IPaidiaService peopleService, ObservableCollection<SkiniDto> skines)
+        public PaidiDto PaidiDto { get; set; } = new PaidiDto();
+        public ObservableCollection<SkiniDto> Skines { get; set; } = skines;
+
+        public async Task<bool> DeletePaidiAsync(int id)
         {
-            _paidiaService = peopleService;
-            PaidiDto = new PaidiDto();
-            Skines = skines;
-        }
-
-        public async Task DeletePaidiAsync(PaidiDto paidi)
-        {
-            bool isDeleted = await _paidiaService.DeletePaidiInDb(paidi.Id);
-
-            if (isDeleted)
-            {
-                // await _paidiaService.GetSkines();
-                OnPropertyChanged(nameof(Skines));
-            }
+            return await _paidiaService.DeletePaidiInDb(id);
         }
 
         public async Task<bool> UpdatePaidiAsync(PaidiDto paidiDto, SkiniDto skini)
         {
-            if (skini is null)
+            if (skini?.Name is null)
             {
                 return false;
             }

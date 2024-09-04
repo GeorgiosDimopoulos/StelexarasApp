@@ -1,6 +1,5 @@
 ﻿using StelexarasApp.ViewModels;
 using System.Collections.ObjectModel;
-using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Domi;
@@ -33,7 +32,7 @@ namespace StelexarasApp.UI.Views.SecondViews
                 return;
             }
 
-            await _childviewModel.DeletePaidiAsync(_paidiDto);
+            await _childviewModel.DeletePaidiAsync(_paidiDto.Id);
             await Navigation.PopAsync();
         }
 
@@ -106,8 +105,15 @@ namespace StelexarasApp.UI.Views.SecondViews
                 _paidiDto.Age = int.Parse(ChildAge.Text);
                 _paidiDto.SkiniName = _skini.Name;
 
-                await _childviewModel.UpdatePaidiAsync(_paidiDto, _skini);
-                SaveButton.IsEnabled = false;
+                if (await _childviewModel.UpdatePaidiAsync(_paidiDto, _skini))
+                {
+                    SaveButton.IsEnabled = false;
+                }
+                else
+                {
+                    await DisplayAlert("Σφάλμα", "Παρακαλώ συμπληρώστε όλα τα πεδία", "OK");
+                }
+                
             }
             else
             {
