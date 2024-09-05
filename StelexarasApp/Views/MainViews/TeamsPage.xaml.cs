@@ -1,9 +1,9 @@
 ﻿using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.UI.Views.SecondViews;
 using StelexarasApp.ViewModels;
 using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.UI.Views.SecondViews;
 
 namespace StelexarasApp.UI.Views
 {
@@ -27,7 +27,8 @@ namespace StelexarasApp.UI.Views
 
             if (paidi != null)
             {
-                await Navigation.PushAsync(new ChildInfoPage(_paidiaService, paidi, _viewModel.Skines));
+                var paidiPage = new PaidiInfoPage(_paidiaService, paidi, _viewModel.Skines);
+                await Navigation.PushAsync(paidiPage);
             }
         }
 

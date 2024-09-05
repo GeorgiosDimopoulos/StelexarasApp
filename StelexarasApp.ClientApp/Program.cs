@@ -59,28 +59,28 @@ switch (choice)
         break;
     case 3:
         var newOmadarxis = CreateStelexosFromUserInput(Thesi.Omadarxis);
-        if (await stelexiService.AddStelexosInDbAsync(newOmadarxis, Thesi.Omadarxis))
+        if (await stelexiService.AddStelexosInService(newOmadarxis, Thesi.Omadarxis))
             Console.WriteLine("Omadarxis created");
         else
             Console.WriteLine("Failed to create Omadarxis.");
         break;
     case 4:
         var newKoinotarxis = CreateStelexosFromUserInput(Thesi.Koinotarxis);
-        if (await stelexiService.AddStelexosInDbAsync(newKoinotarxis, Thesi.Koinotarxis))
+        if (await stelexiService.AddStelexosInService(newKoinotarxis, Thesi.Koinotarxis))
             Console.WriteLine("Omadarxis created");
         else
             Console.WriteLine("Failed to create Omadarxis.");
         break;
     case 5:
         var newTomearxis = CreateStelexosFromUserInput(Thesi.Tomearxis);
-        if (await stelexiService.AddStelexosInDbAsync(newTomearxis, Thesi.Tomearxis))
+        if (await stelexiService.AddStelexosInService(newTomearxis, Thesi.Tomearxis))
             Console.WriteLine("Omadarxis created");
         else
             Console.WriteLine("Failed to create Omadarxis.");
         break;
     case 6:
         var newEkpaideutis = CreateStelexosFromUserInput(Thesi.Ekpaideutis);
-        if (await stelexiService.AddStelexosInDbAsync(newEkpaideutis, Thesi.Ekpaideutis))
+        if (await stelexiService.AddStelexosInService(newEkpaideutis, Thesi.Ekpaideutis))
             Console.WriteLine("Omadarxis created");
         else
             Console.WriteLine("Failed to create Omadarxis.");
@@ -97,13 +97,13 @@ static StelexosDto CreateStelexosFromUserInput(Thesi stelexosThesi) => new()
     Thesi = stelexosThesi
 };
 
-static PaidiDto CreatePaidiFromUserInput(int typeOfChild) => new()
+static PaidiDto CreatePaidiFromUserInput(int typeOfPaidi) => new()
 {
     // ToDo: implement auto person Id
     // paidi.Id = GetPersonId();
     FullName = GetPersonName(),
     Age = GetPersonAge(),
-    PaidiType = (PaidiType)typeOfChild - 1,
+    PaidiType = (PaidiType)typeOfPaidi - 1,
     SeAdeia = false,
     Sex = GetPersonSex()
 };

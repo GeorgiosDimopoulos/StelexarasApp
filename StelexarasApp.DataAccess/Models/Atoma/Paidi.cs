@@ -1,10 +1,13 @@
 ﻿using StelexarasApp.DataAccess.Models.Domi;
+using System.ComponentModel.DataAnnotations;
 
 namespace StelexarasApp.DataAccess.Models.Atoma
 {
     public class Paidi : Atomo
     {
         public string FullName { get; set; }
+
+        [Key]
         public int Id { get; set; }
         public int Age { get; set; }
         public bool SeAdeia { get; set; }

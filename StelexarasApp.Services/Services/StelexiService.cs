@@ -24,10 +24,10 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        public async Task<bool> AddStelexosInDbAsync(StelexosDto stelexosDto, Thesi thesi)
+        public async Task<bool> AddStelexosInService(StelexosDto stelexosDto, Thesi thesi)
         {
-            var paidi = _mapper.Map<Stelexos>(stelexosDto);
-            var result = await _stelexiRepository.AddStelexosInDb(paidi);
+            var stelexos = _mapper.Map<Stelexos>(stelexosDto);
+            var result = await _stelexiRepository.AddStelexosInDb(stelexos);
 
             if (!result)
             {
@@ -37,12 +37,12 @@ namespace StelexarasApp.Services.Services
             return true;
         }
 
-        public async Task<bool> DeleteStelexosInDb(int id, Thesi thesi)
+        public async Task<bool> DeleteStelexosInService(int id, Thesi thesi)
         {
             return await _stelexiRepository.DeleteStelexosInDb(id, thesi);
         }
 
-        public async Task<IEnumerable<Stelexos>> GetStelexoiAnaThesi(Thesi thesi)
+        public async Task<IEnumerable<Stelexos>> GetStelexoiAnaThesiInService(Thesi thesi)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace StelexarasApp.Services.Services
 
         }
 
-        public async Task<Stelexos> GetStelexosById(int id, Thesi thesi)
+        public async Task<Stelexos> GetStelexosByIdInService(int id, Thesi thesi)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        public async Task<bool> MoveOmadarxisToAnotherSkini(int Id, int newSkiniId)
+        public async Task<bool> MoveOmadarxisToAnotherSkiniInService(int Id, int newSkiniId)
         {
             var result = await _stelexiRepository.MoveOmadarxisToAnotherSkiniInDb(Id, newSkiniId);
 
@@ -78,7 +78,7 @@ namespace StelexarasApp.Services.Services
             return true;
         }
 
-        public async Task<bool> UpdateStelexosInDb(int id, StelexosDto stelexosDto, Thesi thesi)
+        public async Task<bool> UpdateStelexosInService(StelexosDto stelexosDto, Thesi thesi)
         {
             var stelexos = MapDtoToEntity(stelexosDto);
             return await _stelexiRepository.UpdateStelexosInDb(stelexos);

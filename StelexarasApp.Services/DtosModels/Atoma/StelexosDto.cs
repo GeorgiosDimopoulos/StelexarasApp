@@ -1,5 +1,6 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.Services.DtosModels.Atoma
 {
@@ -10,5 +11,6 @@ namespace StelexarasApp.Services.DtosModels.Atoma
         public Sex Sex { get; set; }
         public int? Id { get; set; }
         public Thesi Thesi { get; set; }
+        public Xwros Xwros { get; set; }
     }
 }

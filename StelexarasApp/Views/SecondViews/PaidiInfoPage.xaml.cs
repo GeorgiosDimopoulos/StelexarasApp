@@ -6,74 +6,74 @@ using StelexarasApp.Services.DtosModels.Domi;
 
 namespace StelexarasApp.UI.Views.SecondViews
 {
-    public partial class ChildInfoPage : ContentPage
+    public partial class PaidiInfoPage : ContentPage
     {
-        private ChildInfoViewModel? _childviewModel;
+        private PaidiInfoViewModel? _paidiviewModel;
         private bool isSkiniPickerFilled = false;
-        private bool isChildAdeiaFieldFilled = false;
+        private bool isPaidiAdeiaFieldFilled = false;
         private PaidiDto _paidiDto;
         private SkiniDto _skini;
-        private bool isChildNameFilled = false;
-        private bool isChildAgeFilled = false;
+        private bool isPaidiNameFilled = false;
+        private bool isPaidiAgeFilled = false;
 
-        public ChildInfoPage(IPaidiaService peopleService, PaidiDto paidi, ObservableCollection<SkiniDto> allSkines)
+        public PaidiInfoPage(IPaidiaService peopleService, PaidiDto paidi, ObservableCollection<SkiniDto> allSkines)
         {
             InitializeComponent();
-            _childviewModel = new ChildInfoViewModel(peopleService, allSkines);
+            _paidiviewModel = new PaidiInfoViewModel(peopleService, allSkines);
             _paidiDto = paidi;
             _skini = new SkiniDto();
-            BindingContext = _childviewModel;
+            BindingContext = _paidiviewModel;
         }
 
         private async void OnDeleteClicked(object sender, EventArgs e)
         {
-            if(_childviewModel is null)
+            if(_paidiviewModel is null)
             {
                 return;
             }
 
-            await _childviewModel.DeletePaidiAsync(_paidiDto.Id);
+            await _paidiviewModel.DeletePaidiAsync(_paidiDto.Id);
             await Navigation.PopAsync();
         }
 
-        private void OnChildNameEntryFocused(object sender, FocusEventArgs e)
+        private void OnPaidiNameEntryFocused(object sender, FocusEventArgs e)
         {
             SkiniPicker.IsVisible = true;
             SkiniPicker.Focus();
         }
 
-        private void OnChildNameEntryUnfocused (object sender, FocusEventArgs e)
+        private void OnPaidiNameEntryUnfocused(object sender, FocusEventArgs e)
         {
-            if (string.IsNullOrEmpty(ChildName.Text))
+            if (string.IsNullOrEmpty(PaidiName.Text))
             {
-                isChildNameFilled = false;
+                isPaidiNameFilled = false;
                 SkiniPicker.IsEnabled = false;
                 SaveButton.IsEnabled = false;
             }
             else
             {
-                _paidiDto.Age = int.Parse(ChildAge.Text);
-                isChildNameFilled = true;
+                _paidiDto.Age = int.Parse(PaidiAge.Text);
+                isPaidiNameFilled = true;
             }
         }
 
         private void OnSkiniEntryFocused(object sender, FocusEventArgs e)
         {
-            isChildNameFilled = true;
+            isPaidiNameFilled = true;
             SkiniPicker.IsEnabled = true;
             SaveButton.IsEnabled = true;
         }
 
         private void OnAdeiaEntryFocused(object sender, FocusEventArgs e)
         {
-            isChildAdeiaFieldFilled = true;
+            isPaidiAdeiaFieldFilled = true;
             SaveButton.IsEnabled = true;
         }
 
         private void OnAgeEntryFocused(object sender, FocusEventArgs e)
         {
-            isChildAdeiaFieldFilled = true;
-            var age = int.Parse(ChildAge.Text);
+            isPaidiAgeFilled = true;
+            var age = int.Parse(PaidiAge.Text);
             SaveButton.IsEnabled = true;
         }
 
@@ -94,18 +94,18 @@ namespace StelexarasApp.UI.Views.SecondViews
 
         private async void OnSaveClicked(object sender, EventArgs e)
         {
-            if (_childviewModel is null)
+            if (_paidiviewModel is null)
             {
                 return;
             }
 
-            if (isChildNameFilled || isChildAdeiaFieldFilled || isChildAgeFilled && _skini is not null)
+            if (isPaidiNameFilled || isPaidiAdeiaFieldFilled || isPaidiAgeFilled && _skini is not null)
             {
-                _paidiDto.FullName = ChildName.Text;
-                _paidiDto.Age = int.Parse(ChildAge.Text);
+                _paidiDto.FullName = PaidiName.Text;
+                _paidiDto.Age = int.Parse(PaidiAge.Text);
                 _paidiDto.SkiniName = _skini.Name;
 
-                if (await _childviewModel.UpdatePaidiAsync(_paidiDto, _skini))
+                if (await _paidiviewModel.UpdatePaidiAsync(_paidiDto, _skini))
                 {
                     SaveButton.IsEnabled = false;
                 }

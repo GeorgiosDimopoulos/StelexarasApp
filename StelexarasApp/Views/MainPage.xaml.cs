@@ -1,7 +1,6 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.UI.Views
 {

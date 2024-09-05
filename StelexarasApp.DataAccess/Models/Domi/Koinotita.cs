@@ -1,9 +1,11 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using System.ComponentModel.DataAnnotations;
 
 namespace StelexarasApp.DataAccess.Models.Domi
 {
     public class Koinotita : Xwros
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }  = null!;
         public Koinotarxis Koinotarxis { get; set; } = null!;

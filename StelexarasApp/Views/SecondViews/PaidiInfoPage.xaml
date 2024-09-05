@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StelexarasApp.UI.Views.SecondViews.ChildInfoPage" Title="Εκπαιδευόμενος">
+             x:Class="StelexarasApp.UI.Views.SecondViews.PaidiInfoPage" Title="Εκπαιδευόμενος">
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Διαγραφή" Order="Primary" Priority="0" Clicked="OnDeleteClicked" />
 	</ContentPage.ToolbarItems>
@@ -20,7 +20,7 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Label Text="Όνοματεπώνυμο:" Grid.Column="0" Grid.Row="0"/>
-			<Entry Text="{Binding FullName}" x:Name="ChildName" Grid.Column="1" Grid.Row="0" Focused="OnChildNameEntryFocused" Unfocused="OnChildNameEntryUnfocused"/>
+			<Entry Text="{Binding FullName}" x:Name="PaidiName" Grid.Column="1" Grid.Row="0" Focused="OnPaidiNameEntryFocused" Unfocused="OnPaidiNameEntryUnfocused"/>
 			<Label Text="Σκηνή:" Grid.Column="0" Grid.Row="1"/>
 			<Entry Text="{Binding Skini.Name}" x:Name="SkiniName" Grid.Column="1" Grid.Row="1" Focused="OnSkiniEntryFocused"/>
 			<Picker ItemsSource="{Binding Skines}"
@@ -33,9 +33,9 @@
 					Grid.Column="1"
 					Grid.Row="1"/>
 			<Label Text="Ηλικία:" Grid.Column="0" Grid.Row="2"/>
-			<Entry Text="{Binding Age}" Grid.Column="1" x:Name="ChildAge" Grid.Row="2" TextColor="White" Focused="OnAgeEntryFocused"/>
+			<Entry Text="{Binding Age}" Grid.Column="1" x:Name="PaidiAge" Grid.Row="2" TextColor="White" Focused="OnAgeEntryFocused"/>
 			<Label Text="Σε αδεια;" Grid.Column="0" Grid.Row="3"/>
-			<Entry Grid.Column="1" x:Name="ChildAdeia" Grid.Row="3" TextColor="White" Focused="OnAdeiaEntryFocused">
+			<Entry Grid.Column="1" x:Name="PaidiAdeia" Grid.Row="3" TextColor="White" Focused="OnAdeiaEntryFocused">
 				<Entry.Triggers>
 					<DataTrigger TargetType="Entry" Binding="{Binding SeAdeia}" Value="True">
 						<Setter Property="Text" Value="ΣΕ ΑΔΕΙΑ" />

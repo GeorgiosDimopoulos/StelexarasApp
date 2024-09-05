@@ -4,5 +4,24 @@
              x:Class="StelexarasApp.UI.Views.SecondViews.StelexosInfoPage" Title="Στέλεχος">
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Διαγραφή" Order="Primary" Priority="0" Clicked="OnDeleteClicked" />
-	</ContentPage.ToolbarItems>	
+	</ContentPage.ToolbarItems>
+	<ContentPage.Content>
+		<StackLayout Padding="10">
+			<Grid Padding="10" RowSpacing="10" ColumnDefinitions="Auto, *">
+				<Label Grid.Row="0" Grid.Column="0" Text="Full Name:" FontAttributes="Bold"/>
+				<Entry Grid.Row="0" Grid.Column="1" Text="{Binding StelexosDto.FullName, Mode=TwoWay}" />
+				<Label Grid.Row="1" Grid.Column="0" Text="Age:" FontAttributes="Bold"/>
+				<Entry Grid.Row="1" Grid.Column="1" Text="{Binding StelexosDto.Age, Mode=TwoWay}" Keyboard="Numeric" />
+				<Label Grid.Row="2" Grid.Column="0" Text="Sex:" FontAttributes="Bold"/>
+				<Entry Grid.Row="2" Grid.Column="1" Text="{Binding StelexosDto.Sex, Mode=TwoWay}" />
+				<Label Grid.Row="3" Grid.Column="0" Text="ID:" FontAttributes="Bold"/>
+				<Entry Grid.Row="3" Grid.Column="1" Text="{Binding StelexosDto.Id, Mode=TwoWay}" Keyboard="Numeric" />
+				<Label Grid.Row="4" Grid.Column="0" Text="Thesi:" FontAttributes="Bold"/>
+				<Entry Grid.Row="4" Grid.Column="1" Text="{Binding StelexosDto.Thesi, Mode=TwoWay}" />
+				<Label Grid.Row="5" Grid.Column="0" Text="Xwros:" FontAttributes="Bold"/>
+				<Entry Grid.Row="5" Grid.Column="1" Text="{Binding StelexosDto.Xwros, Mode=TwoWay}" />
+			</Grid>
+			<Button Text="Save" VerticalOptions="EndAndExpand" Command="{Binding SaveCommand}" />
+		</StackLayout>
+	</ContentPage.Content>
 </ContentPage>

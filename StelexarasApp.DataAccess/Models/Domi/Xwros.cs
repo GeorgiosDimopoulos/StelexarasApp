@@ -1,8 +1,11 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace StelexarasApp.DataAccess.Models.Domi
 {
     public interface Xwros
     {
+        [Key]
         int Id { get; set; }
         string Name { get; set; }
     }
