@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace StelexarasApp.ViewModels
 {
-    public class ChildInfoViewModel(IPaidiaService peopleService, ObservableCollection<SkiniDto> skines) : INotifyPropertyChanged
+    public class PaidiInfoViewModel(IPaidiaService peopleService, ObservableCollection<SkiniDto> skines) : INotifyPropertyChanged
     {
         private readonly IPaidiaService _paidiaService = peopleService;
 

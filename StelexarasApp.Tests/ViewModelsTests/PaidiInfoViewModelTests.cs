@@ -6,21 +6,21 @@ using StelexarasApp.Services.DtosModels.Domi;
 
 namespace StelexarasApp.Tests.ViewModelsTests
 {
-    public class ChildInfoViewModelTests
+    public class PaidiInfoViewModelTests
     {
         private readonly Mock<IPaidiaService> _mockPaidiaService;
-        private readonly ChildInfoViewModel _childInfoViewModel;
+        private readonly PaidiInfoViewModel _paidiInfoViewModel;
         private readonly PaidiDto _paidi;
         private readonly SkiniDto _skini;
 
-        public ChildInfoViewModelTests()
+        public PaidiInfoViewModelTests()
         {
             _mockPaidiaService = new Mock<IPaidiaService>();
 
             _skini = GetMockUpSkini();
             _paidi = GetMockUpPaidi(_skini);
 
-            _childInfoViewModel = new ChildInfoViewModel(_mockPaidiaService.Object, [_skini]);
+            _paidiInfoViewModel = new PaidiInfoViewModel(_mockPaidiaService.Object, [_skini]);
         }
 
         [Theory]
@@ -35,7 +35,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(paidi)).ReturnsAsync(expectedResult);
 
             // Act
-            var result = await _childInfoViewModel.UpdatePaidiAsync(paidi, skini);
+            var result = await _paidiInfoViewModel.UpdatePaidiAsync(paidi, skini);
 
             // Assert
             Assert.Equal(expectedResult, result);
@@ -49,7 +49,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Setup(service => service.DeletePaidiInDb(_paidi.Id)).ReturnsAsync(true);
 
             // Act
-            await _childInfoViewModel.DeletePaidiAsync(_paidi.Id);
+            await _paidiInfoViewModel.DeletePaidiAsync(_paidi.Id);
 
             // Assert
             _mockPaidiaService.Verify(service => service.DeletePaidiInDb(_paidi.Id), Times.Once);

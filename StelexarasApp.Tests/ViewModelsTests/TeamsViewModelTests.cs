@@ -15,7 +15,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
         public TeamsViewModelTests()
         {
             paidiaServiceMock = new Mock<IPaidiaService>();
-            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object, It.IsAny<EidosXwrou>);
+            peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object, EidosXwrou.Koinotita);
         }
 
         [Fact]
