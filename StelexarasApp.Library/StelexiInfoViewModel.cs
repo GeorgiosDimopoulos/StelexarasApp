@@ -1,6 +1,9 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -11,8 +14,7 @@ namespace StelexarasApp.ViewModels
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         public StelexosDto StelexosDto { get; set; }
-        public ICommand SaveCommand { get; }
-
+        public ICommand SaveStelexosCommand { get; }
 
         private readonly IStelexiService _stelexiService;
 
@@ -20,7 +22,7 @@ namespace StelexarasApp.ViewModels
         {
             _stelexiService = stelexiService;
             StelexosDto = stelexosDto;
-            SaveCommand = new Command(OnSave);
+            SaveStelexosCommand = new Command(OnSaveStelexos);
         }
 
         public async Task<bool> DeleteStelexos(StelexosDto s, Thesi thesi)
@@ -28,15 +30,13 @@ namespace StelexarasApp.ViewModels
             return await _stelexiService.DeleteStelexosInService(s.Id ?? 0, thesi);
         }
 
-        private async void OnSave()
+        private async void OnSaveStelexos()
         {
-            // ToDo: add better Save logic goes here, e.g., calling the service to update the entity in the database.
-            await _stelexiService.AddStelexosInService(StelexosDto, StelexosDto.Thesi);
-        }
-
-        public async Task<bool> UpdateStelexos(StelexosDto stelexosDto, Thesi thesi)
-        {
-            return await _stelexiService.UpdateStelexosInService(stelexosDto, thesi);
+            var result = await _stelexiService.UpdateStelexosInService(StelexosDto, StelexosDto.Thesi);
+            if (result)
+            {
+                OnPropertyChanged(nameof(StelexosDto));
+            }
         }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")

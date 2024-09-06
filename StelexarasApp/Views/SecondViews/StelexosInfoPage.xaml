@@ -21,7 +21,7 @@
 				<Label Grid.Row="5" Grid.Column="0" Text="Xwros:" FontAttributes="Bold"/>
 				<Entry Grid.Row="5" Grid.Column="1" Text="{Binding StelexosDto.Xwros, Mode=TwoWay}" />
 			</Grid>
-			<Button Text="Save" VerticalOptions="EndAndExpand" Command="{Binding SaveCommand}" />
+			<Button Text="Save" VerticalOptions="EndAndExpand" Command="{Binding SaveStelexosCommand}" />
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

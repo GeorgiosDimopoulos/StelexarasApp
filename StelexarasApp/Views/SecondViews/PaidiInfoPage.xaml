@@ -20,9 +20,9 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Label Text="Όνοματεπώνυμο:" Grid.Column="0" Grid.Row="0"/>
-			<Entry Text="{Binding FullName}" x:Name="PaidiName" Grid.Column="1" Grid.Row="0" Focused="OnPaidiNameEntryFocused" Unfocused="OnPaidiNameEntryUnfocused"/>
+			<Entry Text="{Binding PaidiDto.FullName, Mode=TwoWay}" x:Name="PaidiName" Grid.Column="1" Grid.Row="0" Focused="OnPaidiNameEntryFocused" Unfocused="OnPaidiNameEntryUnfocused"/>
 			<Label Text="Σκηνή:" Grid.Column="0" Grid.Row="1"/>
-			<Entry Text="{Binding Skini.Name}" x:Name="SkiniName" Grid.Column="1" Grid.Row="1" Focused="OnSkiniEntryFocused"/>
+			<Entry Text="{Binding PaidiDto.Skini.Name, TargetNullValue='No Skini'}" x:Name="SkiniName" Grid.Column="1" Grid.Row="1" Focused="OnSkiniEntryFocused"/>
 			<Picker ItemsSource="{Binding Skines}"
 					IsVisible="False"
 					Unfocused="OnSkiniPickerUnfocused"
@@ -33,16 +33,16 @@
 					Grid.Column="1"
 					Grid.Row="1"/>
 			<Label Text="Ηλικία:" Grid.Column="0" Grid.Row="2"/>
-			<Entry Text="{Binding Age}" Grid.Column="1" x:Name="PaidiAge" Grid.Row="2" TextColor="White" Focused="OnAgeEntryFocused"/>
+			<Entry Text="{Binding PaidiDto.Age}" Grid.Column="1" x:Name="PaidiAge" Grid.Row="2" TextColor="White" Focused="OnAgeEntryFocused"/>
 			<Label Text="Σε αδεια;" Grid.Column="0" Grid.Row="3"/>
 			<Entry Grid.Column="1" x:Name="PaidiAdeia" Grid.Row="3" TextColor="White" Focused="OnAdeiaEntryFocused">
 				<Entry.Triggers>
-					<DataTrigger TargetType="Entry" Binding="{Binding SeAdeia}" Value="True">
+					<DataTrigger TargetType="Entry" Binding="{Binding PaidiDto.SeAdeia}" Value="True">
 						<Setter Property="Text" Value="ΣΕ ΑΔΕΙΑ" />
 					</DataTrigger>
 				</Entry.Triggers>
 			</Entry>
-			<Button x:Name="SaveButton" Text="Αποθήκευση" IsEnabled="False" Clicked="OnSaveClicked" Grid.Row="5" Padding="10" Grid.ColumnSpan="2" VerticalOptions="End"/>
+			<Button x:Name="SaveButton" Text="Αποθήκευση" IsEnabled="False" Command="{Binding SavePaidiCommand}" Grid.Row="5" Padding="10" Grid.ColumnSpan="2" VerticalOptions="End"/>
 		</Grid>
 	</ContentPage.Content>
 </ContentPage>

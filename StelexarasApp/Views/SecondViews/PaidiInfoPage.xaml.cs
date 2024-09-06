@@ -19,7 +19,7 @@ namespace StelexarasApp.UI.Views.SecondViews
         public PaidiInfoPage(IPaidiaService peopleService, PaidiDto paidi, ObservableCollection<SkiniDto> allSkines)
         {
             InitializeComponent();
-            _paidiviewModel = new PaidiInfoViewModel(peopleService, allSkines);
+            _paidiviewModel = new PaidiInfoViewModel(_paidiDto, peopleService, allSkines);
             _paidiDto = paidi;
             _skini = new SkiniDto();
             BindingContext = _paidiviewModel;
@@ -27,7 +27,7 @@ namespace StelexarasApp.UI.Views.SecondViews
 
         private async void OnDeleteClicked(object sender, EventArgs e)
         {
-            if(_paidiviewModel is null)
+            if (_paidiviewModel is null)
             {
                 return;
             }
@@ -92,33 +92,28 @@ namespace StelexarasApp.UI.Views.SecondViews
             }
         }
 
-        private async void OnSaveClicked(object sender, EventArgs e)
-        {
-            if (_paidiviewModel is null)
-            {
-                return;
-            }
+        // ToDo: should be removed!
+        //private async void OnSaveClicked(object sender, EventArgs e)
+        //{
+        //    if (isPaidiNameFilled || isPaidiAdeiaFieldFilled || isPaidiAgeFilled && _skini is not null)
+        //    {
+        //        _paidiDto.FullName = PaidiName.Text;
+        //        _paidiDto.Age = int.Parse(PaidiAge.Text);
+        //        _paidiDto.SkiniName = _skini.Name;
 
-            if (isPaidiNameFilled || isPaidiAdeiaFieldFilled || isPaidiAgeFilled && _skini is not null)
-            {
-                _paidiDto.FullName = PaidiName.Text;
-                _paidiDto.Age = int.Parse(PaidiAge.Text);
-                _paidiDto.SkiniName = _skini.Name;
-
-                if (await _paidiviewModel.UpdatePaidiAsync(_paidiDto, _skini))
-                {
-                    SaveButton.IsEnabled = false;
-                }
-                else
-                {
-                    await DisplayAlert("Σφάλμα", "Παρακαλώ συμπληρώστε όλα τα πεδία", "OK");
-                }
-                
-            }
-            else
-            {
-                await DisplayAlert("Σφάλμα", "Παρακαλώ συμπληρώστε όλα τα πεδία", "OK");
-            }
-        }
+        //        if (await _paidiviewModel.UpdatePaidiAsync(_paidiDto, _skini))
+        //        {
+        //            SaveButton.IsEnabled = false;
+        //        }
+        //        else
+        //        {
+        //            await DisplayAlert("Σφάλμα", "Παρακαλώ συμπληρώστε όλα τα πεδία", "OK");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        await DisplayAlert("Σφάλμα", "Παρακαλώ συμπληρώστε όλα τα πεδία", "OK");
+        //    }
+        //}
     }
 }
