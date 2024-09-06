@@ -21,6 +21,7 @@ namespace StelexarasApp.DataAccess.Models.Atoma
     public enum PaidiType
     {
         Ekpaideuomenos = 0,
-        Kataskinotis = 1
+        Kataskinotis = 1,
+        Unknown = 2,
     }
 }

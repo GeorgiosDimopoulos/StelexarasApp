@@ -55,6 +55,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
 
             // Assert
             _mockPaidiaService.Verify(service => service.DeletePaidiInDb(_paidi.Id), Times.Once);
+            Assert.Equal("Delete successful", _paidiInfoViewModel.StatusMessage); 
         }
 
         private PaidiDto GetMockUpPaidi(SkiniDto skini)

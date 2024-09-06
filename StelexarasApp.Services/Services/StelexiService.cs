@@ -78,7 +78,7 @@ namespace StelexarasApp.Services.Services
             return true;
         }
 
-        public async Task<bool> UpdateStelexosInService(StelexosDto stelexosDto, Thesi thesi)
+        public async Task<bool> UpdateStelexosInService(StelexosDto stelexosDto)
         {
             var stelexos = MapDtoToEntity(stelexosDto);
             return await _stelexiRepository.UpdateStelexosInDb(stelexos);

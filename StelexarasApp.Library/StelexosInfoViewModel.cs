@@ -1,40 +1,40 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.Services.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace StelexarasApp.ViewModels
 {
-    public class StelexiInfoViewModel : INotifyPropertyChanged
+    public class StelexosInfoViewModel : INotifyPropertyChanged
     {
+        private readonly IStelexiService _stelexiService;
+
         public event PropertyChangedEventHandler? PropertyChanged;
         public StelexosDto StelexosDto { get; set; }
         public ICommand SaveStelexosCommand { get; }
+        public string StatusMessage { get; set; } = string.Empty;
 
-        private readonly IStelexiService _stelexiService;
-
-        public StelexiInfoViewModel(StelexosDto stelexosDto, IStelexiService stelexiService)
+        public StelexosInfoViewModel(StelexosDto stelexosDto, IStelexiService stelexiService)
         {
             _stelexiService = stelexiService;
             StelexosDto = stelexosDto;
-            SaveStelexosCommand = new Command(OnSaveStelexos);
+            SaveStelexosCommand = new Command(async () => await OnSaveStelexos());
         }
 
-        public async Task<bool> DeleteStelexos(StelexosDto s, Thesi thesi)
+        public async Task<bool> DeleteStelexos(StelexosDto s)
         {
-            return await _stelexiService.DeleteStelexosInService(s.Id ?? 0, thesi);
+            return await _stelexiService.DeleteStelexosInService(s.Id ?? 0, s.Thesi);
         }
 
-        private async void OnSaveStelexos()
+        public async Task OnSaveStelexos()
         {
-            var result = await _stelexiService.UpdateStelexosInService(StelexosDto, StelexosDto.Thesi);
+            var result = await _stelexiService.UpdateStelexosInService(StelexosDto);
             if (result)
             {
+                StatusMessage = result ? "Save successful" : "Save failed";
+
                 OnPropertyChanged(nameof(StelexosDto));
             }
         }

@@ -53,7 +53,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPut("Omadarxi/{id}")]
         public async Task<IActionResult> PutOmadarxi([FromBody] OmadarxisDto omadarxisDto)
         {
-            var result = await _stelexiService.UpdateStelexosInService(omadarxisDto, Thesi.Omadarxis);
+            var result = await _stelexiService.UpdateStelexosInService(omadarxisDto);
 
             if (!result)
                 return NotFound();
@@ -106,7 +106,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPut("Koinotarxi/{id}")]
         public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisDto koinotarxisDto)
         {
-            var result = await _stelexiService.UpdateStelexosInService(koinotarxisDto, Thesi.Koinotarxis);
+            var result = await _stelexiService.UpdateStelexosInService(koinotarxisDto);
 
             if (!result)
                 return NotFound();
@@ -161,7 +161,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPut("Tomearxi/{id}")]
         public async Task<IActionResult> PutTomearxi([FromBody] TomearxisDto tomearxisDto)
         {
-            var result = await _stelexiService.UpdateStelexosInService(tomearxisDto, Thesi.Tomearxis);
+            var result = await _stelexiService.UpdateStelexosInService(tomearxisDto);
 
             if (!result)
                 return NotFound();
@@ -216,7 +216,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPut("Ekpaideutis/{id}")]
         public async Task<IActionResult> PutEkpaideutis([FromBody] EkpaideutisDto ekpaideutisDto)
         {
-            var result = await _stelexiService.UpdateStelexosInService(ekpaideutisDto, Thesi.Ekpaideutis);
+            var result = await _stelexiService.UpdateStelexosInService(ekpaideutisDto);
 
             if (!result)
                 return NotFound();
