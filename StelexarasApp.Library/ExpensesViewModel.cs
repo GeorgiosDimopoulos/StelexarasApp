@@ -6,17 +6,12 @@ using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.ViewModels
 {
-    public class ExpensesViewModel : INotifyPropertyChanged
+    public class ExpensesViewModel(IExpenseService expenseService) : INotifyPropertyChanged
     {
-        private IExpenseService _expenseService;
+        private IExpenseService _expenseService = expenseService;
 
-        public ObservableCollection<Expense> Expenses { get; set; }
+        public ObservableCollection<Expense> Expenses { get; set; } = new ObservableCollection<Expense>();
         public string StatusMessage { get; set; } = string.Empty;
-        public ExpensesViewModel(IExpenseService expenseService)
-        {
-            _expenseService = expenseService;
-            LoadExpensesAsync();
-        }
 
         public async void AddExpense(string name, int price)
         {
@@ -39,10 +34,14 @@ namespace StelexarasApp.ViewModels
         public async Task LoadExpensesAsync()
         {
             var expenses = await _expenseService.GetExpensesAsync();
-            if (expenses is not null)
+            if (expenses is not null) 
+            {
                 Expenses = new ObservableCollection<Expense>(expenses);
+                StatusMessage = "Load successful";
+            }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

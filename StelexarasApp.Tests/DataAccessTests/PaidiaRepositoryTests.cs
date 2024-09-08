@@ -18,16 +18,16 @@ namespace StelexarasApp.Tests.DataAccessTests
         
         public PaidiaRepositoryTests()
         {
-            var mockLogger = new Mock<ILogger<PaidiRepository>>();
-            var mockLoggerFactory = new Mock<ILoggerFactory>();
-            mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
-            _dbContext = new Mock<AppDbContext>().Object;
-
-            // var options = new DbContextOptionsBuilder<AppDbContext>()
-            //    .UseInMemoryDatabase(databaseName: "TestDatabase")
-            //    .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-            //    .Options;
-            _paidiRepository = new PaidiRepository(_dbContext, mockLoggerFactory.Object);
+            //var mockLogger = new Mock<ILogger<PaidiRepository>>();
+            //var mockLoggerFactory = new Mock<ILoggerFactory>();
+            //mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
+            //_dbContext = new Mock<AppDbContext>().Object;            
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+               .UseInMemoryDatabase(databaseName: "TestDatabase")
+               .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+               .Options;
+            _dbContext = new AppDbContext(options);
+            _paidiRepository = new PaidiRepository(_dbContext, loggerFactory);
         }
 
         [Theory]
@@ -40,6 +40,19 @@ namespace StelexarasApp.Tests.DataAccessTests
             var paidi = new Paidi { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
             var result = await _paidiRepository.AddPaidiInDb(paidi);
             Assert.Equal(result, expectedResult);
+            if (expectedResult)
+            {
+                var addedPaidi = await _dbContext.Paidia.FindAsync(id);
+                Assert.NotNull(addedPaidi);
+                Assert.Equal(paidi.FullName, addedPaidi.FullName);
+                Assert.Equal(paidi.Age, addedPaidi.Age);
+                Assert.Equal(paidi.PaidiType, addedPaidi.PaidiType);
+            }
+            else
+            {
+                var addedPaidi = await _dbContext.Paidia.FindAsync(id);
+                Assert.Null(addedPaidi);
+            }
         }
 
         [Theory]

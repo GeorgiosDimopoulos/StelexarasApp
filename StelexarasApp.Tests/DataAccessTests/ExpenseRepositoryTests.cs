@@ -16,7 +16,6 @@ namespace StelexarasApp.Tests.DataAccessTests
         public ExpenseRepositoryTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "TestDatabase").Options;
-
             _dbContext = new AppDbContext(options);
             expenseRepository = new ExpenseRepository(_dbContext, loggerFactory);
         }

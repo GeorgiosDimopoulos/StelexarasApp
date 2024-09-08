@@ -70,6 +70,10 @@ namespace StelexarasApp.Services.Services
 
         public async Task<IEnumerable<Expense>> GetExpensesAsync()
         {
+            if (_dbContext.Expenses is null)
+            {
+                return null!;
+            }
             return await _dbContext.Expenses.ToListAsync();
         }
     }

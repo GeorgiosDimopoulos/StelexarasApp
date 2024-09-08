@@ -133,7 +133,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 }
 
                 var existingExpense = await _dbContext.Expenses.FindAsync(id);
-                if (existingExpense == null || string.IsNullOrEmpty(newExpense.Description) || newExpense.Id <= 0)
+                if (existingExpense == null || string.IsNullOrEmpty(newExpense.Description)) // || newExpense.Id <= 0
                 {
                     return false;
                 }

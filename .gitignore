@@ -13,6 +13,11 @@ platforms/
 *.userosscache
 *.sln.docstates
 
+# Ignore specific log files
+dbSuccesses.txt
+dbErrors.txt
+Logs.txt
+
 # Auto-generated files
 *.designer.cs
 *.designer.vb

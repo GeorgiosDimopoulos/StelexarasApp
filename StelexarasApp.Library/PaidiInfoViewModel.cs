@@ -26,17 +26,26 @@ namespace StelexarasApp.ViewModels
 
         public async Task<bool> DeletePaidiAsync(int id)
         {
-            return await _paidiaService.DeletePaidiInDb(id);
+            if (await _paidiaService.DeletePaidiInDb(id))
+            {
+                StatusMessage = "Delete successful";
+                return true;
+            }
+            else
+            {
+                StatusMessage = "Delete failed";
+                return false;
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public async Task OnSavePaidi()
+        public async Task<bool> OnSavePaidi()
         {
             var skini = Skines.FirstOrDefault(s => s.Name == PaidiDto.SkiniName);
 
             if (skini?.Name is null)
-                return;
+                return false;
 
             // ToDo: maybe it is not needed to set the Skini here, it could be already be set via XAML
             PaidiDto.SkiniName = skini.Name;
@@ -48,7 +57,10 @@ namespace StelexarasApp.ViewModels
 
                 OnPropertyChanged(nameof(Skines));
                 OnPropertyChanged(nameof(PaidiDto));
+                return true;
             }
+
+            return false;
         }
 
         protected void OnPropertyChanged(string propertyName)

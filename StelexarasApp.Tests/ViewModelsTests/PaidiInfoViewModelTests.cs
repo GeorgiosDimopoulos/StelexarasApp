@@ -24,25 +24,25 @@ namespace StelexarasApp.Tests.ViewModelsTests
         }
 
         [Theory]
-        [InlineData(null, "SomeSkini", false, "Save failed")]
-        [InlineData("ValidName", null, true, "Save successful")]
+        [InlineData("SomeSkini", false, "Save failed")]
+        [InlineData(null, true, "Save successful")]
 
-        public async Task OnSavePaidi_ShouldUpdateStatusMessage(string fullName, string skiniName, bool expectedResult, string expectedMessage)
+        public async Task OnSavePaidi_ShouldUpdateStatusMessage(string skiniName, bool expectedResult, string expectedMessage)
         {
             // Arrange
-            var paidi = new PaidiDto { FullName = fullName };
+            var paidi = _paidi;
             var skini = skiniName != null ? GetMockUpSkini() : null;
 
             _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(paidi)).ReturnsAsync(expectedResult);
 
             // Act
-            await _paidiInfoViewModel.OnSavePaidi();
+            var result = await _paidiInfoViewModel.OnSavePaidi();
 
             // Assert
             _mockPaidiaService.Verify(service => service.UpdatePaidiInDb(paidi), Times.Once);
             Assert.Equal(expectedMessage, _paidiInfoViewModel.StatusMessage);
+            Assert.True(result);
         }
-
 
         [Fact]
         public async Task DeletePaidiAsync_ShouldUpdateSkines_WhenPaidiIsDeleted()
@@ -51,11 +51,12 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Setup(service => service.DeletePaidiInDb(_paidi.Id)).ReturnsAsync(true);
 
             // Act
-            await _paidiInfoViewModel.DeletePaidiAsync(_paidi.Id);
+            var result = await _paidiInfoViewModel.DeletePaidiAsync(_paidi.Id);
 
             // Assert
             _mockPaidiaService.Verify(service => service.DeletePaidiInDb(_paidi.Id), Times.Once);
-            Assert.Equal("Delete successful", _paidiInfoViewModel.StatusMessage); 
+            Assert.Equal("Delete successful", _paidiInfoViewModel.StatusMessage);
+            Assert.True(result);
         }
 
         private PaidiDto GetMockUpPaidi(SkiniDto skini)

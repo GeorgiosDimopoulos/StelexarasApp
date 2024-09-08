@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Moq;
 using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Services;
@@ -10,14 +9,14 @@ namespace StelexarasApp.Tests.ServicesTests
 {
     public class StelexiServiceTests
     {
-        private readonly Mock<StelexiRepository> _mockStelexiRepository;
+        private readonly Mock<IStelexiRepository> _mockStelexiRepository;
         private readonly StelexiService _stelexiService;
-        private readonly IMapper mapper;
-
+        private readonly Mock<IMapper> _mockMapper;
         public StelexiServiceTests()
         {
-            _mockStelexiRepository = new Mock<StelexiRepository>(MockBehavior.Strict);
-            _stelexiService = new StelexiService(mapper, _mockStelexiRepository.Object);
+            _mockStelexiRepository = new Mock<IStelexiRepository>(); // 
+            _mockMapper = new Mock<IMapper>();
+            _stelexiService = new StelexiService(_mockMapper.Object, _mockStelexiRepository.Object);
         }
 
         [Fact]
@@ -36,10 +35,8 @@ namespace StelexarasApp.Tests.ServicesTests
             var mockRepository = new Mock<IStelexiRepository>();
             mockRepository.Setup(r => r.FindStelexosByIdInDb(id, thesi)).ReturnsAsync(stelexos);
 
-            var service = new StelexiService(null, mockRepository.Object);
-
             // Act
-            var result = await service.GetStelexosByIdInService(id, thesi);
+            var result = await _stelexiService.GetStelexosByIdInService(id, thesi);
 
             // Assert
             Assert.Equal(stelexos, result);
@@ -60,10 +57,8 @@ namespace StelexarasApp.Tests.ServicesTests
             var mockRepository = new Mock<IStelexiRepository>();
             mockRepository.Setup(r => r.GetStelexoiAnaThesiFromDb(thesi)).ReturnsAsync(stelexoi);
 
-            var service = new StelexiService(null, mockRepository.Object);
-
             // Act
-            var result = await service.GetStelexoiAnaThesiInService(thesi);
+            var result = await _stelexiService.GetStelexoiAnaThesiInService(thesi);
 
             // Assert
             Assert.Equal(stelexoi, result);
@@ -81,21 +76,16 @@ namespace StelexarasApp.Tests.ServicesTests
                 Thesi = Thesi.Omadarxis,
             };
             var stelexos = new Omadarxis {};
-
-            var mockMapper = new Mock<IMapper>();
-            var mockRepository = new Mock<IStelexiRepository>();
-
-            mockMapper.Setup(m => m.Map<Stelexos>(stelexosDto)).Returns(stelexos);
-            mockRepository.Setup(r => r.AddStelexosInDb(stelexos)).ReturnsAsync(true);
-
-            var service = new StelexiService(mockMapper.Object, mockRepository.Object);
+            /HERE
+            _mockMapper.Setup(m => m.Map<Stelexos>(stelexosDto)).Returns(stelexos);
+            _mockStelexiRepository.Setup(r => r.AddStelexosInDb(stelexos)).ReturnsAsync(true);
 
             // Act
-            var result = await service.AddStelexosInService(stelexosDto, stelexosDto.Thesi);
+            var result = await _stelexiService.AddStelexosInService(stelexosDto, stelexosDto.Thesi);
 
             // Assert
             Assert.True(result);
-            mockRepository.Verify(r => r.AddStelexosInDb(stelexos), Times.Once);
+            _mockStelexiRepository.Verify(r => r.AddStelexosInDb(stelexos), Times.Once);
         }
 
         [Fact]
@@ -104,18 +94,14 @@ namespace StelexarasApp.Tests.ServicesTests
             // Arrange
             var id = 1;
             var thesi = new Thesi { /* Initialize properties */ };
-
-            var mockRepository = new Mock<IStelexiRepository>();
-            mockRepository.Setup(r => r.DeleteStelexosInDb(id, thesi)).ReturnsAsync(true);
-
-            var service = new StelexiService(null, mockRepository.Object);
+            _mockStelexiRepository.Setup(r => r.DeleteStelexosInDb(id, thesi)).ReturnsAsync(true);
 
             // Act
-            var result = await service.DeleteStelexosInService(id, thesi);
+            var result = await _stelexiService.DeleteStelexosInService(id, thesi);
 
             // Assert
             Assert.True(result);
-            mockRepository.Verify(r => r.DeleteStelexosInDb(id, thesi), Times.Once);
+            _mockStelexiRepository.Verify(r => r.DeleteStelexosInDb(id, thesi), Times.Once);
         }
 
 
