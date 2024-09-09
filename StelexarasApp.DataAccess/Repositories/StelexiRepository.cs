@@ -11,33 +11,33 @@ namespace StelexarasApp.DataAccess.Repositories
         private readonly AppDbContext _dbContext = dbContext;
         private readonly ILogger<StelexiRepository> _logger = loggerFactory.CreateLogger<StelexiRepository>();
 
-        public async Task<bool> AddStelexosInDb(Stelexos stelexi)
+        public async Task<bool> AddStelexosInDb(Stelexos stelexos)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-            if (stelexi == null)
-                return false;            
+            if (stelexos == null)
+                throw new ArgumentNullException(nameof(stelexos), "Stelexos cannot be null");
 
             try
             {
-                switch (stelexi.Thesi)
+                switch (stelexos.Thesi)
                 {
                     case Thesi.Omadarxis:
-                        _dbContext.Omadarxes?.Add((Omadarxis)stelexi);
+                        _dbContext.Omadarxes?.Add((Omadarxis)stelexos);
                         break;
                     case Thesi.Koinotarxis:
-                        _dbContext.Koinotarxes?.Add((Koinotarxis)stelexi);
+                        _dbContext.Koinotarxes?.Add((Koinotarxis)stelexos);
                         break;
                     case Thesi.Tomearxis:
-                        _dbContext.Tomearxes?.Add((Tomearxis)stelexi);
+                        _dbContext.Tomearxes?.Add((Tomearxis)stelexos);
                         break;
                     case Thesi.Ekpaideutis:
                         throw new NullReferenceException("Not yet implemented!");
                     case Thesi.None:
-                        break;
+                        throw new ArgumentException("Thesi cannot be None!", nameof(stelexos.Thesi));
                     default:
-                        throw new ArgumentException("Invalid Thesi value!", nameof(stelexi.Thesi));
+                        throw new ArgumentException("Invalid Thesi value!", nameof(stelexos.Thesi));
                 }
 
                 await _dbContext.SaveChangesAsync();
@@ -45,6 +45,11 @@ namespace StelexarasApp.DataAccess.Repositories
                     await transaction.CommitAsync();
                 
                 return true;
+            }
+            catch (InvalidCastException ex)
+            {
+                _logger.LogError($"Invalid cast for Stelexos of Thesi {stelexos.Thesi}: {ex.Message}");
+                throw new ArgumentException("Invalid Thesi cast.", ex);
             }
             catch (Exception ex)
             {

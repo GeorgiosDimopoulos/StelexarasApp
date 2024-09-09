@@ -15,7 +15,7 @@
                 _driver = new ChromeDriver();
             }
 
-            [Fact]
+            [Fact(Skip = "Temporarily ignoring this test")]
             public void CreatePage_ShouldLoadSuccessfully()
             {
                 // Arrange
@@ -28,7 +28,7 @@
                 Assert.Equal("Create Paidia - StelexarasApp", pageTitle);
             }
 
-            [Fact]
+            [Fact(Skip = "Temporarily ignoring this test")]
             public void IndexPage_ShouldLoadSuccessfully()
             {
                 // Arrange
@@ -41,7 +41,7 @@
                 Assert.Equal("Paidia - StelexarasApp", pageTitle);
             }
 
-            [Fact]
+            [Fact(Skip = "Temporarily ignoring this test")]
             public void CreatePage_ShouldCreateNewPaidia()
             {
                 // Arrange

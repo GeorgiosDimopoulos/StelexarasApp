@@ -10,59 +10,59 @@ namespace StelexarasApp.Tests.ViewModelsTests
 {
     public class StelexosInfoViewModelTests
     {
-        private readonly Mock<IStelexiService> _stelexiService;
+        private readonly Mock<IStelexiService> _mockstelexiService;
         private readonly StelexosInfoViewModel stelexosInfoViewModel;
         private readonly StelexosDto stelexosDto;
 
         public StelexosInfoViewModelTests()
         {
             stelexosDto = GetMockUpStelexos(Thesi.Omadarxis);
-            _stelexiService = new Mock<IStelexiService>();
-            stelexosInfoViewModel = new StelexosInfoViewModel(stelexosDto, _stelexiService.Object);
+            _mockstelexiService = new Mock<IStelexiService>();
+            stelexosInfoViewModel = new StelexosInfoViewModel(stelexosDto, _mockstelexiService.Object);
+
         }
 
         [Theory]
-        [InlineData(null, "SomeSkini", false, "Save failed")]
-        [InlineData("ValidName", null, true, "Save successful")]
-
-        public async Task OnSaveStelexos_ShouldUpdateStatusMessage(string fullName, string skiniName, bool expectedResult, string expectedMessage)
+        [InlineData(null, "xwros", false, "Save failed")]
+        [InlineData("Valid Name", "xwros", true, "Save successful")]
+        public async Task OnSaveStelexos_ShouldUpdateStatusMessage(string fullName, string xwrosName, bool expectedResult, string expectedMessage)
         {
             // Arrange
-            var stelexos = GetMockUpStelexos(Thesi.Omadarxis);
-            _stelexiService.Setup(service => service.UpdateStelexosInService(stelexos)).ReturnsAsync(expectedResult);
+            var stelexosDto = GetMockUpStelexos(Thesi.Omadarxis, fullName, xwrosName);
+            _mockstelexiService.Setup(service => service.UpdateStelexosInService(stelexosDto)).ReturnsAsync(expectedResult);
+            stelexosInfoViewModel.StelexosDto = stelexosDto;
 
             // Act
             await stelexosInfoViewModel.OnSaveStelexos();
 
             // Assert
-            _stelexiService.Verify(service => service.UpdateStelexosInService(stelexos), Times.Once);
+            _mockstelexiService.Verify(service => service.UpdateStelexosInService(stelexosDto), Times.Once);
             Assert.Equal(expectedMessage, stelexosInfoViewModel.StatusMessage);
         }
-
 
         [Fact]
         public async Task DeleteStelexosAsync_ShouldUpdateSkines_WhenPaidiIsDeleted()
         {
             // Arrange
-            var stelexos = GetMockUpStelexos(Thesi.Omadarxis);
-            _stelexiService.Setup(service => service.DeleteStelexosInService(stelexos.Id ?? 0, stelexos.Thesi)).ReturnsAsync(true);
+            var stelexos = GetMockUpStelexos(Thesi.Omadarxis, "Test Name", "Test Xwros");
+            _mockstelexiService.Setup(service => service.DeleteStelexosInService(stelexos.Id ?? 1, stelexos.Thesi)).ReturnsAsync(true);
 
             // Act
             await stelexosInfoViewModel.DeleteStelexos(stelexos);
 
             // Assert
-            _stelexiService.Verify(service => service.DeleteStelexosInService(stelexos.Id ?? 0, stelexos.Thesi), Times.Once);
+            _mockstelexiService.Verify(service => service.DeleteStelexosInService(stelexos.Id ?? 1, stelexos.Thesi), Times.Once);
         }
 
-        private StelexosDto GetMockUpStelexos(Thesi thesi)
+        private StelexosDto GetMockUpStelexos(Thesi? thesi = Thesi.Omadarxis, string name = "Some name", string xwrosName = "someXwros")
         {
             return new StelexosDto
             {
                 Age = 20,
-                FullName = "Valid Name",
+                FullName = name,
                 Sex = Sex.Female,
-                Xwros = new Skini(),
-                Thesi = thesi
+                XwrosName = xwrosName,
+                Thesi = thesi ?? Thesi.None,
             };
         }
     }

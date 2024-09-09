@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Moq;
+using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.Services;
+using Microsoft.Extensions.Logging;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.Tests.ServicesTests
 {
@@ -12,10 +14,17 @@ namespace StelexarasApp.Tests.ServicesTests
         private readonly Mock<IPaidiRepository> _mockPaidiRepository;
         private readonly PaidiaService _paidiaService;
         private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<AppDbContext> _mockDbContext;
+        private readonly Mock<ILoggerFactory> _loggerFactory;
         public PaidiaServiceTests()
         {
+            _mockDbContext = new Mock<AppDbContext>();
+            _loggerFactory = new Mock<ILoggerFactory>();
+
+            // _mockPaidiRepository = new Mock<PaidiRepository>(_mockDbContext.Object, _loggerFactory.Object);
             _mockPaidiRepository = new Mock<IPaidiRepository>();
             _mockMapper = new Mock<IMapper>();
+
             _mockMapper.Setup(m => m.Map<Paidi>(It.IsAny<PaidiDto>()))
               .Returns((PaidiDto dto) => new Paidi
               {
@@ -33,7 +42,7 @@ namespace StelexarasApp.Tests.ServicesTests
             // Arrange
             var paidiDto = new PaidiDto { Id = 1, FullName = "John Doe", Age = 30, PaidiType = PaidiType.Ekpaideuomenos };
             var paidi = new Paidi { Id = 1, FullName = "John Doe", Age = 30, PaidiType = PaidiType.Ekpaideuomenos };
-            
+
             _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
             _mockPaidiRepository.Setup(repo => repo.AddPaidiInDb(paidi)).ReturnsAsync(true);
 
@@ -47,15 +56,15 @@ namespace StelexarasApp.Tests.ServicesTests
 
         [Theory]
         [InlineData(PaidiType.Kataskinotis, 2)]
-        [InlineData(PaidiType.Ekpaideuomenos, 1)]
+        [InlineData(PaidiType.Ekpaideuomenos, 2)]
         public async Task GetPaidia_ShouldReturnPaidia(PaidiType paidiType, int expectedCount)
         {
             // Arrange
             var expectedPaidia = new List<Paidi>
-        {
-            new Paidi { Id = 1, FullName = "John Doe", Age = 30, PaidiType = paidiType },
-            new Paidi { Id = 2, FullName = "Jane Smith", Age = 25, PaidiType = paidiType }
-        }.Where(p => p.PaidiType == paidiType).ToList();
+            {
+                new Paidi { Id = 1, FullName = "John Doe", Age = 30, PaidiType = paidiType },
+                new Paidi { Id = 2, FullName = "Jane Smith", Age = 25, PaidiType = paidiType }
+            }.Where(p => p.PaidiType == paidiType).ToList();
 
             _mockPaidiRepository
                 .Setup(repo => repo.GetPaidiaFromDb(paidiType))
@@ -82,13 +91,15 @@ namespace StelexarasApp.Tests.ServicesTests
                 FullName = "Test Name",
                 PaidiType = PaidiType.Ekpaideuomenos
             };
-            var expectedResult = true;
 
-            _mockPaidiRepository.Setup(service => service.DeletePaidiInDb(paidi)).ReturnsAsync(expectedResult);
+            _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiId)).ReturnsAsync(paidi);
+            _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidi)).ReturnsAsync(true);
+
             var result = await _paidiaService.DeletePaidiInDb(paidiId);
 
             Assert.True(result);
-            _mockPaidiRepository.Verify(service => service.DeletePaidiInDb(paidi), Times.Once);
+            _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiId), Times.Once);
+            _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidi), Times.Once);
         }
 
         [Theory]

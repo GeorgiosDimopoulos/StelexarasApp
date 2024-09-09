@@ -25,24 +25,24 @@ namespace StelexarasApp.ViewModels
 
         public async Task<bool> DeleteStelexos(StelexosDto s)
         {
-            return await _stelexiService.DeleteStelexosInService(s.Id ?? 0, s.Thesi);
+            return await _stelexiService.DeleteStelexosInService(s.Id ?? 1, s.Thesi);
+        }
+
+        public async Task<bool> UpdateStelexos(StelexosDto s)
+        {
+            return await _stelexiService.UpdateStelexosInService(s);
         }
 
         public async Task OnSaveStelexos()
         {
             var result = await _stelexiService.UpdateStelexosInService(StelexosDto);
-            if (result)
-            {
-                StatusMessage = result ? "Save successful" : "Save failed";
-
-                OnPropertyChanged(nameof(StelexosDto));
-            }
+            StatusMessage = result ? "Save successful" : "Save failed";
+            OnPropertyChanged(nameof(StelexosDto));
         }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

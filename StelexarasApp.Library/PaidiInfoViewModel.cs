@@ -1,4 +1,5 @@
-﻿using StelexarasApp.Services.DtosModels;
+﻿using Microsoft.Maui.Platform;
+using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
@@ -43,18 +44,16 @@ namespace StelexarasApp.ViewModels
         public async Task<bool> OnSavePaidi()
         {
             var skini = Skines.FirstOrDefault(s => s.Name == PaidiDto.SkiniName);
-
-            if (skini?.Name is null)
+            if (skini is null || string.IsNullOrEmpty(skini.Name))
                 return false;
 
             // ToDo: maybe it is not needed to set the Skini here, it could be already be set via XAML
             PaidiDto.SkiniName = skini.Name;
             var result = await _paidiaService.UpdatePaidiInDb(PaidiDto);
+            StatusMessage = result ? "Save successful" : "Save failed";
 
             if (result)
             {
-                StatusMessage = result ? "Save successful" : "Save failed";
-
                 OnPropertyChanged(nameof(Skines));
                 OnPropertyChanged(nameof(PaidiDto));
                 return true;

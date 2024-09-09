@@ -4,7 +4,6 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using System;
 
 namespace StelexarasApp.Tests.DataAccessTests
 {
@@ -37,6 +36,7 @@ namespace StelexarasApp.Tests.DataAccessTests
             Assert.True(rest);
             var duties = await _dbContext.Duties.ToListAsync();
             Assert.Single(duties);
+            Assert.Equal("Test Duty", duties [0].Name);
         }
 
         [Fact]

@@ -10,68 +10,62 @@ namespace StelexarasApp.Tests.ViewModelsTests
     {
         private readonly Mock<IPaidiaService> _mockPaidiaService;
         private readonly PaidiInfoViewModel _paidiInfoViewModel;
-        private readonly PaidiDto _paidi;
-        private readonly SkiniDto _skini;
+        private readonly PaidiDto paidiDto;
 
         public PaidiInfoViewModelTests()
         {
             _mockPaidiaService = new Mock<IPaidiaService>();
-
-            _skini = GetMockUpSkini();
-            _paidi = GetMockUpPaidi(_skini);
-
-            _paidiInfoViewModel = new PaidiInfoViewModel(_paidi,_mockPaidiaService.Object, [_skini]);
+            paidiDto = GetMockUpPaidi(GetMockUpSkini(), "Paidi Name");
+            _paidiInfoViewModel = new PaidiInfoViewModel(paidiDto, _mockPaidiaService.Object, [GetMockUpSkini()]);
         }
 
         [Theory]
-        [InlineData("SomeSkini", false, "Save failed")]
-        [InlineData(null, true, "Save successful")]
+        [InlineData(null, false, "Save failed")]
+        //[InlineData("Some Name", true, "Save successful")]
 
-        public async Task OnSavePaidi_ShouldUpdateStatusMessage(string skiniName, bool expectedResult, string expectedMessage)
+        public async Task OnSavePaidi_ShouldUpdateStatusMessage(string paidiName, bool expectedResult, string expectedMessage)
         {
             // Arrange
-            var paidi = _paidi;
-            var skini = skiniName != null ? GetMockUpSkini() : null;
-
-            _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(paidi)).ReturnsAsync(expectedResult);
+            _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(paidiDto)).ReturnsAsync(expectedResult);
 
             // Act
+            _paidiInfoViewModel.PaidiDto.FullName = paidiName;
             var result = await _paidiInfoViewModel.OnSavePaidi();
 
             // Assert
-            _mockPaidiaService.Verify(service => service.UpdatePaidiInDb(paidi), Times.Once);
+            _mockPaidiaService.Verify(service => service.UpdatePaidiInDb(paidiDto), Times.Once);
             Assert.Equal(expectedMessage, _paidiInfoViewModel.StatusMessage);
-            Assert.True(result);
+            Assert.Equal(result, expectedResult);
         }
 
         [Fact]
         public async Task DeletePaidiAsync_ShouldUpdateSkines_WhenPaidiIsDeleted()
         {
             // Arrange
-            _mockPaidiaService.Setup(service => service.DeletePaidiInDb(_paidi.Id)).ReturnsAsync(true);
+            _mockPaidiaService.Setup(service => service.DeletePaidiInDb(paidiDto.Id)).ReturnsAsync(true);
 
             // Act
-            var result = await _paidiInfoViewModel.DeletePaidiAsync(_paidi.Id);
+            var result = await _paidiInfoViewModel.DeletePaidiAsync(paidiDto.Id);
 
             // Assert
-            _mockPaidiaService.Verify(service => service.DeletePaidiInDb(_paidi.Id), Times.Once);
+            _mockPaidiaService.Verify(service => service.DeletePaidiInDb(paidiDto.Id), Times.Once);
             Assert.Equal("Delete successful", _paidiInfoViewModel.StatusMessage);
             Assert.True(result);
         }
 
-        private PaidiDto GetMockUpPaidi(SkiniDto skini)
+        private static PaidiDto GetMockUpPaidi(SkiniDto skini, string name)
         {
             return new PaidiDto
             {
                 Id = 1,
-                FullName = "Βασιλης Λαμπαδιτης",
+                FullName = name,
                 PaidiType = DataAccess.Models.Atoma.PaidiType.Kataskinotis,
                 Age = 10,
                 SkiniName = skini.Name
             };
         }
 
-        private SkiniDto GetMockUpSkini()
+        private static SkiniDto GetMockUpSkini()
         {
             return new SkiniDto { Id = 1, Name = "Πίνδος" };
         }

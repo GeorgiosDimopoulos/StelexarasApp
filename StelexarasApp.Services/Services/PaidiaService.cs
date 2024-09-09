@@ -40,9 +40,7 @@ namespace StelexarasApp.Services.Services
         {
             var paidi = await _paidiRepository.GetPaidiByIdFromDb(id);
             if (paidi == null)
-            {
                 return false;
-            }
 
             return await _paidiRepository.DeletePaidiInDb(paidi);
         }

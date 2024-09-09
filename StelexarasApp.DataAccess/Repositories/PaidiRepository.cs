@@ -12,6 +12,9 @@ namespace StelexarasApp.DataAccess.Repositories
         private readonly AppDbContext _dbContext;
         private readonly ILogger<PaidiRepository> _logger;
 
+        // for unit tests (and mocking requirements)
+        // public PaidiRepository() {}
+
         public PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactory)
         {
             _dbContext = dbContext;
@@ -242,6 +245,10 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<Paidi> GetPaidiByIdFromDb(int id)
         {
+            if (_dbContext.Paidia is null || _dbContext.Paidia.Count() == 0)
+            {
+                return null!;
+            }
             return await _dbContext.Paidia.FirstAsync(p => p.Id == id);
         }
 

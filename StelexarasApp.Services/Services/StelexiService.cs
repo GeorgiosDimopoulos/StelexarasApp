@@ -27,13 +27,12 @@ namespace StelexarasApp.Services.Services
         public async Task<bool> AddStelexosInService(StelexosDto stelexosDto, Thesi thesi)
         {
             var stelexos = _mapper.Map<Stelexos>(stelexosDto);
+            if (stelexos == null)
+                throw new ArgumentNullException(nameof(stelexos), "Mapping failed");
+
             var result = await _stelexiRepository.AddStelexosInDb(stelexos);
-
             if (!result)
-            {
                 return false;
-            }
-
             return true;
         }
 
@@ -81,6 +80,8 @@ namespace StelexarasApp.Services.Services
         public async Task<bool> UpdateStelexosInService(StelexosDto stelexosDto)
         {
             var stelexos = MapDtoToEntity(stelexosDto);
+            if (stelexos == null)
+                return false;
             return await _stelexiRepository.UpdateStelexosInDb(stelexos);
         }
 
