@@ -44,7 +44,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteDutyInDb(int id)
+        public async Task<bool> DeleteDutyInDb(string name)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -52,15 +52,11 @@ namespace StelexarasApp.DataAccess.Repositories
             try
             {
                 if (_dbContext.Duties is null)
-                {
                     return false;
-                }
 
-                var existingDuty = await _dbContext.Duties.FindAsync(id);
+                var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Name.Equals(name));
                 if (existingDuty == null)
-                {
                     return false;
-                }
 
                 _dbContext.Duties?.Remove(existingDuty);
                 await _dbContext.SaveChangesAsync();
@@ -89,17 +85,15 @@ namespace StelexarasApp.DataAccess.Repositories
             return await _dbContext.Duties.ToListAsync();
         }
 
-        public async Task<Duty> GetDutyFromDb(int id)
+        public async Task<Duty> GetDutyFromDb(string name)
         {
             if (_dbContext.Duties is null)
-            {
-                return null;
-            }
+                return null!;
 
-            return await _dbContext.Duties.FirstOrDefaultAsync(d => d.Id == id);
+            return await _dbContext.Duties.FirstAsync(d => d.Name.Equals(name));
         }
 
-        public async Task<bool> UpdateDutyInDb(int id, Duty newDuty)
+        public async Task<bool> UpdateDutyInDb(string name, Duty newDuty)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -111,7 +105,7 @@ namespace StelexarasApp.DataAccess.Repositories
                     return false;
                 }
 
-                var existingDuty = await _dbContext.Duties.FindAsync(id);
+                var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Name.Equals(name));
                 if (existingDuty == null)
                 {
                     return false;

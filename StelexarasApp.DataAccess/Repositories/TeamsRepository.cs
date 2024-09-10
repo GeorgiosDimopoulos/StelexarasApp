@@ -312,5 +312,29 @@ namespace StelexarasApp.DataAccess.Repositories
                 return false;
             }
         }
+
+        public Task<bool> AddSkiniInDb(Skini skini)
+        {
+            if (skini is null || _dbContext.Skines is null)
+                return Task.FromResult(false);
+
+           var skiniInDb = _dbContext.Skines.FirstOrDefaultAsync(skini => skini.Id == skini.Id);
+
+            if (skiniInDb != null)
+                return Task.FromResult(true);
+            else return Task.FromResult(false);
+        }
+
+        public Task<bool> AddKoinotitaInDb(Koinotita koinotita)
+        {
+            if (koinotita is null || _dbContext.Koinotites is null)
+                return Task.FromResult(false);
+
+            var skiniInDb = _dbContext.Koinotites.FirstOrDefaultAsync(k => k.Id == koinotita.Id);
+
+            if (skiniInDb != null)
+                return Task.FromResult(true);
+            else return Task.FromResult(false);
+        }
     }
 }

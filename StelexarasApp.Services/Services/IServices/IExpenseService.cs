@@ -4,9 +4,11 @@ namespace StelexarasApp.Services.IServices
 {
     public interface IExpenseService
     {
-        Task<bool> AddExpenseAsync(Expense expense);
-        Task<bool> DeleteExpenseAsync(int expenseId);
-        Task<bool> UpdateExpenseAsync(int expenseId, Expense expense);
-        Task<IEnumerable<Expense>> GetExpensesAsync();
+        Task<bool> AddExpenseInService(Expense expense);
+        Task<bool> DeleteExpenseInService(int expenseId);
+        Task<bool> UpdateExpenseInService(int expenseId, Expense expense);
+        Task<IEnumerable<Expense>> GetExpensesInService();
+
+        Task<Expense> GetExpenseByIdInService(int expenseId);
     }
 }

@@ -15,7 +15,7 @@ namespace StelexarasApp.ViewModels
 
         public async void AddExpense(string name, int price)
         {
-            var result = await _expenseService.AddExpenseAsync(new Expense
+            var result = await _expenseService.AddExpenseInService(new Expense
             {
                 Description = name,
                 Date = DateTime.Today,
@@ -28,12 +28,12 @@ namespace StelexarasApp.ViewModels
 
         public void DeleteExpense(int id)
         {
-            _expenseService.DeleteExpenseAsync(id);
+            _expenseService.DeleteExpenseInService(id);
         }
 
         public async Task LoadExpensesAsync()
         {
-            var expenses = await _expenseService.GetExpensesAsync();
+            var expenses = await _expenseService.GetExpensesInService();
             if (expenses is not null) 
             {
                 Expenses = new ObservableCollection<Expense>(expenses);

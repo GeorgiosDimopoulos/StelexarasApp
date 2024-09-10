@@ -1,80 +1,65 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.Models;
+﻿using StelexarasApp.DataAccess.Models;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
-using System.Globalization;
 
-namespace StelexarasApp.Services.Services
+namespace StelexarasApp.Services.Services;
+
+public class ExpenseService : IExpenseService
 {
-    public class ExpenseService : IExpenseService
+    private readonly IExpenseRepository? _expenseRepository;
+
+    public ExpenseService(IExpenseRepository? expenseRepository)
     {
-        private readonly AppDbContext _dbContext;
+        _expenseRepository = expenseRepository;
+    }
 
-        public ExpenseService(AppDbContext dbContext)
+    public async Task<bool> AddExpenseInService(Expense expense)
+    {
+        if (expense.Amount <= 0 || _expenseRepository is null)
+            throw new ArgumentException("Amount cannot be negative", nameof(expense.Amount));
+
+        return await _expenseRepository.AddExpenseAsync(expense);
+    }
+
+    public async Task<bool> DeleteExpenseInService(int expenseId)
+    {
+        try
         {
-            _dbContext = dbContext;
+            if (expenseId <= 0 || _expenseRepository is null)
+                throw new ArgumentException("Amount cannot be negative", nameof(expenseId));
+            return await _expenseRepository.DeleteExpenseAsync(expenseId);
         }
-
-        public async Task<bool> AddExpenseAsync(Expense expense)
+        catch (Exception ex)
         {
-            if (expense.Amount < 0)
-            {
-                throw new ArgumentException("Amount cannot be negative", nameof(expense.Amount));
-            }
-
-            _dbContext.Expenses?.Add(expense);
-            await _dbContext.SaveChangesAsync();
-            return true;
+            throw new ArgumentException($"Expense with ID {expenseId} not deleted in the database. Reason: ", ex.Message);
         }
+    }
 
-        public async Task<bool> DeleteExpenseAsync(int expenseId)
+    public async Task<bool> UpdateExpenseInService(int expenseId, Expense expense)
+    {
+        try
         {
-            try
-            {
-                var expense = await _dbContext.Expenses.FindAsync(expenseId);
-                if (expense != null)
-                {
-                    _dbContext.Expenses.Remove(expense);
-                    await _dbContext.SaveChangesAsync();
-                    return true;
-                }
-
+            if (expense.Amount <= 0 || string.IsNullOrEmpty(expense.Description) || _expenseRepository is null)
                 return false;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException($"Expense with ID {expenseId} not deleted in the database. Reason: ", ex.Message);
-            }
+            return await _expenseRepository.UpdateExpenseAsync(expenseId, expense);
         }
-
-        public async Task<bool> UpdateExpenseAsync(int expenseId, Expense expense)
+        catch (Exception)
         {
-            if (expense.Amount <= 0 || string.IsNullOrEmpty(expense.Description))
-            {
-                return false;
-            }
-
-            var existingExpense = await _dbContext.Expenses.FindAsync(expenseId);
-            if (existingExpense != null)
-            {
-                existingExpense.Description = expense.Description;
-                existingExpense.Amount = expense.Amount;
-                _dbContext.Expenses.Update(existingExpense);
-
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-
             throw new ArgumentException($"Expense with ID {expenseId} not updated in the database.");
         }
+    }
 
-        public async Task<IEnumerable<Expense>> GetExpensesAsync()
-        {
-            if (_dbContext.Expenses is null)
-            {
-                return null!;
-            }
-            return await _dbContext.Expenses.ToListAsync();
-        }
+    public async Task<IEnumerable<Expense>> GetExpensesInService()
+    {
+        if (_expenseRepository is null)
+            throw new ArgumentException("Expense Repository cannot be null");
+        return await _expenseRepository.GetAllExpensesAsync();
+    }
+
+    public Task<Expense> GetExpenseByIdInService(int id)
+    {
+        if (id <= 0 || _expenseRepository is null)
+            throw new ArgumentException("id cannot be null", nameof(id));
+        return _expenseRepository.GetExpenseByIdAsync(id);
     }
 }

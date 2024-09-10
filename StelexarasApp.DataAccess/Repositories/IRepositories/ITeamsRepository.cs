@@ -4,6 +4,10 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface ITeamsRepository
     {
+        Task<bool> AddSkiniInDb(Skini skini);
+
+        Task<bool> AddKoinotitaInDb(Koinotita koinotita);
+
         Task<IEnumerable<Skini>> GetSkinesInDb();
 
         Task<Skini> GetSkiniByNameInDb(string name);

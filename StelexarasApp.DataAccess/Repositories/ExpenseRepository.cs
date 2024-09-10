@@ -50,7 +50,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteExpenseAsync(Expense expense)
+        public async Task<bool> DeleteExpenseAsync(int expenseId)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -62,7 +62,7 @@ namespace StelexarasApp.DataAccess.Repositories
                     return false;
                 }
 
-                var existingExpense = await _dbContext.Expenses.FirstOrDefaultAsync(e => e.Id == expense.Id);
+                var existingExpense = await _dbContext.Expenses.FirstOrDefaultAsync(e => e.Id == expenseId);
                 if (existingExpense == null)
                 {
                     return false;

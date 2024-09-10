@@ -27,7 +27,7 @@ namespace StelexarasApp.ViewModels
                 Date = DateTime.Now
             };
 
-            var result = await _dutyService.AddDutyInDbAsync(duty);
+            var result = await _dutyService.AddDutyInService(duty);
             if (result)
                 return true;
 
@@ -41,7 +41,7 @@ namespace StelexarasApp.ViewModels
                 return false;
             }
             
-            var result = await _dutyService.DeleteDutyInDbAsync(dutyName);
+            var result = await _dutyService.DeleteDutyInService(dutyName);
             if (result)
                 return true;
 
@@ -55,7 +55,7 @@ namespace StelexarasApp.ViewModels
                 return false;
             }
 
-            var result = await _dutyService.UpdateDutyInDbAsync(dutyNewName, duty);
+            var result = await _dutyService.UpdateDutyInService(dutyNewName, duty);
             if (result)
             {
                 return true;

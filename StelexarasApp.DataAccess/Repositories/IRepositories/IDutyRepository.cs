@@ -6,10 +6,10 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
     public interface IDutyRepository
     {
         Task<bool> AddDutyInDb(Duty duty);
-        Task<bool> DeleteDutyInDb(int id);
-        Task<bool> UpdateDutyInDb(int id, Duty newDuty);
+        Task<bool> DeleteDutyInDb(string name);
+        Task<bool> UpdateDutyInDb(string name, Duty newDuty);
 
-        Task<Duty> GetDutyFromDb(int dutyInt);
+        Task<Duty> GetDutyFromDb(string name);
         Task<IEnumerable<Duty>> GetDutiesFromDb();
     }
 }

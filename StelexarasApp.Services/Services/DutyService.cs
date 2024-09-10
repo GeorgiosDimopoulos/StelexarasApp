@@ -1,62 +1,52 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.Models;
+﻿using StelexarasApp.DataAccess.Models;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.Services.Services
 {
     public class DutyService : IDutyService
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IDutyRepository? _dutyRepository;
 
-        public DutyService(AppDbContext dbContext)
+        public DutyService(IDutyRepository dutyRepository)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task<bool> AddDutyInDbAsync(Duty duty)
-        {
-            if (string.IsNullOrEmpty(duty.Name))
+            try
             {
-                throw new ArgumentException("Duty name cannot be null");
+                _dutyRepository = dutyRepository;
             }
-            
-            _dbContext.Duties?.Add(duty);
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-        public async Task<bool> DeleteDutyInDbAsync(string dutyName)
-        {
-            var duty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Name.Equals(dutyName));
-            if (duty != null)
+            catch (Exception ex)
             {
-                _dbContext.Duties.Remove(duty);
-                await _dbContext.SaveChangesAsync();
-                return true;
+                Console.WriteLine(ex.Message);
             }
-
-            return false;
         }
 
-        public async Task<bool> UpdateDutyInDbAsync(string dutyName, Duty updatedDuty)
+        public async Task<bool> AddDutyInService(Duty duty)
         {
-            var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Name.Equals(dutyName));
-            if (existingDuty != null)
-            {
-                existingDuty.Name = updatedDuty.Name;
-                existingDuty.Date = DateTime.Now;
-                
-                _dbContext.Duties.Update(existingDuty);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
+            if (string.IsNullOrEmpty(duty.Name) || _dutyRepository is null)
+                throw new ArgumentException("Duty name or duty Repository cannot be null");
 
-            return false;
+            return await _dutyRepository.AddDutyInDb(duty);
+        }
+        public async Task<bool> DeleteDutyInService(string dutyName)
+        {
+            if (string.IsNullOrEmpty(dutyName) || _dutyRepository is null)
+                throw new ArgumentException("Duty name or duty Repository cannot be null");
+            return await _dutyRepository.DeleteDutyInDb(dutyName);
         }
 
-        public async Task<IEnumerable<Duty>> GetDutiesFromDbAsync()
+        public async Task<bool> UpdateDutyInService(string dutyName, Duty updatedDuty)
         {
-            return await _dbContext.Duties.ToListAsync();
+            if (string.IsNullOrEmpty(dutyName) || updatedDuty is null || _dutyRepository is null)
+                throw new ArgumentException("Duty name or updated duty or duty Repository cannot be null");
+
+            return await _dutyRepository.UpdateDutyInDb(dutyName, updatedDuty);
+        }
+
+        public async Task<IEnumerable<Duty>> GetDutiesInService()
+        {
+            if (_dutyRepository is null)
+                throw new ArgumentException("Duty Repository cannot be null");
+            return await _dutyRepository.GetDutiesFromDb();
         }
     }
 }

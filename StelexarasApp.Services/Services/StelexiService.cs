@@ -8,8 +8,8 @@ namespace StelexarasApp.Services.Services
 {
     public class StelexiService : IStelexiService
     {
-        private readonly IStelexiRepository _stelexiRepository;
-        private readonly IMapper _mapper;
+        private readonly IStelexiRepository? _stelexiRepository;
+        private readonly IMapper? _mapper;
 
         public StelexiService(IMapper mapper, IStelexiRepository stelexiRepository)
         {
@@ -26,11 +26,11 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> AddStelexosInService(StelexosDto stelexosDto, Thesi thesi)
         {
-            var stelexos = _mapper.Map<Stelexos>(stelexosDto);
+            var stelexos = _mapper!.Map<Stelexos>(stelexosDto);
             if (stelexos == null)
                 throw new ArgumentNullException(nameof(stelexos), "Mapping failed");
 
-            var result = await _stelexiRepository.AddStelexosInDb(stelexos);
+            var result = await _stelexiRepository!.AddStelexosInDb(stelexos);
             if (!result)
                 return false;
             return true;

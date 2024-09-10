@@ -1,16 +1,18 @@
-﻿using StelexarasApp.Services.DtosModels.Domi;
+﻿using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.Services.DtosModels.Domi;
 using System.Collections.ObjectModel;
 
 namespace StelexarasApp.Services.IServices
 {
     public interface ITeamsService
     {
-        Task<bool> AddSkini(SkiniDto skini);
-
-        Task<bool> DeleteSkiniInDb(SkiniDto skini);
-        Task<bool> UpdateSkiniInDb(SkiniDto skini);
-        Task<ObservableCollection<SkiniDto>> GetSkines();
-        Task<SkiniDto> GetSkini();
-        Task<bool> AddKoinotita(KoinotitaDto skini);
+        Task<bool> AddSkiniInService(SkiniDto skini);
+        Task<bool> AddKoinotitaInService(KoinotitaDto skini);
+        Task<bool> DeleteSkiniInService(int skiniId);
+        Task<bool> DeleteKoinotitaInService(int koinotitaId);
+        Task<bool> UpdateSkiniInService(SkiniDto skini);
+        Task<IEnumerable<Skini>> GetSkines();
+        Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInService(string name);
+        Task<Skini> GetSkiniByName(string name);
     }
 }
