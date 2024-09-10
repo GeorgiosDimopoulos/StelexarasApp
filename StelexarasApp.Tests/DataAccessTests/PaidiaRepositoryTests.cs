@@ -6,7 +6,7 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Models.Domi;
 using Microsoft.Extensions.Logging;
-using Moq;
+using StelexarasApp.DataAccess.Models;
 
 namespace StelexarasApp.Tests.DataAccessTests;
 
@@ -18,10 +18,6 @@ public class PaidiaRepositoryTests
     
     public PaidiaRepositoryTests()
     {
-        //var mockLogger = new Mock<ILogger<PaidiRepository>>();
-        //var mockLoggerFactory = new Mock<ILoggerFactory>();
-        //mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
-        //_dbContext = new Mock<AppDbContext>().Object;            
         var options = new DbContextOptionsBuilder<AppDbContext>()
            .UseInMemoryDatabase(databaseName: "TestDatabase")
            .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
@@ -42,7 +38,7 @@ public class PaidiaRepositoryTests
         Assert.Equal(result, expectedResult);
         if (expectedResult)
         {
-            var addedPaidi = await _dbContext.Paidia.FindAsync(id);
+            var addedPaidi = await _dbContext.Paidia!.FindAsync(id);
             Assert.NotNull(addedPaidi);
             Assert.Equal(paidi.FullName, addedPaidi.FullName);
             Assert.Equal(paidi.Age, addedPaidi.Age);
@@ -50,7 +46,7 @@ public class PaidiaRepositoryTests
         }
         else
         {
-            var addedPaidi = await _dbContext.Paidia.FindAsync(id);
+            var addedPaidi = await _dbContext.Paidia!.FindAsync(id);
             Assert.Null(addedPaidi);
         }
     }
@@ -63,10 +59,10 @@ public class PaidiaRepositoryTests
     public async Task DeletePaidiInDbAsync_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
     {
         // Arrange
-        Paidi paidi = new Paidi { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
+        Paidi paidi = new() { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
         if (id > 0)
         {
-            _dbContext.Paidia.Add(paidi);
+            await _dbContext.Paidia!.AddAsync(paidi);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -78,7 +74,7 @@ public class PaidiaRepositoryTests
 
         if (expectedResult)
         {
-            var deletedPaidi = await _dbContext.Paidia.FindAsync(id);
+            var deletedPaidi = await _dbContext.Paidia!.FindAsync(id);
             Assert.Null(deletedPaidi);
         }
     }
@@ -136,12 +132,50 @@ public class PaidiaRepositoryTests
 
         if (expectedResult)
         {
-            var movedPaidi = await _dbContext.Paidia
+            var movedPaidi = await _dbContext.Paidia!
                 .Include(p => p.Skini)
                 .FirstOrDefaultAsync(p => p.Id == paidiId);
 
             Assert.NotNull(movedPaidi);
             Assert.Equal(newSkiniId, movedPaidi.Skini.Id);
+        }
+    }
+
+    [Theory]
+    [InlineData(1, "Updated Name", true)]
+    [InlineData(2, null, false)]
+    public async Task UpdatePaidiInDb_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
+    {
+        // Arrange
+        var paidi = new Paidi { 
+            FullName = "New Paidi",
+            Age = 10,
+            PaidiType = PaidiType.Kataskinotis,
+            Sex = Sex.Male
+        };
+
+        await _dbContext.Paidia!.AddAsync(paidi);
+        await _dbContext.SaveChangesAsync();
+
+        if (newName != null)
+        {
+            paidi.FullName = newName;
+        }
+        else
+        {
+            paidi = null;
+        }
+
+        // Act
+        var result = await _paidiRepository.UpdatePaidiInDb(paidi);
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+        if (expectedResult)
+        {
+            var updatedPaidi = await _dbContext.Paidia.FindAsync(id);
+            Assert.NotNull(updatedPaidi);
+            Assert.Equal(newName, updatedPaidi.FullName);
         }
     }
 }

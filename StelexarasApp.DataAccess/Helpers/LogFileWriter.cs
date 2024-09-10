@@ -19,15 +19,15 @@ namespace StelexarasApp.DataAccess.Helpers
                 switch (typeOfOutput)
                 {
                     case TypeOfOutput.DbSuccessMessage:
-                        message = $"[DB SUCCESS] {message}";
+                        message = $"[DB SUCCESS] {message}\n";
                         File.AppendAllText(LogFileDbErrorPath, message);
                         break;
                     case TypeOfOutput.DbErroMessager:
-                        message = $"[DB ERROR] {message}";
+                        message = $"[DB ERROR] {message}\n";
                         File.AppendAllText(LogFileDbErrorPath, message);
                         break;
                     case TypeOfOutput.UiWarningMessage:
-                        message = $"[UI WARNING] {message}";
+                        message = $"[UI WARNING] {message}\n";
                         File.AppendAllText(LogFileUiWarrningsPath, message);
                         break;
                 }

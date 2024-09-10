@@ -68,7 +68,7 @@ public class ExpenseRepositoryTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await expenseRepository.DeleteExpenseAsync(existingExpense);
+        var result = await expenseRepository.DeleteExpenseAsync(existingExpense.Id);
 
         // Assert
         Assert.True(result);
@@ -87,7 +87,7 @@ public class ExpenseRepositoryTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await expenseRepository.DeleteExpenseAsync(notIdDbExpense);
+        var result = await expenseRepository.DeleteExpenseAsync(notIdDbExpense.Id);
 
         // Assert
         Assert.False(result);

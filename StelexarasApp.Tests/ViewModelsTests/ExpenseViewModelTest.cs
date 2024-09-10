@@ -22,14 +22,14 @@ public class ExpenseViewModelTest
     public void AddExpenseShouldGiveExpecteResult(string name, int price, bool expectedResult, string expectedMessage)
     {
         var expense = new Expense { Description = name, Amount = price };
-        _expenseService.Setup(service => service.AddExpenseAsync(It.Is<Expense>(e => e.Description == name && e.Amount == price)))
+        _expenseService.Setup(service => service.AddExpenseInService(It.Is<Expense>(e => e.Description == name && e.Amount == price)))
             .ReturnsAsync(expectedResult);
 
         // Act
         _expenseInfoViewModel.AddExpense(name, price);
 
         // Assert
-        _expenseService.Verify(service => service.AddExpenseAsync(It.Is<Expense>(e => e.Description == name && e.Amount == price)), Times.Once);
+        _expenseService.Verify(service => service.AddExpenseInService(It.Is<Expense>(e => e.Description == name && e.Amount == price)), Times.Once);
         Assert.Equal(expectedMessage, _expenseInfoViewModel.StatusMessage);
     }
 
@@ -37,11 +37,11 @@ public class ExpenseViewModelTest
     public void DeleteExpenseShouldGiveExpectedResult()
     {
         var expense = GetMockUpExpense();
-        _expenseService.Setup(service => service.DeleteExpenseAsync(expense.Id)).ReturnsAsync(true);
+        _expenseService.Setup(service => service.DeleteExpenseInService(expense.Id)).ReturnsAsync(true);
 
         _expenseInfoViewModel.DeleteExpense(expense.Id);
 
-        _expenseService.Verify(service => service.DeleteExpenseAsync(expense.Id), Times.Once);
+        _expenseService.Verify(service => service.DeleteExpenseInService(expense.Id), Times.Once);
         // Assert.Equal("Delete successful", _expenseInfoViewModel.StatusMessage);
     }
 
@@ -49,11 +49,11 @@ public class ExpenseViewModelTest
     public async Task LoadExpensesAsyncShouldGiveExpectedResult()
     {
         var expenses = new List<Expense> { GetMockUpExpense() };
-        _expenseService.Setup(service => service.GetExpensesAsync()).ReturnsAsync(expenses);
+        _expenseService.Setup(service => service.GetExpensesInService()).ReturnsAsync(expenses);
 
         await _expenseInfoViewModel.LoadExpensesAsync();
 
-        _expenseService.Verify(service => service.GetExpensesAsync(), Times.Once);
+        _expenseService.Verify(service => service.GetExpensesInService(), Times.Once);
         Assert.Equal("Load successful", _expenseInfoViewModel.StatusMessage);
     }
 

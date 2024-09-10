@@ -57,7 +57,8 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager); return null!;
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager); 
+                return null!;
             }
         }
 
@@ -100,7 +101,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 throw new InvalidOperationException("The DbSet<Skini> is not initialized.");
             }
 
-            return await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name.Equals(name));
+            return await _dbContext.Skines.FirstAsync(s => s.Name.Equals(name));
         }
 
         public async Task<IEnumerable<Tomeas>> GetTomeisInDb()
@@ -115,6 +116,23 @@ namespace StelexarasApp.DataAccess.Repositories
                 LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
+        }
+
+        public async Task<Koinotita> GetKoinotitaByNameInDb(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException(nameof(name));
+
+            return await _dbContext.Koinotites!.FirstAsync(k => k.Name.Equals(name));
+
+        }
+
+        public async Task<Tomeas> GetTomeaByNameInDb(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException(nameof(name));
+
+            return await _dbContext.Tomeis!.FirstAsync(t => t.Name.Equals(name));
         }
 
         public async Task<bool> UpdateKoinotitaInDb(Koinotita koinotita)
@@ -249,7 +267,7 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (skiniId == 0 || _dbContext.Skines is null)
+                if (skiniId <= 0 || _dbContext.Skines is null)
                     return false;
 
                 var skini = await _dbContext.Skines.FindAsync(skiniId);
@@ -313,16 +331,31 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public Task<bool> AddSkiniInDb(Skini skini)
+        public async Task<bool> AddSkiniInDb(Skini skini)
         {
-            if (skini is null || _dbContext.Skines is null)
-                return Task.FromResult(false);
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-           var skiniInDb = _dbContext.Skines.FirstOrDefaultAsync(skini => skini.Id == skini.Id);
+            try
+            {
+                if (skini is null || _dbContext.Skines is null || skini.Id <= 0)
+                    return false;
 
-            if (skiniInDb != null)
-                return Task.FromResult(true);
-            else return Task.FromResult(false);
+                _dbContext.Skines.Add(skini);
+                await _dbContext.SaveChangesAsync();
+
+                if (transaction != null)
+                    await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+                return false;
+            }
         }
 
         public Task<bool> AddKoinotitaInDb(Koinotita koinotita)

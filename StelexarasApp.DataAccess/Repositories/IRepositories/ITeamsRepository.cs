@@ -18,9 +18,12 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 
         Task<IEnumerable<Koinotita>> GetKoinotitesInDb();
 
+        Task<Koinotita> GetKoinotitaByNameInDb(string name);
+
         Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(int tomeaId);
 
         Task<IEnumerable<Tomeas>> GetTomeisInDb();
+        Task<Tomeas> GetTomeaByNameInDb(string name);
 
         Task<bool> UpdateKoinotitaInDb(Koinotita koinotita);
 
