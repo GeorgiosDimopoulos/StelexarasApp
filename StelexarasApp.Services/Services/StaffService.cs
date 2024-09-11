@@ -49,15 +49,17 @@ namespace StelexarasApp.Services.Services
         {
             try
             {
-                var stelexiDtos = await _stelexiRepository!.GetStelexoiAnaThesiFromDb(thesi);
-                return _mapper.Map<IEnumerable<StelexosDto>>(stelexiDtos);
+                var stelexi = await _stelexiRepository!.GetStelexoiAnaThesiFromDb(thesi);
+                if (stelexi == null)
+                    return null!;
+                var stelexiDtos = _mapper?.Map<IEnumerable<StelexosDto>>(stelexi);
+                return stelexiDtos;
             }
             catch (Exception ex)
             {
                 LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return null;
             }
-
         }
 
         public async Task<Stelexos> GetStelexosByIdInService(int id, Thesi thesi)

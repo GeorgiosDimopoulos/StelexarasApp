@@ -14,8 +14,15 @@ public class StaffServiceTests
     private readonly Mock<IStaffRepository> _mockStelexiRepository;
     private readonly StaffService _stelexiService;
     private readonly Mock<IMapper> _mockMapper;
+    private readonly IMapper _mapper;
     public StaffServiceTests()
     {
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<Omadarxis, StelexosDto>();
+        });
+        
+        _mapper = config.CreateMapper();
         _mockStelexiRepository = new Mock<IStaffRepository>();
         _mockMapper = new Mock<IMapper>();
         _stelexiService = new StaffService(_mockMapper.Object, _mockStelexiRepository.Object);
@@ -54,14 +61,22 @@ public class StaffServiceTests
             new Omadarxis { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis }
         };
 
+        var stelexoiDtos = new List<StelexosDto>
+        {
+            new StelexosDto { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis }
+        };
+
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaThesiFromDb(Thesi.Omadarxis)).ReturnsAsync(stelexoi);
+        _mockMapper.Setup(m => m.Map<IEnumerable<StelexosDto>>(It.IsAny<IEnumerable<Omadarxis>>())).Returns(stelexoiDtos);
 
         // Act
         var result = await _stelexiService.GetStelexoiAnaThesiInService(Thesi.Omadarxis);
-        
+
         // Assert
+        Assert.Equal("John Doe", result.First().FullName);
         Assert.Single(result);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaThesiFromDb(Thesi.Omadarxis), Times.Once);
+        _mockMapper.Verify(m => m.Map<IEnumerable<StelexosDto>>(stelexoi), Times.Once);
     }
 
     [Theory]

@@ -13,8 +13,6 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
         public Sex Sex { get; set ; }
         public Skini Skini { get; set; } = new Skini();
         public Thesi Thesi { get; set; } = Thesi.Omadarxis;
-        public int Tel { get; set; }
-
-        // public List<int> PaidiaIds { get; set; } = new List<int>();
+        public string Tel { get; set; } = null!;
     }
 }

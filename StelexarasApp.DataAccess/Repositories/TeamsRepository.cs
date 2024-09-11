@@ -142,7 +142,6 @@ namespace StelexarasApp.DataAccess.Repositories
 
             if (koinotita is null || _dbContext.Koinotites is null)
                 return false;
-
             try
             {
                 _dbContext.Koinotites.Update(koinotita);

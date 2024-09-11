@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
@@ -91,6 +92,9 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
+                if (!WordsConverterChecks.IsValidFullNameInput(paidi.FullName))
+                    throw new ArgumentException("Invalid FullName", nameof(paidi.FullName));
+
                 if (paidi is null || paidi.Id <= 0|| _dbContext.Paidia is null)
                 {
                     _logger.LogWarning("Attempted to add a null paidi or this nullable Id");
@@ -145,8 +149,8 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (paidi is null)
-                    return false;
+                if (!WordsConverterChecks.IsValidFullNameInput(paidi.FullName))
+                    throw new ArgumentException("Invalid FullName", nameof(paidi.FullName));
 
                 _dbContext.Paidia.Update(paidi);
                 await _dbContext.SaveChangesAsync();

@@ -5,7 +5,7 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
     public interface Stelexos : Atomo
     {
         public new string FullName { get; set; }
-        public int Tel { get; set; }
+        public string Tel { get; set; }
         [Key]
         public new int Id { get; set; }
         public Thesi Thesi { get; set; }

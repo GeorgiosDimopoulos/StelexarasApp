@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
+using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
@@ -21,6 +22,9 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
         try
         {
+            if (!WordsConverterChecks.IsValidFullNameInput(stelexos.FullName))
+                throw new ArgumentException("Invalid FullName", nameof(stelexos.FullName));
+
             switch (stelexos.Thesi)
             {
                 case Thesi.Omadarxis:
@@ -46,21 +50,36 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             
             return true;
         }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError($"Database update exception: {ex.Message}");
+            _dbContext.Dispose();
+            throw new DbUpdateException("Invalid Thesi cast.", ex);
+        }
         catch (InvalidCastException ex)
         {
             _logger.LogError($"Invalid cast for Stelexos of Thesi {stelexos.Thesi}: {ex.Message}");
-            throw new ArgumentException("Invalid Thesi cast.", ex);
+            _dbContext.Dispose();
+            throw new InvalidCastException("Invalid Thesi cast.", ex);
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError($"Invalid cast for Stelexos of Thesi {stelexos.Thesi}: {ex.Message}");
+            _dbContext.Dispose();
+            throw new ArgumentException("ArgumentException: ", ex.Message);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
-
+            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);            
             if (transaction != null)
                 await transaction.RollbackAsync();
-            
+            _dbContext.Dispose();
             return false;
         }
+        //finally
+        //{
+        //    _dbContext.Dispose(); 
+        //}
     }
 
     public async Task<bool> DeleteStelexosInDb(int id, Thesi thesi)
@@ -144,25 +163,24 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                 {
                     return null!;
                 }
-                return await _dbContext.Omadarxes!.FirstAsync(om => om.Id == id);
+                return await _dbContext.Omadarxes!.FirstOrDefaultAsync(om => om.Id == id);
             case Thesi.Koinotarxis:
                 if (_dbContext.Koinotarxes == null)
                 {
                     return null!;
                 }
-                return await _dbContext.Koinotarxes.FirstAsync(ko => ko.Id == id);
+                return await _dbContext.Koinotarxes.FirstOrDefaultAsync(ko => ko.Id == id);
             case Thesi.Tomearxis:
                 if (_dbContext.Tomearxes == null)
                 {
                     return null!;
                 }
-                return await _dbContext.Tomearxes.FirstAsync(to => to.Id == id);
+                return await _dbContext.Tomearxes.FirstOrDefaultAsync(to => to.Id == id);
             case Thesi.Ekpaideutis:
                 throw new NotImplementedException();
             default:
                 break;
         }
-
         return null!;
     }
 
@@ -171,6 +189,8 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
+        if (!WordsConverterChecks.IsValidFullNameInput(stelexi.FullName))
+            throw new ArgumentException("Invalid FullName", nameof(stelexi.FullName));
         try
         {
             switch (stelexi.Thesi)

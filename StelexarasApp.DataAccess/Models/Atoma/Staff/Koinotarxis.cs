@@ -12,7 +12,7 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
         public int Age { get; set; }
         public Sex Sex { get; set; }
         public Koinotita Koinotita { get; set; } = null!;
-        public int Tel { get; set; }
+        public string Tel { get; set; }
         public Thesi Thesi { get; set; } = Thesi.Koinotarxis;
         public IEnumerable<Omadarxis> Omadarxes { get; set; } = null!;
     }

@@ -6,9 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Models.Atoma;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Platform;
-using Moq;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 
 namespace StelexarasApp.Tests.DataAccessTests
 {
@@ -131,14 +129,14 @@ namespace StelexarasApp.Tests.DataAccessTests
             // Arrange
             var teams = new List<Skini>
             {
-                new() 
+                new()
                 {
                     Id = 1, Name = "TestTeam1", Paidia = new List<Paidi>(), Koinotita = new Koinotita
                     {
                         Name = "KoinotitaName"
-                    } 
+                    }
                 },
-                new() { 
+                new() {
                     Id = 2, Name = "TestTeam2", Paidia = new List<Paidi>(), Koinotita = new Koinotita
                     {
                         Name = "KoinotitaName2"
@@ -238,15 +236,16 @@ namespace StelexarasApp.Tests.DataAccessTests
         public async Task UpdateTomeasInDbAsync_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
         {
             // Arrange
-            var tomeas = new Tomeas 
-            { 
-                Id = 1, Name = "TestTomeas"
+            var tomeas = new Tomeas
+            {
+                Id = 1,
+                Name = "TestTomeas"
             };
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
             if (newName != null)
-                tomeas.Name= newName;
+                tomeas.Name = newName;
             else
                 tomeas = null;
 
@@ -257,7 +256,7 @@ namespace StelexarasApp.Tests.DataAccessTests
             Assert.Equal(expectedResult, result);
             if (expectedResult)
             {
-                var updatedTomeas= await _dbContext.Tomeis.FindAsync(id);
+                var updatedTomeas = await _dbContext.Tomeis.FindAsync(id);
                 Assert.NotNull(updatedTomeas);
                 Assert.Equal(newName, updatedTomeas.Name);
             }
@@ -284,7 +283,14 @@ namespace StelexarasApp.Tests.DataAccessTests
         public async Task DeleteTomeasInDbAsync_ShouldReturnExpectedResult()
         {
             // Arrange
-            var tomeas = new Tomeas { Id = 1, Name = "TestTomeas" };
+            var tomeas = new Tomeas
+            {
+                Id = 1,
+                Name = "TestTomeas",
+                Koinotites = new List<Koinotita>(),
+                Tomearxis = new Tomearxis()
+            };
+
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
@@ -295,6 +301,38 @@ namespace StelexarasApp.Tests.DataAccessTests
             Assert.True(result);
             var deletedTomeas = await _dbContext.Tomeis.FindAsync(tomeas.Id);
             Assert.Null(deletedTomeas);
+        }
+
+        [Fact]
+        public async Task GetTomeaByName_ShouldReturnTomea()
+        {
+            // Arrange
+            await _dbContext.Tomearxes!.AddAsync(GetTomeas().Tomearxis);
+            await _dbContext.SaveChangesAsync();
+
+            await _dbContext.Tomeis!.AddAsync(GetTomeas());
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _teamsRepository.GetTomeaByNameInDb(GetTomeas().Name);
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        private Tomeas GetTomeas()
+        {
+            return new Tomeas
+            {
+                Id = 1,
+                Name = "TestTomeas",
+                Tomearxis = new Tomearxis
+                {
+                    Id = 1,
+                    FullName = "Test Tomearxis",
+                },
+                Koinotites = new List<Koinotita>()
+            };
         }
     }
 }
