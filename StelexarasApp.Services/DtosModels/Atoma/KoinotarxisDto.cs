@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.Services.DtosModels.Atoma

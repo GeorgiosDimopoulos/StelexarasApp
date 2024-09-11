@@ -1,8 +1,8 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
 
 namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
-    public interface IStelexiRepository
+    public interface IStaffRepository
     {
         Task<IEnumerable<Stelexos>> GetStelexoiAnaThesiFromDb(Thesi thesi);
 

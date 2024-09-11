@@ -1,13 +1,13 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using StelexarasApp.DataAccess.Models.Domi;
+﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.IServices;
 using System.ComponentModel;
 
 namespace StelexarasApp.ViewModels
 {
-    public class StaffViewModel : INotifyPropertyChanged
+    public class StaffViewModel(IStaffService personalService, Thesi thesi) : INotifyPropertyChanged
     {
-        private readonly IStelexiService personalService1;
+        private readonly IStaffService personalService1 = personalService;
 
         private Thesi thesi;
         public Thesi Thesi1
@@ -16,8 +16,6 @@ namespace StelexarasApp.ViewModels
             set
             {
                 thesi = value;
-                
-                // OnPropertyChanged();
                 OnPropertyChanged(nameof(Title));
             }
         }
@@ -31,16 +29,16 @@ namespace StelexarasApp.ViewModels
             _ => "Unknown Thesi Title"
         };
 
-        public StaffViewModel(IStelexiService personalService, Thesi thesi)
-        {
-            personalService1 = personalService;
-        }
-
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public async Task<IEnumerable<StelexosDto>> GetStelexoi(Thesi thesi)
+        {
+            return await personalService1.GetStelexoiAnaThesiInService(thesi);
         }
     }
 }

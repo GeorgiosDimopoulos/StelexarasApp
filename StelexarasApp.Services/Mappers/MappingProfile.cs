@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using AutoMapper;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.DtosModels.Atoma;
@@ -25,7 +25,15 @@ namespace StelexarasApp.Services.Mappers
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId }));
-                // .ForMember(dest => dest.Paidia, opt => opt.Ignore());
+            // .ForMember(dest => dest.Paidia, opt => opt.Ignore());
+
+            CreateMap<StelexosDto, Stelexos>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<EkpaideutisDto, Ekpaideutis>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }

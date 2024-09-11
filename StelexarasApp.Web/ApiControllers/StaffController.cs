@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
 
 namespace StelexarasApp.Web.ApiControllers
@@ -8,11 +8,11 @@ namespace StelexarasApp.Web.ApiControllers
     [ApiController]
     [Route("[controller]")]
     [ApiExplorerSettings(IgnoreApi = false)]
-    public class StelexiController : ControllerBase
+    public class StaffController : ControllerBase
     {
-        private readonly IStelexiService _stelexiService;
+        private readonly IStaffService _stelexiService;
 
-        public StelexiController(IStelexiService stelexiService)
+        public StaffController(IStaffService stelexiService)
         {
             _stelexiService = stelexiService;
         }

@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.DataAccess.Models.Domi;
 using System.ComponentModel.DataAnnotations;
 
-namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
+namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
     public class Omadarxis : Stelexos
     {
@@ -13,7 +13,8 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
         public Sex Sex { get; set ; }
         public Skini Skini { get; set; } = new Skini();
         public Thesi Thesi { get; set; } = Thesi.Omadarxis;
-        
+        public int Tel { get; set; }
+
         // public List<int> PaidiaIds { get; set; } = new List<int>();
     }
 }

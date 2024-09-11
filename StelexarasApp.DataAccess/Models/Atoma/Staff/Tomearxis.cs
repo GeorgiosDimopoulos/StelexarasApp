@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.DataAccess.Models.Domi;
 using System.ComponentModel.DataAnnotations;
 
-namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
+namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
     public class Tomearxis : Stelexos
     {
@@ -11,6 +11,7 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
         public int Id { get; set; }
         public int Age { get; set; }
         public Sex Sex { get; set; }
+        public int Tel { get; set; }
         public Tomeas Tomeas { get; set; } = new Tomeas();
         public Thesi Thesi { get; set; } = Thesi.Tomearxis;
         // public int TomeasId { get; set; }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.DataAccess

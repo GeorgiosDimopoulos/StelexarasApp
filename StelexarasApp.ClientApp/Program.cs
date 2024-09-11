@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels;
@@ -17,7 +17,7 @@ var serviceProvider = new ServiceCollection()
     .BuildServiceProvider();
 
 var paidiService = serviceProvider.GetService<IPaidiaService>();
-var stelexiService = serviceProvider.GetService<IStelexiService>();
+var stelexiService = serviceProvider.GetService<IStaffService>();
 if (paidiService is null || stelexiService is null)
 {
     Console.WriteLine("Failed to get PaidiService or StelexiService from ServiceProvider.");

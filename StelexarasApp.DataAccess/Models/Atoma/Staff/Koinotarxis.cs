@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.DataAccess.Models.Domi;
 using System.ComponentModel.DataAnnotations;
 
-namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
+namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
     public class Koinotarxis : Stelexos
     {
@@ -12,7 +12,7 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Stelexi
         public int Age { get; set; }
         public Sex Sex { get; set; }
         public Koinotita Koinotita { get; set; } = null!;
-        // public int KoinotitaId { get; set; }
+        public int Tel { get; set; }
         public Thesi Thesi { get; set; } = Thesi.Koinotarxis;
         public IEnumerable<Omadarxis> Omadarxes { get; set; } = null!;
     }

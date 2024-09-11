@@ -69,7 +69,7 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
     builder.Services.AddScoped<IDutyRepository, DutyRepository>();
     builder.Services.AddScoped<ITeamsRepository, TeamsRepository>();
-    builder.Services.AddScoped<IStelexiRepository, StelexiRepository>();
+    builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 
 
     builder.Services.AddControllers();
@@ -85,7 +85,7 @@ void ConfigureServives(WebApplicationBuilder builder)
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
     // Register your own application services
-    builder.Services.AddScoped<IStelexiService, StelexiService>();
+    builder.Services.AddScoped<IStaffService, StaffService>();
     builder.Services.AddScoped<IPaidiaService, PaidiaService>();
     builder.Services.AddScoped<IExpenseService, ExpenseService>();
     builder.Services.AddScoped<IDutyService, DutyService>();

@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
 using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
+using StelexarasApp.DataAccess.Helpers;
 
 namespace StelexarasApp.Services.Services
 {
-    public class StelexiService : IStelexiService
+    public class StaffService : IStaffService
     {
-        private readonly IStelexiRepository? _stelexiRepository;
+        private readonly IStaffRepository? _stelexiRepository;
         private readonly IMapper? _mapper;
 
-        public StelexiService(IMapper mapper, IStelexiRepository stelexiRepository)
+        public StaffService(IMapper mapper, IStaffRepository stelexiRepository)
         {
             try
             {
@@ -27,8 +28,11 @@ namespace StelexarasApp.Services.Services
         public async Task<bool> AddStelexosInService(StelexosDto stelexosDto, Thesi thesi)
         {
             var stelexos = _mapper!.Map<Stelexos>(stelexosDto);
-            if (stelexos == null)
+            if (stelexos == null) 
+            { 
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, Mapping Stelexos with stelexosDto failed", TypeOfOutput.DbErroMessager);
                 throw new ArgumentNullException(nameof(stelexos), "Mapping failed");
+            }
 
             var result = await _stelexiRepository!.AddStelexosInDb(stelexos);
             if (!result)
@@ -38,18 +42,19 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> DeleteStelexosInService(int id, Thesi thesi)
         {
-            return await _stelexiRepository.DeleteStelexosInDb(id, thesi);
+            return await _stelexiRepository!.DeleteStelexosInDb(id, thesi);
         }
 
-        public async Task<IEnumerable<Stelexos>> GetStelexoiAnaThesiInService(Thesi thesi)
+        public async Task<IEnumerable<StelexosDto>> GetStelexoiAnaThesiInService(Thesi thesi)
         {
             try
             {
-                return await _stelexiRepository.GetStelexoiAnaThesiFromDb(thesi);
+                var stelexiDtos = await _stelexiRepository!.GetStelexoiAnaThesiFromDb(thesi);
+                return _mapper.Map<IEnumerable<StelexosDto>>(stelexiDtos);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return null;
             }
 
@@ -63,8 +68,8 @@ namespace StelexarasApp.Services.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                return null!;
             }
         }
 

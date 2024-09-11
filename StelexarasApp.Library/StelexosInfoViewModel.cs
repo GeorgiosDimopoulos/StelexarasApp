@@ -1,5 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using StelexarasApp.Services.DtosModels.Atoma;
+﻿using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.IServices;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,14 +8,14 @@ namespace StelexarasApp.ViewModels
 {
     public class StelexosInfoViewModel : INotifyPropertyChanged
     {
-        private readonly IStelexiService _stelexiService;
+        private readonly IStaffService _stelexiService;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public StelexosDto StelexosDto { get; set; }
         public ICommand SaveStelexosCommand { get; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public StelexosInfoViewModel(StelexosDto stelexosDto, IStelexiService stelexiService)
+        public StelexosInfoViewModel(StelexosDto stelexosDto, IStaffService stelexiService)
         {
             _stelexiService = stelexiService;
             StelexosDto = stelexosDto;

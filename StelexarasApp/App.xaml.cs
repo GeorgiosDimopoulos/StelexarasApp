@@ -54,7 +54,7 @@ namespace StelexarasApp.UI
             services.AddTransient<ToDoPage>();
 
             services.AddScoped<IDutyService, DutyService>();
-            services.AddScoped<IStelexiService, StelexiService>();
+            services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IPaidiaService, PaidiaService>();
             services.AddScoped<IExpenseService, ExpenseService>();
 

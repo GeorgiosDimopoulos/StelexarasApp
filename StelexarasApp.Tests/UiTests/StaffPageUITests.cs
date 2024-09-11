@@ -2,7 +2,7 @@
 
 namespace StelexarasApp.Tests.UiTests;
 
-public class StelexiPageUITests
+public class StaffPageUITests
 {
     [Fact(Skip = "Temporarily ignoring this test")]
     public void CreatePage_ShouldLoadSuccessfully()

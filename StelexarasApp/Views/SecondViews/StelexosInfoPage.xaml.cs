@@ -9,7 +9,7 @@ namespace StelexarasApp.UI.Views.SecondViews
         private StelexosInfoViewModel? _stelexosinfoViewModel;
         private StelexosDto stelexosDto1;
 
-        public StelexosInfoPage(IStelexiService stelexiService, StelexosDto stelexosDto)
+        public StelexosInfoPage(IStaffService stelexiService, StelexosDto stelexosDto)
         {
             InitializeComponent();
             _stelexosinfoViewModel = new StelexosInfoViewModel(stelexosDto, stelexiService);

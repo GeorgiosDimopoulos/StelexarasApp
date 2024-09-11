@@ -2,22 +2,21 @@
 using StelexarasApp.ViewModels;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
-using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.Tests.ViewModelsTests;
 
 public class StelexosInfoViewModelTests
 {
-    private readonly Mock<IStelexiService> _mockstelexiService;
+    private readonly Mock<IStaffService> _mockstelexiService;
     private readonly StelexosInfoViewModel stelexosInfoViewModel;
     private readonly StelexosDto stelexosDto;
 
     public StelexosInfoViewModelTests()
     {
         stelexosDto = GetMockUpStelexos(Thesi.Omadarxis);
-        _mockstelexiService = new Mock<IStelexiService>();
+        _mockstelexiService = new Mock<IStaffService>();
         stelexosInfoViewModel = new StelexosInfoViewModel(stelexosDto, _mockstelexiService.Object);
 
     }

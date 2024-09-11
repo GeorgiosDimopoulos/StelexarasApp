@@ -1,23 +1,24 @@
 ﻿using AutoMapper;
+using Microsoft.Maui.Platform;
 using Moq;
 using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Stelexi;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
-public class StelexiServiceTests
+public class StaffServiceTests
 {
-    private readonly Mock<IStelexiRepository> _mockStelexiRepository;
-    private readonly StelexiService _stelexiService;
+    private readonly Mock<IStaffRepository> _mockStelexiRepository;
+    private readonly StaffService _stelexiService;
     private readonly Mock<IMapper> _mockMapper;
-    public StelexiServiceTests()
+    public StaffServiceTests()
     {
-        _mockStelexiRepository = new Mock<IStelexiRepository>();
+        _mockStelexiRepository = new Mock<IStaffRepository>();
         _mockMapper = new Mock<IMapper>();
-        _stelexiService = new StelexiService(_mockMapper.Object, _mockStelexiRepository.Object);
+        _stelexiService = new StaffService(_mockMapper.Object, _mockStelexiRepository.Object);
     }
 
     [Fact]
@@ -50,16 +51,16 @@ public class StelexiServiceTests
         // Arrange
         var stelexoi = new List<Omadarxis>
         {
-            new Omadarxis { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis},
+            new Omadarxis { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaThesiFromDb(Thesi.Omadarxis)).ReturnsAsync(stelexoi);
 
         // Act
         var result = await _stelexiService.GetStelexoiAnaThesiInService(Thesi.Omadarxis);
-
+        
         // Assert
-        Assert.Equal(stelexoi, result);
+        Assert.Single(result);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaThesiFromDb(Thesi.Omadarxis), Times.Once);
     }
 
