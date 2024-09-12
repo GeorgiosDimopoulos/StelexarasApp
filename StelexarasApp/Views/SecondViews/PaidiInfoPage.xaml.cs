@@ -16,11 +16,11 @@ namespace StelexarasApp.UI.Views.SecondViews
         private bool isPaidiNameFilled = false;
         private bool isPaidiAgeFilled = false;
 
-        public PaidiInfoPage(IPaidiaService peopleService, PaidiDto paidi, ObservableCollection<SkiniDto> allSkines)
+        public PaidiInfoPage(IPaidiaService peopleService, PaidiDto paidi)
         {
             InitializeComponent();
-            _paidiviewModel = new PaidiInfoViewModel(_paidiDto, peopleService, allSkines);
             _paidiDto = paidi;
+            _paidiviewModel = new PaidiInfoViewModel(_paidiDto, peopleService, _paidiDto.SkiniName);
             _skini = new SkiniDto();
             BindingContext = _paidiviewModel;
         }

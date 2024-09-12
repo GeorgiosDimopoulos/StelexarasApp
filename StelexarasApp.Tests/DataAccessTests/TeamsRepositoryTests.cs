@@ -320,7 +320,7 @@ namespace StelexarasApp.Tests.DataAccessTests
             Assert.NotNull(result);
         }
 
-        private Tomeas GetTomeas()
+        private static Tomeas GetTomeas()
         {
             return new Tomeas
             {

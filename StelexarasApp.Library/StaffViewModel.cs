@@ -5,30 +5,11 @@ using System.ComponentModel;
 
 namespace StelexarasApp.ViewModels
 {
-    public class StaffViewModel(IStaffService personalService, Thesi thesi) : INotifyPropertyChanged
+    public class StaffViewModel(IStaffService personalService, string thesiStr) : INotifyPropertyChanged
     {
         private readonly IStaffService personalService1 = personalService;
 
-        private Thesi thesi;
-        public Thesi Thesi1
-        {
-            get => thesi;
-            set
-            {
-                thesi = value;
-                OnPropertyChanged(nameof(Title));
-            }
-        }
-
-        public string Title => Thesi1 switch
-        {
-            Thesi.Tomearxis => "Tomearxis",
-            Thesi.Ekpaideutis => "Ekpaideutis",
-            Thesi.Omadarxis => "Omadarxis",
-            Thesi.Koinotarxis => "Koinotarxis",
-            _ => "Unknown Thesi Title"
-        };
-
+        public string Title = thesiStr;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)

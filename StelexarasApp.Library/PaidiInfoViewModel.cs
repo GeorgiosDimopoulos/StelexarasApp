@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Platform;
-using StelexarasApp.Services.DtosModels;
-using StelexarasApp.Services.DtosModels.Domi;
+﻿using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,15 +12,15 @@ namespace StelexarasApp.ViewModels
         private ICommand SavePaidiCommand { get; }
 
         public PaidiDto PaidiDto { get; set; } = new PaidiDto();
-        public ObservableCollection<SkiniDto> Skines { get; set; }
+        public string SkiniName { get; set; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public PaidiInfoViewModel(PaidiDto paidiDto,IPaidiaService peopleService, ObservableCollection<SkiniDto> skines)
+        public PaidiInfoViewModel(PaidiDto paidiDto,IPaidiaService peopleService, string skini)
         {
             PaidiDto = paidiDto;
             _paidiaService = peopleService;
             SavePaidiCommand = new Command(async () => await OnSavePaidi());
-            Skines = skines;
+            SkiniName = skini;
         }
 
         public async Task<bool> DeletePaidiAsync(int id)
@@ -43,18 +41,12 @@ namespace StelexarasApp.ViewModels
 
         public async Task<bool> OnSavePaidi()
         {
-            var skini = Skines.FirstOrDefault(s => s.Name == PaidiDto.SkiniName);
-            if (skini is null || string.IsNullOrEmpty(skini.Name))
-                return false;
-
-            // ToDo: maybe it is not needed to set the Skini here, it could be already be set via XAML
-            PaidiDto.SkiniName = skini.Name;
             var result = await _paidiaService.UpdatePaidiInDb(PaidiDto);
             StatusMessage = result ? "Save successful" : "Save failed";
 
             if (result)
             {
-                OnPropertyChanged(nameof(Skines));
+                OnPropertyChanged(nameof(SkiniName));
                 OnPropertyChanged(nameof(PaidiDto));
                 return true;
             }

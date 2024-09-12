@@ -13,18 +13,18 @@ namespace StelexarasApp.Services.Mappers
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Tomeas, opt => opt.MapFrom(src => new Tomeas { Id = src.TomeasId }))
-                .ForMember(dest => dest.Koinotarxes, opt => opt.Ignore());
+                .ForMember(dest => dest.Koinotarxes, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<KoinotarxisDto, Koinotarxis>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId ?? 0}))
-                .ForMember(dest => dest.Omadarxes, opt => opt.Ignore());
+                .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId ?? 0 }))
+                .ForMember(dest => dest.Omadarxes, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<OmadarxisDto, Omadarxis>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId }));
+                .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId })).ReverseMap();
             // .ForMember(dest => dest.Paidia, opt => opt.Ignore());
 
             CreateMap<StelexosDto, Stelexos>()
@@ -33,7 +33,7 @@ namespace StelexarasApp.Services.Mappers
 
             CreateMap<EkpaideutisDto, Ekpaideutis>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-                .ForMember(dest => dest.Id, opt => opt.Ignore());
+                .ForMember(dest => dest.Id, opt => opt.Ignore()).ReverseMap();
         }
     }
 }

@@ -56,7 +56,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Paidia");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Ekpaideutis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Ekpaideutis", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,21 +73,20 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<int>("Sex")
                         .HasColumnType("int");
+
+                    b.Property<string>("Tel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
 
-                    b.Property<int>("TomeasId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TomeasId");
 
                     b.ToTable("Ekpaideutis");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Koinotarxis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,6 +103,10 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<int>("Sex")
                         .HasColumnType("int");
+
+                    b.Property<string>("Tel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
@@ -118,7 +121,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Koinotarxes");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Omadarxis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,6 +142,10 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.Property<int>("Sex")
                         .HasColumnType("int");
 
+                    b.Property<string>("Tel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
 
@@ -149,7 +156,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Omadarxes");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Tomearxis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,6 +173,10 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<int>("Sex")
                         .HasColumnType("int");
+
+                    b.Property<string>("Tel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
@@ -308,34 +319,23 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.Navigation("Skini");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Ekpaideutis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Domi.Tomeas", "Tomeas")
-                        .WithMany()
-                        .HasForeignKey("TomeasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tomeas");
-                });
-
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Koinotarxis", b =>
-                {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Tomearxis", null)
+                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", null)
                         .WithMany("Koinotarxes")
                         .HasForeignKey("TomearxisId");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Omadarxis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Koinotarxis", null)
+                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", null)
                         .WithMany("Omadarxes")
                         .HasForeignKey("KoinotarxisId");
                 });
 
             modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Koinotita", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Koinotarxis", "Koinotarxis")
+                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", "Koinotarxis")
                         .WithOne("Koinotita")
                         .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Koinotita", "KoinotarxisId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -360,7 +360,7 @@ namespace StelexarasApp.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Omadarxis", "Omadarxis")
+                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", "Omadarxis")
                         .WithOne("Skini")
                         .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Skini", "OmadarxisId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -373,7 +373,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
             modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Tomeas", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Tomearxis", "Tomearxis")
+                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", "Tomearxis")
                         .WithOne("Tomeas")
                         .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Tomeas", "TomearxisId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,7 +382,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.Navigation("Tomearxis");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Koinotarxis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", b =>
                 {
                     b.Navigation("Koinotita")
                         .IsRequired();
@@ -390,13 +390,13 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.Navigation("Omadarxes");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Omadarxis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", b =>
                 {
                     b.Navigation("Skini")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Stelexi.Tomearxis", b =>
+            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", b =>
                 {
                     b.Navigation("Koinotarxes");
 

@@ -15,10 +15,12 @@ namespace StelexarasApp.Tests.OtherTests
         public void IsValidInput_ShouldReturnExpectedResult(string fullName, string skiniName, bool expectedResult)
         {
             // Act
-            var result = WordsConverterChecks.IsValidInput(fullName, skiniName);
+            var result = DataChecksAndConverters.IsValidFullNameInput(fullName);
+            var result2 = DataChecksAndConverters.IsValidFullNameInput(skiniName);
 
             // Assert
             Assert.Equal(expectedResult, result);
+            Assert.Equal(expectedResult, result2);
         }
     }
 }

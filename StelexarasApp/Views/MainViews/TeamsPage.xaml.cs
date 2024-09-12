@@ -12,12 +12,14 @@ namespace StelexarasApp.UI.Views
     {
         private TeamsViewModel _viewModel;
         private IPaidiaService _paidiaService;
+        private ITeamsService _teamsService;
 
-        public TeamsPage(IPaidiaService paidiaService, EidosXwrou eidosXwrou)
+        public TeamsPage(IPaidiaService paidiaService, ITeamsService teamsService, EidosXwrou eidosXwrou)
         {
             InitializeComponent();
             _paidiaService = paidiaService;
-            _viewModel = new TeamsViewModel(_paidiaService, eidosXwrou);
+            _teamsService = teamsService;
+            _viewModel = new TeamsViewModel(_paidiaService, _teamsService, eidosXwrou);
             BindingContext = _viewModel;
         }
 
@@ -28,8 +30,8 @@ namespace StelexarasApp.UI.Views
 
             if (paidi != null)
             {
-                var paidiPage = new PaidiInfoPage(_paidiaService, paidi, _viewModel.Skines);
-                await Navigation.PushAsync(paidiPage);
+                var paidiPage = new PaidiInfoPage(_paidiaService, paidi);
+                await Navigation.PushModalAsync(paidiPage); // or PushAsync
             }
         }
 
@@ -39,8 +41,8 @@ namespace StelexarasApp.UI.Views
             string skiniName = await DisplayPromptAsync("Νέο παιδί", "Γράψτε όνομα σκηνής:", "OK", "Άκυρο", "Σκηνή", maxLength: 50, keyboard: Keyboard.Text);
 
             if (string.IsNullOrEmpty(fullName) ||
-                !WordsConverterChecks.IsValidFullNameInput(fullName) ||
-                !WordsConverterChecks.IsValidFullNameInput(skiniName) ||
+                !DataChecksAndConverters.IsValidFullNameInput(fullName) ||
+                !DataChecksAndConverters.IsValidFullNameInput(skiniName) ||
                 (string.IsNullOrEmpty(skiniName)))
                 await DisplayAlert("Λάθος Στοιχεία", $"{fullName}", "OK");
             else

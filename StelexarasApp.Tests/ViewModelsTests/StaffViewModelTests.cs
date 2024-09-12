@@ -17,7 +17,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
         public StaffViewModelTests()
         {
             _mockPaidiaService = new Mock<IStaffService>();
-            staffViewModel = new StaffViewModel(_mockPaidiaService.Object, Thesi.Ekpaideutis);
+            staffViewModel = new StaffViewModel(_mockPaidiaService.Object, "Ekpaideutis");
         }
 
         [Fact]

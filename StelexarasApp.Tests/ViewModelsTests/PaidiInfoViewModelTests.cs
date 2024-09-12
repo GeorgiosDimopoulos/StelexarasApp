@@ -16,7 +16,7 @@ public class PaidiInfoViewModelTests
     {
         _mockPaidiaService = new Mock<IPaidiaService>();
         paidiDto = GetMockUpPaidi(GetMockUpSkini(), "Paidi Name");
-        _paidiInfoViewModel = new PaidiInfoViewModel(paidiDto, _mockPaidiaService.Object, [GetMockUpSkini()]);
+        _paidiInfoViewModel = new PaidiInfoViewModel(paidiDto, _mockPaidiaService.Object, GetMockUpSkini().Name);
     }
 
     [Theory]

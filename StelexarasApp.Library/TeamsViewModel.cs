@@ -6,41 +6,44 @@ using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.ViewModels
 {
     public class TeamsViewModel : INotifyPropertyChanged
     {
         private readonly IPaidiaService _paidiaService;
-        public ObservableCollection<SkiniDto>? Skines { get; set; }
+        private readonly ITeamsService _teamsService;
+        public ObservableCollection<string> Skines { get; set; }
         public Koinotita? Koinotita { get; set; }
+        public string Title { get; set; }
 
-        private EidosXwrou _eidosXwrou;
-        public EidosXwrou EidosXwrou
+        private async void LoadSkines()
         {
-            get => _eidosXwrou;
-            set
-            {
-                _eidosXwrou = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Title));
-            }
+            var skines = await _teamsService.GetSkines();
+            foreach (var skini in skines)
+                Skines.Add(skini.Name);
         }
 
-        public string Title => EidosXwrou switch
-        {
-            EidosXwrou.Koinotita => "Koinotita",
-            EidosXwrou.Skini => "Skini",
-            EidosXwrou.Tomeas => "Tomeas",
-            _ => "Unknown Title"
-        };
-
-        public TeamsViewModel(IPaidiaService paidiaService, EidosXwrou eidosXwrou)
+        public TeamsViewModel(IPaidiaService paidiaService, ITeamsService teamsService, EidosXwrou eidosXwrou)
         {
             _paidiaService = paidiaService;
+            _teamsService = teamsService;
             Skines = [];
+            LoadSkines();
             Koinotita = new Koinotita();
-            EidosXwrou = eidosXwrou;
+            Title = GetTitle(eidosXwrou);
+        }
+
+        private static string? GetTitle(EidosXwrou eidosXwrou)
+        {
+            return eidosXwrou switch
+            {
+                EidosXwrou.Koinotita => "Koinotita",
+                EidosXwrou.Skini => "Skini",
+                EidosXwrou.Tomeas => "Tomeas",
+                _ => "Unknown Title",
+            };
         }
 
         public async Task<bool> AddPaidiAsync(string fullName, string skiniName, PaidiType paidiType)

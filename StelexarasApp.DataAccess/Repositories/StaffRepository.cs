@@ -22,7 +22,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
         try
         {
-            if (!WordsConverterChecks.IsValidFullNameInput(stelexos.FullName))
+            if (!DataChecksAndConverters.IsValidFullNameInput(stelexos.FullName))
                 throw new ArgumentException("Invalid FullName", nameof(stelexos.FullName));
 
             switch (stelexos.Thesi)
@@ -189,7 +189,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (!WordsConverterChecks.IsValidFullNameInput(stelexi.FullName))
+        if (!DataChecksAndConverters.IsValidFullNameInput(stelexi.FullName))
             throw new ArgumentException("Invalid FullName", nameof(stelexi.FullName));
         try
         {

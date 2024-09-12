@@ -28,7 +28,7 @@ namespace StelexarasApp.UI.Views
         }
 
         private async void OnExpensesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new ExpensesPage(_expenseService));
-        private async void OnPeopleButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new TeamsPage(_paidiaService, EidosXwrou.Skini));
+        private async void OnPeopleButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new TeamsPage(_paidiaService, _teamsService, EidosXwrou.Skini));
         private async void OnPersonalButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new StuffPage(_stelexiService, Thesi.Tomearxis));
         private async void OnDutiesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new ToDoPage(_dutiesService));
     }

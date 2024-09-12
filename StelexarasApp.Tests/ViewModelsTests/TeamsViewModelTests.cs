@@ -11,11 +11,13 @@ public class TeamsViewModelTests
 {
     private readonly TeamsViewModel peopleViewModel;
     private readonly Mock<IPaidiaService> paidiaServiceMock;
+    private readonly Mock<ITeamsService> teamsServiceMock;
 
     public TeamsViewModelTests()
     {
         paidiaServiceMock = new Mock<IPaidiaService>();
-        peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object, EidosXwrou.Koinotita);
+        teamsServiceMock = new Mock<ITeamsService>();
+        peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object, teamsServiceMock.Object, EidosXwrou.Koinotita);
     }
 
     [Fact]

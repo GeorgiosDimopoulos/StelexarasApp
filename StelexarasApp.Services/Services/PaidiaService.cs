@@ -9,8 +9,8 @@ namespace StelexarasApp.Services.Services
     public class PaidiaService : IPaidiaService
     {
         // private readonly ILogger<TeamsService> _logger;
-        private readonly IPaidiRepository _paidiRepository;
-        private readonly IMapper _mapper;
+        private readonly IPaidiRepository? _paidiRepository;
+        private readonly IMapper? _mapper;
 
         public PaidiaService(IPaidiRepository paidiRepository, IMapper mapper)
         {

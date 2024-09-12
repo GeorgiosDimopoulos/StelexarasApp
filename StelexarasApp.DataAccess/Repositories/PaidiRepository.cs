@@ -92,7 +92,7 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (!WordsConverterChecks.IsValidFullNameInput(paidi.FullName))
+                if (!DataChecksAndConverters.IsValidFullNameInput(paidi.FullName))
                     throw new ArgumentException("Invalid FullName", nameof(paidi.FullName));
 
                 if (paidi is null || paidi.Id <= 0|| _dbContext.Paidia is null)
@@ -149,7 +149,7 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (!WordsConverterChecks.IsValidFullNameInput(paidi.FullName))
+                if (!DataChecksAndConverters.IsValidFullNameInput(paidi.FullName))
                     throw new ArgumentException("Invalid FullName", nameof(paidi.FullName));
 
                 _dbContext.Paidia.Update(paidi);
