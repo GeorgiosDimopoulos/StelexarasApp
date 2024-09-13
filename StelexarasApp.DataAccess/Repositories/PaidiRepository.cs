@@ -121,9 +121,8 @@ namespace StelexarasApp.DataAccess.Repositories
                 LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 
                 if (transaction != null)
-                {
                     await transaction.RollbackAsync();
-                }
+                
                 return false;
             }
         }
@@ -155,9 +154,8 @@ namespace StelexarasApp.DataAccess.Repositories
                 _dbContext.Paidia.Update(paidi);
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
-                {
                     await transaction.CommitAsync();
-                }
+                
                 return true;
             }
             catch (Exception ex)
@@ -166,9 +164,8 @@ namespace StelexarasApp.DataAccess.Repositories
                 LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 
                 if (transaction != null)
-                {
                     await transaction.RollbackAsync();
-                }
+                
                 return false;
             }
         }

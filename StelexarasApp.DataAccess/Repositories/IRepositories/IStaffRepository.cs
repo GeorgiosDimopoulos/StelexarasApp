@@ -6,6 +6,8 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
     {
         Task<IEnumerable<Stelexos>> GetStelexoiAnaThesiFromDb(Thesi thesi);
 
+        Task<IEnumerable<Stelexos>> GetStelexoiAnaXwros(Thesi posto, string xwrosName);
+
         Task<Stelexos> FindStelexosByIdInDb(int id, Thesi thesi);
 
         Task<bool> AddStelexosInDb(Stelexos stelexos);

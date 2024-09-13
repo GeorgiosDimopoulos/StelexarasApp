@@ -4,6 +4,8 @@ using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.DataAccess.Helpers;
+using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.DataAccess.Repositories;
 
 namespace StelexarasApp.Services.Services
 {
@@ -45,14 +47,44 @@ namespace StelexarasApp.Services.Services
             return await _stelexiRepository!.DeleteStelexosInDb(id, thesi);
         }
 
+        public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesInService()
+        {
+            try
+            {
+                if (_stelexiRepository is null)
+                    throw new ArgumentException("StaffRepository cannot be null");
+                return (IEnumerable<KoinotarxisDto>)await _stelexiRepository.GetStelexoiAnaThesiFromDb(Thesi.Koinotarxis);
+            }
+            catch (Exception ex)
+            {
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(Koinotita koinotita)
+        {
+            try
+            {
+                if (_stelexiRepository is null)
+                    throw new ArgumentException("StaffRepository cannot be null");
+                return (IEnumerable<OmadarxisDto>)await _stelexiRepository.GetStelexoiAnaXwros(Thesi.Omadarxis, koinotita.Name);
+            }
+            catch (Exception ex)
+            {
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<StelexosDto>> GetStelexoiAnaThesiInService(Thesi thesi)
         {
             try
             {
                 var stelexi = await _stelexiRepository!.GetStelexoiAnaThesiFromDb(thesi);
-                if (stelexi == null)
+                if (stelexi == null || _mapper is null)
                     return null!;
-                var stelexiDtos = _mapper?.Map<IEnumerable<StelexosDto>>(stelexi);
+                var stelexiDtos = _mapper!.Map<IEnumerable<StelexosDto>>(stelexi);
                 return stelexiDtos;
             }
             catch (Exception ex)

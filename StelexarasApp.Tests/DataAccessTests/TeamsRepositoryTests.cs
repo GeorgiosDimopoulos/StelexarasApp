@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using Moq;
 
 namespace StelexarasApp.Tests.DataAccessTests
 {
@@ -129,18 +130,11 @@ namespace StelexarasApp.Tests.DataAccessTests
             // Arrange
             var teams = new List<Skini>
             {
-                new()
-                {
-                    Id = 1, Name = "TestTeam1", Paidia = new List<Paidi>(), Koinotita = new Koinotita
-                    {
-                        Name = "KoinotitaName"
-                    }
+                new() { 
+                    Id = 1, Name = "TestTeam1", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName" }
                 },
                 new() {
-                    Id = 2, Name = "TestTeam2", Paidia = new List<Paidi>(), Koinotita = new Koinotita
-                    {
-                        Name = "KoinotitaName2"
-                    }
+                    Id = 2, Name = "TestTeam2", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName2" }
                 }
             };
             await _dbContext.Skines!.AddRangeAsync(teams);
@@ -174,7 +168,7 @@ namespace StelexarasApp.Tests.DataAccessTests
         public async Task GetKoinotitaByName_ShouldReturnTeam()
         {
             // Arrange
-            var koinotita = new Koinotita { Id = 1, Name = "TestKOinotita" };
+            var koinotita = GetKoinotita(1,"Koinotita1");
             await _dbContext.Koinotites!.AddAsync(koinotita);
             await _dbContext.SaveChangesAsync();
 
@@ -187,16 +181,16 @@ namespace StelexarasApp.Tests.DataAccessTests
         }
 
         [Theory]
-        [InlineData(1, "Updated Name", true)]
-        [InlineData(2, null, false)]
+        [InlineData(6, "Updated Name", true)]
+        [InlineData(7, "", false)]
         public async Task UpdateKoinotitaInDbAsync_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
         {
             // Arrange
-            var koinotita = new Koinotita { Id = 1, Name = "TestKOinotita" };
+            var koinotita = GetKoinotita(id, newName);
             await _dbContext.Koinotites!.AddAsync(koinotita);
             await _dbContext.SaveChangesAsync();
 
-            if (newName != null)
+            if (!string.IsNullOrEmpty(newName))
                 koinotita.Name = newName;
             else
                 koinotita = null;
@@ -215,36 +209,41 @@ namespace StelexarasApp.Tests.DataAccessTests
         }
 
         [Fact]
-        public async Task GetTomeaByName_ShouldReturnTeam()
+        public async Task GetTomeaByNameInDb_ShouldReturnTomeas_WhenNameIsValid()
         {
             // Arrange
-            var tomeas = new Tomeas { Id = 1, Name = "TestTomeas" };
-            await _dbContext.Tomeis!.AddAsync(tomeas);
+            var tomeasName = "TestTomeas";
+            var expectedTomeas = new Tomeas { Id = 1, Name = tomeasName };
+            await _dbContext.Tomeis.AddAsync(expectedTomeas);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.GetTomeaByNameInDb(tomeas.Name);
+            var result = await _teamsRepository.GetTomeaByNameInDb(tomeasName);
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(tomeas.Id, result.Id);
+            Assert.Equal(expectedTomeas.Id, result.Id);
+            Assert.Equal(expectedTomeas.Name, result.Name);
+        }
+
+        [Fact]
+        public async Task GetTomeaByNameInDb_ShouldThrowArgumentException_WhenNameIsNullOrEmpty()
+        {
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => _teamsRepository.GetTomeaByNameInDb(string.Empty));
         }
 
         [Theory]
-        [InlineData(1, "Updated Name", true)]
-        [InlineData(2, null, false)]
+        [InlineData(11, "UpdatedName", true)]
+        [InlineData(22, "", false)]
         public async Task UpdateTomeasInDbAsync_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
         {
             // Arrange
-            var tomeas = new Tomeas
-            {
-                Id = 1,
-                Name = "TestTomeas"
-            };
+            var tomeas = GetTomeas(id, newName);
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
-            if (newName != null)
+            if (!string.IsNullOrEmpty(newName))
                 tomeas.Name = newName;
             else
                 tomeas = null;
@@ -263,7 +262,7 @@ namespace StelexarasApp.Tests.DataAccessTests
         }
 
         [Fact]
-        public async Task DeleteKoinotitaInDbAsync_ShouldReturnExpectedResult()
+        public async Task DeleteKoinotitaInDbAsync_ShouldWork()
         {
             // Arrange
             var koinotita = new Koinotita { Id = 1, Name = "TestKOinotita" };
@@ -280,18 +279,11 @@ namespace StelexarasApp.Tests.DataAccessTests
         }
 
         [Fact]
-        public async Task DeleteTomeasInDbAsync_ShouldReturnExpectedResult()
+        public async Task DeleteTomeasInDbAsync_ShouldWork()
         {
             // Arrange
-            var tomeas = new Tomeas
-            {
-                Id = 1,
-                Name = "TestTomeas",
-                Koinotites = new List<Koinotita>(),
-                Tomearxis = new Tomearxis()
-            };
-
-            await _dbContext.Tomeis!.AddAsync(tomeas);
+            var tomeas = GetTomeas(8, "Tomeas1");
+            await _dbContext.Tomeis.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
             // Act
@@ -307,31 +299,46 @@ namespace StelexarasApp.Tests.DataAccessTests
         public async Task GetTomeaByName_ShouldReturnTomea()
         {
             // Arrange
-            await _dbContext.Tomearxes!.AddAsync(GetTomeas().Tomearxis);
-            await _dbContext.SaveChangesAsync();
-
-            await _dbContext.Tomeis!.AddAsync(GetTomeas());
+            var tomeas = GetTomeas(6,"Tomeas1");
+            await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.GetTomeaByNameInDb(GetTomeas().Name);
+            var result = await _teamsRepository.GetTomeaByNameInDb(tomeas.Name);
 
             // Assert
             Assert.NotNull(result);
         }
 
-        private static Tomeas GetTomeas()
+        private static Tomeas GetTomeas(int id, string name)
         {
             return new Tomeas
             {
-                Id = 1,
-                Name = "TestTomeas",
+                Id = id,
+                Name = name,
                 Tomearxis = new Tomearxis
                 {
-                    Id = 1,
                     FullName = "Test Tomearxis",
+                    Tel = "1234567890",
+                    Age = 30,
                 },
-                Koinotites = new List<Koinotita>()
+                Koinotites = [],
+            };
+        }
+
+        private static Koinotita GetKoinotita(int id, string name)
+        {
+            return new Koinotita
+            {
+                Id = id,
+                Name = name,
+                Koinotarxis = new Koinotarxis
+                {
+                    Id = 4,
+                    FullName = "Test Koinotarxis",
+                    Tel = "1234567890",
+                },
+                Skines = [],
             };
         }
     }

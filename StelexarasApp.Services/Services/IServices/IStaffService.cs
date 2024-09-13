@@ -1,5 +1,6 @@
 ﻿using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.Services.IServices
 {
@@ -11,7 +12,11 @@ namespace StelexarasApp.Services.IServices
         Task<bool> UpdateStelexosInService(StelexosDto stelexosDto);
         Task<IEnumerable<StelexosDto>> GetStelexoiAnaThesiInService(Thesi thesi);
 
+        Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(Koinotita koinotita);
+
         Task<Stelexos> GetStelexosByIdInService(int id, Thesi thesi);
+
+        Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesInService();
 
         Task<bool> MoveOmadarxisToAnotherSkiniInService(int Id, int newSkiniId);
     }

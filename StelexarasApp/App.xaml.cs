@@ -50,7 +50,7 @@ namespace StelexarasApp.UI
 
             services.AddTransient<TeamsPage>();
             services.AddTransient<ExpensesPage>();
-            services.AddTransient<StuffPage>();
+            services.AddTransient<StaffPage>();
             services.AddTransient<ToDoPage>();
 
             services.AddScoped<IDutyService, DutyService>();

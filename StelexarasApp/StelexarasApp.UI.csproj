@@ -83,8 +83,8 @@
 	  <Compile Update="Views\MainViews\TeamsPage.xaml.cs">
 	    <DependentUpon>TeamsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MainViews\StuffPage.xaml.cs">
-	    <DependentUpon>StuffPage.xaml</DependentUpon>
+	  <Compile Update="Views\MainViews\StaffPage.xaml.cs">
+	    <DependentUpon>StaffPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\SecondViews\XwrosInfoPage.xaml.cs">
 	    <DependentUpon>XwrosInfoPage.xaml</DependentUpon>
@@ -111,7 +111,7 @@
 	  <MauiXaml Update="Views\MainViews\TeamsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MainViews\StuffPage.xaml">
+	  <MauiXaml Update="Views\MainViews\StaffPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SecondViews\PaidiContentView.xaml">

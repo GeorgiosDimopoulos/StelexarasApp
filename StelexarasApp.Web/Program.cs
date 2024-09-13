@@ -102,21 +102,20 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddScoped<ITeamsService, TeamsService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
 
-    builder.Services.AddTransient<TeamsViewModel>(provider =>
+    builder.Services.AddTransient(provider =>
     {
         var paidiaService = provider.GetRequiredService<IPaidiaService>();
         var teamsService = provider.GetRequiredService<ITeamsService>();
         return new TeamsViewModel(paidiaService, teamsService, EidosXwrou.Koinotita);
     });
 
-    builder.Services.AddTransient<StaffViewModel>(provider =>
+    builder.Services.AddTransient(provider =>
     {
         var staffService = provider.GetRequiredService<IStaffService>();
         return new StaffViewModel(staffService, "koinotita");
     });
 
     builder.Services.AddTransient<ExpensesViewModel>();
-    builder.Services.AddTransient<StaffViewModel>();
     builder.Services.AddTransient<PaidiInfoViewModel>();
     builder.Services.AddTransient<StelexosInfoViewModel>();
     builder.Services.AddTransient<DutyViewModel>();

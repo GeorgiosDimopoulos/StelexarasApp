@@ -29,12 +29,7 @@ public class StaffRepositoryTests
     public async Task GetStelexosByIdInDb_ShouldReturnStelexos_WhenStelexosExists()
     {
         // Arrange
-        var stelexos = new Omadarxis
-        {
-            Id = 1,
-            Thesi = Thesi.Omadarxis,
-            FullName = "Test Name"
-        };
+        var stelexos = new Omadarxis { Id = 1, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "19123123" };
 
         await _dbContext.Omadarxes!.AddAsync(stelexos);
         await _dbContext.SaveChangesAsync();
@@ -77,7 +72,8 @@ public class StaffRepositoryTests
         {
             Id = 1,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name"
+            FullName = "Test Name",
+            Tel = "123-456-7890"
         };
 
         // Act
@@ -132,7 +128,8 @@ public class StaffRepositoryTests
         {
             Id = 1,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name"
+            FullName = "Test Name",
+            Tel = "123-456-7890"
         };
 
         await _dbContext.Omadarxes!.AddAsync(stelexos);
@@ -154,7 +151,8 @@ public class StaffRepositoryTests
         {
             Id = 1,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name"
+            FullName = "Test Name",
+            Tel = "123-456-7890"
         };
 
         await _dbContext.Omadarxes!.AddAsync(stelexos);

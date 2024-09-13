@@ -6,7 +6,6 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Models.Domi;
 using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess.Models;
 
 namespace StelexarasApp.Tests.DataAccessTests;
 
@@ -33,7 +32,7 @@ public class PaidiaRepositoryTests
     [InlineData(0, PaidiType.Kataskinotis, false)]
     public async Task AddPaidi_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
     {
-        var paidi = new Paidi { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
+        var paidi = new Paidi { Id = id, FullName = "Test Paidi", Age = 10, PaidiType = paidiType };
         var result = await _paidiRepository.AddPaidiInDb(paidi);
         Assert.Equal(result, expectedResult);
         if (expectedResult)
@@ -59,7 +58,7 @@ public class PaidiaRepositoryTests
     public async Task DeletePaidiInDbAsync_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
     {
         // Arrange
-        Paidi paidi = new() { Id = id, FullName = "Test", Age = 10, PaidiType = paidiType };
+        Paidi paidi = new() { Id = id, FullName = "Test Name", Age = 10, PaidiType = paidiType };
         if (id > 0)
         {
             await _dbContext.Paidia!.AddAsync(paidi);
@@ -143,7 +142,7 @@ public class PaidiaRepositoryTests
 
     [Theory]
     [InlineData(1, "Updated Name", true)]
-    [InlineData(2, null, false)]
+    [InlineData(1, null, false)]
     public async Task UpdatePaidiInDb_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
     {
         // Arrange
@@ -157,14 +156,10 @@ public class PaidiaRepositoryTests
         await _dbContext.Paidia!.AddAsync(paidi);
         await _dbContext.SaveChangesAsync();
 
-        if (newName != null)
-        {
+        if (!string.IsNullOrEmpty(newName))
             paidi.FullName = newName;
-        }
         else
-        {
             paidi = null;
-        }
 
         // Act
         var result = await _paidiRepository.UpdatePaidiInDb(paidi);

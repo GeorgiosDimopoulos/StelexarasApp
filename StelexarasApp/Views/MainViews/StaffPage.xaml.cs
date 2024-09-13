@@ -4,12 +4,12 @@ using StelexarasApp.ViewModels;
 
 namespace StelexarasApp.UI.Views
 {
-    public partial class StuffPage : ContentPage
+    public partial class StaffPage : ContentPage
     {
         private IStaffService _personalService;
         private StaffViewModel _personalViewModel;
 
-        public StuffPage(IStaffService personalService, Thesi thesi)
+        public StaffPage(IStaffService personalService, Thesi thesi)
         {
             _personalService = personalService;
             InitializeComponent();

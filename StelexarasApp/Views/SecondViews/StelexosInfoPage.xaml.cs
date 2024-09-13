@@ -14,7 +14,7 @@ namespace StelexarasApp.UI.Views.SecondViews
             InitializeComponent();
             _stelexosinfoViewModel = new StelexosInfoViewModel(stelexosDto, stelexiService);
             stelexosDto1 = stelexosDto;
-            BindingContext = _stelexosinfoViewModel; // stelexosDto
+            BindingContext = _stelexosinfoViewModel;
         }
 
         private async void OnDeleteClicked(object sender, EventArgs e)

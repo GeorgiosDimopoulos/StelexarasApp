@@ -47,7 +47,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             await _dbContext.SaveChangesAsync();
             if (transaction != null)
                 await transaction.CommitAsync();
-            
+
             return true;
         }
         catch (DbUpdateException ex)
@@ -70,7 +70,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);            
+            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             if (transaction != null)
                 await transaction.RollbackAsync();
             _dbContext.Dispose();
@@ -268,8 +268,23 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
             if (transaction != null)
                 await transaction.RollbackAsync();
-            
+
             return false;
+        }
+    }
+
+    public async Task<IEnumerable<Stelexos>> GetStelexoiAnaXwros(Thesi posto, string xwrosName)
+    {
+        switch (posto)
+        {
+            case Thesi.Omadarxis:
+                return await _dbContext.Omadarxes!.Where(o => o.Skini.Name == xwrosName).ToListAsync();
+            case Thesi.Koinotarxis:
+                return await _dbContext.Koinotarxes!.Where(k => k.Koinotita.Name == xwrosName).ToListAsync();
+            case Thesi.Tomearxis:
+                return await _dbContext.Tomearxes!.Where(t => t.Tomeas.Name == xwrosName).ToListAsync();
+            default:
+                return null!;
         }
     }
 }

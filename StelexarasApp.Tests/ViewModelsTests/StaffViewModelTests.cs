@@ -1,8 +1,6 @@
 ﻿using Moq;
-using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.ViewModels;
@@ -28,7 +26,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
             _mockPaidiaService.Setup(x => x.GetStelexoiAnaThesiInService(Thesi.Omadarxis)).ReturnsAsync(stelexoi);
 
             // Act
-            var result = staffViewModel.GetStelexoi(Thesi.Omadarxis);
+            var result = staffViewModel.GetStelexoiAnaThesi(Thesi.Omadarxis);
 
             // Assert
             Assert.NotNull(result);

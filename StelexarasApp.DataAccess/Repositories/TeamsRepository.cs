@@ -123,7 +123,7 @@ namespace StelexarasApp.DataAccess.Repositories
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException(nameof(name));
 
-            return await _dbContext.Koinotites!.FirstAsync(k => k.Name.Equals(name));
+            return await _dbContext.Koinotites!.FirstOrDefaultAsync(k => k.Name.Equals(name));
 
         }
 
@@ -132,7 +132,7 @@ namespace StelexarasApp.DataAccess.Repositories
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException(nameof(name));
 
-            return await _dbContext.Tomeis!.FirstAsync(t => t.Name.Equals(name));
+            return await _dbContext.Tomeis!.FirstOrDefaultAsync(t => t.Name.Equals(name));
         }
 
         public async Task<bool> UpdateKoinotitaInDb(Koinotita koinotita)
@@ -301,7 +301,7 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (tomeasId == 0 || _dbContext.Tomeis is null)
+                if (tomeasId <= 0 || _dbContext.Tomeis is null)
                     return false;
 
                 var tomeas = await _dbContext.Tomeis.FindAsync(tomeasId);
@@ -312,9 +312,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 await _dbContext.SaveChangesAsync();
 
                 if (transaction != null)
-                {
                     await transaction.CommitAsync();
-                }
 
                 return true;
             }

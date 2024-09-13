@@ -16,11 +16,5 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
         public Thesi Thesi { get; set; } = Thesi.Tomearxis;
         // public int TomeasId { get; set; }
         public IEnumerable<Koinotarxis> Koinotarxes { get; set; } = null!;
-
-        public Tomearxis()
-        {
-            Tomeas = new Tomeas();
-            Thesi = Thesi.Tomearxis;
-        }
     }
 }
