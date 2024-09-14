@@ -11,5 +11,6 @@ namespace StelexarasApp.Services.DtosModels.Atoma
         public int? Id { get; set; }
         public Thesi Thesi { get; set; }
         public string XwrosName { get; set; } = string.Empty;
+        public string Tel { get; set; } = string.Empty;
     }
 }

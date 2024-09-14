@@ -5,7 +5,6 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.DataAccess.Repositories;
 
 namespace StelexarasApp.Services.Services
 {
@@ -53,7 +52,7 @@ namespace StelexarasApp.Services.Services
             {
                 if (_stelexiRepository is null)
                     throw new ArgumentException("StaffRepository cannot be null");
-                return (IEnumerable<KoinotarxisDto>)await _stelexiRepository.GetStelexoiAnaThesiFromDb(Thesi.Koinotarxis);
+                return (IEnumerable<KoinotarxisDto>)await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis);
             }
             catch (Exception ex)
             {
@@ -77,11 +76,11 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        public async Task<IEnumerable<StelexosDto>> GetStelexoiAnaThesiInService(Thesi thesi)
+        public async Task<IEnumerable<StelexosDto>> GetStelexoiAnaXwroInService(Thesi thesi, string? xwrosName)
         {
             try
             {
-                var stelexi = await _stelexiRepository!.GetStelexoiAnaThesiFromDb(thesi);
+                var stelexi = await _stelexiRepository!.GetStelexoiAnaXwroInDb(thesi, xwrosName);
                 if (stelexi == null || _mapper is null)
                     return null!;
                 var stelexiDtos = _mapper!.Map<IEnumerable<StelexosDto>>(stelexi);

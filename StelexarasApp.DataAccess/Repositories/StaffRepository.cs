@@ -127,7 +127,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IEnumerable<Stelexos>> GetStelexoiAnaThesiFromDb(Thesi thesi)
+    public async Task<IEnumerable<Stelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string xwrosName)
     {
         try
         {

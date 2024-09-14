@@ -27,11 +27,6 @@ namespace StelexarasApp.ViewModels
             return await _stelexiService.DeleteStelexosInService(s.Id ?? 1, s.Thesi);
         }
 
-        public async Task<bool> UpdateStelexos(StelexosDto s)
-        {
-            return await _stelexiService.UpdateStelexosInService(s);
-        }
-
         public async Task OnSaveStelexos()
         {
             var result = await _stelexiService.UpdateStelexosInService(StelexosDto);

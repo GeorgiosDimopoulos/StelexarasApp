@@ -10,7 +10,7 @@ namespace StelexarasApp.Services.IServices
 
         Task<bool> DeleteStelexosInService(int id, Thesi thesi);
         Task<bool> UpdateStelexosInService(StelexosDto stelexosDto);
-        Task<IEnumerable<StelexosDto>> GetStelexoiAnaThesiInService(Thesi thesi);
+        Task<IEnumerable<StelexosDto>> GetStelexoiAnaXwroInService(Thesi thesi, string? xwrosName);
 
         Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(Koinotita koinotita);
 

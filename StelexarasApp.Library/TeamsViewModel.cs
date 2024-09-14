@@ -32,7 +32,7 @@ namespace StelexarasApp.ViewModels
             Skines = [];
             LoadSkines();
             Koinotita = new Koinotita();
-            Title = GetTitle(eidosXwrou);
+            Title = GetTitle(eidosXwrou) ?? string.Empty;
         }
 
         private static string? GetTitle(EidosXwrou eidosXwrou)
@@ -68,7 +68,6 @@ namespace StelexarasApp.ViewModels
 
             if (result)
             {
-                // await GetAllSkinesAsync();
                 OnPropertyChanged(nameof(Skines));
                 return true;
             }
@@ -86,7 +85,6 @@ namespace StelexarasApp.ViewModels
             var result = await _paidiaService.DeletePaidiInDb(int.Parse(paidiId));
             if (result)
             {
-                // await GetAllSkinesAsync();
                 OnPropertyChanged(nameof(Skines));
                 return true;
             }

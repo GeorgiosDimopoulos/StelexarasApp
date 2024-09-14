@@ -4,9 +4,7 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface IStaffRepository
     {
-        Task<IEnumerable<Stelexos>> GetStelexoiAnaThesiFromDb(Thesi thesi);
-
-        Task<IEnumerable<Stelexos>> GetStelexoiAnaXwros(Thesi posto, string xwrosName);
+        Task<IEnumerable<Stelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName);
 
         Task<Stelexos> FindStelexosByIdInDb(int id, Thesi thesi);
 
