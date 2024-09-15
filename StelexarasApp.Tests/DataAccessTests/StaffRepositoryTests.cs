@@ -35,7 +35,7 @@ public class StaffRepositoryTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.FindStelexosByIdInDb(stelexos.Id, stelexos.Thesi);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(stelexos.Id, stelexos.Thesi);
 
         // Assert
         Assert.Equal(stelexos, result);
@@ -58,7 +58,7 @@ public class StaffRepositoryTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.FindStelexosByIdInDb(2, stelexos.Thesi);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(2, stelexos.Thesi);
 
         // Assert
         Assert.Null(result);
@@ -166,7 +166,7 @@ public class StaffRepositoryTests
     }
 
     [Fact]
-    public async Task GetAllStelexoiAnaThesiInDb_ShouldReturnAllStelexos()
+    public async Task GetAllOmadarxesInDb_ShouldReturnAllStelexos()
     {
         // Arrange
         var stelexos = new Omadarxis { Id = 3, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "123-456-7890" };
@@ -177,7 +177,24 @@ public class StaffRepositoryTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexoiAnaThesiFromDb(Thesi.Omadarxis);
+        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, string.Empty);
+
+        // Assert
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public async Task GetAllKoinotarxesInDb_ShouldReturnAllStelexos()
+    {
+        // Arrange
+        var stelexos2 = new Koinotarxis { Id = 4, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890" };
+        var stelexos = new Koinotarxis { Id = 5, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890" };
+
+        await _dbContext.Koinotarxes!.AddRangeAsync(stelexos, stelexos2);
+        await _dbContext.SaveChangesAsync();
+
+        // Act
+        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, string.Empty);
 
         // Assert
         Assert.NotNull(result);

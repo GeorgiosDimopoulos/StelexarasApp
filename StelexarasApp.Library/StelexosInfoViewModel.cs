@@ -1,5 +1,5 @@
 ﻿using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -24,7 +24,7 @@ namespace StelexarasApp.ViewModels
 
         public async Task<bool> DeleteStelexos(StelexosDto s)
         {
-            return await _stelexiService.DeleteStelexosInService(s.Id ?? 1, s.Thesi);
+            return await _stelexiService.DeleteStelexosByIdInService(s.Id ?? 1, s.Thesi);
         }
 
         public async Task OnSaveStelexos()

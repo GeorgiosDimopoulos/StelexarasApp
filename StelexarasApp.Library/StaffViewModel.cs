@@ -1,7 +1,6 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.IServices;
+﻿using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 
 namespace StelexarasApp.ViewModels
@@ -18,19 +17,24 @@ namespace StelexarasApp.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public async Task<IEnumerable<StelexosDto>> GetStelexoiAnaThesi(Thesi thesi)
+        public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotita(KoinotitaDto koinotitaDto)
         {
-            return await personalService1.GetStelexoiAnaThesiInService(thesi);
+            return await personalService1.GetOmadarxesSeKoinotitaInService(koinotitaDto);
         }
 
-        public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotita(Koinotita koinotita)
+        public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomea(TomeasDto tomeasDto)
         {
-            return await personalService1.GetOmadarxesSeKoinotitaInService(koinotita);
+            return await personalService1.GetOmadarxesSeTomeaInService(tomeasDto);
+        }
+
+        public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomeaInService(TomeasDto tomeasDto)
+        {
+            return await personalService1.GetKoinotarxesSeTomeaInService(tomeasDto);
         }
 
         public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxes()
         {
-            return await personalService1.GetKoinotarxesInService();
+            return await personalService1.GetAllKoinotarxesInService();
         }
     }
 }

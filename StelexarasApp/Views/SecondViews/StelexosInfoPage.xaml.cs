@@ -1,6 +1,6 @@
 ﻿using StelexarasApp.ViewModels;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.UI.Views.SecondViews
 {

@@ -10,6 +10,7 @@ using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.ViewModels;
 using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.Services.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServives(builder);

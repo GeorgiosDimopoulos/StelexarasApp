@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
@@ -149,7 +148,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<Stelexos> FindStelexosByIdInDb(int id, Thesi thesi)
+    public async Task<Stelexos> GetStelexosByIdInDb(int id, Thesi? thesi)
     {
         if (thesi == Thesi.None || id <= 0 || _dbContext is null)
             return null!;
@@ -234,10 +233,8 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (id <= 0 || newSkiniId <= 0 || _dbContext.Skines is null || _dbContext.Omadarxes is null)
-        {
+        if (_dbContext.Skines is null || _dbContext.Omadarxes is null)
             return false;
-        }
 
         try
         {

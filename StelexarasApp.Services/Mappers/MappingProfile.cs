@@ -9,6 +9,30 @@ namespace StelexarasApp.Services.Mappers
     {
         public MappingProfile()
         {
+            CreateMap<StelexosDto, OmadarxisDto>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Age, opt => opt.Ignore())
+                .ForMember(dest => dest.Sex, opt => opt.Ignore())
+                .ForMember(dest => dest.SkiniId, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Thesi, opt => opt.MapFrom(src => Thesi.Omadarxis));
+
+            CreateMap<StelexosDto, KoinotarxisDto>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Age, opt => opt.Ignore())
+                .ForMember(dest => dest.Sex, opt => opt.Ignore())
+                .ForMember(dest => dest.KoinotitaId, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Thesi, opt => opt.MapFrom(src => Thesi.Omadarxis));
+
+            CreateMap<StelexosDto, TomearxisDto>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Age, opt => opt.Ignore())
+                .ForMember(dest => dest.Sex, opt => opt.Ignore())
+                .ForMember(dest => dest.TomeasId, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Thesi, opt => opt.MapFrom(src => Thesi.Omadarxis));
+
             CreateMap<TomearxisDto, Tomearxis>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -25,11 +49,10 @@ namespace StelexarasApp.Services.Mappers
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId })).ReverseMap();
-            // .ForMember(dest => dest.Paidia, opt => opt.Ignore());
 
             CreateMap<StelexosDto, Stelexos>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-                .ForMember(dest => dest.Id, opt => opt.Ignore());
+                .ForMember(dest => dest.Id, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<EkpaideutisDto, Ekpaideutis>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))

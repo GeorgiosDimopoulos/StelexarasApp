@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
@@ -7,7 +8,9 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
+using StelexarasApp.Services.Services.IServices;
 using System.Text.RegularExpressions;
 
 var serviceProvider = new ServiceCollection()
@@ -15,6 +18,12 @@ var serviceProvider = new ServiceCollection()
     .AddScoped<IPaidiaService, PaidiaService>()
     .AddScoped<IPaidiRepository, PaidiRepository>()
     .BuildServiceProvider();
+
+var config = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<MappingProfile>();
+});
+var mapper = config.CreateMapper();
 
 var paidiService = serviceProvider.GetService<IPaidiaService>();
 var stelexiService = serviceProvider.GetService<IStaffService>();

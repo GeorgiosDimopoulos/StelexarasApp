@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.ApiControllers
 {
@@ -20,7 +20,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpGet("Omadarxes")]
         public async Task<ActionResult<IEnumerable<Stelexos>>> GetOmadarxes()
         {
-            var result = await _stelexiService.GetStelexoiAnaThesiInService(Thesi.Omadarxis);
+            var result = await _stelexiService.GetAllOmadarxesInService();
 
             if (result is null)
                 return NotFound();
@@ -64,7 +64,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpDelete("Omadarxi/{id}")]
         public async Task<IActionResult> DeleteOmadarxi(int id)
         {
-            var result = await _stelexiService.DeleteStelexosInService(id, Thesi.Omadarxis);
+            var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Omadarxis);
 
             if (!result)
                 return NotFound();
@@ -75,7 +75,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpGet("Koinotarxes")]
         public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes()
         {
-            var result = await _stelexiService.GetStelexoiAnaThesiInService(Thesi.Koinotarxis);
+            var result = await _stelexiService.GetAllKoinotarxesInService();
             if (result is null)
                 return NotFound();
 
@@ -117,7 +117,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpDelete("Koinotarxi/{id}")]
         public async Task<IActionResult> DeleteKoinotarxi(int id)
         {
-            var result = await _stelexiService.DeleteStelexosInService(id, Thesi.Koinotarxis);
+            var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Koinotarxis);
 
             if (!result)
                 return NotFound();
@@ -128,7 +128,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpGet("Tomearxes")]
         public async Task<ActionResult<IEnumerable<Tomearxis>>> GetTomearxes()
         {
-            var result = await _stelexiService.GetStelexoiAnaThesiInService(Thesi.Tomearxis);
+            var result = await _stelexiService.GetAllTomearxesInService();
 
             if (result is null)
                 return NotFound();
@@ -172,20 +172,9 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpDelete("Tomearxi/{id}")]
         public async Task<IActionResult> DeleteTomearxi(int id)
         {
-            var result = await _stelexiService.DeleteStelexosInService(id, Thesi.Tomearxis);
+            var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Tomearxis);
 
             if (!result)
-                return NotFound();
-
-            return Ok(result);
-        }
-
-        [HttpGet("Ekpaideutes")]
-        public async Task<ActionResult<IEnumerable<Ekpaideutis>>> GetEkpaideutes()
-        {
-            var result = await _stelexiService.GetStelexoiAnaThesiInService(Thesi.Ekpaideutis);
-
-            if (result is null)
                 return NotFound();
 
             return Ok(result);
@@ -227,8 +216,8 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpDelete("Ekpaideutis/{id}")]
         public async Task<IActionResult> DeleteEkpaideutis(int id)
         {
-            var result = await _stelexiService.DeleteStelexosInService(id, Thesi.Ekpaideutis);
-
+            var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Ekpaideutis);
+            
             if (!result)
                 return NotFound();
 

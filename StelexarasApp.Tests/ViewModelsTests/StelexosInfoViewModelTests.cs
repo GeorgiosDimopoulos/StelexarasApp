@@ -1,9 +1,9 @@
 ﻿using Moq;
 using StelexarasApp.ViewModels;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Tests.ViewModelsTests;
 
@@ -44,13 +44,13 @@ public class StelexosInfoViewModelTests
     {
         // Arrange
         var stelexos = GetMockUpStelexos(Thesi.Omadarxis, "Test Name", "Test Xwros");
-        _mockstelexiService.Setup(service => service.DeleteStelexosInService(stelexos.Id ?? 1, stelexos.Thesi)).ReturnsAsync(true);
+        _mockstelexiService.Setup(service => service.DeleteStelexosByIdInService(stelexos.Id ?? 1, stelexos.Thesi)).ReturnsAsync(true);
 
         // Act
         await stelexosInfoViewModel.DeleteStelexos(stelexos);
 
         // Assert
-        _mockstelexiService.Verify(service => service.DeleteStelexosInService(stelexos.Id ?? 1, stelexos.Thesi), Times.Once);
+        _mockstelexiService.Verify(service => service.DeleteStelexosByIdInService(stelexos.Id ?? 1, stelexos.Thesi), Times.Once);
     }
 
     private StelexosDto GetMockUpStelexos(Thesi? thesi = Thesi.Omadarxis, string name = "Some name", string xwrosName = "someXwros")
