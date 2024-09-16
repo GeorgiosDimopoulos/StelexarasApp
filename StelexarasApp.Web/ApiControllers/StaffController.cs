@@ -121,7 +121,28 @@ namespace StelexarasApp.Web.ApiControllers
 
             if (!result)
                 return NotFound();
+            return Ok(result);
+        }
 
+        [HttpGet("StelexosByName")]
+        public async Task<ActionResult<StelexosDto>> GetStelexosByNameInService(string name, string? thesiStr)
+        {
+            var thesi = Thesi.None;
+            if (thesiStr is not null)
+            {
+                thesi = thesiStr switch
+                {
+                    "Omadarxis" => Thesi.Omadarxis,
+                    "Koinotarxis" => Thesi.Koinotarxis,
+                    "Tomearxis" => Thesi.Tomearxis,
+                    "Ekpaideutis" => Thesi.Ekpaideutis,
+                    _ => Thesi.None
+                };
+            }
+
+            var result = await _stelexiService.GetStelexosByNameInService(name, thesi);
+            if (result is null)
+                return NotFound();
             return Ok(result);
         }
 
@@ -217,7 +238,7 @@ namespace StelexarasApp.Web.ApiControllers
         public async Task<IActionResult> DeleteEkpaideutis(int id)
         {
             var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Ekpaideutis);
-            
+
             if (!result)
                 return NotFound();
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Moq;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels.Domi;
@@ -61,20 +62,103 @@ public class TeamsServiceTests
 
         // Act
         var result = await _teamsService.GetSkines();
+
+        // Assert
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public async Task GetAllTomeisInService_ShouldReturnTeams()
+    {
+        // Arrange
+        var teams = new List<Tomeas>
+        {
+            new Tomeas { Id = 1, Name = "TestTomeas1" },
+            new Tomeas { Id = 2, Name = "TestTomeas2" }
+        };
+        _mockdteamsRepository.Setup(m => m.GetTomeisInDb()).ReturnsAsync(teams);
+
+        // Act
+        var result = await _teamsService.GetTomeisInService();
+
+        // Assert
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public async Task GetAllKoinotitesInService_ShouldReturnTeams()
+    {
+        // Arrange
+        var teams = new List<Koinotita>
+        {
+            new Koinotita 
+            { 
+                Id = 1, Name = "TestKoinotita1", Koinotarxis = new Koinotarxis
+                { 
+                    FullName = "Test Name1" 
+                }
+            },
+            new Koinotita
+            { Id = 2, Name = "TestKoinotita2", Koinotarxis = new Koinotarxis()
+            {
+                FullName = "Test Name2"
+            }
+            }
+        };
+        _mockdteamsRepository.Setup(m => m.GetKoinotitesInDb()).ReturnsAsync(teams);
+
+        // Act
+        var result = await _teamsService.GetKoinotitesInService();
+
+        // Assert
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public async Task GetKoinotitesAnaTomeaInService_ShouldReturnTeams()
+    {
+        // Arrange
+        var tomeasId = 1;
+        var teams = new List<Koinotita>
+        {
+            new Koinotita
+            {
+                Id = 1, Name = "TestKoinotita1", Koinotarxis = new Koinotarxis
+                {
+                    FullName = "Test Name1"
+                }
+            },
+            new Koinotita
+            { 
+                Id = 2, Name = "TestKoinotita2", Koinotarxis = new Koinotarxis()
+                {
+                    FullName = "Test Name2"
+                }
+            }
+        };
+        var tomeas = new Tomeas { Id = 1, Name = "TestTomeas", Koinotites = new List<Koinotita>() };
+        tomeas.Koinotites = teams;
+
+        _mockdteamsRepository.Setup(m => m.GetKoinotitesAnaTomeaInDb(tomeasId)).ReturnsAsync(teams);
+
+        // Act
+        var result = await _teamsService.GetKoinotitesInService();
+
+        // Assert
+        Assert.NotNull(result);
     }
 
     [Fact]
     public async Task UpdateSkiniInService_ShouldReturnTeam()
     {
         // Arrange
-        var team = new SkiniDto { Id = 1, Name = "TestTeam"};
+        var team = new SkiniDto { Id = 1, Name = "TestTeam" };
         _mockdteamsRepository.Setup(m => m.UpdateSkiniInDb(It.IsAny<Skini>())).ReturnsAsync(true);
 
         // Act
         var result = await _teamsService.UpdateSkiniInService(team);
 
         // Assert
-        Assert.NotNull(result);
         Assert.True(result);
     }
 }

@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using System.Linq.Expressions;
 
 namespace StelexarasApp.DataAccess.Repositories;
 
@@ -126,14 +128,19 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
+    public async Task<IEnumerable<Omadarxis>> GetOmadarxesSeKoinotitaInDb(Koinotita koinotita)
+    {
+        return (IEnumerable<Omadarxis>)await GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotita.Name);
+    }
+
     public async Task<IEnumerable<Stelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string xwrosName)
     {
         try
         {
             return thesi switch
             {
-                Thesi.Omadarxis => await _dbContext.Omadarxes!.ToListAsync(),
-                Thesi.Koinotarxis => await _dbContext.Koinotarxes!.ToListAsync(),
+                Thesi.Omadarxis => await GetOmadarxesAnaKoinotita(xwrosName),
+                Thesi.Koinotarxis => await GetKoinotarxesAnaTomea(xwrosName),
                 Thesi.Tomearxis => await _dbContext.Tomearxes!.ToListAsync(),
                 Thesi.None => throw new NotImplementedException(),
                 Thesi.Ekpaideutis => throw new NotImplementedException(),
@@ -148,6 +155,29 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
+    private async Task<List<Omadarxis>> GetOmadarxesAnaKoinotita(string? name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return await _dbContext.Omadarxes!.ToListAsync();
+        return await _dbContext.Skines!.Where(k => k.Koinotita.Name == name).Select(k => k.Omadarxis).ToListAsync();
+    }
+
+    // ToDo: not yet implemented
+    private async Task<List<Omadarxis>> GetOmadarxesAnaTomea(string? name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return await _dbContext.Omadarxes!.ToListAsync();
+        return await _dbContext.Skines!.Where(k => k.Koinotita.Name == name).Select(k => k.Omadarxis).ToListAsync();
+    }
+
+    private async Task<List<Koinotarxis>> GetKoinotarxesAnaTomea(string? tomeasName)
+    {
+        if (string.IsNullOrEmpty(tomeasName))
+            return await _dbContext.Koinotarxes!.ToListAsync();
+
+        return await _dbContext.Koinotites!.Where(k => k.Tomeas.Name == tomeasName).Select(k => k.Koinotarxis).ToListAsync();
+    }
+
     public async Task<Stelexos> GetStelexosByIdInDb(int id, Thesi? thesi)
     {
         if (thesi == Thesi.None || id <= 0 || _dbContext is null)
@@ -159,21 +189,15 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                 break;
             case Thesi.Omadarxis:
                 if (_dbContext.Omadarxes == null)
-                {
                     return null!;
-                }
                 return await _dbContext.Omadarxes!.FirstOrDefaultAsync(om => om.Id == id);
             case Thesi.Koinotarxis:
                 if (_dbContext.Koinotarxes == null)
-                {
                     return null!;
-                }
                 return await _dbContext.Koinotarxes.FirstOrDefaultAsync(ko => ko.Id == id);
             case Thesi.Tomearxis:
                 if (_dbContext.Tomearxes == null)
-                {
                     return null!;
-                }
                 return await _dbContext.Tomearxes.FirstOrDefaultAsync(to => to.Id == id);
             case Thesi.Ekpaideutis:
                 throw new NotImplementedException();
@@ -220,9 +244,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
-            {
                 await transaction.RollbackAsync();
-            }
 
             return false;
         }
@@ -245,7 +267,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                 return false;
 
             var oldSkini = omadarxisInDb.Skini;
-
             if (oldSkini != null)
             {
                 newSkini.Omadarxis = omadarxisInDb;
@@ -265,7 +286,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
             if (transaction != null)
                 await transaction.RollbackAsync();
-
             return false;
         }
     }
@@ -283,5 +303,30 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             default:
                 return null!;
         }
+    }
+
+    public async Task<Stelexos> GetStelexosByNameInDb(string name, Thesi? thesi)
+    {
+        if (string.IsNullOrEmpty(name) || thesi is null)
+            return null!;
+
+        if (thesi == Thesi.None)
+        {
+            IQueryable<Stelexos> query = _dbContext.Omadarxes!.Cast<Stelexos>()
+                .Concat(_dbContext.Koinotarxes!.Cast<Stelexos>())
+                .Concat(_dbContext.Tomearxes!.Cast<Stelexos>());
+            return await query.FirstOrDefaultAsync(e => e.FullName == name);
+        }
+
+        return thesi! switch
+        {
+            Thesi.Omadarxis => await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.FullName == name),
+            Thesi.Koinotarxis => await _dbContext.Koinotarxes!.FirstOrDefaultAsync(k => k.FullName == name),
+            Thesi.Tomearxis => await _dbContext.Tomearxes!.FirstOrDefaultAsync(t => t.FullName == name),
+            Thesi.Ekpaideutis => throw new NotImplementedException(),
+            Thesi.None => throw new NotImplementedException(),
+            null => throw new NotImplementedException(),
+            _ => throw new ArgumentOutOfRangeException(nameof(thesi), thesi, null)
+        };
     }
 }
