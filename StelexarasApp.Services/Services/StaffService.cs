@@ -163,18 +163,18 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<bool> MoveOmadarxisToAnotherSkiniInService(int Id, int newSkiniId)
+    public async Task<bool> MoveOmadarxisToAnotherSkiniInService(int Id, string newSkiniName)
     {
         try
         {
-            if (_stelexiRepository is null || _mapper is null || Id is <= 0 || newSkiniId <= 0)
+            if (_stelexiRepository is null || _mapper is null || Id is <= 0 || string.IsNullOrEmpty(newSkiniName))
                 throw new ArgumentException("StaffRepository, Ids or _mapper cannot be null");
 
             var omadarxis = await _stelexiRepository.GetStelexosByIdInDb(Id, Thesi.Omadarxis);
             if (omadarxis == null)
                 return false;
 
-            return await _stelexiRepository.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkiniId);
+            return await _stelexiRepository.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkiniName);
         }
         catch (Exception ex)
         {

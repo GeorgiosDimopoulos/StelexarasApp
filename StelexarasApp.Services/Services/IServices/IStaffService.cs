@@ -15,7 +15,7 @@ namespace StelexarasApp.Services.Services.IServices
         Task<IEnumerable<OmadarxisDto>> GetAllOmadarxesInService();
         Task<IEnumerable<KoinotarxisDto>> GetAllKoinotarxesInService();
         Task<IEnumerable<TomearxisDto>> GetAllTomearxesInService();
-        Task<bool> MoveOmadarxisToAnotherSkiniInService(int Id, int newSkiniId);
+        Task<bool> MoveOmadarxisToAnotherSkiniInService(int Id, string newSkiniName);
 
         // Task<IEnumerable<StelexosDto>> GetStelexoiAnaXwroInService(Thesi thesi, string? xwrosName);
         Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(KoinotitaDto koinotita);

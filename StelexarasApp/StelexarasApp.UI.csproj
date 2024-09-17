@@ -95,10 +95,6 @@
 	  <Compile Update="Views\SecondViews\PaidiContentView.xaml.cs">
 	    <DependentUpon>PaidiContentView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\SecondViews\StelexosInfoPage.xaml.cs">
-	    <SubType>Code</SubType>
-	    <DependentUpon>StelexosInfoPage.xaml</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -117,11 +113,10 @@
 	  <MauiXaml Update="Views\SecondViews\PaidiContentView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\SecondViews\XwrosInfoPage.xaml">
+	  <MauiXaml Update="Views\SecondViews\StelexosInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\SecondViews\StelexosInfoPage.xaml">
-	    <SubType>Designer</SubType>
+	  <MauiXaml Update="Views\SecondViews\XwrosInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

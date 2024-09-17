@@ -250,7 +250,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<bool> MoveOmadarxisToAnotherSkiniInDb(int id, int newSkiniId)
+    public async Task<bool> MoveOmadarxisToAnotherSkiniInDb(int id, string newSkiniName)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -261,7 +261,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         try
         {
             var omadarxisInDb = await _dbContext.Omadarxes.Include(o => o.Skini).FirstOrDefaultAsync(o => o.Id == id);
-            var newSkini = await _dbContext.Skines.FirstOrDefaultAsync(s => s.Id == newSkiniId);
+            var newSkini = await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name.Equals(newSkiniName));
 
             if (newSkini == null || newSkini.Omadarxis == omadarxisInDb || omadarxisInDb == null)
                 return false;

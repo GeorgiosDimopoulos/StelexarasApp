@@ -413,15 +413,15 @@ public class StaffServiceTests
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(id, thesi)).ReturnsAsync(omadarxis);
-        _mockStelexiRepository.Setup(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Id)).ReturnsAsync(true);
+        _mockStelexiRepository.Setup(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Name)).ReturnsAsync(true);
 
         // Act
-        var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(id, newSkini.Id);
+        var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(id, newSkini.Name);
 
         // Assert
         Assert.True(result);
         _mockStelexiRepository.Verify(r => r.GetStelexosByIdInDb(id, thesi), Times.Once);
-        _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Id), Times.Once);
+        _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Name), Times.Once);
     }
 
     [Fact]
@@ -429,7 +429,7 @@ public class StaffServiceTests
     {
         // Arrange
         var omadarxisId = 1;
-        var newSkiniId = 2;
+        var newSkiniName = "Skini2";
 
         var omadarxis = new Omadarxis
         {
@@ -441,15 +441,15 @@ public class StaffServiceTests
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(omadarxisId, Thesi.Omadarxis)).ReturnsAsync(omadarxis);
-        _mockStelexiRepository.Setup(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniId)).ReturnsAsync(false);
+        _mockStelexiRepository.Setup(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName)).ReturnsAsync(false);
 
         // Act
-        var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(omadarxisId, newSkiniId);
+        var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(omadarxisId, newSkiniName);
 
         // Assert
         Assert.False(result);
         _mockStelexiRepository.Verify(r => r.GetStelexosByIdInDb(omadarxisId, Thesi.Omadarxis), Times.Once);
-        _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniId), Times.Once);
+        _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName), Times.Once);
     }
 
     [Fact]
@@ -483,28 +483,4 @@ public class StaffServiceTests
         _mockStelexiRepository.Verify(r => r.UpdateStelexosInDb(stelexos), Times.Once);
         _mockMapper.Verify(m => m.Map<Stelexos>(stelexosDto), Times.Once);
     }
-
-    //[Fact]
-    //public void MapDtoToEntity_ShouldMapCorrectlyBasedOnThesi()
-    //{
-    //    // Arrange
-    //    var stelexosDto = new StelexosDto
-    //    {
-    //        Thesi = Thesi.Omadarxis,
-    //    };
-
-    //    var expectedOmadarxis = new Omadarxis
-    //    {
-    //        // Set expected properties
-    //    };
-
-    //    _mockMapper.Setup(m => m.Map<Omadarxis>(stelexosDto)).Returns(expectedOmadarxis);
-
-    //    // Act
-    //    var result = MapDtoToEntity(stelexosDto);
-
-    //    // Assert
-    //    Assert.IsType<Omadarxis>(result);
-    //    Assert.Equal(expectedOmadarxis, result);
-    //}
 }

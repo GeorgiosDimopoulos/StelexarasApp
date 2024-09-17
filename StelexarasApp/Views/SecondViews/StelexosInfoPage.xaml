@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StelexarasApp.UI.Views.SecondViews.StelexosInfoPage" Title="Στέλεχος">
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Διαγραφή" Order="Primary" Priority="0" Clicked="OnDeleteClicked" />
@@ -19,7 +19,7 @@
 				<Label Grid.Row="4" Grid.Column="0" Text="Thesi:" FontAttributes="Bold"/>
 				<Entry Grid.Row="4" Grid.Column="1" Text="{Binding StelexosDto.Thesi, Mode=TwoWay}" />
 				<Label Grid.Row="5" Grid.Column="0" Text="Xwros:" FontAttributes="Bold"/>
-				<Entry Grid.Row="5" Grid.Column="1" Text="{Binding StelexosDto.Xwros, Mode=TwoWay}" />
+				<Entry Grid.Row="5" Grid.Column="1" Text="{Binding StelexosDto.Xwros, Mode=TwoWay}"/>
 			</Grid>
 			<Button Text="Save" VerticalOptions="EndAndExpand" Command="{Binding SaveStelexosCommand}" />
 		</StackLayout>

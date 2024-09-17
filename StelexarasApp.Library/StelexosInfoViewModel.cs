@@ -9,16 +9,31 @@ namespace StelexarasApp.ViewModels
     public class StelexosInfoViewModel : INotifyPropertyChanged
     {
         private readonly IStaffService _stelexiService;
+        private readonly bool skiniIsChanged;
+        private StelexosDto _stelexosDto;
+
+        public StelexosDto StelexosDto
+        {
+            get => _stelexosDto;
+            set
+            {
+                if (_stelexosDto != value)
+                {
+                    _stelexosDto = value;
+                    OnPropertyChanged(nameof(StelexosDto));
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public StelexosDto StelexosDto { get; set; }
         public ICommand SaveStelexosCommand { get; }
         public string StatusMessage { get; set; } = string.Empty;
 
         public StelexosInfoViewModel(StelexosDto stelexosDto, IStaffService stelexiService)
         {
             _stelexiService = stelexiService;
-            StelexosDto = stelexosDto;
+            _stelexosDto = stelexosDto;
+            skiniIsChanged = false;
             SaveStelexosCommand = new Command(async () => await OnSaveStelexos());
         }
 
@@ -29,8 +44,18 @@ namespace StelexarasApp.ViewModels
 
         public async Task OnSaveStelexos()
         {
+            if(skiniIsChanged)
+                await MoveOmadarxisToAnotherSkini();
+            
             var result = await _stelexiService.UpdateStelexosInService(StelexosDto);
             StatusMessage = result ? "Save successful" : "Save failed";
+            OnPropertyChanged(nameof(StelexosDto));
+        }
+
+        public async Task MoveOmadarxisToAnotherSkini()
+        {
+            var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(StelexosDto.Id ?? 0, StelexosDto.XwrosName);
+            StatusMessage = result ? "Move successful" : "Move failed";
             OnPropertyChanged(nameof(StelexosDto));
         }
 
