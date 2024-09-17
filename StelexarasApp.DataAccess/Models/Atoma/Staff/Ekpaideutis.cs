@@ -1,5 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Domi;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {

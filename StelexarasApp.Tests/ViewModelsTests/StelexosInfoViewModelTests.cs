@@ -1,9 +1,9 @@
 ﻿using Moq;
-using StelexarasApp.ViewModels;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
+using StelexarasApp.ViewModels.PeopleViewModels;
 
 namespace StelexarasApp.Tests.ViewModelsTests;
 

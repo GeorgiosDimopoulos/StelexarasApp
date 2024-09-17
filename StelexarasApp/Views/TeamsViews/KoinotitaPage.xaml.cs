@@ -1,26 +1,25 @@
 ﻿using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.ViewModels;
-using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.UI.Views.SecondViews;
 using StelexarasApp.DataAccess.Helpers;
+using StelexarasApp.UI.Views.PaidiaViews;
+using StelexarasApp.ViewModels.TeamsViewModels;
 
-namespace StelexarasApp.UI.Views
+namespace StelexarasApp.UI.Views.TeamsViews
 {
-    public partial class TeamsPage : ContentPage
+    public partial class KoinotitaPage : ContentPage
     {
-        private TeamsViewModel _viewModel;
+        private KoinotitaViewModel _koinotitaViewModel;
         private IPaidiaService _paidiaService;
         private ITeamsService _teamsService;
 
-        public TeamsPage(IPaidiaService paidiaService, ITeamsService teamsService, EidosXwrou eidosXwrou)
+        public KoinotitaPage(IPaidiaService paidiaService, ITeamsService teamsService, KoinotitaViewModel koinotitaViewModel)
         {
             InitializeComponent();
             _paidiaService = paidiaService;
             _teamsService = teamsService;
-            _viewModel = new TeamsViewModel(_paidiaService, _teamsService, eidosXwrou);
-            BindingContext = _viewModel;
+            _koinotitaViewModel = koinotitaViewModel;
+            BindingContext = _koinotitaViewModel;
         }
 
         private async void Paidi_Clicked(object sender, EventArgs e)
@@ -47,7 +46,7 @@ namespace StelexarasApp.UI.Views
                 await DisplayAlert("Λάθος Στοιχεία", $"{fullName}", "OK");
             else
             {
-                if (await _viewModel.AddPaidiAsync(fullName, skiniName, PaidiType.Kataskinotis))
+                if (await _koinotitaViewModel.AddPaidiAsync(fullName, skiniName, PaidiType.Kataskinotis))
                 {
                     await DisplayAlert("Στοιχεία νέου παιδιού", fullName, "OK");
                 }

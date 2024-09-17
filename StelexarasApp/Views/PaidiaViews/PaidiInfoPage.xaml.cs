@@ -1,9 +1,9 @@
-﻿using StelexarasApp.ViewModels;
-using StelexarasApp.Services.IServices;
+﻿using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.ViewModels.PeopleViewModels;
 
-namespace StelexarasApp.UI.Views.SecondViews
+namespace StelexarasApp.UI.Views.PaidiaViews
 {
     public partial class PaidiInfoPage : ContentPage
     {

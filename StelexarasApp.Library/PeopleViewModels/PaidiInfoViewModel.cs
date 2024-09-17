@@ -1,10 +1,9 @@
 ﻿using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.IServices;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
-namespace StelexarasApp.ViewModels
+namespace StelexarasApp.ViewModels.PeopleViewModels
 {
     public class PaidiInfoViewModel : INotifyPropertyChanged
     {

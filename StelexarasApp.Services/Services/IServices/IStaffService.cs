@@ -1,6 +1,5 @@
 ﻿using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.DtosModels.Domi;
 
 namespace StelexarasApp.Services.Services.IServices

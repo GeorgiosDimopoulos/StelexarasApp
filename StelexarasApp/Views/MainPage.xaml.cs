@@ -1,7 +1,9 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services.IServices;
+using StelexarasApp.UI.Views.PaidiaViews;
+using StelexarasApp.UI.Views.StaffViews;
+using StelexarasApp.Views.TeamsViews;
 
 namespace StelexarasApp.UI.Views
 {
@@ -29,8 +31,15 @@ namespace StelexarasApp.UI.Views
         }
 
         private async void OnExpensesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new ExpensesPage(_expenseService));
-        private async void OnPeopleButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new TeamsPage(_paidiaService, _teamsService, EidosXwrou.Skini));
-        private async void OnPersonalButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new StaffPage(_stelexiService, Thesi.Tomearxis));
+        private async void OnTeamsPageButtonClicked(object sender, EventArgs e)
+        {
+            var tomeas1 = await _teamsService.GetTomeaByNameInDb("1");
+            var tomeas2 = await _teamsService.GetTomeaByNameInDb("2");
+            await Navigation.PushAsync(new GeneralTeamsPage(tomeas1, tomeas2, _paidiaService, _teamsService));
+        }
+
+        private async void OnStaffButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new StaffPage(_stelexiService, Thesi.Tomearxis));
         private async void OnDutiesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new ToDoPage(_dutiesService));
+        private async void OnPaidiaButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new PaidiaPage(_paidiaService)); 
     }
 }

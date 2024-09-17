@@ -4,7 +4,7 @@ using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace StelexarasApp.ViewModels;
+namespace StelexarasApp.ViewModels.PeopleViewModels;
 
 public class StaffViewModel : INotifyPropertyChanged
 {
@@ -24,11 +24,14 @@ public class StaffViewModel : INotifyPropertyChanged
         var koinotarxes = await GetAllKoinotarxes();
         var omadarxes = await GetAllOmadarxes();
 
+        //var groupedKoinotarxes = new ObservableCollection<IGrouping<Tomeas, KoinotarxisDto>>(
+        //    koinotarxes.GroupBy(k => k.TomeasName));
         var allStaff = tomearxes.Cast<StelexosDto>()
             .Concat(koinotarxes.Cast<StelexosDto>())
             .Concat(omadarxes.Cast<StelexosDto>());
 
         AllStaff = new ObservableCollection<StelexosDto>(allStaff);
+        OnPropertyChanged(nameof(AllStaff));
     }
 
     public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotita(KoinotitaDto koinotitaDto)

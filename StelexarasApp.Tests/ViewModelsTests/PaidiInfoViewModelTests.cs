@@ -1,8 +1,8 @@
 ﻿using Moq;
-using StelexarasApp.ViewModels;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.ViewModels.PeopleViewModels;
 
 namespace StelexarasApp.Tests.ViewModelsTests;
 

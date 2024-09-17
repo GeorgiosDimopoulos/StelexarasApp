@@ -1,10 +1,10 @@
 ﻿using StelexarasApp.DataAccess.Models.Domi;
 
-namespace StelexarasApp.UI.Views.SecondViews
+namespace StelexarasApp.UI.Views.TeamsViews
 {
-    public partial class XwrosInfoPage : ContentPage
+    public partial class SkiniInfoPage : ContentPage
     {
-        public XwrosInfoPage(Xwros xwros)
+        public SkiniInfoPage(Xwros xwros)
         {
             InitializeComponent();
         }

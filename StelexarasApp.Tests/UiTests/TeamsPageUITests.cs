@@ -1,9 +1,7 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using Xunit;
+﻿using OpenQA.Selenium.Chrome;
 
 namespace StelexarasApp.Tests.UiTests
-{   
+{
     namespace StelexarasApp.Tests.UITests
     {
         public class TeamsPageUITests

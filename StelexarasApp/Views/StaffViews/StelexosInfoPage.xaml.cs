@@ -1,8 +1,8 @@
-﻿using StelexarasApp.ViewModels;
-using StelexarasApp.Services.DtosModels.Atoma;
+﻿using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Services.IServices;
+using StelexarasApp.ViewModels.PeopleViewModels;
 
-namespace StelexarasApp.UI.Views.SecondViews
+namespace StelexarasApp.UI.Views.StaffViews
 {
     public partial class StelexosInfoPage : ContentPage
     {

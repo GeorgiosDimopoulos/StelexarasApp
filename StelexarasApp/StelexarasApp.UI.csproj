@@ -74,49 +74,43 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\MainViews\ToDoPage.xaml.cs">
-	    <DependentUpon>ToDoPage.xaml</DependentUpon>
+	  <Compile Update="Views\PaidiaViews\PaidiaPage.xaml.cs">
+	    <DependentUpon>PaidiaPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MainViews\ExpensesPage.xaml.cs">
-	    <DependentUpon>ExpensesPage.xaml</DependentUpon>
+	  <Compile Update="Views\TeamsViews\KoinotitaPage.xaml.cs">
+	    <DependentUpon>KoinotitaPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MainViews\TeamsPage.xaml.cs">
-	    <DependentUpon>TeamsPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\MainViews\StaffPage.xaml.cs">
+	  <Compile Update="Views\StaffViews\StaffPage.xaml.cs">
 	    <DependentUpon>StaffPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\SecondViews\XwrosInfoPage.xaml.cs">
+	  <Compile Update="Views\TeamsViews\XwrosInfoPage.xaml.cs">
 	    <DependentUpon>XwrosInfoPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\SecondViews\PaidiInfoPage.xaml.cs">
+	  <Compile Update="Views\PaidiaViews\PaidiInfoPage.xaml.cs">
 	    <DependentUpon>PaidiInfoPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\SecondViews\PaidiContentView.xaml.cs">
-	    <DependentUpon>PaidiContentView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\MainViews\ToDoPage.xaml">
+	  <MauiXaml Update="Views\PaidiaViews\PaidiaPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MainViews\ExpensesPage.xaml">
+	  <MauiXaml Update="Views\TeamsViews\GeneralTeamsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MainViews\TeamsPage.xaml">
+	  <MauiXaml Update="Views\TeamsViews\KoinotitaPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MainViews\StaffPage.xaml">
+	  <MauiXaml Update="Views\StaffViews\StaffPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\SecondViews\PaidiContentView.xaml">
+	  <MauiXaml Update="Views\StaffViews\StelexosInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\SecondViews\StelexosInfoPage.xaml">
+	  <MauiXaml Update="Views\TeamsViews\TomeasPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\SecondViews\XwrosInfoPage.xaml">
+	  <MauiXaml Update="Views\TeamsViews\XwrosInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

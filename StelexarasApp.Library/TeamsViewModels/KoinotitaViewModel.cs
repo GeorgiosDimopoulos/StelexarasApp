@@ -1,16 +1,15 @@
 ﻿using StelexarasApp.Services.DtosModels;
-using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using StelexarasApp.Services.Services;
+using StelexarasApp.Services.DtosModels.Domi;
 
-namespace StelexarasApp.ViewModels
+namespace StelexarasApp.ViewModels.TeamsViewModels
 {
-    public class TeamsViewModel : INotifyPropertyChanged
+    public class KoinotitaViewModel : INotifyPropertyChanged
     {
         private readonly IPaidiaService _paidiaService;
         private readonly ITeamsService _teamsService;
@@ -18,32 +17,14 @@ namespace StelexarasApp.ViewModels
         public Koinotita? Koinotita { get; set; }
         public string Title { get; set; }
 
-        private async void LoadSkines()
-        {
-            var skines = await _teamsService.GetSkines();
-            foreach (var skini in skines)
-                Skines.Add(skini.Name);
-        }
-
-        public TeamsViewModel(IPaidiaService paidiaService, ITeamsService teamsService, EidosXwrou eidosXwrou)
+        public KoinotitaViewModel(IPaidiaService paidiaService, ITeamsService teamsService)
         {
             _paidiaService = paidiaService;
             _teamsService = teamsService;
-            Skines = [];
-            LoadSkines();
-            Koinotita = new Koinotita();
-            Title = GetTitle(eidosXwrou) ?? string.Empty;
-        }
 
-        private static string? GetTitle(EidosXwrou eidosXwrou)
-        {
-            return eidosXwrou switch
-            {
-                EidosXwrou.Koinotita => "Koinotita",
-                EidosXwrou.Skini => "Skini",
-                EidosXwrou.Tomeas => "Tomeas",
-                _ => "Unknown Title",
-            };
+            Skines = [];
+            Koinotita = new Koinotita();
+            LoadSkinesKoinotitas();
         }
 
         public async Task<bool> AddPaidiAsync(string fullName, string skiniName, PaidiType paidiType)
@@ -78,9 +59,8 @@ namespace StelexarasApp.ViewModels
         public async Task<bool> DeletePaidiAsync(string paidiId)
         {
             if (paidiId == null)
-            {
                 return false;
-            }
+
 
             var result = await _paidiaService.DeletePaidiInDb(int.Parse(paidiId));
             if (result)
@@ -91,12 +71,24 @@ namespace StelexarasApp.ViewModels
 
             return false;
         }
-        
+
+        private async void LoadSkinesKoinotitas()
+        {
+            var skines = await _teamsService.GetSkinesAnaKoinotitaInService(Koinotita.Name);
+            foreach (var skini in skines)
+                Skines.Add(skini.Name);
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void AddKoinotita(KoinotitaDto koinotita)
+        {
+            _teamsService.AddKoinotitaInService(koinotita);
         }
     }
 }

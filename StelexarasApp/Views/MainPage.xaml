@@ -11,9 +11,10 @@
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
-		<Button Grid.Row="0" Grid.Column="0" Text="ΔΥΝΑΜΗ" Clicked="OnPeopleButtonClicked" BorderColor="White" BorderWidth="1"/>
-		<Button Grid.Row="0" Grid.Column="1" Text="ΥΠΟΧΡΕΩΣΕΙΣ" Clicked="OnDutiesButtonClicked" BorderColor="White" BorderWidth="1"/>
-		<Button Grid.Row="1" Grid.Column="0" Text="ΠΡΟΣΩΠΙΚΑ" Clicked="OnPersonalButtonClicked" BorderColor="White" BorderWidth="1"/>
-		<Button Grid.Row="1" Grid.Column="1" Text="ΕΞΟΔΑ" Clicked="OnExpensesButtonClicked" BorderColor="White" BorderWidth="1"/>
+		<Button Grid.Row="0" Grid.Column="0" Text="ΣΤΕΛΕΧΗ" Clicked="OnStaffButtonClicked" BorderColor="White" BorderWidth="1"/>
+		<Button Grid.Row="1" Grid.Column="1" Text="ΠΑΙΔΙΑ" Clicked="OnPaidiaButtonClicked" BorderColor="White" BorderWidth="1"/>
+		<Button Grid.Row="1" Grid.Column="0" Text="ΧΩΡΟΙ" Clicked="OnTeamsPageButtonClicked" BorderColor="White" BorderWidth="1"/>
+		<Button Grid.Row="1" Grid.Column="1" Text="ΥΠΟΧΡΕΩΣΕΙΣ" Clicked="OnDutiesButtonClicked" BorderColor="White" BorderWidth="1"/>
+		<!--<Button Grid.Row="1" Grid.Column="1" Text="ΕΞΟΔΑ" Clicked="OnExpensesButtonClicked" BorderColor="White" BorderWidth="1"/>-->
 	</Grid>
 </ContentPage>

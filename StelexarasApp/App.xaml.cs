@@ -5,7 +5,13 @@ using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.UI.Views;
+using StelexarasApp.UI.Views.PaidiaViews;
+using StelexarasApp.UI.Views.StaffViews;
+using StelexarasApp.UI.Views.TeamsViews;
 using StelexarasApp.ViewModels;
+using StelexarasApp.ViewModels.PeopleViewModels;
+using StelexarasApp.ViewModels.TeamsViewModels;
+using StelexarasApp.Views.TeamsViews;
 
 namespace StelexarasApp.UI
 {
@@ -48,16 +54,24 @@ namespace StelexarasApp.UI
             services.AddTransient<ExpensesViewModel>();
             services.AddTransient<StaffViewModel>();
             services.AddTransient<DutyViewModel>();
+            services.AddTransient<PaidiInfoViewModel>();
+            services.AddTransient<StelexosInfoViewModel>();
 
-            services.AddTransient<TeamsPage>();
+            services.AddTransient<GeneralTeamsPage>();
+            services.AddTransient<TomeasPage>();
+            services.AddTransient<KoinotitaPage>();
             services.AddTransient<ExpensesPage>();
             services.AddTransient<StaffPage>();
             services.AddTransient<ToDoPage>();
+            services.AddTransient<StelexosInfoPage>();
+            services.AddTransient<XwrosInfoPage>();
+            services.AddTransient<PaidiInfoPage>();
 
             services.AddScoped<IDutyService, DutyService>();
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IPaidiaService, PaidiaService>();
             services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddScoped<ITeamsService, TeamsService>();
 
             ServiceProvider = services.BuildServiceProvider();
 

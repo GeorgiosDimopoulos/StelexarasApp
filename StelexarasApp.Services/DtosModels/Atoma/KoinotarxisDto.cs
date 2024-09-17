@@ -11,5 +11,7 @@ namespace StelexarasApp.Services.DtosModels.Atoma
         public int? KoinotitaId { get; set; }
         public int? Id { get; set; }
         public Thesi Thesi { get; set; } = Thesi.Koinotarxis;
+
+        public string TomeasName { get; set; } = null!;
     }
 }

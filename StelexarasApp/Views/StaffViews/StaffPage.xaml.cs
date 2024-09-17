@@ -1,11 +1,9 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.UI.Views.SecondViews;
-using StelexarasApp.ViewModels;
+using StelexarasApp.ViewModels.PeopleViewModels;
 
-namespace StelexarasApp.UI.Views
+namespace StelexarasApp.UI.Views.StaffViews
 {
     public partial class StaffPage : ContentPage
     {

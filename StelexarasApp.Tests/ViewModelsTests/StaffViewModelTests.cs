@@ -3,7 +3,7 @@ using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.ViewModels;
+using StelexarasApp.ViewModels.PeopleViewModels;
 
 namespace StelexarasApp.Tests.ViewModelsTests
 {

@@ -1,22 +1,21 @@
-﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StelexarasApp.UI.Views.StaffPage"
-             Title="Staff">
+             x:Class="StelexarasApp.UI.Views.PaidiaViews.PaidiaPage"
+             Title="Paidia">
 	<ContentPage.Content>
-		<CollectionView ItemsSource="{Binding StaffList}" SelectionMode="Single" SelectionChanged="OnStelexosSelected">
+		<CollectionView ItemsSource="{Binding PaidiaList}" SelectionMode="Single" SelectionChanged="OnPaidiSelected">
 			<CollectionView.Header>
 				<Grid Padding="10" ColumnDefinitions="*, *">
 					<Label Grid.Column="0" Text="Όνομα" FontAttributes="Bold" />
-					<Label Grid.Column="1" Text="Χώρος" FontAttributes="Bold" />
-					<Label Grid.Column="1" Text="Τηλέφωνο" FontAttributes="Bold" />
+					<Label Grid.Column="1" Text="Ηλικία" FontAttributes="Bold" />
 				</Grid>
 			</CollectionView.Header>
 			<CollectionView.ItemTemplate>
 				<DataTemplate>
 					<StackLayout>
 						<Label Text="{Binding FullName}" />
-						<Label Text="{Binding XwrosName}" />
-						<Label Text="{Binding Tel}" />
+						<Label Text="{Binding Age}" />
 					</StackLayout>
 				</DataTemplate>
 			</CollectionView.ItemTemplate>

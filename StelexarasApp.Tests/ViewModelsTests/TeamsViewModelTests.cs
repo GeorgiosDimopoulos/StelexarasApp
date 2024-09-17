@@ -2,14 +2,13 @@
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.ViewModels;
-using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.ViewModels.TeamsViewModels;
 
 namespace StelexarasApp.Tests.ViewModelsTests;
 
 public class TeamsViewModelTests
 {
-    private readonly TeamsViewModel peopleViewModel;
+    private readonly KoinotitaViewModel peopleViewModel;
     private readonly Mock<IPaidiaService> paidiaServiceMock;
     private readonly Mock<ITeamsService> teamsServiceMock;
 
@@ -17,7 +16,7 @@ public class TeamsViewModelTests
     {
         paidiaServiceMock = new Mock<IPaidiaService>();
         teamsServiceMock = new Mock<ITeamsService>();
-        peopleViewModel = new TeamsViewModel(paidiaServiceMock.Object, teamsServiceMock.Object, EidosXwrou.Koinotita);
+        peopleViewModel = new KoinotitaViewModel(paidiaServiceMock.Object, teamsServiceMock.Object);
     }
 
     [Fact]
