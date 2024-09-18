@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
+using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using System.Linq.Expressions;
 
 namespace StelexarasApp.DataAccess.Repositories;
 
@@ -23,7 +23,8 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
         try
         {
-            if (!DataChecksAndConverters.IsValidFullNameInput(stelexos.FullName))
+            var parts = stelexos.FullName.Trim().Split(' ');
+            if (parts.Length < 2)
                 throw new ArgumentException("Invalid FullName", nameof(stelexos.FullName));
 
             switch (stelexos.Thesi)
@@ -207,32 +208,34 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         return null!;
     }
 
-    public async Task<bool> UpdateStelexosInDb(Stelexos stelexi)
+    public async Task<bool> UpdateStelexosInDb(Stelexos stelexos)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (!DataChecksAndConverters.IsValidFullNameInput(stelexi.FullName))
-            throw new ArgumentException("Invalid FullName", nameof(stelexi.FullName));
+        var parts = stelexos.FullName.Trim().Split(' ');
+        if (parts.Length < 2)
+            throw new ArgumentException("Invalid FullName", nameof(stelexos.FullName));
+
         try
         {
-            switch (stelexi.Thesi)
+            switch (stelexos.Thesi)
             {
                 case Thesi.Omadarxis:
-                    _dbContext.Omadarxes?.Update((Omadarxis)stelexi);
+                    _dbContext.Omadarxes?.Update((Omadarxis)stelexos);
                     break;
                 case Thesi.Koinotarxis:
-                    _dbContext.Koinotarxes?.Update((Koinotarxis)stelexi);
+                    _dbContext.Koinotarxes?.Update((Koinotarxis)stelexos);
                     break;
                 case Thesi.Tomearxis:
-                    _dbContext.Tomearxes?.Update((Tomearxis)stelexi);
+                    _dbContext.Tomearxes?.Update((Tomearxis)stelexos);
                     break;
                 case Thesi.Ekpaideutis:
                     throw new NotImplementedException();
                 case Thesi.None:
                     break;
                 default:
-                    throw new ArgumentException("Invalid Thesi value!", nameof(stelexi.Thesi));
+                    throw new ArgumentException("Invalid Thesi value!", nameof(stelexos.Thesi));
             }
 
             var changes = await _dbContext.SaveChangesAsync();

@@ -50,7 +50,7 @@ namespace StelexarasApp.UI
             });
 #endif
             
-            services.AddTransient<TeamsViewModel>();
+            services.AddTransient<SxoliViewModel>();
             services.AddTransient<ExpensesViewModel>();
             services.AddTransient<StaffViewModel>();
             services.AddTransient<DutyViewModel>();
@@ -58,13 +58,13 @@ namespace StelexarasApp.UI
             services.AddTransient<StelexosInfoViewModel>();
 
             services.AddTransient<GeneralTeamsPage>();
-            services.AddTransient<TomeasPage>();
-            services.AddTransient<KoinotitaPage>();
+            services.AddTransient<TomeasInfoPage>();
+            services.AddTransient<KoinotitaInfoPage>();
             services.AddTransient<ExpensesPage>();
             services.AddTransient<StaffPage>();
             services.AddTransient<ToDoPage>();
             services.AddTransient<StelexosInfoPage>();
-            services.AddTransient<XwrosInfoPage>();
+            services.AddTransient<SkiniInfoPage>();
             services.AddTransient<PaidiInfoPage>();
 
             services.AddScoped<IDutyService, DutyService>();

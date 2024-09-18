@@ -1,44 +1,45 @@
 ﻿using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.DtosModels;
-using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.UI.Views.PaidiaViews;
 using StelexarasApp.ViewModels.TeamsViewModels;
 
 namespace StelexarasApp.UI.Views.TeamsViews;
 
-public partial class SkiniInfoPage : ContentPage
+public partial class SxoliInfoPage : ContentPage
 {
-    private readonly SkiniViewModel _skiniViewModel;
-    private readonly IPaidiaService _paidiaService;
+    private SxoliViewModel _sxoliViewModel;
+    private IPaidiaService _paidiaService;
 
-    public SkiniInfoPage(SkiniDto skini, IPaidiaService paidiaService)
+    public SxoliInfoPage(IPaidiaService paidiaService, SxoliViewModel koinotitaViewModel)
     {
         InitializeComponent();
-        _skiniViewModel = new SkiniViewModel(skini, paidiaService);
         _paidiaService = paidiaService;
+        _sxoliViewModel = koinotitaViewModel;
+        BindingContext = _sxoliViewModel;
     }
 
     private async void PaidiButton_Clicked(object sender, EventArgs e)
     {
         var button = sender as Button;
+        var paidi = button?.CommandParameter as PaidiDto;
 
-        if (button?.CommandParameter is PaidiDto paidi)
+        if (paidi != null)
         {
             var paidiPage = new PaidiInfoPage(_paidiaService, paidi);
             await Navigation.PushModalAsync(paidiPage);
         }
     }
 
-    private async void OnAddPaidiClicked(object sender, EventArgs e)
+    private async void AddEkpaideuomenos(object sender, EventArgs e)
     {
         PaidiDto paidiDto = null;
 
         while (paidiDto == null)
         {
             var fullName = await GetValidFullName();
-            if (fullName == null) 
+            if (fullName == null)
                 return;
 
             var age = await GetValidAge();
@@ -50,11 +51,11 @@ public partial class SkiniInfoPage : ContentPage
                 Age = age,
                 SkiniName = skiniName,
                 SeAdeia = false,
-                PaidiType = PaidiType.Kataskinotis
+                PaidiType = PaidiType.Ekpaideuomenos
             };
         }
 
-        if (await _skiniViewModel.AddPaidiAsync(paidiDto))
+        if (await _sxoliViewModel.AddEkpaideuomenos(paidiDto))
             await DisplayAlert("ΠΡΟΣΘΗΚΗ", "Δημιουργηθηκε επιτυχώς νέο παιδί!", "OK");
     }
 

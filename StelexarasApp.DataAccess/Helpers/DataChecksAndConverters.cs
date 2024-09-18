@@ -5,14 +5,14 @@ namespace StelexarasApp.DataAccess.Helpers
 {    
     public static class DataChecksAndConverters // : IValueConverter
     {
-        public static bool IsValidFullNameInput(string input)
-        {
-            if (string.IsNullOrWhiteSpace(input))
-                return false;
+        //public static bool IsValidFullNameInput(string input)
+        //{
+        //    if (string.IsNullOrWhiteSpace(input))
+        //        return false;
 
-            var parts = input.Trim().Split(' ');
-            return parts.Length >= 2;
-        }
+        //    var parts = input.Trim().Split(' ');
+        //    return parts.Length >= 2;
+        //}
 
         public static object ConvertEidosXwrouToString(object value, Type targetType, object parameter, CultureInfo culture)
         {

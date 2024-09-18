@@ -10,6 +10,7 @@ public partial class GeneralTeamsPage : ContentPage
     private readonly TomeasViewModel _tomeas2ViewModel;
     private readonly TomeasViewModel _tomeas1ViewModel;
     private readonly KoinotitaViewModel _koinotitaViewModel;
+    private readonly SxoliViewModel _sxoliViewModel;
     private readonly IPaidiaService _paidiaService;
     private readonly ITeamsService _teamsService;
 
@@ -25,16 +26,16 @@ public partial class GeneralTeamsPage : ContentPage
 
     private async void TomeasA_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new TomeasPage(_tomeas1ViewModel, _koinotitaViewModel, _teamsService, _paidiaService));
+        await Navigation.PushAsync(new TomeasInfoPage(_tomeas1ViewModel, _koinotitaViewModel, _teamsService, _paidiaService));
     }
 
     private async void TomeasB_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new TomeasPage(_tomeas2ViewModel, _koinotitaViewModel, _teamsService, _paidiaService));
+        await Navigation.PushAsync(new TomeasInfoPage(_tomeas2ViewModel, _koinotitaViewModel, _teamsService, _paidiaService));
     }
 
     private async void Sxoli_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new KoinotitaPage(_paidiaService, _teamsService, _koinotitaViewModel));
+        await Navigation.PushAsync(new SxoliInfoPage(_paidiaService, _sxoliViewModel));
     }
 }

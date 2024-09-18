@@ -77,17 +77,20 @@
 	  <Compile Update="Views\PaidiaViews\PaidiaPage.xaml.cs">
 	    <DependentUpon>PaidiaPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\TeamsViews\KoinotitaPage.xaml.cs">
-	    <DependentUpon>KoinotitaPage.xaml</DependentUpon>
+	  <Compile Update="Views\TeamsViews\SxoliInfoPage.xaml.cs">
+	    <DependentUpon>SxoliInfoPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\StaffViews\StaffPage.xaml.cs">
 	    <DependentUpon>StaffPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\TeamsViews\XwrosInfoPage.xaml.cs">
-	    <DependentUpon>XwrosInfoPage.xaml</DependentUpon>
+	  <Compile Update="Views\TeamsViews\SkiniInfoPage.xaml.cs">
+	    <DependentUpon>SkiniInfoPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\PaidiaViews\PaidiInfoPage.xaml.cs">
 	    <DependentUpon>PaidiInfoPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\TeamsViews\TomeasInfoPage.xaml.cs">
+	    <DependentUpon>TomeasInfoPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -98,7 +101,10 @@
 	  <MauiXaml Update="Views\TeamsViews\GeneralTeamsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\TeamsViews\KoinotitaPage.xaml">
+	  <MauiXaml Update="Views\TeamsViews\KoinotitaInfoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\TeamsViews\SxoliInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\StaffViews\StaffPage.xaml">
@@ -107,10 +113,10 @@
 	  <MauiXaml Update="Views\StaffViews\StelexosInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\TeamsViews\TomeasPage.xaml">
+	  <MauiXaml Update="Views\TeamsViews\TomeasInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\TeamsViews\XwrosInfoPage.xaml">
+	  <MauiXaml Update="Views\TeamsViews\SkiniInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -92,7 +92,8 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (!DataChecksAndConverters.IsValidFullNameInput(paidi.FullName))
+                var parts = paidi.FullName.Trim().Split(' ');
+                if (parts.Length < 2)
                     throw new ArgumentException("Invalid FullName", nameof(paidi.FullName));
 
                 if (paidi is null || paidi.Id <= 0|| _dbContext.Paidia is null)
@@ -148,9 +149,10 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (!DataChecksAndConverters.IsValidFullNameInput(paidi.FullName))
+                var parts = paidi.FullName.Trim().Split(' ');
+                if (parts.Length < 2)
                     throw new ArgumentException("Invalid FullName", nameof(paidi.FullName));
-
+                
                 _dbContext.Paidia.Update(paidi);
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)

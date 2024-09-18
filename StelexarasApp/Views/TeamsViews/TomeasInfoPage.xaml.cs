@@ -6,21 +6,21 @@ using StelexarasApp.ViewModels.TeamsViewModels;
 
 namespace StelexarasApp.Views.TeamsViews;
 
-public partial class TomeasPage : ContentPage
+public partial class TomeasInfoPage : ContentPage
 {
-    private TomeasViewModel _teamsViewModel;
+    private TomeasViewModel _tomeasViewModel;
     private KoinotitaViewModel _koinotitaViewModel;
     private IPaidiaService _paidiaService;
     private ITeamsService _teamsService;
 
-    public TomeasPage(TomeasViewModel teamsViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiaService paidiaService)
+    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiaService paidiaService)
     {
         InitializeComponent();
         _teamsService = teamsService;
         _paidiaService = paidiaService;
-        _teamsViewModel = teamsViewModel;
+        _tomeasViewModel = tomeasViewModel;
         _koinotitaViewModel = koinotitaViewModel;
-        BindingContext = _teamsViewModel;
+        BindingContext = _tomeasViewModel;
     }
 
     private void KoinotitaButton_Clicked(object sender, EventArgs e)
@@ -29,14 +29,14 @@ public partial class TomeasPage : ContentPage
         var koinotita = (Koinotita)button.BindingContext;
         _koinotitaViewModel.Koinotita = koinotita;
 
-        Navigation.PushAsync(new KoinotitaPage(_paidiaService, _teamsService, _koinotitaViewModel));
+        Navigation.PushAsync(new KoinotitaInfoPage(_teamsService, _paidiaService, _koinotitaViewModel));
     }
 
     private void OnAddClicked(object sender, EventArgs e)
     {
-        var newKoinotita = new KoinotitaDto 
+        var newKoinotita = new KoinotitaDto
         {
-            TomeasName = _teamsViewModel.TomeasDto.Name,
+            TomeasName = _tomeasViewModel.TomeasDto.Name,
             Name = "",
         };
         _koinotitaViewModel.AddKoinotita(newKoinotita);

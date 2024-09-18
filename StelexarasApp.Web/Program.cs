@@ -12,6 +12,7 @@ using StelexarasApp.ViewModels;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.TeamsViewModels;
 using StelexarasApp.ViewModels.PeopleViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServives(builder);
@@ -108,7 +109,7 @@ void ConfigureServives(WebApplicationBuilder builder)
     {
         var paidiaService = provider.GetRequiredService<IPaidiaService>();
         var teamsService = provider.GetRequiredService<ITeamsService>();
-        return new TeamsViewModel(paidiaService, teamsService);
+        return new SxoliViewModel(teamsService, paidiaService);
     });
 
     builder.Services.AddTransient(provider =>
@@ -123,5 +124,5 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddTransient<StelexosInfoViewModel>();
     builder.Services.AddTransient<DutyViewModel>();
     builder.Services.AddTransient<StaffViewModel>();
-    builder.Services.AddTransient<TeamsViewModel>();
+    builder.Services.AddTransient<SxoliViewModel>();
 }
