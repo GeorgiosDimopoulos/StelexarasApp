@@ -12,7 +12,7 @@ using StelexarasApp.ViewModels;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.TeamsViewModels;
 using StelexarasApp.ViewModels.PeopleViewModels;
-using Microsoft.Extensions.DependencyInjection;
+using StelexarasApp.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServives(builder);
@@ -63,12 +63,10 @@ app.MapHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
+app.MapControllerRoute(name: "default", pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
 
-// Map Controllers
 app.MapControllers();
+app.MapHub<MyHub>("/myhub");
 
 app.Run();
 
@@ -76,6 +74,9 @@ void ConfigureServives(WebApplicationBuilder builder)
 {
     builder.Services.AddTransient<PaidiDto>();
     builder.Services.AddTransient<StelexosDto>();
+    builder.Services.AddTransient<TomearxisDto>();
+    builder.Services.AddTransient<OmadarxisDto>();
+    builder.Services.AddTransient<KoinotarxisDto>();
 
     builder.Services.AddScoped<IPaidiRepository, PaidiRepository>();
     builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
@@ -88,7 +89,9 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-    builder.Services.AddHealthChecks() // Custom health check
+    builder.Services.AddSignalR();
+
+    builder.Services.AddHealthChecks()
         .AddCheck<DbHealthCheck>("Database");
 
     // builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -115,14 +118,18 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddTransient(provider =>
     {
         var staffService = provider.GetRequiredService<IStaffService>();
-        return new StaffViewModel(staffService, "koinotita");
+        return new StaffViewModel(staffService, "Koinotita");
+    });
+
+    builder.Services.AddTransient(provider =>
+    {
+        var paidiaService = provider.GetRequiredService<IPaidiaService>();
+        return new PaidiInfoViewModel(new PaidiDto(), paidiaService, "Skini");
     });
 
     builder.Services.AddTransient<ExpensesViewModel>();
-    builder.Services.AddTransient<PaidiInfoViewModel>();
     builder.Services.AddTransient<PaidiaViewModel>();
     builder.Services.AddTransient<StelexosInfoViewModel>();
     builder.Services.AddTransient<DutyViewModel>();
-    builder.Services.AddTransient<StaffViewModel>();
     builder.Services.AddTransient<SxoliViewModel>();
 }

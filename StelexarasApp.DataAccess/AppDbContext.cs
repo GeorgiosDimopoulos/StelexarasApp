@@ -16,6 +16,7 @@ namespace StelexarasApp.DataAccess
         public DbSet<Omadarxis>? Omadarxes { get; set; }
         public DbSet<Koinotarxis>? Koinotarxes { get; set; }
         public DbSet<Tomearxis>? Tomearxes { get; set; }
+        public DbSet<Ekpaideutis>? Ekpaideutes { get; set; }
         public DbSet<Paidi>? Paidia { get; set; }
 
         public DbSet<Koinotita>? Koinotites { get; set; }
@@ -101,9 +102,16 @@ namespace StelexarasApp.DataAccess
             modelBuilder.Entity<Paidi>().HasKey(p => p.Id);
 
             modelBuilder.Entity<Omadarxis>().HasKey(o => o.Id);
-            modelBuilder.Entity<Tomearxis>().HasKey(t => t.Id);
+            modelBuilder.Entity<Omadarxis>().HasIndex(s => s.Tel).IsUnique();
+
             modelBuilder.Entity<Koinotarxis>().HasKey(k => k.Id);
+            modelBuilder.Entity<Koinotarxis>().HasIndex(s => s.Tel).IsUnique();
+
+            modelBuilder.Entity<Tomearxis>().HasKey(t => t.Id);
+            modelBuilder.Entity<Tomearxis>().HasIndex(s => s.Tel).IsUnique();
+
             modelBuilder.Entity<Ekpaideutis>().HasKey(k => k.Id);
+            modelBuilder.Entity<Ekpaideutis>().HasIndex(s => s.Tel).IsUnique();
 
             modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);

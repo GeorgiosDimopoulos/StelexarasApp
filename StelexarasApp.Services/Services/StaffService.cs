@@ -142,6 +142,47 @@ public class StaffService : IStaffService
         }
     }
 
+    public async Task<IEnumerable<Ekpaideutis>> GetEkpaideutes()
+    {
+        try
+        {
+            if (_stelexiRepository is null || _mapper is null)
+                throw new ArgumentException("StaffRepository or _mapper cannot be null");
+
+            var ekpaideutesInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Ekpaideutis, string.Empty);
+            if (ekpaideutesInDb is null || !ekpaideutesInDb.Any())
+                return null!;
+
+            return ekpaideutesInDb;
+        }
+        catch (Exception ex)
+        {
+            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+            return null!;
+        }
+    }
+
+    public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomeaInService(TomeasDto tomeaDto)
+    {
+        try
+        {
+            if (_stelexiRepository is null || _mapper is null)
+                throw new ArgumentException("StaffRepository or _mapper cannot be null");
+
+            var stelexoiInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, tomeaDto.Name);
+            if (stelexoiInDb is null || !stelexoiInDb.Any())
+                return [];
+
+            var omadarxesDto = _mapper.Map<IEnumerable<OmadarxisDto>>(stelexoiInDb);
+            return omadarxesDto;
+        }
+        catch (Exception ex)
+        {
+            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+            return [];
+        }
+    }
+    
     public async Task<StelexosDto> GetStelexosByIdInService(int id, Thesi? thesi)
     {
         try
@@ -227,7 +268,6 @@ public class StaffService : IStaffService
                 throw new ArgumentException("StaffRepository or _mapper cannot be null");
 
             var koinotarxes = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, tomea.Name);
-
             if (koinotarxes is null || !koinotarxes.Any())
                 return [];
 

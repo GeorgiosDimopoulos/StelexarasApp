@@ -10,7 +10,6 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
         public new int Id { get; set; }
         public Thesi Thesi { get; set; }
         // public Xwros Xwros{ get; set; }
-
     }
 
     public enum Thesi 

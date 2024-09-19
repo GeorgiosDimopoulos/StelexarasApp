@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.DataAccess.Repositories;
 
@@ -134,17 +134,17 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         return (IEnumerable<Omadarxis>)await GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotita.Name);
     }
 
-    public async Task<IEnumerable<Stelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string xwrosName)
+    public async Task<IEnumerable<Stelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName)
     {
         try
         {
             return thesi switch
             {
-                Thesi.Omadarxis => await GetOmadarxesAnaKoinotita(xwrosName),
-                Thesi.Koinotarxis => await GetKoinotarxesAnaTomea(xwrosName),
+                Thesi.Omadarxis => await GetOmadarxesAnaXwro(xwrosName),
+                Thesi.Koinotarxis => await GetKoinotarxesAnaXwro(xwrosName),
                 Thesi.Tomearxis => await _dbContext.Tomearxes!.ToListAsync(),
                 Thesi.None => throw new NotImplementedException(),
-                Thesi.Ekpaideutis => throw new NotImplementedException(),
+                Thesi.Ekpaideutis => await _dbContext.Ekpaideutes!.ToListAsync(),
                 _ => throw new NotImplementedException(),
             };
         }
@@ -154,29 +154,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             return null!;
         }
-    }
-
-    private async Task<List<Omadarxis>> GetOmadarxesAnaKoinotita(string? name)
-    {
-        if (string.IsNullOrEmpty(name))
-            return await _dbContext.Omadarxes!.ToListAsync();
-        return await _dbContext.Skines!.Where(k => k.Koinotita.Name == name).Select(k => k.Omadarxis).ToListAsync();
-    }
-
-    // ToDo: not yet implemented
-    private async Task<List<Omadarxis>> GetOmadarxesAnaTomea(string? name)
-    {
-        if (string.IsNullOrEmpty(name))
-            return await _dbContext.Omadarxes!.ToListAsync();
-        return await _dbContext.Skines!.Where(k => k.Koinotita.Name == name).Select(k => k.Omadarxis).ToListAsync();
-    }
-
-    private async Task<List<Koinotarxis>> GetKoinotarxesAnaTomea(string? tomeasName)
-    {
-        if (string.IsNullOrEmpty(tomeasName))
-            return await _dbContext.Koinotarxes!.ToListAsync();
-
-        return await _dbContext.Koinotites!.Where(k => k.Tomeas.Name == tomeasName).Select(k => k.Koinotarxis).ToListAsync();
     }
 
     public async Task<Stelexos> GetStelexosByIdInDb(int id, Thesi? thesi)
@@ -222,16 +199,25 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             switch (stelexos.Thesi)
             {
                 case Thesi.Omadarxis:
-                    _dbContext.Omadarxes?.Update((Omadarxis)stelexos);
+                    if (_dbContext.Omadarxes == null)
+                        return false;
+                    _dbContext.Omadarxes.Update((Omadarxis)stelexos);
                     break;
                 case Thesi.Koinotarxis:
-                    _dbContext.Koinotarxes?.Update((Koinotarxis)stelexos);
+                    if (_dbContext.Koinotarxes == null)
+                        return false;
+                    _dbContext.Koinotarxes.Update((Koinotarxis)stelexos);
                     break;
                 case Thesi.Tomearxis:
-                    _dbContext.Tomearxes?.Update((Tomearxis)stelexos);
+                    if (_dbContext.Tomearxes == null)
+                        return false;
+                    _dbContext.Tomearxes.Update((Tomearxis)stelexos);
                     break;
                 case Thesi.Ekpaideutis:
-                    throw new NotImplementedException();
+                    if (_dbContext.Ekpaideutes == null)
+                        return false;
+                    _dbContext.Ekpaideutes.Update((Ekpaideutis)stelexos);
+                    break;
                 case Thesi.None:
                     break;
                 default:
@@ -293,21 +279,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IEnumerable<Stelexos>> GetStelexoiAnaXwros(Thesi posto, string xwrosName)
-    {
-        switch (posto)
-        {
-            case Thesi.Omadarxis:
-                return await _dbContext.Omadarxes!.Where(o => o.Skini.Name == xwrosName).ToListAsync();
-            case Thesi.Koinotarxis:
-                return await _dbContext.Koinotarxes!.Where(k => k.Koinotita.Name == xwrosName).ToListAsync();
-            case Thesi.Tomearxis:
-                return await _dbContext.Tomearxes!.Where(t => t.Tomeas.Name == xwrosName).ToListAsync();
-            default:
-                return null!;
-        }
-    }
-
     public async Task<Stelexos> GetStelexosByNameInDb(string name, Thesi? thesi)
     {
         if (string.IsNullOrEmpty(name) || thesi is null)
@@ -321,15 +292,61 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             return await query.FirstOrDefaultAsync(e => e.FullName == name);
         }
 
-        return thesi! switch
+        return thesi switch
         {
             Thesi.Omadarxis => await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.FullName == name),
             Thesi.Koinotarxis => await _dbContext.Koinotarxes!.FirstOrDefaultAsync(k => k.FullName == name),
             Thesi.Tomearxis => await _dbContext.Tomearxes!.FirstOrDefaultAsync(t => t.FullName == name),
-            Thesi.Ekpaideutis => throw new NotImplementedException(),
+            Thesi.Ekpaideutis => await _dbContext.Ekpaideutes!.FirstOrDefaultAsync(t => t.FullName == name),
             Thesi.None => throw new NotImplementedException(),
             null => throw new NotImplementedException(),
             _ => throw new ArgumentOutOfRangeException(nameof(thesi), thesi, null)
         };
+    }
+
+    private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string xwrosName)
+    {
+        var isXwrosAnKoinotita = _dbContext.Koinotites!.Any(k => k.Name.Equals(xwrosName));
+        if (isXwrosAnKoinotita)
+            return await GetOmadarxesAnaKoinotita(xwrosName);
+        else
+        {
+            var isXwrosATomeas = _dbContext.Tomeis!.Any(t => t.Name.Equals(xwrosName));
+            if (isXwrosATomeas)
+                return await GetOmadarxesAnaTomea(xwrosName);
+            else
+                return null!;
+        }
+    }
+
+    private async Task<IEnumerable<Koinotarxis>> GetKoinotarxesAnaXwro(string xwrosName)
+    {
+        var isXwrosAnTomeas = _dbContext.Tomeis!.Any(k => k.Name.Equals(xwrosName));
+        if (isXwrosAnTomeas)
+            return await GetKoinotarxesAnaTomea(xwrosName);
+        else
+            return null!;
+    }
+
+    private async Task<List<Omadarxis>> GetOmadarxesAnaKoinotita(string? name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return await _dbContext.Omadarxes!.ToListAsync();
+        return await _dbContext.Skines!.Where(k => k.Koinotita.Name == name).Select(k => k.Omadarxis).ToListAsync();
+    }
+
+    private async Task<List<Omadarxis>> GetOmadarxesAnaTomea(string? name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return await _dbContext.Omadarxes!.ToListAsync();
+        return await _dbContext.Skines!.Where(k => k.Koinotita.Name == name).Select(k => k.Omadarxis).ToListAsync();
+    }
+
+    private async Task<List<Koinotarxis>> GetKoinotarxesAnaTomea(string? tomeasName)
+    {
+        if (string.IsNullOrEmpty(tomeasName))
+            return await _dbContext.Koinotarxes!.ToListAsync();
+
+        return await _dbContext.Koinotites!.Where(k => k.Tomeas.Name == tomeasName).Select(k => k.Koinotarxis).ToListAsync();
     }
 }

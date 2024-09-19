@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.ApiControllers
@@ -86,6 +87,36 @@ namespace StelexarasApp.Web.ApiControllers
         public async Task<ActionResult<Koinotarxis>> GetKoinotarxis(int id)
         {
             var result = await _stelexiService.GetStelexosByIdInService(id, Thesi.Koinotarxis);
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("OmadarxesKoinotitas/{id}")]
+        public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaKoinotita([FromBody] KoinotitaDto koinotita)
+        {
+            var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(koinotita);
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("OmadarxesTomea/{id}")]
+        public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaTomea([FromBody] TomeasDto tomea)
+        {
+            var result = await _stelexiService.GetOmadarxesSeTomeaInService(tomea);
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("KoinotarxesTomea/{id}")]
+        public async Task<ActionResult<OmadarxisDto>> GetKoinotarxesAnaTomea([FromBody] TomeasDto tomea)
+        {
+            var result = await _stelexiService.GetKoinotarxesSeTomeaInService(tomea);
             if (result is null)
                 return NotFound();
 

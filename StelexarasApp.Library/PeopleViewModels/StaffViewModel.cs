@@ -24,8 +24,6 @@ public class StaffViewModel : INotifyPropertyChanged
         var koinotarxes = await GetAllKoinotarxes();
         var omadarxes = await GetAllOmadarxes();
 
-        //var groupedKoinotarxes = new ObservableCollection<IGrouping<Tomeas, KoinotarxisDto>>(
-        //    koinotarxes.GroupBy(k => k.TomeasName));
         var allStaff = tomearxes.Cast<StelexosDto>()
             .Concat(koinotarxes.Cast<StelexosDto>())
             .Concat(omadarxes.Cast<StelexosDto>());
