@@ -33,7 +33,7 @@ public class SkiniViewModel : INotifyPropertyChanged
         if (string.IsNullOrEmpty(paidiDto.FullName) || string.IsNullOrEmpty(paidiDto.SkiniName))
             return false;
 
-        var result = await _paidiaService.AddPaidiInDbAsync(paidiDto);
+        var result = await _paidiaService.AddPaidiInService(paidiDto);
         if (result)
         {
             OnPropertyChanged(nameof(Skini.Paidia));

@@ -45,7 +45,7 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
                 paidi.PaidiType = PaidiType.Ekpaideuomenos;
             }
 
-            var result = await _paidiaService.AddPaidiInDbAsync(paidi);
+            var result = await _paidiaService.AddPaidiInService(paidi);
 
             if (result)
             {
@@ -62,7 +62,7 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
                 return false;
 
 
-            var result = await _paidiaService.DeletePaidiInDb(int.Parse(paidiId));
+            var result = await _paidiaService.DeletePaidiInService(int.Parse(paidiId));
             if (result)
             {
                 OnPropertyChanged(nameof(Skines));

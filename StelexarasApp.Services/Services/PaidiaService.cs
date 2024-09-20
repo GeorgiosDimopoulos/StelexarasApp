@@ -25,19 +25,23 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        public async Task<bool> AddPaidiInDbAsync(PaidiDto paidiDto)
+        public async Task<bool> AddPaidiInService(PaidiDto paidiDto)
         {
+            if (paidiDto == null || _mapper == null || _paidiRepository is null)
+                return false;
+
             var paidi = _mapper.Map<Paidi>(paidiDto);
             if (paidi == null)
-            {
                 return false;
-            }
 
             return await _paidiRepository.AddPaidiInDb(paidi);
         }
 
-        public async Task<bool> DeletePaidiInDb(int id)
+        public async Task<bool> DeletePaidiInService(int id)
         {
+            if (id <= 0 || _mapper == null || _paidiRepository is null)
+                return false;
+
             var paidi = await _paidiRepository.GetPaidiByIdFromDb(id);
             if (paidi == null)
                 return false;
@@ -45,38 +49,44 @@ namespace StelexarasApp.Services.Services
             return await _paidiRepository.DeletePaidiInDb(paidi);
         }
 
-        public Task<IEnumerable<Paidi>> GetPaidia(PaidiType type)
+        public Task<IEnumerable<Paidi>> GetPaidiaInService(PaidiType type)
         {
+            if (_mapper == null || _paidiRepository is null)
+                return null!;
+
             return _paidiRepository.GetPaidiaFromDb(type);
         }
 
-        public Task<Paidi> GetPaidiById(int id)
+        public Task<Paidi> GetPaidiByIdInService(int id)
         {
+            if (id <= 0 || _mapper == null || _paidiRepository is null)
+                return null!;
+
             return _paidiRepository.GetPaidiByIdFromDb(id);
         }
 
-        public async Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId)
+        public async Task<bool> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId)
         {
-            var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
-
-            if (!result)
-            {
+            if (paidiId <= 0 || newSkiniId <= 0 || _mapper == null || _paidiRepository is null)
                 return false;
-            }
+
+            var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
+            if (!result)
+                return false;
 
             return true;
         }
 
-        public async Task<bool> UpdatePaidiInDb(PaidiDto paidiDto)
+        public async Task<bool> UpdatePaidiInService(PaidiDto paidiDto)
         {
+            if (paidiDto == null || _mapper == null || _paidiRepository is null)
+                return false;
+
             var paidi = _mapper.Map<Paidi>(paidiDto);
             var result = await _paidiRepository.UpdatePaidiInDb(paidi);
 
             if (!result)
-            {
                 return false;
-            }
-
             return true;
         }
     }

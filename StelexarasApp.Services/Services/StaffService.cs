@@ -153,7 +153,7 @@ public class StaffService : IStaffService
             if (ekpaideutesInDb is null || !ekpaideutesInDb.Any())
                 return null!;
 
-            return ekpaideutesInDb;
+            return (IEnumerable<Ekpaideutis>)ekpaideutesInDb;
         }
         catch (Exception ex)
         {
@@ -234,30 +234,6 @@ public class StaffService : IStaffService
             return false;
 
         return await _stelexiRepository.UpdateStelexosInDb(stelexos);
-    }
-
-    public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomeaInService(TomeasDto tomeaDto)
-    {
-        try
-        {
-            if (tomeaDto is null || string.IsNullOrWhiteSpace(tomeaDto.Name))
-                throw new ArgumentException("Invalid tomea information.");
-
-            if (_stelexiRepository is null || _mapper is null)
-                throw new ArgumentException("StaffRepository or _mapper cannot be null");
-
-            var omadarxes = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, tomeaDto.Name);
-
-            if (omadarxes is null || !omadarxes.Any())
-                return [];
-
-            return _mapper.Map<IEnumerable<OmadarxisDto>>(omadarxes);
-        }
-        catch (Exception ex)
-        {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
-            return null!;
-        }
     }
 
     public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomeaInService(TomeasDto tomea)

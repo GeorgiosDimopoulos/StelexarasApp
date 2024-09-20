@@ -5,16 +5,16 @@ namespace StelexarasApp.Services.IServices
 {
     public interface IPaidiaService
     {
-        Task<bool> AddPaidiInDbAsync(PaidiDto paidiDto);
+        Task<bool> AddPaidiInService(PaidiDto paidiDto);
 
-        Task<bool> DeletePaidiInDb(int id);
+        Task<bool> DeletePaidiInService(int id);
 
-        Task<bool> UpdatePaidiInDb(PaidiDto paidiDto);
+        Task<bool> UpdatePaidiInService(PaidiDto paidiDto);
 
-        Task<IEnumerable<Paidi>> GetPaidia(PaidiType type);
+        Task<IEnumerable<Paidi>> GetPaidiaInService(PaidiType type);
 
-        Task<Paidi> GetPaidiById(int id);
+        Task<Paidi> GetPaidiByIdInService(int id);
 
-        Task<bool> MovePaidiToNewSkini(int paidiId, int newSkiniId);
+        Task<bool> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId);
     }
 }

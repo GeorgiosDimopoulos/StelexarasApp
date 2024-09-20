@@ -28,7 +28,7 @@ public class TeamsViewModelTests
         var paidiType = PaidiType.Kataskinotis;
 
         // Act
-        paidiaServiceMock.Setup(service => service.AddPaidiInDbAsync(It.IsAny<PaidiDto>())).ReturnsAsync(true);
+        paidiaServiceMock.Setup(service => service.AddPaidiInService(It.IsAny<PaidiDto>())).ReturnsAsync(true);
         var result = await peopleViewModel.AddPaidiAsync(fullName, skiniName, paidiType);
 
         // Assert
@@ -44,7 +44,7 @@ public class TeamsViewModelTests
         var paidiType = PaidiType.Kataskinotis;
 
         // Act
-        paidiaServiceMock.Setup(service => service.AddPaidiInDbAsync(It.IsAny<PaidiDto>())).ReturnsAsync(false);
+        paidiaServiceMock.Setup(service => service.AddPaidiInService(It.IsAny<PaidiDto>())).ReturnsAsync(false);
         var result = await peopleViewModel.AddPaidiAsync(fullName, skiniName, paidiType);
 
         // Assert
@@ -60,7 +60,7 @@ public class TeamsViewModelTests
         PaidiType paidiType = PaidiType.Kataskinotis;
 
         // Act
-        paidiaServiceMock.Setup(service => service.AddPaidiInDbAsync(It.IsAny<PaidiDto>())).ReturnsAsync(false);
+        paidiaServiceMock.Setup(service => service.AddPaidiInService(It.IsAny<PaidiDto>())).ReturnsAsync(false);
         var result = await peopleViewModel.AddPaidiAsync(fullName, skiniName, paidiType);
 
         // Assert

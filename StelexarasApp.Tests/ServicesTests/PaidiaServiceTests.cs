@@ -47,7 +47,7 @@ public class PaidiaServiceTests
         _mockPaidiRepository.Setup(repo => repo.AddPaidiInDb(paidi)).ReturnsAsync(true);
 
         // Act
-        var result = await _paidiaService.AddPaidiInDbAsync(paidiDto);
+        var result = await _paidiaService.AddPaidiInService(paidiDto);
 
         // Assert
         Assert.True(result);
@@ -71,7 +71,7 @@ public class PaidiaServiceTests
             .ReturnsAsync(expectedPaidia);
 
         // Act
-        var result = await _paidiaService.GetPaidia(paidiType);
+        var result = await _paidiaService.GetPaidiaInService(paidiType);
 
         // Assert
         Assert.Equal(expectedCount, result.Count());
@@ -95,7 +95,7 @@ public class PaidiaServiceTests
         _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiId)).ReturnsAsync(paidi);
         _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidi)).ReturnsAsync(true);
 
-        var result = await _paidiaService.DeletePaidiInDb(paidiId);
+        var result = await _paidiaService.DeletePaidiInService(paidiId);
 
         Assert.True(result);
         _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiId), Times.Once);
@@ -120,7 +120,7 @@ public class PaidiaServiceTests
             .ReturnsAsync(expectedPaidi);
 
         // Act
-        var result = await _paidiaService.GetPaidiById(paidiId);
+        var result = await _paidiaService.GetPaidiByIdInService(paidiId);
 
         // Assert
         if (shouldExist)

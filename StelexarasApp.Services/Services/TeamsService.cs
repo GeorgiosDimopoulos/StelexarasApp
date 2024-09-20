@@ -29,7 +29,7 @@ namespace StelexarasApp.Services.Services
             return await _teamsRepository.AddKoinotitaInDb(koinotita);
         }
 
-        public async Task<IEnumerable<SkiniDto>> GetSkines()
+        public async Task<IEnumerable<SkiniDto>> GetAllSkines()
         {
             var skini = await _teamsRepository.GetSkinesInDb();
             return _mapper.Map<IEnumerable<SkiniDto>>(skini);

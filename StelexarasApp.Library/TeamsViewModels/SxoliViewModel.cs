@@ -35,7 +35,7 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
 
         public async Task<bool> AddEkpaideuomenos(PaidiDto paidiDto)
         {
-            var result = await _paidiaService.AddPaidiInDbAsync(paidiDto);
+            var result = await _paidiaService.AddPaidiInService(paidiDto);
 
             if (result)
             {

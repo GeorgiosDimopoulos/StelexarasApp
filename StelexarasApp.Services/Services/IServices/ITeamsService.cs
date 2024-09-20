@@ -9,7 +9,7 @@ public interface ITeamsService
     Task<bool> DeleteSkiniInService(int skiniId);
     Task<bool> DeleteKoinotitaInService(int koinotitaId);
     Task<bool> UpdateSkiniInService(SkiniDto skini);
-    Task<IEnumerable<SkiniDto>> GetSkines();
+    Task<IEnumerable<SkiniDto>> GetAllSkines();
     Task<IEnumerable<SkiniDto>> GetSkinesAnaKoinotitaInService(string name);
 
     Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomea(int name);

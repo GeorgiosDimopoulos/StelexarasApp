@@ -61,7 +61,7 @@ public class TeamsServiceTests
         _mockdteamsRepository.Setup(m => m.GetSkinesInDb()).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetSkines();
+        var result = await _teamsService.GetAllSkines();
 
         // Assert
         Assert.NotNull(result);

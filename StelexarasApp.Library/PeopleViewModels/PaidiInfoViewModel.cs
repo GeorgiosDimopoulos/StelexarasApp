@@ -24,7 +24,7 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
 
         public async Task<bool> DeletePaidiAsync(int id)
         {
-            if (await _paidiaService.DeletePaidiInDb(id))
+            if (await _paidiaService.DeletePaidiInService(id))
             {
                 StatusMessage = "Delete successful";
                 return true;
@@ -40,7 +40,7 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
 
         public async Task<bool> OnSavePaidi()
         {
-            var result = await _paidiaService.UpdatePaidiInDb(PaidiDto);
+            var result = await _paidiaService.UpdatePaidiInService(PaidiDto);
             StatusMessage = result ? "Save successful" : "Save failed";
 
             if (result)

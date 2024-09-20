@@ -26,14 +26,14 @@ public class PaidiInfoViewModelTests
     public async Task OnSavePaidi_ShouldUpdateStatusMessage(string paidiName, bool expectedResult, string expectedMessage)
     {
         // Arrange
-        _mockPaidiaService.Setup(service => service.UpdatePaidiInDb(paidiDto)).ReturnsAsync(expectedResult);
+        _mockPaidiaService.Setup(service => service.UpdatePaidiInService(paidiDto)).ReturnsAsync(expectedResult);
 
         // Act
         _paidiInfoViewModel.PaidiDto.FullName = paidiName;
         var result = await _paidiInfoViewModel.OnSavePaidi();
 
         // Assert
-        _mockPaidiaService.Verify(service => service.UpdatePaidiInDb(paidiDto), Times.Once);
+        _mockPaidiaService.Verify(service => service.UpdatePaidiInService(paidiDto), Times.Once);
         Assert.Equal(expectedMessage, _paidiInfoViewModel.StatusMessage);
         Assert.Equal(result, expectedResult);
     }
@@ -42,13 +42,13 @@ public class PaidiInfoViewModelTests
     public async Task DeletePaidiAsync_ShouldUpdateSkines_WhenPaidiIsDeleted()
     {
         // Arrange
-        _mockPaidiaService.Setup(service => service.DeletePaidiInDb(paidiDto.Id)).ReturnsAsync(true);
+        _mockPaidiaService.Setup(service => service.DeletePaidiInService(paidiDto.Id)).ReturnsAsync(true);
 
         // Act
         var result = await _paidiInfoViewModel.DeletePaidiAsync(paidiDto.Id);
 
         // Assert
-        _mockPaidiaService.Verify(service => service.DeletePaidiInDb(paidiDto.Id), Times.Once);
+        _mockPaidiaService.Verify(service => service.DeletePaidiInService(paidiDto.Id), Times.Once);
         Assert.Equal("Delete successful", _paidiInfoViewModel.StatusMessage);
         Assert.True(result);
     }

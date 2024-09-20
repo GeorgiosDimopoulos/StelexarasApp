@@ -54,14 +54,14 @@ switch (choice)
 {
     case 1:
         var newKataskinotis = CreatePaidiFromUserInput(0);
-        if (await paidiService.AddPaidiInDbAsync(newKataskinotis))
+        if (await paidiService.AddPaidiInService(newKataskinotis))
             Console.WriteLine("Kataskinotis created");
         else
             Console.WriteLine("Failed to create Kataskinotis.");
         break;
     case 2:
         var newEkpaideuomenos = CreatePaidiFromUserInput(1);
-        if (await paidiService.AddPaidiInDbAsync(newEkpaideuomenos))
+        if (await paidiService.AddPaidiInService(newEkpaideuomenos))
             Console.WriteLine("Ekpaideuomenos created");
         else
             Console.WriteLine("Failed to create Ekpaideuomenos.");

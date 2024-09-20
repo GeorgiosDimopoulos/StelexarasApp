@@ -20,10 +20,9 @@ namespace StelexarasApp.Web.ApiControllers
         public async Task<ActionResult<IEnumerable<Paidi>>> GetPaidia()
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
-            var paidia = await _paidiaService.GetPaidia(PaidiType.Kataskinotis);
+            
+            var paidia = await _paidiaService.GetPaidiaInService(PaidiType.Kataskinotis);
             return Ok(paidia);
         }
 
@@ -31,11 +30,9 @@ namespace StelexarasApp.Web.ApiControllers
         public async Task<ActionResult<IEnumerable<Paidi>>> GetEkpaideuomenoi()
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            var paidia = await _paidiaService.GetPaidia(PaidiType.Kataskinotis);
+            var paidia = await _paidiaService.GetPaidiaInService(PaidiType.Ekpaideuomenos);
             return Ok(paidia);
         }
 
@@ -43,11 +40,9 @@ namespace StelexarasApp.Web.ApiControllers
         public async Task<ActionResult<Paidi>> GetPaidi(int id)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            var paidi = await _paidiaService.GetPaidiById(id);
+            var paidi = await _paidiaService.GetPaidiByIdInService(id);
             if (paidi == null)
                 return NotFound();
 
@@ -58,25 +53,21 @@ namespace StelexarasApp.Web.ApiControllers
         public async Task<ActionResult<Paidi>> PostPaidi([FromBody] PaidiDto paidiDto)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            var result = await _paidiaService.AddPaidiInDbAsync(paidiDto);
+            var result = await _paidiaService.AddPaidiInService(paidiDto);
 
             if (result)
-            {
                 return Ok(result);
-            }
 
-            return NotFound(); // or BadRequest?
+            return NotFound();
         }
 
         [HttpPut("Paidi/{id}")]
         public async Task<IActionResult> PutPaidi(int id, PaidiDto paidiDto)
         {
             paidiDto.Id = id;
-            var result = await _paidiaService.UpdatePaidiInDb(paidiDto);
+            var result = await _paidiaService.UpdatePaidiInService(paidiDto);
 
             if (!result)
                 return NotFound();
@@ -88,15 +79,11 @@ namespace StelexarasApp.Web.ApiControllers
         public async Task<IActionResult> DeletePaidi(int id)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            var result = await _paidiaService.DeletePaidiInDb(id);
-
+            var result = await _paidiaService.DeletePaidiInService(id);
             if (!result)
                 return NotFound();
-
             return Ok(result);
         }
     }

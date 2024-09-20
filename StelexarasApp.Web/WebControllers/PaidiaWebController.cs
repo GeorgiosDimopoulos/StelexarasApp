@@ -1,140 +1,173 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.Services.DtosModels;
+using StelexarasApp.Services.IServices;
+using System.Collections;
 
 namespace StelexarasApp.Web.WebControllers
 {
-    public class PaidiaWebController : Controller
+    public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService teamsService, ILogger<PaidiaWebController> logger) : Controller
     {
-        private readonly AppDbContext _context;
-
-        public PaidiaWebController(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly IPaidiaService _paidiaService = paidiaService;
+        private readonly ITeamsService _teamsService = teamsService;
+        private readonly ILogger<PaidiaWebController> _logger = logger;
 
         // GET: PaidiaWeb
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Paidia.Include(p => p.Skini);
-            return View(await appDbContext.ToListAsync());
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var paidia = await _paidiaService.GetPaidiaInService(PaidiType.Kataskinotis);
+                if (paidia == null || !paidia.Any())
+                {
+                    _logger.LogWarning("No Paidia found for the specified type.");
+                    return NotFound("No Paidia Data");
+                }
+                return View(paidia);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching in Index Paidia.");
+                return View("Error");
+            }
         }
 
         // GET: PaidiaWeb/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id <= 0)
+                    return NotFound("");
 
-            var paidi = await _context.Paidia
-                .Include(p => p.Skini)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (paidi == null)
+                var paidi = await _paidiaService.GetPaidiByIdInService(id);
+
+                if (paidi == null)
+                    return NotFound();
+                return View(paidi);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex, "An error occurred while fetching Details of Paidia.");
+                return View("Error");
             }
-
-            return View(paidi);
         }
 
         // GET: PaidiaWeb/Create
         public IActionResult Create()
         {
-            ViewData["SkiniId"] = new SelectList(_context.Skines, "Id", "Name");
-            return View();
+            try
+            {
+                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkines(), "Id", "Name");
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while Create Paidi.");
+                return View("Error");
+            }
         }
 
         // POST: PaidiaWeb/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FullName,Id,Age,SeAdeia,Sex,PaidiType,SkiniId")] Paidi paidi)
+        public async Task<IActionResult> Create([Bind("FullName,Age,Sex,PaidiType,SkiniName")] PaidiDto paidi)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(paidi);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var result = await _paidiaService.AddPaidiInService(paidi);
+
+                    if (result)
+                        return View(paidi); //  return RedirectToAction(nameof(Index));
+                    ModelState.AddModelError("", "An error occurred while adding the Paidi.");
+                }
+
+                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkines(), "Id", "Name", paidi.SkiniId);
+                return View(paidi);
             }
-            ViewData["SkiniId"] = new SelectList(_context.Skines, "Id", "Name", paidi.SkiniId);
-            return View(paidi);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while Create Paidi.");
+                return View("Error");
+            }
         }
 
         // GET: PaidiaWeb/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id <= 0)
+                    return NotFound();
 
-            var paidi = await _context.Paidia.FindAsync(id);
-            if (paidi == null)
-            {
-                return NotFound();
+                var paidi = await _paidiaService.GetPaidiByIdInService(id);
+                if (paidi == null)
+                    return NotFound();
+
+                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkines(), "Id", "Name", paidi.SkiniId);
+                return View(paidi);
             }
-            ViewData["SkiniId"] = new SelectList(_context.Skines, "Id", "Name", paidi.SkiniId);
-            return View(paidi);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while Edit Paidi.");
+                return View("Error");
+            }
         }
 
         // POST: PaidiaWeb/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FullName,Id,Age,SeAdeia,Sex,PaidiType,SkiniId")] Paidi paidi)
+        public async Task<IActionResult> Edit(int id, [Bind("FullName,Id,Age,Sex,PaidiType,SkiniName")] PaidiDto paidi)
         {
-            if (id != paidi.Id)
-            {
+            if (id != paidi.Id || paidi is null)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(paidi);
-                    await _context.SaveChangesAsync();
+                    await _paidiaService.UpdatePaidiInService(paidi);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PaidiExists(paidi.Id))
-                    {
-                        return NotFound();
-                    }
+                    var existed = _paidiaService.GetPaidiByIdInService(paidi.Id);
+                    if (existed is null)
+                        return NotFound("DbUpdateConcurrencyException: Paidi not found in Db");
                     else
-                    {
-                        throw;
-                    }
+                        return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SkiniId"] = new SelectList(_context.Skines, "Id", "Name", paidi.SkiniId);
+            ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkines(), "Id", "Name", paidi.SkiniId);
             return View(paidi);
         }
 
         // GET: PaidiaWeb/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id <= 0)
+                    return NotFound();
 
-            var paidi = await _context.Paidia
-                .Include(p => p.Skini)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (paidi == null)
+                var paidi = await _paidiaService.DeletePaidiInService(id);
+                if (paidi == false)
+                    return NotFound();
+
+                return View(paidi);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex, "An error occurred while Delete Paidi.");
+                return View("Error");
             }
-
-            return View(paidi);
         }
 
         // POST: PaidiaWeb/Delete/5
@@ -142,19 +175,20 @@ namespace StelexarasApp.Web.WebControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var paidi = await _context.Paidia.FindAsync(id);
-            if (paidi != null)
+            try
             {
-                _context.Paidia.Remove(paidi);
+                var result = await _paidiaService.DeletePaidiInService(id);
+                if (result == false)
+                    return RedirectToAction(nameof(Index));
+
+                ModelState.AddModelError("", "An error occurred while deleting the Paidi.");
+                return View("Error");
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool PaidiExists(int id)
-        {
-            return _context.Paidia.Any(e => e.Id == id);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while Delete Paidi.");
+                return View("Error");
+            }
         }
     }
 }
