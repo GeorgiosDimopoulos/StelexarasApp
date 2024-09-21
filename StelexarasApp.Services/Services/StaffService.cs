@@ -26,6 +26,32 @@ public class StaffService : IStaffService
         }
     }
 
+    public async Task<IEnumerable<StelexosDto>> GetAllStaffInService()
+    {
+        try
+        {
+            if (_stelexiRepository is null || _mapper is null)
+                throw new ArgumentException("StaffRepository or _mapper cannot be null");
+
+            var omadarxesInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, string.Empty);
+            var koinotarxesInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, string.Empty);
+            var tomearxesInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Tomearxis, string.Empty);
+            var ekpaiduetesInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Ekpaideutis, string.Empty);
+            
+            var allStelexoiInDb = omadarxesInDb.Concat(koinotarxesInDb).Concat(tomearxesInDb).Concat(ekpaiduetesInDb);
+            var stelexoiInService = _mapper.Map<IEnumerable<StelexosDto>>(allStelexoiInDb);
+
+            if (stelexoiInService is null || !stelexoiInService.Any())
+                return null!;
+            return stelexoiInService;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null!;
+        }
+    }
+
     public async Task<bool> AddStelexosInService(StelexosDto stelexosDto, Thesi thesi)
     {
         var stelexos = _mapper!.Map<Stelexos>(stelexosDto);

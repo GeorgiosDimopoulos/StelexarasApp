@@ -20,6 +20,9 @@ public class StaffViewModel : INotifyPropertyChanged
 
     public async Task LoadAllStaffAsync()
     {
+        // ToDo: check if it is better to use the following code
+        // AllStaff = GetAllStaff().Result as ObservableCollection<StelexosDto>;
+
         var tomearxes = await GetAllTomearxes();
         var koinotarxes = await GetAllKoinotarxes();
         var omadarxes = await GetAllOmadarxes();
@@ -30,6 +33,11 @@ public class StaffViewModel : INotifyPropertyChanged
 
         AllStaff = new ObservableCollection<StelexosDto>(allStaff);
         OnPropertyChanged(nameof(AllStaff));
+    }
+
+    public async Task<IEnumerable<StelexosDto>> GetAllStaff()
+    {
+        return await _staffService.GetAllStaffInService();
     }
 
     public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotita(KoinotitaDto koinotitaDto)

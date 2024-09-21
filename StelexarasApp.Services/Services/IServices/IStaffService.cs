@@ -11,6 +11,7 @@ namespace StelexarasApp.Services.Services.IServices
         Task<bool> UpdateStelexosInService(StelexosDto stelexosDto);
         Task<StelexosDto> GetStelexosByIdInService(int id, Thesi? thesi);
         Task<StelexosDto> GetStelexosByNameInService(string name, Thesi? thesi);
+        Task<IEnumerable<StelexosDto>> GetAllStaffInService();
         Task<IEnumerable<OmadarxisDto>> GetAllOmadarxesInService();
         Task<IEnumerable<KoinotarxisDto>> GetAllKoinotarxesInService();
         Task<IEnumerable<TomearxisDto>> GetAllTomearxesInService();
