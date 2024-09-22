@@ -5,15 +5,15 @@ using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
-namespace StelexarasApp.Tests.DataAccessTests;
+namespace StelexarasApp.Tests.IntegrationDbTests;
 
-public class DutyRepositoryTests
+public class DutyRepositoryDbTests
 {
     private readonly IDutyRepository dutyRepository;
     private readonly AppDbContext _dbContext;
     private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
-    public DutyRepositoryTests()
+    public DutyRepositoryDbTests()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")

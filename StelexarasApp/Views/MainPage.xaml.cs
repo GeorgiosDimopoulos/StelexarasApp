@@ -50,8 +50,8 @@ public partial class MainPage : ContentPage
     private async void OnExpensesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new ExpensesPage(_expenseService));
     private async void OnTeamsPageButtonClicked(object sender, EventArgs e)
     {
-        var tomeas1 = await _teamsService.GetTomeaByNameInDb("1");
-        var tomeas2 = await _teamsService.GetTomeaByNameInDb("2");
+        var tomeas1 = await _teamsService.GetTomeaByNameInService("1");
+        var tomeas2 = await _teamsService.GetTomeaByNameInService("2");
         await Navigation.PushAsync(new GeneralTeamsPage(tomeas1, tomeas2, _paidiaService, _teamsService));
     }
 

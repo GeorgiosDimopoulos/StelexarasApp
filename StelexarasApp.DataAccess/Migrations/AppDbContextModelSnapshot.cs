@@ -76,14 +76,17 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Tel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ekpaideutis");
+                    b.HasIndex("Tel")
+                        .IsUnique();
+
+                    b.ToTable("Ekpaideutes");
                 });
 
             modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", b =>
@@ -106,7 +109,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Tel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
@@ -115,6 +118,9 @@ namespace StelexarasApp.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Tel")
+                        .IsUnique();
 
                     b.HasIndex("TomearxisId");
 
@@ -144,7 +150,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Tel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
@@ -152,6 +158,9 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("KoinotarxisId");
+
+                    b.HasIndex("Tel")
+                        .IsUnique();
 
                     b.ToTable("Omadarxes");
                 });
@@ -176,12 +185,15 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Tel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Tel")
+                        .IsUnique();
 
                     b.ToTable("Tomearxes");
                 });

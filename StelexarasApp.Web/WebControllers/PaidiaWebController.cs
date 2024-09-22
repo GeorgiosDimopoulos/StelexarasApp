@@ -63,7 +63,7 @@ namespace StelexarasApp.Web.WebControllers
         {
             try
             {
-                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkines(), "Id", "Name");
+                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name");
                 return View();
             }
             catch (Exception ex)
@@ -89,7 +89,7 @@ namespace StelexarasApp.Web.WebControllers
                     ModelState.AddModelError("", "An error occurred while adding the Paidi.");
                 }
 
-                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkines(), "Id", "Name", paidi.SkiniId);
+                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.SkiniId);
                 return View(paidi);
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace StelexarasApp.Web.WebControllers
                 if (paidi == null)
                     return NotFound();
 
-                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkines(), "Id", "Name", paidi.SkiniId);
+                ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.SkiniId);
                 return View(paidi);
             }
             catch (Exception ex)
@@ -145,7 +145,7 @@ namespace StelexarasApp.Web.WebControllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkines(), "Id", "Name", paidi.SkiniId);
+            ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.SkiniId);
             return View(paidi);
         }
 

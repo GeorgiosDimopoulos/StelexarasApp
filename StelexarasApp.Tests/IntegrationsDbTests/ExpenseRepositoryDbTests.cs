@@ -5,15 +5,15 @@ using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using Microsoft.Extensions.Logging;
 
-namespace StelexarasApp.Tests.DataAccessTests;
+namespace StelexarasApp.Tests.IntegrationDbTests;
 
-public class ExpenseRepositoryTests
+public class ExpenseRepositoryDbTests
 {
     private readonly IExpenseRepository expenseRepository;
     private readonly AppDbContext _dbContext;
     private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
-    public ExpenseRepositoryTests()
+    public ExpenseRepositoryDbTests()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "TestDatabase").Options;
         _dbContext = new AppDbContext(options);

@@ -4,7 +4,6 @@ using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.DataAccess.Repositories;
 
@@ -15,8 +14,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
     public async Task<bool> AddStelexosInDb(Stelexos stelexos)
     {
-        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+        var isInMemoryDatabase = _dbContext.Database?.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase || _dbContext.Database == null
+            ? null 
+            : await _dbContext.Database.BeginTransactionAsync();
 
         if (stelexos == null)
             throw new ArgumentNullException(nameof(stelexos), "Stelexos cannot be null");
@@ -150,7 +151,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+           _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             return null!;
         }
@@ -306,6 +307,9 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
     private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string xwrosName)
     {
+        if (string.IsNullOrEmpty(xwrosName))
+            return await GetAllOmadarxes();
+
         var isXwrosAnKoinotita = _dbContext.Koinotites!.Any(k => k.Name.Equals(xwrosName));
         if (isXwrosAnKoinotita)
             return await GetOmadarxesAnaKoinotita(xwrosName);
@@ -315,12 +319,15 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             if (isXwrosATomeas)
                 return await GetOmadarxesAnaTomea(xwrosName);
             else
-                return null!;
+                return await GetAllOmadarxes();
         }
     }
 
     private async Task<IEnumerable<Koinotarxis>> GetKoinotarxesAnaXwro(string xwrosName)
     {
+        if (string.IsNullOrEmpty(xwrosName))
+            return await _dbContext.Koinotarxes!.ToListAsync();
+        
         var isXwrosAnTomeas = _dbContext.Tomeis!.Any(k => k.Name.Equals(xwrosName));
         if (isXwrosAnTomeas)
             return await GetKoinotarxesAnaTomea(xwrosName);
@@ -339,7 +346,12 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
     {
         if (string.IsNullOrEmpty(name))
             return await _dbContext.Omadarxes!.ToListAsync();
-        return await _dbContext.Skines!.Where(k => k.Koinotita.Name == name).Select(k => k.Omadarxis).ToListAsync();
+        return await _dbContext.Skines!.Where(sk => sk.Koinotita.Tomeas.Name == name).Select(k => k.Omadarxis).ToListAsync();
+    }
+
+    private async Task<List<Omadarxis>> GetAllOmadarxes()
+    {
+        return await _dbContext.Omadarxes!.ToListAsync();
     }
 
     private async Task<List<Koinotarxis>> GetKoinotarxesAnaTomea(string? tomeasName)

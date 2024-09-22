@@ -9,19 +9,19 @@ namespace StelexarasApp.DataAccess
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Expense>? Expenses { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
-        public DbSet<Duty>? Duties { get; set; }
+        public DbSet<Duty> Duties { get; set; }
 
-        public DbSet<Omadarxis>? Omadarxes { get; set; }
-        public DbSet<Koinotarxis>? Koinotarxes { get; set; }
-        public DbSet<Tomearxis>? Tomearxes { get; set; }
-        public DbSet<Ekpaideutis>? Ekpaideutes { get; set; }
+        public virtual DbSet<Omadarxis> Omadarxes { get; set; }
+        public virtual DbSet<Koinotarxis> Koinotarxes { get; set; }
+        public virtual DbSet<Tomearxis> Tomearxes { get; set; }
+        public DbSet<Ekpaideutis> Ekpaideutes { get; set; }
         public DbSet<Paidi>? Paidia { get; set; }
 
-        public DbSet<Koinotita>? Koinotites { get; set; }
-        public DbSet<Skini>? Skines { get; set; }
-        public DbSet<Tomeas>? Tomeis { get; set; }
+        public DbSet<Koinotita> Koinotites { get; set; }
+        public DbSet<Skini> Skines { get; set; }
+        public DbSet<Tomeas> Tomeis { get; set; }
 
         public string? ConnectionString { get; set; }
 

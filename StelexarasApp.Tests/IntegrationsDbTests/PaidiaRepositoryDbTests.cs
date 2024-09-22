@@ -7,15 +7,15 @@ using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Models.Domi;
 using Microsoft.Extensions.Logging;
 
-namespace StelexarasApp.Tests.DataAccessTests;
+namespace StelexarasApp.Tests.IntegrationDbTests;
 
-public class PaidiaRepositoryTests
+public class PaidiaRepositoryDbTests
 {
     private readonly IPaidiRepository _paidiRepository;
     private readonly AppDbContext _dbContext;
     private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
     
-    public PaidiaRepositoryTests()
+    public PaidiaRepositoryDbTests()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
            .UseInMemoryDatabase(databaseName: "TestDatabase")

@@ -366,5 +366,17 @@ namespace StelexarasApp.DataAccess.Repositories
                 return Task.FromResult(true);
             else return Task.FromResult(false);
         }
+
+        public Task<bool> AddTomeasInDb(Tomeas tomeas)
+        {
+            if (tomeas is null || _dbContext.Tomeis is null)
+                return Task.FromResult(false);
+
+            var skiniInDb = _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Id == tomeas.Id);
+
+            if (skiniInDb != null)
+                return Task.FromResult(true);
+            else return Task.FromResult(false);
+        }
     }
 }

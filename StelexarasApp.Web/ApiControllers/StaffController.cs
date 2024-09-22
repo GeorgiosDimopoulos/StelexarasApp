@@ -9,14 +9,9 @@ namespace StelexarasApp.Web.ApiControllers
     [ApiController]
     [Route("[controller]")]
     [ApiExplorerSettings(IgnoreApi = false)]
-    public class StaffController : ControllerBase
+    public class StaffController(IStaffService stelexiService) : ControllerBase
     {
-        private readonly IStaffService _stelexiService;
-
-        public StaffController(IStaffService stelexiService)
-        {
-            _stelexiService = stelexiService;
-        }
+        private readonly IStaffService _stelexiService = stelexiService;
 
         [HttpGet("Omadarxes")]
         public async Task<ActionResult<IEnumerable<Stelexos>>> GetOmadarxes()

@@ -6,14 +6,26 @@ public interface ITeamsService
 {
     Task<bool> AddSkiniInService(SkiniDto skini);
     Task<bool> AddKoinotitaInService(KoinotitaDto skini);
+    Task<bool> AddTomeasInService(TomeasDto skini);
+
     Task<bool> DeleteSkiniInService(int skiniId);
     Task<bool> DeleteKoinotitaInService(int koinotitaId);
+    Task<bool> DeleteTomeasInService(int tomeasId);
+
     Task<bool> UpdateSkiniInService(SkiniDto skini);
-    Task<IEnumerable<SkiniDto>> GetAllSkines();
+    Task<bool> UpdateKoinotitaInService(KoinotitaDto koinotita);
+    Task<bool> UpdateTomeaInService(TomeasDto tomeas);
+
+    Task<IEnumerable<SkiniDto>> GetAllSkinesInService();
+    Task<IEnumerable<KoinotitaDto>> GetAllKoinotitesInService();
+    Task<IEnumerable<TomeasDto>> GetAllTomeisInService();
+           
     Task<IEnumerable<SkiniDto>> GetSkinesAnaKoinotitaInService(string name);
+    Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomeaInService(int name);
 
-    Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomea(int name);
+    Task<SkiniDto> GetSkiniByNameInService(string name);
+    Task<SkiniDto> GetKoinotitaByNameInService(string name);
+    Task<TomeasDto> GetTomeaByNameInService(string name);
 
-    Task<TomeasDto> GetTomeaByNameInDb(string name); 
-    Task<SkiniDto> GetSkiniByName(string name);
+    Task<IEnumerable<SkiniDto>> GetSkinesEkpaideuomenonInService();
 }

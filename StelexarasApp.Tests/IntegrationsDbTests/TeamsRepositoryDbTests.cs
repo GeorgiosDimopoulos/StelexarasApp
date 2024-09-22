@@ -8,15 +8,15 @@ using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 
-namespace StelexarasApp.Tests.DataAccessTests
+namespace StelexarasApp.Tests.IntegrationDbTests
 {
-    public class TeamsRepositoryTests
+    public class TeamsRepositoryDbTests
     {
         private readonly ITeamsRepository _teamsRepository;
         private readonly AppDbContext _dbContext;
         private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
-        public TeamsRepositoryTests()
+        public TeamsRepositoryDbTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                .UseInMemoryDatabase(databaseName: "TestDatabase")

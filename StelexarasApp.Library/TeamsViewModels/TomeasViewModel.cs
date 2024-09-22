@@ -30,7 +30,7 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
 
         private async Task<IEnumerable<KoinotitaDto>> GetKoinotitesForTomea(int tomeasId)
         {
-            return await _teamsService.GetKoinotitesAnaTomea(tomeasId);
+            return await _teamsService.GetKoinotitesAnaTomeaInService(tomeasId);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

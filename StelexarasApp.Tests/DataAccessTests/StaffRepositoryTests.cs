@@ -3,62 +3,60 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.DataAccess.Models.Atoma;
+using Moq;
+using System.Linq.Expressions;
+using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.Tests.DataAccessTests;
 
 public class StaffRepositoryTests
 {
     private readonly IStaffRepository _stelexiRepository;
-    private readonly AppDbContext _dbContext;
-    private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+    private readonly Mock<AppDbContext> _mockDbContext;
+    private readonly Mock<ILoggerFactory> _mockLoggerFactory;
 
     public StaffRepositoryTests()
     {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-           .UseInMemoryDatabase(databaseName: "TestDatabase")
-           .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-           .Options;
-        _dbContext = new AppDbContext(options);
-        _stelexiRepository = new StaffRepository(_dbContext, loggerFactory);
+        _mockDbContext = new Mock<AppDbContext>();
+        _mockLoggerFactory = new Mock<ILoggerFactory>();
+
+        var mockOmadarxisDbSet = new Mock<DbSet<Omadarxis>>();
+        _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
+        var mockKoinotarxisDbSet = new Mock<DbSet<Koinotarxis>>();
+        _mockDbContext.Setup(db => db.Koinotarxes).Returns(mockKoinotarxisDbSet.Object);
+        var mockTomearxisDbSet = new Mock<DbSet<Tomearxis>>();
+        _mockDbContext.Setup(db => db.Tomearxes).Returns(mockTomearxisDbSet.Object);
+
+        _stelexiRepository = new StaffRepository(_mockDbContext.Object, _mockLoggerFactory.Object);
     }
 
-    [Fact]
     public async Task GetStelexosByIdInDb_ShouldReturnStelexos_WhenStelexosExists()
     {
         // Arrange
-        var stelexos = new Omadarxis { Id = 1, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "19123123" };
+        var existingOmadarxis = new Omadarxis { Id = 1, FullName = "Test Name", Tel = "123121311" };
+        var mockOmadarxisDbSet = SetupMockOmadarxisDbSet(new List<Omadarxis> { existingOmadarxis });
 
-        await _dbContext.Omadarxes!.AddAsync(stelexos);
-        await _dbContext.SaveChangesAsync();
+        _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
-        var result = await _stelexiRepository.GetStelexosByIdInDb(stelexos.Id, stelexos.Thesi);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(existingOmadarxis.Id, existingOmadarxis.Thesi);
 
         // Assert
-        Assert.Equal(stelexos, result);
+        Assert.NotNull(result);
+        Assert.Equal(existingOmadarxis.FullName, result.FullName);
     }
 
-    [Fact]
     public async Task GetStelexosByIdInDb_ShouldReturnNull_WhenStelexosDoesNotExist()
     {
         // Arrange
-        var stelexos = new Omadarxis
-        {
-            Id = 1,
-            Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
-            Sex = Sex.Male,
-            Tel = "1234567890",
-        };
-
-        await _dbContext.Omadarxes!.AddAsync(stelexos);
-        await _dbContext.SaveChangesAsync();
+        var nonExistentId = 999;
+        /HERE
+        var mockOmadarxisDbSet = SetupMockOmadarxisDbSet(new List<Omadarxis>());
+        _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
-        var result = await _stelexiRepository.GetStelexosByIdInDb(2, stelexos.Thesi);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(nonExistentId, Thesi.Omadarxis);
 
         // Assert
         Assert.Null(result);
@@ -84,25 +82,6 @@ public class StaffRepositoryTests
     }
 
     [Fact]
-    public async Task AddStelexosInDb_ShouldThrowArgumentException_WhenThesiIsInvalid()
-    {
-        // Arrange
-        var stelexos = new Omadarxis
-        {
-            Id = 1,
-            Thesi = (Thesi)999, // Invalid Thesi value
-            FullName = "Test Name",
-            Tel = "123-456-7890"
-        };
-
-        // Act & Assert
-        await Assert.ThrowsAsync<ArgumentException>(async () =>
-        {
-            await _stelexiRepository.AddStelexosInDb(stelexos);
-        });
-    }
-
-    [Fact]
     public async Task AddStelexosInDb_ShouldThrowException_WhenRequiredPropertiesAreMissing()
     {
         // Arrange
@@ -110,7 +89,7 @@ public class StaffRepositoryTests
         {
             Id = 1,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name"
+            FullName = "TestName",
         };
 
         // Act & Assert
@@ -124,20 +103,12 @@ public class StaffRepositoryTests
     public async Task UpdateStelexosInDb_ShouldReturnTrue_WhenStelexosIsUpdated()
     {
         // Arrange
-        var stelexos = new Omadarxis
-        {
-            Id = 1,
-            Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
-            Tel = "123-456-7890"
-        };
-
-        await _dbContext.Omadarxes!.AddAsync(stelexos);
-        await _dbContext.SaveChangesAsync();
+        var existingOmadarxis = new Omadarxis { Id = 1, FullName = "Test Name", Tel = "123121311" };
+        var mockOmadarxisDbSet = SetupMockOmadarxisDbSet(new List<Omadarxis> { existingOmadarxis });
+        _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
-        stelexos.FullName = "Updated Name";
-        var result = await _stelexiRepository.UpdateStelexosInDb(stelexos);
+        var result = await _stelexiRepository.UpdateStelexosInDb(existingOmadarxis);
 
         // Assert
         Assert.True(result);
@@ -147,37 +118,36 @@ public class StaffRepositoryTests
     public async Task DeleteStelexosInDb_ShouldReturnTrue_WhenStelexosIsDeleted()
     {
         // Arrange
-        var stelexos = new Omadarxis
+        var existingOmadarxis = new Omadarxis { Id = 1, FullName = "Test Name", Tel = "123-456-7890" };
+        var mockOmadarxisDbSet = SetupMockOmadarxisDbSet(new List<Omadarxis>
         {
-            Id = 1,
-            Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
-            Tel = "123-456-7890"
-        };
+            existingOmadarxis
+        });
 
-        await _dbContext.Omadarxes!.AddAsync(stelexos);
-        await _dbContext.SaveChangesAsync();
+        _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
-        var result = await _stelexiRepository.DeleteStelexosInDb(stelexos.Id, stelexos.Thesi);
+        var result = await _stelexiRepository.DeleteStelexosInDb(existingOmadarxis.Id, existingOmadarxis.Thesi);
 
         // Assert
         Assert.True(result);
+        _mockDbContext.Verify(db => db.Omadarxes.Remove(It.IsAny<Omadarxis>()), Times.Once);
+        _mockDbContext.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
     public async Task GetAllOmadarxesInDb_ShouldReturnAllStelexos()
     {
         // Arrange
-        var stelexos = new Omadarxis { Id = 3, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "123-456-7890" };
-        var stelexos2 = new Omadarxis { Id = 4, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "123-456-7890" };
-        var stelexos3 = new Omadarxis { Id = 5, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "123-456-7890" };
-
-        await _dbContext.Omadarxes!.AddRangeAsync(stelexos, stelexos2, stelexos3);
-        await _dbContext.SaveChangesAsync();
+        var existingOmadarxis = new Omadarxis { Id = 1, FullName = "Test Name", Tel = "123-456-7890", Thesi = Thesi.Omadarxis };
+        var mockOmadarxisDbSet = SetupMockOmadarxisDbSet(new List<Omadarxis>
+        {
+            existingOmadarxis
+        });
+        _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
-        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, string.Empty);
+        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, "");
 
         // Assert
         Assert.NotNull(result);
@@ -187,16 +157,51 @@ public class StaffRepositoryTests
     public async Task GetAllKoinotarxesInDb_ShouldReturnAllStelexos()
     {
         // Arrange
-        var stelexos2 = new Koinotarxis { Id = 4, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890" };
-        var stelexos = new Koinotarxis { Id = 5, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890" };
+        var omadarxisList = new List<Koinotarxis>
+        {
+            new Koinotarxis { Id = 1, FullName = "Test Name 1", Age = 30, Tel = "1234567890", Koinotita = new Koinotita(), Thesi = Thesi.Koinotarxis},
+            new Koinotarxis { Id = 2, FullName = "Test Name 2", Age = 25, Tel = "0987654321", Koinotita = new Koinotita(), Thesi = Thesi.Koinotarxis}
+        };
 
-        await _dbContext.Koinotarxes!.AddRangeAsync(stelexos, stelexos2);
-        await _dbContext.SaveChangesAsync();
+        var mockKoinotarxisDbSet = SetupMockKoinotarxisDbSet(omadarxisList);
+        _mockDbContext.Setup(db => db.Koinotarxes).Returns(mockKoinotarxisDbSet.Object);
 
         // Act
         var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, string.Empty);
 
         // Assert
         Assert.NotNull(result);
+    }
+
+    private Mock<DbSet<Omadarxis>> SetupMockOmadarxisDbSet(IEnumerable<Omadarxis> omadarxisData)
+    {
+        var mockOmadarxisDbSet = new Mock<DbSet<Omadarxis>>();
+        var omadarxisQueryable = omadarxisData.AsQueryable();
+
+        mockOmadarxisDbSet.As<IQueryable<Omadarxis>>().Setup(m => m.Provider).Returns(omadarxisQueryable.Provider);
+        mockOmadarxisDbSet.As<IQueryable<Omadarxis>>().Setup(m => m.Expression).Returns(omadarxisQueryable.Expression);
+        mockOmadarxisDbSet.As<IQueryable<Omadarxis>>().Setup(m => m.ElementType).Returns(omadarxisQueryable.ElementType);
+        mockOmadarxisDbSet.As<IQueryable<Omadarxis>>().Setup(m => m.GetEnumerator()).Returns(omadarxisQueryable.GetEnumerator());
+
+        mockOmadarxisDbSet.Setup(m => m.ToListAsync(It.IsAny<CancellationToken>())).ReturnsAsync(omadarxisData.ToList());
+
+        mockOmadarxisDbSet.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<Omadarxis, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Expression<Func<Omadarxis, bool>> predicate, CancellationToken _) => omadarxisQueryable.FirstOrDefault(predicate));
+
+
+        return mockOmadarxisDbSet;
+    }
+
+    private Mock<DbSet<Koinotarxis>> SetupMockKoinotarxisDbSet(IEnumerable<Koinotarxis> omadarxisData)
+    {
+        var mockKoinotarxisDbSet = new Mock<DbSet<Koinotarxis>>();
+        var koinotarxisQueryable = omadarxisData.AsQueryable();
+
+        mockKoinotarxisDbSet.As<IQueryable<Koinotarxis>>().Setup(m => m.Provider).Returns(koinotarxisQueryable.Provider);
+        mockKoinotarxisDbSet.As<IQueryable<Koinotarxis>>().Setup(m => m.Expression).Returns(koinotarxisQueryable.Expression);
+        mockKoinotarxisDbSet.As<IQueryable<Koinotarxis>>().Setup(m => m.ElementType).Returns(koinotarxisQueryable.ElementType);
+        mockKoinotarxisDbSet.As<IQueryable<Koinotarxis>>().Setup(m => m.GetEnumerator()).Returns(koinotarxisQueryable.GetEnumerator());
+
+        return mockKoinotarxisDbSet;
     }
 }

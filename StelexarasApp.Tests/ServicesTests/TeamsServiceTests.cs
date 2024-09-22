@@ -4,6 +4,7 @@ using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.Tests.ServicesTests;
@@ -11,7 +12,7 @@ namespace StelexarasApp.Tests.ServicesTests;
 public class TeamsServiceTests
 {
     private readonly Mock<ITeamsRepository> _mockdteamsRepository;
-    private readonly TeamsService _teamsService;
+    private readonly ITeamsService _teamsService;
     private readonly Mock<IMapper> _mockMapper;
 
     public TeamsServiceTests()
@@ -61,7 +62,7 @@ public class TeamsServiceTests
         _mockdteamsRepository.Setup(m => m.GetSkinesInDb()).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetAllSkines();
+        var result = await _teamsService.GetAllSkinesInService();
 
         // Assert
         Assert.NotNull(result);
@@ -79,7 +80,7 @@ public class TeamsServiceTests
         _mockdteamsRepository.Setup(m => m.GetTomeisInDb()).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetTomeisInService();
+        var result = await _teamsService.GetAllTomeisInService();
 
         // Assert
         Assert.NotNull(result);
@@ -108,7 +109,7 @@ public class TeamsServiceTests
         _mockdteamsRepository.Setup(m => m.GetKoinotitesInDb()).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetKoinotitesInService();
+        var result = await _teamsService.GetAllKoinotitesInService();
 
         // Assert
         Assert.NotNull(result);
@@ -142,7 +143,7 @@ public class TeamsServiceTests
         _mockdteamsRepository.Setup(m => m.GetKoinotitesAnaTomeaInDb(tomeasId)).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetKoinotitesInService();
+        var result = await _teamsService.GetAllKoinotitesInService();
 
         // Assert
         Assert.NotNull(result);
