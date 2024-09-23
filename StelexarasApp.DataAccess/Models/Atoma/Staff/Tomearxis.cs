@@ -1,27 +1,25 @@
 ﻿using StelexarasApp.DataAccess.Models.Domi;
 using System.ComponentModel.DataAnnotations;
 
-namespace StelexarasApp.DataAccess.Models.Atoma.Staff
+namespace StelexarasApp.DataAccess.Models.Atoma.Staff;
+
+public class Tomearxis : Stelexos
 {
-    public class Tomearxis : Stelexos
-    {
-        [Required]
-        public string FullName { get; set; } = null!;
+    public required string FullName { get; set; }
 
-        [Key]
-        public int Id { get; set; }
+    [Key]
+    public int Id { get; set; }
 
-        public int Age { get; set; }
+    public int Age { get; set; }
 
-        public Sex Sex { get; set; }
+    public Sex Sex { get; set; }
 
-        [Required]
-        public string Tel { get; set; }
+    [Required]
+    public required string Tel { get; set; }
 
-        [Required]
-        public Tomeas Tomeas { get; set; } = new Tomeas();
-        public Thesi Thesi { get; set; } = Thesi.Tomearxis;
-        // public int TomeasId { get; set; }
-        public IEnumerable<Koinotarxis> Koinotarxes { get; set; } = null!;
-    }
+    [Required]
+    public required Tomeas Tomeas { get; set; }
+    public Thesi Thesi { get; set; } = Thesi.Tomearxis;
+    // public int TomeasId { get; set; }
+    public IEnumerable<Koinotarxis> Koinotarxes { get; set; } = null!;
 }

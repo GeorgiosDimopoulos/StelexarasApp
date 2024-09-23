@@ -39,14 +39,11 @@ if (app.Environment.IsDevelopment())
 }
 
 // var redirectUrl = Environment.GetEnvironmentVariable("DEFAULT_REDIRECT_URL") ?? "/KoinotitaWeb/Index";
-// var redirectUrl = ResourceHelper.GetValue("DefaultRedirectUrl");
 var redirectUrl = builder.Configuration ["DefaultRedirectUrl"];
-
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/")
     {
-        // context.Response.Redirect("/Koinotita/Index");
         context.Response.Redirect(redirectUrl);
         return;
     }

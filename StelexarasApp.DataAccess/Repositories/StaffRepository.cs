@@ -85,6 +85,11 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         //}
     }
 
+    public async Task<IEnumerable<Omadarxis>> GetAllOmadarxesInDb()
+    {
+        return await _dbContext.Omadarxes!.ToListAsync();
+    }
+
     public async Task<bool> DeleteStelexosInDb(int id, Thesi thesi)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";

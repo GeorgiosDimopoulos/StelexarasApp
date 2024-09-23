@@ -30,7 +30,8 @@ namespace StelexarasApp.DataAccess.Helpers
                         File.AppendAllText(LogFileUiWarrningsPath, message);
                         break;
                 }
-                File.AppendAllText(logFilePath, message);
+                
+                // File.AppendAllText(logFilePath, message);
             }
             catch (Exception ex)
             {

@@ -320,6 +320,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
                     FullName = "Test Tomearxis",
                     Tel = "1234567890",
                     Age = 30,
+                    Tomeas = new Tomeas { Name = "TestTomea" }
                 },
                 Koinotites = [],
             };

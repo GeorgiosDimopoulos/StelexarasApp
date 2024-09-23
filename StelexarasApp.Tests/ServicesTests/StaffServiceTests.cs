@@ -114,7 +114,8 @@ public class StaffServiceTests
                     Age = 30,
                     Sex = Sex.Male,
                     Thesi = thesi,
-                    Tel = "1234567890"
+                    Tel = "1234567890",
+                    Tomeas = new Tomeas { Name = "TestTomea" }
                 };
                 break;
             case Thesi.None:
@@ -122,7 +123,7 @@ public class StaffServiceTests
                 {
                     new Omadarxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Omadarxis, Tel = "1234567890" },
                     new Koinotarxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Koinotarxis, Tel = "1234567890" },
-                    new Tomearxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Tomearxis, Tel = "1234567890" }
+                    new Tomearxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Tomearxis, Tel = "1234567890", Tomeas = new Tomeas { Name = "TestTomea" } }
                 };
                 _mockStelexiRepository.Setup(r => r.GetStelexosByNameInDb(name, Thesi.None))
                     .ReturnsAsync(allStelexos.FirstOrDefault(x => x.FullName == name));
@@ -337,11 +338,11 @@ public class StaffServiceTests
         // Arrange
         var tomearxes = new List<Tomearxis>
         {
-            new() { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890" }
+            new() { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890", Tomeas = new Tomeas { Name = "TestTomea" } }
         };
         var tomearxesDtos = new List<TomearxisDto>
         {
-            new() { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890" }
+            new() { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890"}
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Tomearxis, string.Empty)).ReturnsAsync(tomearxes);
