@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
@@ -12,6 +13,12 @@ using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
 using System.Text.RegularExpressions;
+
+var connection = new HubConnectionBuilder()
+    .WithUrl("http://localhost:5000/myhub") // Adjust URL as needed
+    .Build();
+await connection.StartAsync();
+Console.WriteLine("Connected to SignalR hub.");
 
 var serviceProvider = new ServiceCollection()
     .AddDbContext<AppDbContext>()
@@ -55,44 +62,62 @@ switch (choice)
     case 1:
         var newKataskinotis = CreatePaidiFromUserInput(0);
         if (await paidiService.AddPaidiInService(newKataskinotis))
+        {
+            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Kataskinotis created: {newKataskinotis.FullName}");
             Console.WriteLine("Kataskinotis created");
+        }
         else
             Console.WriteLine("Failed to create Kataskinotis.");
         break;
     case 2:
         var newEkpaideuomenos = CreatePaidiFromUserInput(1);
         if (await paidiService.AddPaidiInService(newEkpaideuomenos))
+        {
+            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Ekpaideuomenos created: {newEkpaideuomenos.FullName}");
             Console.WriteLine("Ekpaideuomenos created");
+        }
         else
             Console.WriteLine("Failed to create Ekpaideuomenos.");
         break;
     case 3:
         var newOmadarxis = CreateStelexosFromUserInput(Thesi.Omadarxis);
         if (await stelexiService.AddStelexosInService(newOmadarxis, Thesi.Omadarxis))
+        {
+            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Omadarxis created: {newOmadarxis.FullName}");
             Console.WriteLine("Omadarxis created");
+        }
         else
             Console.WriteLine("Failed to create Omadarxis.");
         break;
     case 4:
         var newKoinotarxis = CreateStelexosFromUserInput(Thesi.Koinotarxis);
         if (await stelexiService.AddStelexosInService(newKoinotarxis, Thesi.Koinotarxis))
-            Console.WriteLine("Omadarxis created");
+        {
+            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Koinotarxis created: {newKoinotarxis.FullName}");
+            Console.WriteLine("Koinotarxis created");
+        }
         else
-            Console.WriteLine("Failed to create Omadarxis.");
+            Console.WriteLine("Failed to create Koinotarxis.");
         break;
     case 5:
         var newTomearxis = CreateStelexosFromUserInput(Thesi.Tomearxis);
         if (await stelexiService.AddStelexosInService(newTomearxis, Thesi.Tomearxis))
-            Console.WriteLine("Omadarxis created");
+        {
+            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Koinotarxis created: {newTomearxis.FullName}");
+            Console.WriteLine("Tomearxis created");
+        }
         else
-            Console.WriteLine("Failed to create Omadarxis.");
+            Console.WriteLine("Failed to create Tomearxis.");
         break;
     case 6:
         var newEkpaideutis = CreateStelexosFromUserInput(Thesi.Ekpaideutis);
         if (await stelexiService.AddStelexosInService(newEkpaideutis, Thesi.Ekpaideutis))
-            Console.WriteLine("Omadarxis created");
+        {
+            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Ekpaideutis created: {newEkpaideutis.FullName}");
+            Console.WriteLine("Ekpaideutis created");
+        }
         else
-            Console.WriteLine("Failed to create Omadarxis.");
+            Console.WriteLine("Failed to create OmadEkpaideutisarxis.");
         break;
     default:
         Console.WriteLine("Invalid choice");

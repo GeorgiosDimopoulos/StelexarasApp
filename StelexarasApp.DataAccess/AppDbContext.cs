@@ -68,7 +68,7 @@ namespace StelexarasApp.DataAccess
             OnModelsRelationsCreating(modelBuilder);
         }
 
-        private void OnModelsRelationsCreating(ModelBuilder modelBuilder)
+        private static void OnModelsRelationsCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Paidi>()
                 .HasOne(p => p.Skini)
@@ -97,21 +97,18 @@ namespace StelexarasApp.DataAccess
             // modelBuilder.Entity<Skini>().ToTable("Skines");
         }
 
-        private void OnModelsRulesCreating(ModelBuilder modelBuilder)
+        private static void OnModelsRulesCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Paidi>().HasKey(p => p.Id);
 
             modelBuilder.Entity<Omadarxis>().HasKey(o => o.Id);
-            modelBuilder.Entity<Omadarxis>().HasIndex(s => s.Tel).IsUnique();
 
             modelBuilder.Entity<Koinotarxis>().HasKey(k => k.Id);
-            modelBuilder.Entity<Koinotarxis>().HasIndex(s => s.Tel).IsUnique();
 
             modelBuilder.Entity<Tomearxis>().HasKey(t => t.Id);
-            modelBuilder.Entity<Tomearxis>().HasIndex(s => s.Tel).IsUnique();
 
             modelBuilder.Entity<Ekpaideutis>().HasKey(k => k.Id);
-            modelBuilder.Entity<Ekpaideutis>().HasIndex(s => s.Tel).IsUnique();
+            // modelBuilder.Entity<Ekpaideutis>().HasIndex(s => s.Tel).IsUnique();
 
             modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);

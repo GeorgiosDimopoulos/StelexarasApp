@@ -25,28 +25,28 @@ namespace StelexarasApp.DataAccess.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Tel",
                 table: "Tomearxes",
-                type: "nvarchar(max)",
+                type: "nvarchar(100)",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "Tel",
                 table: "Omadarxes",
-                type: "nvarchar(max)",
+                type: "nvarchar(100)",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "Tel",
                 table: "Koinotarxes",
-                type: "nvarchar(max)",
+                type: "nvarchar(100)",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "Tel",
                 table: "Ekpaideutis",
-                type: "nvarchar(max)",
+                type: "nvarchar(100)",
                 nullable: false,
                 defaultValue: "");
         }

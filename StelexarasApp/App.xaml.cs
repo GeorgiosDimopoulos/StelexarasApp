@@ -13,90 +13,86 @@ using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.ViewModels.TeamsViewModels;
 using StelexarasApp.Views.TeamsViews;
 
-namespace StelexarasApp.UI
+namespace StelexarasApp.UI;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public static IServiceProvider ServiceProvider { get; private set; } = null!;
+
+    public App()
     {
-        public static IServiceProvider ServiceProvider { get; private set; } = null!;
-        private AppDbContext? _dbContext;
+        InitializeComponent();
+        ConfigureServices();
+        InitializeDatabaseAsync(ServiceProvider).Wait();
+        ListTablesAsync();
 
-        public App()
-        {
-            InitializeComponent();
-            ConfigureServices();
-            InitializeDatabaseAsync(ServiceProvider).Wait();
-            ListTablesAsync();
+        // MainPage = new AppShell();
+        MainPage = ServiceProvider.GetRequiredService<MainPage>();
+    }
 
-            MainPage = new AppShell();
-        }
-
-        private void ConfigureServices()
-        {
-            var services = new ServiceCollection();
-            services.AddSingleton<IDatabasePathProvider, DatabasePathProvider>();
+    private void ConfigureServices()
+    {
+        var services = new ServiceCollection();
+        services.AddSingleton<IDatabasePathProvider, DatabasePathProvider>();
 
 #if DEBUG
-            // Use SQLite in Debug mode
-            var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "app.db");
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlite($"Data Source={dbPath}");
-            });
+        // Use SQLite in Debug mode
+        var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "app.db");
+        services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseSqlite($"Data Source={dbPath}");
+        });
 #else
-            // Use SQL Server in Release mode
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+        // Use SQL Server in Release mode
+        services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+        });
 #endif
-            
-            services.AddTransient<SxoliViewModel>();
-            services.AddTransient<ExpensesViewModel>();
-            services.AddTransient<StaffViewModel>();
-            services.AddTransient<DutyViewModel>();
-            services.AddTransient<PaidiInfoViewModel>();
-            services.AddTransient<StelexosInfoViewModel>();
+        services.AddTransient<AppShell>();
+        services.AddTransient<SxoliViewModel>();
+        services.AddTransient<ExpensesViewModel>();
+        services.AddTransient<StaffViewModel>();
+        services.AddTransient<DutyViewModel>();
+        services.AddTransient<PaidiInfoViewModel>();
+        services.AddTransient<StelexosInfoViewModel>();
 
-            services.AddTransient<GeneralTeamsPage>();
-            services.AddTransient<TomeasInfoPage>();
-            services.AddTransient<KoinotitaInfoPage>();
-            services.AddTransient<ExpensesPage>();
-            services.AddTransient<StaffPage>();
-            services.AddTransient<ToDoPage>();
-            services.AddTransient<StelexosInfoPage>();
-            services.AddTransient<SkiniInfoPage>();
-            services.AddTransient<PaidiInfoPage>();
+        services.AddTransient<GeneralTeamsPage>();
+        services.AddTransient<TomeasInfoPage>();
+        services.AddTransient<KoinotitaInfoPage>();
+        services.AddTransient<ExpensesPage>();
+        services.AddTransient<StaffPage>();
+        services.AddTransient<ToDoPage>();
+        services.AddTransient<StelexosInfoPage>();
+        services.AddTransient<SkiniInfoPage>();
+        services.AddTransient<PaidiInfoPage>();
 
-            services.AddScoped<IDutyService, DutyService>();
-            services.AddScoped<IStaffService, StaffService>();
-            services.AddScoped<IPaidiaService, PaidiaService>();
-            services.AddScoped<IExpenseService, ExpenseService>();
-            services.AddScoped<ITeamsService, TeamsService>();
+        services.AddScoped<IDutyService, DutyService>();
+        services.AddScoped<IStaffService, StaffService>();
+        services.AddScoped<IPaidiaService, PaidiaService>();
+        services.AddScoped<IExpenseService, ExpenseService>();
+        services.AddScoped<ITeamsService, TeamsService>();
 
-            ServiceProvider = services.BuildServiceProvider();
+        ServiceProvider = services.BuildServiceProvider();
+    }
 
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                _dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                _dbContext.Database.Migrate();
-            }
-        }
-
-        private static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider)
+    private static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider)
+    {
+        using (var scope = serviceProvider.CreateScope())
         {
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                await dbContext.Database.MigrateAsync();
-            }
+            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            await dbContext.Database.MigrateAsync();
         }
+    }
 
-        public void ListTablesAsync()
+    public void ListTablesAsync()
+    {
+        using (var scope = ServiceProvider.CreateScope())
         {
+            var _dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
             if (_dbContext == null)
-            {
                 throw new InvalidOperationException("Database context is not initialized.");
-            }
 
             var tableNames = new List<string>();
             var sql = "SELECT name FROM sqlite_master WHERE type='table';";

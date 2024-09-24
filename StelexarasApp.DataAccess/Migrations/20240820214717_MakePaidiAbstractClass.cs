@@ -105,7 +105,7 @@ namespace StelexarasApp.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SkiniId = table.Column<int>(type: "int", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     PaidiType = table.Column<int>(type: "int", nullable: false),
                     SeAdeia = table.Column<bool>(type: "bit", nullable: false),
                     Sex = table.Column<int>(type: "int", nullable: false)
