@@ -69,64 +69,57 @@ app.Run();
 
 void ConfigureServives(WebApplicationBuilder builder)
 {
-    builder.Services.AddTransient<PaidiDto>();
-    builder.Services.AddTransient<StelexosDto>();
-    builder.Services.AddTransient<TomearxisDto>();
-    builder.Services.AddTransient<OmadarxisDto>();
-    builder.Services.AddTransient<KoinotarxisDto>();
+    // ToDo: Remove DTO registrations?
+    //builder.Services.AddTransient<PaidiDto>();
+    //builder.Services.AddTransient<StelexosDto>();
+    //builder.Services.AddTransient<TomearxisDto>();
+    //builder.Services.AddTransient<OmadarxisDto>();
+    //builder.Services.AddTransient<KoinotarxisDto>();
 
+    // register Repositories
     builder.Services.AddScoped<IPaidiRepository, PaidiRepository>();
     builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
     builder.Services.AddScoped<IDutyRepository, DutyRepository>();
     builder.Services.AddScoped<IStaffRepository, StaffRepository>();
     builder.Services.AddScoped<ITeamsRepository, TeamsRepository>();
 
-    builder.Services.AddControllers();
-    builder.Services.AddControllersWithViews();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-
-    builder.Services.AddSignalR();
-
-    builder.Services.AddHealthChecks()
-        .AddCheck<DbHealthCheck>("Database");
-
-    // builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-    builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-    // Add DbContext with SQL Server
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-    // Register your own application services
+    // register Services
     builder.Services.AddScoped<IStaffService, StaffService>();
     builder.Services.AddScoped<IPaidiaService, PaidiaService>();
     builder.Services.AddScoped<IExpenseService, ExpenseService>();
     builder.Services.AddScoped<ITeamsService, TeamsService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
 
-    builder.Services.AddTransient(provider =>
-    {
-        var paidiaService = provider.GetRequiredService<IPaidiaService>();
-        var teamsService = provider.GetRequiredService<ITeamsService>();
-        return new SxoliViewModel(teamsService, paidiaService);
-    });
-
-    builder.Services.AddTransient(provider =>
-    {
-        var staffService = provider.GetRequiredService<IStaffService>();
-        return new StaffViewModel(staffService, "Koinotita");
-    });
-
-    builder.Services.AddTransient(provider =>
-    {
-        var paidiaService = provider.GetRequiredService<IPaidiaService>();
-        return new PaidiInfoViewModel(new PaidiDto(), paidiaService, "Skini");
-    });
-
+    // register ViewModels
     builder.Services.AddTransient<ExpensesViewModel>();
     builder.Services.AddTransient<PaidiaViewModel>();
     builder.Services.AddTransient<StelexosInfoViewModel>();
     builder.Services.AddTransient<DutyViewModel>();
     builder.Services.AddTransient<SxoliViewModel>();
+
+    //builder.Services.AddTransient(provider =>
+    //{
+    //    var paidiaService = provider.GetRequiredService<IPaidiaService>();
+    //    return new PaidiInfoViewModel(new PaidiDto(), paidiaService, "Skini");
+    //});
+    builder.Services.AddScoped<StaffViewModel>(provider =>
+        new StaffViewModel(provider.GetRequiredService<IStaffService>(), "Koinotita"));
+    builder.Services.AddScoped<PaidiInfoViewModel>(provider =>
+        new PaidiInfoViewModel(new PaidiDto(), provider.GetRequiredService<IPaidiaService>(), "Skini"));
+
+    // MVC and Health Checks
+    builder.Services.AddControllers();
+    builder.Services.AddControllersWithViews();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddSignalR();
+    builder.Services.AddHealthChecks()
+        .AddCheck<DbHealthCheck>("Database");
+
+    // Add AutoMapper
+    builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+    // Add DbContext with SQL Server
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 }

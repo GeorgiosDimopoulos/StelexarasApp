@@ -12,6 +12,9 @@ using StelexarasApp.ViewModels;
 using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.ViewModels.TeamsViewModels;
 using StelexarasApp.Views.TeamsViews;
+using StelexarasApp.Services.Mappers;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.DataAccess.Repositories;
 
 namespace StelexarasApp.UI;
 
@@ -34,6 +37,7 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
         services.AddSingleton<IDatabasePathProvider, DatabasePathProvider>();
+        services.AddAutoMapper(typeof(MappingProfile));
 
 #if DEBUG
         // Use SQLite in Debug mode
@@ -48,8 +52,10 @@ public partial class App : Application
         {
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
         });
-#endif
+#endif        
+        services.AddTransient<MainPage>();
         services.AddTransient<AppShell>();
+
         services.AddTransient<SxoliViewModel>();
         services.AddTransient<ExpensesViewModel>();
         services.AddTransient<StaffViewModel>();
@@ -57,21 +63,28 @@ public partial class App : Application
         services.AddTransient<PaidiInfoViewModel>();
         services.AddTransient<StelexosInfoViewModel>();
 
-        services.AddTransient<GeneralTeamsPage>();
-        services.AddTransient<TomeasInfoPage>();
-        services.AddTransient<KoinotitaInfoPage>();
-        services.AddTransient<ExpensesPage>();
-        services.AddTransient<StaffPage>();
-        services.AddTransient<ToDoPage>();
-        services.AddTransient<StelexosInfoPage>();
-        services.AddTransient<SkiniInfoPage>();
-        services.AddTransient<PaidiInfoPage>();
+        services.AddScoped<GeneralTeamsPage>();
+        services.AddScoped<TomeasInfoPage>();
+        services.AddScoped<KoinotitaInfoPage>();
+        services.AddScoped<ExpensesPage>();
+        services.AddScoped<StaffPage>();
+        services.AddScoped<ToDoPage>();
+        services.AddScoped<StelexosInfoPage>();
+        services.AddScoped<SkiniInfoPage>();
+        services.AddScoped<PaidiInfoPage>();
+        services.AddScoped<MainPage>();
 
         services.AddScoped<IDutyService, DutyService>();
         services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<IPaidiaService, PaidiaService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
+
+        services.AddScoped<IStaffRepository, StaffRepository>();
+        services.AddScoped<IPaidiRepository, PaidiRepository>();
+        services.AddScoped<ITeamsRepository, TeamsRepository>();
+        services.AddScoped<IExpenseRepository, ExpenseRepository>();
+        services.AddScoped<IDutyRepository, DutyRepository>();
 
         ServiceProvider = services.BuildServiceProvider();
     }

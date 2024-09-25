@@ -9,13 +9,13 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
     {
         private readonly ITeamsService _teamsService;
         private readonly IPaidiaService _paidiaService;
-        public List<string> Skines { get; set; }
+        public List<string> SkinesNames { get; set; }
 
         public SxoliViewModel(ITeamsService teamsService, IPaidiaService paidiaService)
         {
             _teamsService = teamsService;
             _paidiaService = paidiaService;
-            Skines = [];
+            SkinesNames = [];
             LoadSkinesKoinotitas();
         }
 
@@ -23,7 +23,7 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
         {
             var skines = await _teamsService.GetSkinesAnaKoinotitaInService("Sxoli");
             foreach (var skini in skines)
-                Skines.Add(skini.Name);
+                SkinesNames.Add(skini.Name);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -39,7 +39,7 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
 
             if (result)
             {
-                OnPropertyChanged(nameof(Skines));
+                OnPropertyChanged(nameof(SkinesNames));
                 return true;
             }
 
