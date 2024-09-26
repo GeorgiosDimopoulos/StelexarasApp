@@ -12,6 +12,7 @@ using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.TeamsViewModels;
 using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.Web;
+using StelexarasApp.Services.DtosModels.Atoma;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServives(builder);
@@ -68,13 +69,6 @@ app.Run();
 
 void ConfigureServives(WebApplicationBuilder builder)
 {
-    // ToDo: Remove DTO registrations?
-    //builder.Services.AddTransient<PaidiDto>();
-    //builder.Services.AddTransient<StelexosDto>();
-    //builder.Services.AddTransient<TomearxisDto>();
-    //builder.Services.AddTransient<OmadarxisDto>();
-    //builder.Services.AddTransient<KoinotarxisDto>();
-
     // register Repositories
     builder.Services.AddScoped<IPaidiRepository, PaidiRepository>();
     builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
@@ -89,18 +83,18 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddScoped<ITeamsService, TeamsService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
 
-    // register ViewModels
+    // register simpel ViewModels
     builder.Services.AddTransient<ExpensesViewModel>();
     builder.Services.AddTransient<PaidiaViewModel>();
-    builder.Services.AddTransient<StelexosInfoViewModel>();
     builder.Services.AddTransient<DutyViewModel>();
     builder.Services.AddTransient<SxoliViewModel>();
     builder.Services.AddTransient<StaffViewModel>();
 
-    //builder.Services.AddScoped<StaffViewModel>(provider =>
-    //    new StaffViewModel(provider.GetRequiredService<IStaffService>()));
+    // register ViewModels Constructor Dependencies
     builder.Services.AddScoped<PaidiInfoViewModel>(provider =>
         new PaidiInfoViewModel(new PaidiDto(), provider.GetRequiredService<IPaidiaService>(), "Skini"));
+    builder.Services.AddScoped<StelexosInfoViewModel>(provider =>
+        new StelexosInfoViewModel(new StelexosDto(), provider.GetRequiredService<IStaffService>()));
 
     // MVC and Health Checks
     builder.Services.AddControllers();

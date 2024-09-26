@@ -54,6 +54,9 @@ public class StaffService : IStaffService
 
     public async Task<bool> AddStelexosInService(StelexosDto stelexosDto, Thesi thesi)
     {
+        if (stelexosDto == null || thesi == Thesi.None)
+            throw new ArgumentNullException(nameof(stelexosDto), "StelexosDto or thesi cannot be null");
+
         var stelexos = _mapper!.Map<Stelexos>(stelexosDto);
         if (stelexos == null)
         {
@@ -64,6 +67,7 @@ public class StaffService : IStaffService
         var result = await _stelexiRepository!.AddStelexosInDb(stelexos);
         if (!result)
             return false;
+
         return true;
     }
 
@@ -252,8 +256,8 @@ public class StaffService : IStaffService
 
     public async Task<bool> UpdateStelexosInService(StelexosDto stelexosDto)
     {
-        if (_stelexiRepository is null)
-            throw new ArgumentException("StaffRepository or _mapper cannot be null");
+        if (_stelexiRepository is null || stelexosDto is null)
+            throw new ArgumentException("StaffRepository or stelexosDto cannot be null");
 
         var stelexos = MapDtoToEntity(stelexosDto);
         if (stelexos == null)
@@ -286,6 +290,9 @@ public class StaffService : IStaffService
 
     private Stelexos MapDtoToEntity(StelexosDto stelexosDto)
     {
+        if (stelexosDto is null)
+            return null!;
+
         return stelexosDto.Thesi switch
         {
             Thesi.Omadarxis => _mapper!.Map<Omadarxis>(stelexosDto),

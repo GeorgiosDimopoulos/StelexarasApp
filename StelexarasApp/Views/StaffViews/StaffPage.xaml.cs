@@ -26,7 +26,7 @@ namespace StelexarasApp.UI.Views.StaffViews
                 StelexosDto? selectedStaff = e.CurrentSelection [0] as StelexosDto;
                 if (selectedStaff != null)
                 {
-                    var stelexosInfoPage = new StelexosInfoPage(staffService, selectedStaff, null);HERE
+                    var stelexosInfoPage = new StelexosInfoPage(staffService, selectedStaff, null);
                     await Navigation.PushAsync(stelexosInfoPage);
                 }
                 else

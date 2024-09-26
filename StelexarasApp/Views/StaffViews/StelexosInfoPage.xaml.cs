@@ -12,6 +12,9 @@ namespace StelexarasApp.UI.Views.StaffViews
         public StelexosInfoPage(IStaffService stelexiService, StelexosDto stelexosDto, StelexosInfoViewModel stelexosInfoViewModel)
         {
             InitializeComponent();
+            if (stelexosDto == null)
+                throw new ArgumentNullException(nameof(stelexosDto), "StelexosDto cannot be null");
+            
             _stelexosinfoViewModel = stelexosInfoViewModel ?? new StelexosInfoViewModel(stelexosDto, stelexiService);
             stelexosDto1 = stelexosDto;
             BindingContext = _stelexosinfoViewModel;

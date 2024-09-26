@@ -71,13 +71,13 @@ public class StaffWebController(IStaffService staffService, ITeamsService teamsS
             if (ModelState.IsValid)
             {
                 var result = await _staffService.AddStelexosInService(stelexos, thesi);
-
                 if (result)
-                    return View(stelexos);
+                    return RedirectToAction("Index");
+
                 ModelState.AddModelError("", "An error occurred while adding the Stelexos.");
             }
 
-            ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", stelexos.XwrosName);
+            ViewData ["SkiniId"] = new SelectList(await _teamsService.GetAllSkinesInService(), "Id", "Name", stelexos.XwrosName);
             return View(stelexos);
         }
         catch (Exception ex)
