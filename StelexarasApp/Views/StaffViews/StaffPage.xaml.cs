@@ -10,11 +10,11 @@ namespace StelexarasApp.UI.Views.StaffViews
         private IStaffService _personalService;
         private StaffViewModel _personalViewModel;
 
-        public StaffPage(IStaffService personalService, Thesi thesi)
+        public StaffPage(IStaffService personalService, StaffViewModel personalViewModel)
         {
             _personalService = personalService;
             InitializeComponent();
-            _personalViewModel = new StaffViewModel(personalService, GetThesiValue(thesi));
+            _personalViewModel = personalViewModel;
             BindingContext = _personalViewModel;
         }
 
@@ -23,12 +23,15 @@ namespace StelexarasApp.UI.Views.StaffViews
             if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
             {
                 var staffService = DependencyService.Get<IStaffService>();
-
-                var selectedStaff = e.CurrentSelection [0] as StelexosDto;
+                StelexosDto? selectedStaff = e.CurrentSelection [0] as StelexosDto;
                 if (selectedStaff != null)
                 {
-                    var stelexosInfoPage = new StelexosInfoPage(staffService, selectedStaff);
+                    var stelexosInfoPage = new StelexosInfoPage(staffService, selectedStaff, null);HERE
                     await Navigation.PushAsync(stelexosInfoPage);
+                }
+                else
+                {
+                    throw new ArgumentNullException(nameof(selectedStaff), "Selected staff cannot be null.");
                 }
             }
         }

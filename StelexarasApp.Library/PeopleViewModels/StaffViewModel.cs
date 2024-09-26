@@ -3,6 +3,7 @@ using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace StelexarasApp.ViewModels.PeopleViewModels;
 
@@ -11,28 +12,37 @@ public class StaffViewModel : INotifyPropertyChanged
     private readonly IStaffService _staffService;
     public ObservableCollection<StelexosDto> AllStaff { get; set; }
 
-    public StaffViewModel(IStaffService staffService, string thesiStr)
+    public StaffViewModel(IStaffService staffService)
     {
-        this._staffService = staffService;
+        _staffService = staffService ?? throw new ArgumentNullException(nameof(staffService));
         AllStaff = new ObservableCollection<StelexosDto>();
         _ = LoadAllStaffAsync();
     }
 
     public async Task LoadAllStaffAsync()
     {
-        // ToDo: check if it is better to use the following code
-        // AllStaff = GetAllStaff().Result as ObservableCollection<StelexosDto>;
+        try
+        {
+            //var tomearxes = await GetAllTomearxes();
+            //var koinotarxes = await GetAllKoinotarxes();
+            //var omadarxes = await GetAllOmadarxes();
+            //var allStaff = tomearxes.Cast<StelexosDto>()
+            //    .Concat(koinotarxes.Cast<StelexosDto>())
+            //    .Concat(omadarxes.Cast<StelexosDto>());
+            var allStaff = await _staffService.GetAllStaffInService();
 
-        var tomearxes = await GetAllTomearxes();
-        var koinotarxes = await GetAllKoinotarxes();
-        var omadarxes = await GetAllOmadarxes();
+            AllStaff.Clear();
+            foreach (var staff in allStaff)
+            {
+                AllStaff.Add(staff);
+            }
 
-        var allStaff = tomearxes.Cast<StelexosDto>()
-            .Concat(koinotarxes.Cast<StelexosDto>())
-            .Concat(omadarxes.Cast<StelexosDto>());
-
-        AllStaff = new ObservableCollection<StelexosDto>(allStaff);
-        OnPropertyChanged(nameof(AllStaff));
+            OnPropertyChanged(nameof(AllStaff));
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error loading staff: {ex.Message}");
+        }
     }
 
     public async Task<IEnumerable<StelexosDto>> GetAllStaff()

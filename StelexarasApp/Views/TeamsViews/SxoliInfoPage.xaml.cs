@@ -12,11 +12,11 @@ public partial class SxoliInfoPage : ContentPage
     private SxoliViewModel _sxoliViewModel;
     private IPaidiaService _paidiaService;
 
-    public SxoliInfoPage(IPaidiaService paidiaService, SxoliViewModel koinotitaViewModel)
+    public SxoliInfoPage(IPaidiaService paidiaService, SxoliViewModel sxoliViewModel)
     {
         InitializeComponent();
         _paidiaService = paidiaService;
-        _sxoliViewModel = koinotitaViewModel;
+        _sxoliViewModel = sxoliViewModel;
         BindingContext = _sxoliViewModel;
     }
 

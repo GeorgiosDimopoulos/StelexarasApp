@@ -3,7 +3,6 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Mappers;
@@ -96,14 +95,10 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddTransient<StelexosInfoViewModel>();
     builder.Services.AddTransient<DutyViewModel>();
     builder.Services.AddTransient<SxoliViewModel>();
+    builder.Services.AddTransient<StaffViewModel>();
 
-    //builder.Services.AddTransient(provider =>
-    //{
-    //    var paidiaService = provider.GetRequiredService<IPaidiaService>();
-    //    return new PaidiInfoViewModel(new PaidiDto(), paidiaService, "Skini");
-    //});
-    builder.Services.AddScoped<StaffViewModel>(provider =>
-        new StaffViewModel(provider.GetRequiredService<IStaffService>(), "Koinotita"));
+    //builder.Services.AddScoped<StaffViewModel>(provider =>
+    //    new StaffViewModel(provider.GetRequiredService<IStaffService>()));
     builder.Services.AddScoped<PaidiInfoViewModel>(provider =>
         new PaidiInfoViewModel(new PaidiDto(), provider.GetRequiredService<IPaidiaService>(), "Skini"));
 

@@ -10,7 +10,7 @@ public partial class GeneralTeamsPage : ContentPage
     private readonly TomeasViewModel _tomeas2ViewModel;
     private readonly TomeasViewModel _tomeas1ViewModel;
     private readonly KoinotitaViewModel _koinotitaViewModel;
-    private readonly SxoliViewModel _sxoliViewModel;
+    private readonly SxoliViewModel _sxoliViewModel; 
     private readonly IPaidiaService _paidiaService;
     private readonly ITeamsService _teamsService;
 
@@ -22,6 +22,7 @@ public partial class GeneralTeamsPage : ContentPage
         _tomeas1ViewModel = new TomeasViewModel(tomeas1, _teamsService, _paidiaService);
         _tomeas2ViewModel = new TomeasViewModel(tomeas2, _teamsService, _paidiaService);
         _koinotitaViewModel = new KoinotitaViewModel(_paidiaService, _teamsService);
+        _sxoliViewModel = new SxoliViewModel(_teamsService, _paidiaService);
     }
 
     private async void TomeasA_Clicked(object sender, EventArgs e)

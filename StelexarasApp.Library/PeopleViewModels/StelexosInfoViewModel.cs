@@ -32,7 +32,7 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
         public StelexosInfoViewModel(StelexosDto stelexosDto, IStaffService stelexiService)
         {
             _stelexiService = stelexiService;
-            _stelexosDto = stelexosDto;
+            _stelexosDto = stelexosDto ?? throw new ArgumentNullException(nameof(stelexosDto)); ;
             skiniIsChanged = false;
             SaveStelexosCommand = new Command(async () => await OnSaveStelexos());
         }

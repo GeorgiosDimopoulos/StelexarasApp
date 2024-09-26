@@ -9,10 +9,10 @@ namespace StelexarasApp.UI.Views.StaffViews
         private StelexosInfoViewModel? _stelexosinfoViewModel;
         private StelexosDto stelexosDto1;
 
-        public StelexosInfoPage(IStaffService stelexiService, StelexosDto stelexosDto)
+        public StelexosInfoPage(IStaffService stelexiService, StelexosDto stelexosDto, StelexosInfoViewModel stelexosInfoViewModel)
         {
             InitializeComponent();
-            _stelexosinfoViewModel = new StelexosInfoViewModel(stelexosDto, stelexiService);
+            _stelexosinfoViewModel = stelexosInfoViewModel ?? new StelexosInfoViewModel(stelexosDto, stelexiService);
             stelexosDto1 = stelexosDto;
             BindingContext = _stelexosinfoViewModel;
         }

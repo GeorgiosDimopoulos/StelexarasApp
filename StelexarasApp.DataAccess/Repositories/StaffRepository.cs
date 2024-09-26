@@ -7,10 +7,18 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories;
 
-public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactory) : IStaffRepository
+public class StaffRepository : IStaffRepository
 {
-    private readonly AppDbContext _dbContext = dbContext;
-    private readonly ILogger<StaffRepository> _logger = loggerFactory.CreateLogger<StaffRepository>();
+    private readonly AppDbContext _dbContext;
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly ILogger<StaffRepository> _logger;
+
+    public StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactory)
+    {
+        _dbContext = dbContext;
+        _loggerFactory = loggerFactory;
+        _logger = loggerFactory.CreateLogger<StaffRepository>();
+    }
 
     public async Task<bool> AddStelexosInDb(Stelexos stelexos)
     {

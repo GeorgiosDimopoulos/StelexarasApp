@@ -1,5 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.Services;
+﻿using StelexarasApp.Services;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.UI.Views.PaidiaViews;
@@ -15,7 +14,9 @@ public partial class MainPage : ContentPage
     private readonly IPaidiaService _paidiaService;
     private readonly IDutyService _dutiesService;
     private readonly ITeamsService _teamsService;
+    private readonly IStaffService _staffService;
     private readonly SignalrService _signalRService;
+    private readonly IServiceProvider _serviceProvider;
 
     public MainPage(
         IStaffService peopleService,
@@ -23,15 +24,18 @@ public partial class MainPage : ContentPage
         IPaidiaService paidiaService,
         ITeamsService teamsService,
         IExpenseService expenseService,
-        SignalrService signalRService)
+        IStaffService staffService,
+        SignalrService signalRService,
+        IServiceProvider serviceProvider)
     {
         InitializeComponent();
         _dutiesService = dutyService;
         _stelexiService = peopleService;
         _paidiaService = paidiaService;
         _expenseService = expenseService;
-        _teamsService = teamsService;
+        _staffService = staffService;
         _signalRService = signalRService;
+        _serviceProvider = serviceProvider;
     }
 
     private void OnMessageReceived(string message)
@@ -55,7 +59,11 @@ public partial class MainPage : ContentPage
         await Navigation.PushAsync(new GeneralTeamsPage(tomeas1, tomeas2, _paidiaService, _teamsService));
     }
 
-    private async void OnStaffButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new StaffPage(_stelexiService, Thesi.Tomearxis));
+    private async void OnStaffButtonClicked(object sender, EventArgs e)
+    {
+        var staffPage = ActivatorUtilities.CreateInstance<StaffPage>(_serviceProvider, _stelexiService);
+        await Navigation.PushAsync(staffPage);
+    }
     private async void OnDutiesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new ToDoPage(_dutiesService));
     private async void OnPaidiaButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new PaidiaPage(_paidiaService));
 }
