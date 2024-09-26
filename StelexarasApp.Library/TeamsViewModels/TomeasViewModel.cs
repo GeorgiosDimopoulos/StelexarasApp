@@ -10,20 +10,20 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
         private readonly ITeamsService _teamsService;
         private IPaidiaService _paidiaService;
 
-        public TomeasDto TomeasDto { get; set; }
         public List<KoinotitaDto>? Koinotites { get; set; }
+        public string TomeasNumber { get; set; }
 
-        public TomeasViewModel(TomeasDto tomeasDto, ITeamsService teamsService, IPaidiaService paidiaService)
+        public TomeasViewModel(int tomeasNumber, ITeamsService teamsService, IPaidiaService paidiaService)
         {
             _teamsService = teamsService;
             _paidiaService = paidiaService;
-            TomeasDto = tomeasDto;
-            _ = LoadKoinotites(tomeasDto);
+            TomeasNumber  = tomeasNumber.ToString();
+            _ = LoadKoinotites(tomeasNumber);
         }
 
-        private async Task LoadKoinotites(TomeasDto tomeasDto)
+        private async Task LoadKoinotites(int tomeas)
         {
-            var koinotites = await GetKoinotitesForTomea(tomeasDto.Id);
+            var koinotites = await GetKoinotitesForTomea(tomeas);
             Koinotites = koinotites.ToList();
             OnPropertyChanged(nameof(Koinotites));
         }

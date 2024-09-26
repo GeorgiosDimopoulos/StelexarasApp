@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StelexarasApp.Views.TeamsViews.GeneralTeamsPage"
-             Title="Kataskinosi Xaras">
+             Title="ΚΑΤΑΣΚΗΝΩΣΗ ΧΑΡΑΣ">
 	<ContentPage.Content>
 		<Grid RowDefinitions="*,*,*">
 			<Button Grid.Row="0" Text="Τομέας Α" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Clicked="TomeasA_Clicked" />

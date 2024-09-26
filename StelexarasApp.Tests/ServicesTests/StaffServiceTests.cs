@@ -309,7 +309,7 @@ public class StaffServiceTests
         _mockStelexiRepository.Setup(repo => repo.AddStelexosInDb(stelexos)).ReturnsAsync(true);
 
         // Act
-        var result = await _stelexiService.AddStelexosInService(stelexosDto, stelexosDto.Thesi);
+        var result = await _stelexiService.AddStelexosInService(stelexosDto);
 
         // Assert
         Assert.True(result);

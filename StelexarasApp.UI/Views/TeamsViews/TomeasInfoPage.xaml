@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StelexarasApp.Views.TeamsViews.TomeasInfoPage"
-             Title="{Binding TomeasDto.Name}" Padding="10">
+             Title="{Binding TomeasNumber}" Padding="10">
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="+" Order="Primary" Priority="0" Clicked="OnAddClicked" />
+		<ToolbarItem Text="+" Order="Primary" Priority="0" Clicked="OnAddKoinotitaClicked"/>
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
 		<ScrollView>

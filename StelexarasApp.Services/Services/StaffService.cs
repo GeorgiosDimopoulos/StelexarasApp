@@ -52,10 +52,10 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<bool> AddStelexosInService(StelexosDto stelexosDto, Thesi thesi)
+    public async Task<bool> AddStelexosInService(StelexosDto stelexosDto)
     {
-        if (stelexosDto == null || thesi == Thesi.None)
-            throw new ArgumentNullException(nameof(stelexosDto), "StelexosDto or thesi cannot be null");
+        if (stelexosDto == null)
+            throw new ArgumentNullException(nameof(stelexosDto), "StelexosDto cannot be null");
 
         var stelexos = _mapper!.Map<Stelexos>(stelexosDto);
         if (stelexos == null)

@@ -1,4 +1,4 @@
-using StelexarasApp.Services.DtosModels.Domi;
+﻿using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.UI.Views.TeamsViews;
 using StelexarasApp.ViewModels.TeamsViewModels;
@@ -14,15 +14,21 @@ public partial class GeneralTeamsPage : ContentPage
     private readonly IPaidiaService _paidiaService;
     private readonly ITeamsService _teamsService;
 
-    public GeneralTeamsPage(TomeasDto tomeas1, TomeasDto tomeas2, IPaidiaService paidiaService, ITeamsService teamsService)
+    public GeneralTeamsPage(IPaidiaService paidiaService, ITeamsService teamsService)
     {
         InitializeComponent();
-        _paidiaService = paidiaService;
-        _teamsService = teamsService;
-        _tomeas1ViewModel = new TomeasViewModel(tomeas1, _teamsService, _paidiaService);
-        _tomeas2ViewModel = new TomeasViewModel(tomeas2, _teamsService, _paidiaService);
+        _paidiaService = paidiaService ?? throw new ArgumentNullException(nameof(paidiaService));
+        _teamsService = teamsService ?? throw new ArgumentNullException(nameof(teamsService));
+
+        _tomeas1ViewModel = new TomeasViewModel(1, _teamsService, _paidiaService);
+        _tomeas2ViewModel = new TomeasViewModel(2, _teamsService, _paidiaService);
         _koinotitaViewModel = new KoinotitaViewModel(_paidiaService, _teamsService);
         _sxoliViewModel = new SxoliViewModel(_teamsService, _paidiaService);
+    }
+
+    private async Task<TomeasDto> GetTomea(int num)
+    {
+         return await _teamsService.GetTomeaByNameInService(num.ToString());
     }
 
     private async void TomeasA_Clicked(object sender, EventArgs e)

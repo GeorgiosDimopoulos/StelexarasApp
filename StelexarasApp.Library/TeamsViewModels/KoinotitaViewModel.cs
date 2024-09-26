@@ -15,8 +15,7 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
         private readonly ITeamsService _teamsService;
         public ObservableCollection<string> Skines { get; set; }
         public Koinotita? Koinotita { get; set; }
-        public string Title { get; set; }
-
+        
         public KoinotitaViewModel(IPaidiaService paidiaService, ITeamsService teamsService)
         {
             _paidiaService = paidiaService;
@@ -86,9 +85,15 @@ namespace StelexarasApp.ViewModels.TeamsViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void AddKoinotita(KoinotitaDto koinotita)
+        public async Task<bool> AddKoinotita(KoinotitaDto koinotita)
         {
-            _teamsService.AddKoinotitaInService(koinotita);
+            bool result = await _teamsService.AddKoinotitaInService(koinotita);
+            if (result)
+            {
+                OnPropertyChanged(nameof(Skines));
+                return true;
+            }
+            return false;
         }
     }
 }

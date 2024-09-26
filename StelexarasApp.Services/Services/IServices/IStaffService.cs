@@ -6,7 +6,7 @@ namespace StelexarasApp.Services.Services.IServices
 {
     public interface IStaffService
     {
-        Task<bool> AddStelexosInService(StelexosDto stelexosDto, Thesi thesi);
+        Task<bool> AddStelexosInService(StelexosDto stelexosDto);
         Task<bool> DeleteStelexosByIdInService(int id, Thesi thesi);
         Task<bool> UpdateStelexosInService(StelexosDto stelexosDto);
         Task<StelexosDto> GetStelexosByIdInService(int id, Thesi? thesi);

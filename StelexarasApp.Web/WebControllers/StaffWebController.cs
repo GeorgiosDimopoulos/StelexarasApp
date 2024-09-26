@@ -70,7 +70,7 @@ public class StaffWebController(IStaffService staffService, ITeamsService teamsS
         {
             if (ModelState.IsValid)
             {
-                var result = await _staffService.AddStelexosInService(stelexos, thesi);
+                var result = await _staffService.AddStelexosInService(stelexos);
                 if (result)
                     return RedirectToAction("Index");
 

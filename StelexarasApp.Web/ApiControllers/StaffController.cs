@@ -38,7 +38,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPost("Omadarxi")]
         public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] OmadarxisDto omadarxisDto)
         {
-            var result = await _stelexiService.AddStelexosInService(omadarxisDto, Thesi.Omadarxis);
+            var result = await _stelexiService.AddStelexosInService(omadarxisDto);
 
             if (!result)
                 return NotFound();
@@ -121,7 +121,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPost("Koinotarxi")]
         public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] KoinotarxisDto koinotarxisDto)
         {
-            var result = await _stelexiService.AddStelexosInService(koinotarxisDto, Thesi.Koinotarxis);
+            var result = await _stelexiService.AddStelexosInService(koinotarxisDto);
 
             if (!result)
                 return NotFound();
@@ -197,7 +197,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPost("Tomearxi")]
         public async Task<ActionResult<Tomearxis>> PostTomearxi([FromBody] TomearxisDto tomearxisDto)
         {
-            var result = await _stelexiService.AddStelexosInService(tomearxisDto, Thesi.Tomearxis);
+            var result = await _stelexiService.AddStelexosInService(tomearxisDto);
 
             if (!result)
                 return NotFound();
@@ -241,7 +241,7 @@ namespace StelexarasApp.Web.ApiControllers
         [HttpPost("Ekpaideutis")]
         public async Task<ActionResult<Ekpaideutis>> PostEkpaideutis([FromBody] EkpaideutisDto ekpaideutisDto)
         {
-            var result = await _stelexiService.AddStelexosInService(ekpaideutisDto, Thesi.Ekpaideutis);
+            var result = await _stelexiService.AddStelexosInService(ekpaideutisDto);
 
             if (!result)
                 return NotFound();

@@ -1,5 +1,4 @@
-﻿using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.DataAccess.Models.Atoma;
+﻿using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.UI.Views.PaidiaViews;
@@ -9,15 +8,15 @@ namespace StelexarasApp.UI.Views.TeamsViews;
 
 public partial class SxoliInfoPage : ContentPage
 {
-    private SxoliViewModel _sxoliViewModel;
-    private IPaidiaService _paidiaService;
+    private readonly SxoliViewModel _sxoliViewModel;
+    private readonly IPaidiaService _paidiaService;
 
     public SxoliInfoPage(IPaidiaService paidiaService, SxoliViewModel sxoliViewModel)
     {
         InitializeComponent();
-        _paidiaService = paidiaService;
-        _sxoliViewModel = sxoliViewModel;
-        BindingContext = _sxoliViewModel;
+        _paidiaService = paidiaService ?? throw new ArgumentNullException(nameof(paidiaService));
+        _sxoliViewModel = sxoliViewModel ?? throw new ArgumentNullException(nameof(sxoliViewModel));
+        BindingContext = _sxoliViewModel ?? throw new ArgumentNullException(nameof(_sxoliViewModel));
     }
 
     private async void PaidiButton_Clicked(object sender, EventArgs e)

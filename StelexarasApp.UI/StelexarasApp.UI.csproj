@@ -56,6 +56,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Platforms\Android\Resources\drawable\white-cross.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Resources\Images\typet.png" />
 	</ItemGroup>
 
@@ -78,6 +82,9 @@
 	  <Compile Update="Views\PaidiaViews\PaidiaPage.xaml.cs">
 	    <DependentUpon>PaidiaPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\StaffViews\AddStelexosPage.xaml.cs">
+	    <DependentUpon>AddStelexosPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\TeamsViews\SxoliInfoPage.xaml.cs">
 	    <DependentUpon>SxoliInfoPage.xaml</DependentUpon>
 	  </Compile>
@@ -97,6 +104,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\PaidiaViews\PaidiaPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\StaffViews\AddStelexosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\TeamsViews\GeneralTeamsPage.xaml">
@@ -120,10 +130,6 @@
 	  <MauiXaml Update="Views\TeamsViews\SkiniInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Platforms\Android\Resources\drawable\" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionStelexarasAppUIHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarStelexarasAppUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>
