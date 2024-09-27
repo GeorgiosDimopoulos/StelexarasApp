@@ -10,7 +10,7 @@ namespace StelexarasApp.Services.DtosModels.Atoma
         public Sex Sex { get; set; }
         public int SkiniId { get; set; }
         public int? Id { get; set; }
-        public Thesi Thesi { get; set; } = Thesi.Omadarxis;
+        public Thesi Thesi { get; set; }
         // public List<int> PaidiaIds { get; set; } = new List<int>();
     }
 }
