@@ -15,12 +15,15 @@ using StelexarasApp.Web;
 using StelexarasApp.Services.DtosModels.Atoma;
 
 var builder = WebApplication.CreateBuilder(args);
+
 ConfigureServives(builder);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 var app = builder.Build();
+SeedDbWithMockData(app);
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -69,6 +72,8 @@ app.Run();
 
 void ConfigureServives(WebApplicationBuilder builder)
 {
+    builder.Services.AddScoped<DataSeeder>();
+
     // register Repositories
     builder.Services.AddScoped<IPaidiRepository, PaidiRepository>();
     builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
@@ -111,4 +116,23 @@ void ConfigureServives(WebApplicationBuilder builder)
     // Add DbContext with SQL Server
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+
+static async Task SeedDbWithMockData(WebApplication app)
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+
+        try
+        {
+            var dataSeeder = services.GetRequiredService<DataSeeder>();
+            await dataSeeder.SeedTeamsData();
+            await dataSeeder.SeedStelexisData();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
+        }
+    }
 }

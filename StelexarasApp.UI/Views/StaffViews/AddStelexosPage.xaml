@@ -11,6 +11,7 @@
 		<Entry Placeholder="Γράψε Ονοματεπώνυμο" Text="{Binding FullName}" />
 		<Entry Placeholder="Γράψε τηλέφωνο" Text="{Binding PhoneNumber}" />
 		<Entry Placeholder="Γράψε ηλικία" Text="{Binding Age}" />
+		<Entry Placeholder="Γράψε ονομα χώρου" Text="{Binding XwrosName}" />
 		<Button Text="ΑΠΟΘΗΚΕΥΣΗ" Command="{Binding SaveCommand}" />
 	</StackLayout>
 </ContentPage>

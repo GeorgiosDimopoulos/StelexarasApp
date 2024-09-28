@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.IServices;
 
@@ -127,6 +129,65 @@ namespace StelexarasApp.Services.Services
         {
             var tomeas = _mapper.Map<Tomeas>(tomeasDto);
             return _teamsRepository.AddTomeasInDb(tomeas);
+        }
+
+        public Task<bool> HasData()
+        {
+            if (!_teamsRepository.GetSkinesInDb().Result.Any() &&
+                !_teamsRepository.GetKoinotitesAnaTomeaInDb(2).Result.Any() &&
+                !_teamsRepository.GetKoinotitesAnaTomeaInDb(1).Result.Any())
+                return Task.FromResult(false);
+            return Task.FromResult(true);
+        }
+
+        public async Task<bool> CheckStelexousXwroNameInService(StelexosDto stelexosDto, string xwrosName)
+        {
+            switch (stelexosDto.Thesi)
+            {
+                case Thesi.Omadarxis:
+                    var skini = await _teamsRepository.GetSkiniByNameInDb(xwrosName);
+                    if (skini == null)
+                    {
+                        Console.WriteLine($"Skini {xwrosName} doesnt exist in DB!");
+                        return false;
+                    }
+                    if (stelexosDto.Id == skini.OmadarxisId)
+                    {
+                        Console.WriteLine($"Skini {xwrosName} already has another Omadarxis!");
+                        return false;
+                    }
+                    return true;
+                case Thesi.Koinotarxis:
+                    var koinotita = await _teamsRepository.GetKoinotitaByNameInDb(xwrosName);
+                    if (koinotita == null)
+                    {
+                        Console.WriteLine($"Koinotita {xwrosName} doesnt exist in DB!");
+                        return false;
+                    }
+                    if (stelexosDto.Id == koinotita.KoinotarxisId)
+                    {
+                        Console.WriteLine($"Koinotita {xwrosName} already has another Koinotarxi!");
+                        return false;
+                    }
+                    return true;
+                case Thesi.Tomearxis:
+                    var tomeas = await _teamsRepository.GetTomeaByNameInDb(xwrosName);
+                    if (tomeas == null)
+                    {
+                        Console.WriteLine($"Tomeas {xwrosName} doesnt exist in DB!");
+                        return false;
+                    }
+                    if (stelexosDto.Id == tomeas.TomearxisId)
+                    {
+                        Console.WriteLine($"Tomeas {xwrosName} already has another Tomearxi!");
+                        return false;
+                    }
+                    return true;
+                case Thesi.Ekpaideutis:
+                    throw new NotImplementedException();
+                default:
+                    return false;
+            }
         }
     }
 }

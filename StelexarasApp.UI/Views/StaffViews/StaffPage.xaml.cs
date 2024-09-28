@@ -1,6 +1,7 @@
-﻿using CommunityToolkit.Maui.Views;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
+﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.Views.StaffViews;
@@ -10,11 +11,13 @@ namespace StelexarasApp.UI.Views.StaffViews;
 public partial class StaffPage : ContentPage
 {
     private readonly IStaffService _personalService;
+    private readonly ITeamsService _teamsService;
     private readonly StaffViewModel _personalViewModel;
 
-    public StaffPage(IStaffService personalService, StaffViewModel personalViewModel)
+    public StaffPage(IStaffService personalService, ITeamsService teamsService, StaffViewModel personalViewModel)
     {
         _personalService = personalService;
+        _teamsService = teamsService;
         InitializeComponent();
         _personalViewModel = personalViewModel;
         BindingContext = _personalViewModel;
@@ -52,7 +55,7 @@ public partial class StaffPage : ContentPage
 
     private async void OnAddStelexosClicked(object sender, EventArgs e)
     {
-        var addStelexosPage = new AddStelexosPage(_personalService);
+        var addStelexosPage = new AddStelexosPage(_personalService, _teamsService);
         await Navigation.PushAsync(addStelexosPage);
     }
 }

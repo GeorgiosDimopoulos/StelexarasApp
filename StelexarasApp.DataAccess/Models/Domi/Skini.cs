@@ -12,6 +12,7 @@ namespace StelexarasApp.DataAccess.Models.Domi
         public Omadarxis Omadarxis { get; set; } = null!;
         public int OmadarxisId { get; set; }
         public ICollection<Paidi> Paidia { get; set; } = null!;
+        public Sex Sex { get; set; }
         public Koinotita Koinotita { get; set; } = null!;
     }
 }

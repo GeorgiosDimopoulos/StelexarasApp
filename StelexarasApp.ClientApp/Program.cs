@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.IServices;
@@ -16,9 +16,8 @@ using System.Text.RegularExpressions;
 
 var connection = new HubConnectionBuilder()
     .WithUrl("http://localhost:5000/myhub") // Adjust URL as needed
+    .WithAutomaticReconnect()
     .Build();
-await connection.StartAsync();
-Console.WriteLine("Connected to SignalR hub.");
 
 var serviceProvider = new ServiceCollection()
     .AddDbContext<AppDbContext>()
@@ -26,12 +25,37 @@ var serviceProvider = new ServiceCollection()
     .AddScoped<IPaidiRepository, PaidiRepository>()
     .BuildServiceProvider();
 
+connection.Closed += async (error) =>
+{
+    Console.WriteLine("SignalR connection closed.");
+    await Task.Delay(new Random().Next(0, 5) * 1000);
+    try
+    {
+        await connection.StartAsync();
+        Console.WriteLine("SignalR reconnected.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Reconnection failed: {ex.Message}");
+    }
+};
+
+try
+{
+    await connection.StartAsync();
+    Console.WriteLine("SignalR connection established.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"SignalR connection failed: {ex.Message}. Continuing without SignalR...");
+}
+
 var config = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile<MappingProfile>();
 });
-var mapper = config.CreateMapper();
 
+var mapper = config.CreateMapper();
 var paidiService = serviceProvider.GetService<IPaidiaService>();
 var stelexiService = serviceProvider.GetService<IStaffService>();
 if (paidiService is null || stelexiService is null)
@@ -81,7 +105,7 @@ switch (choice)
         break;
     case 3:
         var newOmadarxis = CreateStelexosFromUserInput(Thesi.Omadarxis);
-        if (await stelexiService.AddStelexosInService(newOmadarxis, Thesi.Omadarxis))
+        if (await stelexiService.AddStelexosInService(newOmadarxis))
         {
             await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Omadarxis created: {newOmadarxis.FullName}");
             Console.WriteLine("Omadarxis created");
@@ -91,7 +115,7 @@ switch (choice)
         break;
     case 4:
         var newKoinotarxis = CreateStelexosFromUserInput(Thesi.Koinotarxis);
-        if (await stelexiService.AddStelexosInService(newKoinotarxis, Thesi.Koinotarxis))
+        if (await stelexiService.AddStelexosInService(newKoinotarxis))
         {
             await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Koinotarxis created: {newKoinotarxis.FullName}");
             Console.WriteLine("Koinotarxis created");
@@ -101,7 +125,7 @@ switch (choice)
         break;
     case 5:
         var newTomearxis = CreateStelexosFromUserInput(Thesi.Tomearxis);
-        if (await stelexiService.AddStelexosInService(newTomearxis, Thesi.Tomearxis))
+        if (await stelexiService.AddStelexosInService(newTomearxis))
         {
             await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Koinotarxis created: {newTomearxis.FullName}");
             Console.WriteLine("Tomearxis created");
@@ -111,7 +135,7 @@ switch (choice)
         break;
     case 6:
         var newEkpaideutis = CreateStelexosFromUserInput(Thesi.Ekpaideutis);
-        if (await stelexiService.AddStelexosInService(newEkpaideutis, Thesi.Ekpaideutis))
+        if (await stelexiService.AddStelexosInService(newEkpaideutis))
         {
             await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Ekpaideutis created: {newEkpaideutis.FullName}");
             Console.WriteLine("Ekpaideutis created");
