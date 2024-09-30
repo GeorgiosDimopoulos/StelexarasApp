@@ -19,7 +19,6 @@ public class AddStelexosViewModel
     public int Age { get; set; } = 0;
     public Command SaveCommand { get; }
 
-    /add unit tests
     public AddStelexosViewModel(IStaffService staffService, ITeamsService teamsService)
     {
         _staffService = staffService;
@@ -50,7 +49,7 @@ public class AddStelexosViewModel
         await _staffService.AddStelexosInService(newStelexosDto);
     }
 
-    public static bool IsValidFullNameInput(string input)
+    private static bool IsValidFullNameInput(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
             return false;

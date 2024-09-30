@@ -366,7 +366,6 @@ public class StaffServiceTests
         {
             Id = 1,
             Name = koinotitaName,
-            KoinotarxisDto = new KoinotarxisDto(),
             TomeasName = "Tomeas1"
         };
         var stelexoi = new List<Omadarxis>
