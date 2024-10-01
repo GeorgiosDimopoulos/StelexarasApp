@@ -22,7 +22,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 var app = builder.Build();
-SeedDbWithMockData(app);
+SeedDbWithMockData(app).Wait();
 
 
 if (app.Environment.IsDevelopment())
@@ -120,19 +120,19 @@ void ConfigureServives(WebApplicationBuilder builder)
 
 static async Task SeedDbWithMockData(WebApplication app)
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var services = scope.ServiceProvider;
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
 
-        try
-        {
-            var dataSeeder = services.GetRequiredService<DataSeeder>();
-            await dataSeeder.SeedTeamsData();
-            await dataSeeder.SeedStelexisData();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
-        }
+    try
+    {
+        var dataSeeder = services.GetRequiredService<DataSeeder>();
+        await dataSeeder.SeedSDutiesData();
+        await dataSeeder.SeedExpensesData();
+        await dataSeeder.SeedTeamsData();
+        await dataSeeder.SeedStelexiData();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
     }
 }

@@ -10,5 +10,6 @@ namespace StelexarasApp.Services.IServices
         Task<IEnumerable<Expense>> GetExpensesInService();
 
         Task<Expense> GetExpenseByIdInService(int expenseId);
+        Task<bool> HasData();
     }
 }

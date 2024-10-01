@@ -84,7 +84,7 @@ public class StaffServiceTests
             Tel = "1234567890",
             Thesi = thesi
         };
-        Stelexos stelexos = null;
+        IStelexos stelexos = null;
         switch (thesi)
         {
             case Thesi.Omadarxis:
@@ -119,7 +119,7 @@ public class StaffServiceTests
                 };
                 break;
             case Thesi.None:
-                var allStelexos = new List<Stelexos>
+                var allStelexos = new List<IStelexos>
                 {
                     new Omadarxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Omadarxis, Tel = "1234567890" },
                     new Koinotarxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Koinotarxis, Tel = "1234567890" },
@@ -305,15 +305,15 @@ public class StaffServiceTests
             Thesi = thesi
         };
 
-        _mockMapper.Setup(m => m.Map<Stelexos>(stelexosDto)).Returns(stelexos);
-        _mockStelexiRepository.Setup(repo => repo.AddStelexosInDb(stelexos)).ReturnsAsync(true);
+        _mockMapper.Setup(m => m.Map<IStelexos>(stelexosDto)).Returns(stelexos);
+        _mockStelexiRepository.Setup(repo => repo.AddOmadarxiInDb(stelexos)).ReturnsAsync(true);
 
         // Act
         var result = await _stelexiService.AddStelexosInService(stelexosDto);
 
         // Assert
         Assert.True(result);
-        _mockStelexiRepository.Verify(r => r.AddStelexosInDb(stelexos), Times.Once);
+        _mockStelexiRepository.Verify(r => r.AddOmadarxiInDb(stelexos), Times.Once);
     }
 
     [Fact]
@@ -472,7 +472,7 @@ public class StaffServiceTests
             Thesi = Thesi.Omadarxis
         };
 
-        _mockMapper.Setup(m => m.Map<Stelexos>(stelexosDto)).Returns(stelexos);
+        _mockMapper.Setup(m => m.Map<IStelexos>(stelexosDto)).Returns(stelexos);
         _mockStelexiRepository.Setup(r => r.UpdateStelexosInDb(stelexos)).ReturnsAsync(true);
 
         // Act
@@ -481,6 +481,6 @@ public class StaffServiceTests
         // Assert
         Assert.True(result);
         _mockStelexiRepository.Verify(r => r.UpdateStelexosInDb(stelexos), Times.Once);
-        _mockMapper.Verify(m => m.Map<Stelexos>(stelexosDto), Times.Once);
+        _mockMapper.Verify(m => m.Map<IStelexos>(stelexosDto), Times.Once);
     }
 }

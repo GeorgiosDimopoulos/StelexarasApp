@@ -39,7 +39,7 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
 
         public async Task<bool> DeleteStelexos(StelexosDto s)
         {
-            return await _stelexiService.DeleteStelexosByIdInService(s.Id ?? 1, s.Thesi);
+            return await _stelexiService.DeleteStelexosByIdInService(s.Id, s.Thesi);
         }
 
         public async Task OnSaveStelexos()
@@ -54,7 +54,7 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
 
         public async Task MoveOmadarxisToAnotherSkini()
         {
-            var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(StelexosDto.Id ?? 0, StelexosDto.XwrosName);
+            var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(StelexosDto.Id, StelexosDto.XwrosName);
             StatusMessage = result ? "Move successful" : "Move failed";
             OnPropertyChanged(nameof(StelexosDto));
         }

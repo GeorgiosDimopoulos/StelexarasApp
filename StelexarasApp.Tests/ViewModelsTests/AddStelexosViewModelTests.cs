@@ -20,7 +20,7 @@ public class AddStelexosViewModelTests
     }
 
     [Fact]
-    public void OnSaveStelexos_WhenFullNameIsInvalid_ShouldShowAlert()
+    public async Task OnSaveStelexos_WhenFullNameIsInvalid_ShouldShowAlert()
     {
         // Arrange
         dutyViewModel.FullName = string.Empty;
@@ -30,31 +30,33 @@ public class AddStelexosViewModelTests
         dutyViewModel.SelectedThesi = "Omadarxis";
 
         // Act
-        dutyViewModel.SaveCommand.Execute(null);
+        var result = await dutyViewModel.TrySaveStelexosAsync();
 
         // Assert
+        Assert.False(result);
         _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Never);
     }
 
     [Fact]
-    public void OnSaveStelexos_WhenXwrosNameIsInvalid_ShouldShowAlert()
+    public async Task OnSaveStelexos_WhenXwrosNameIsInvalid_ShouldShowAlert()
     {
         // Arrange
-        dutyViewModel.FullName = "FullName";
+        dutyViewModel.FullName = "Full Name";
         dutyViewModel.XwrosName = string.Empty;
         dutyViewModel.PhoneNumber = "PhoneNumber";
         dutyViewModel.Age = 18;
         dutyViewModel.SelectedThesi = "Omadarxis";
 
         // Act
-        dutyViewModel.SaveCommand.Execute(null);
+        var result = await dutyViewModel.TrySaveStelexosAsync();
 
         // Assert
+        Assert.False(result);
         _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Never);
     }
 
     [Fact]
-    public void OnSaveStelexos_WhenPhoneNumberIsInvalid_ShouldShowAlert()
+    public async Task OnSaveStelexos_WhenPhoneNumberIsInvalid_ShouldShowAlert()
     {
         // Arrange
         dutyViewModel.FullName = "Full Name";
@@ -64,14 +66,15 @@ public class AddStelexosViewModelTests
         dutyViewModel.SelectedThesi = "Omadarxis";
 
         // Act
-        dutyViewModel.SaveCommand.Execute(null);
+        var result = await dutyViewModel.TrySaveStelexosAsync();
 
         // Assert
+        Assert.False(result);
         _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Never);
     }
 
     [Fact]
-    public void OnSaveStelexos_WhenAgeIsInvalid_ShouldShowAlert()
+    public async Task OnSaveStelexos_WhenAgeIsInvalid_ShouldShowAlert()
     {
         // Arrange
         dutyViewModel.FullName = "Full Name";
@@ -81,14 +84,15 @@ public class AddStelexosViewModelTests
         dutyViewModel.SelectedThesi = "Omadarxis";
 
         // Act
-        dutyViewModel.SaveCommand.Execute(null);
+        var result = await dutyViewModel.TrySaveStelexosAsync();
 
         // Assert
+        Assert.False(result);
         _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Never);
     }
 
     [Fact]
-    public void OnSaveStelexos_WhenAllFieldsAreValid_ShouldAddStelexos()
+    public async Task OnSaveStelexos_WhenAllFieldsAreValid_ShouldWork()
     {
         // Arrange
         dutyViewModel.FullName = "Full Name";
@@ -98,9 +102,16 @@ public class AddStelexosViewModelTests
         dutyViewModel.SelectedThesi = "Omadarxis";
 
         // Act
-        dutyViewModel.SaveCommand.Execute(null);
+        _mockstaffService
+            .Setup(x => x.AddStelexosInService(It.IsAny<StelexosDto>()))
+            .ReturnsAsync(true);
+        _mockTeamsService
+           .Setup(x => x.CheckStelexousXwroNameInService(It.IsAny<StelexosDto>(), It.IsAny<string>()))
+           .ReturnsAsync(true);
+        var result = await dutyViewModel.TrySaveStelexosAsync();
 
         // Assert
-        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Once);
+        Assert.True(result);
+        _mockTeamsService.Verify(x => x.CheckStelexousXwroNameInService(It.IsAny<StelexosDto>(), It.IsAny<string>()), Times.Once);
     }
 }

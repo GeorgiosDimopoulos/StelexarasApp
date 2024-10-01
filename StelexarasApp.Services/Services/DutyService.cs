@@ -1,4 +1,5 @@
 ﻿using StelexarasApp.DataAccess.Models;
+using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.IServices;
 
@@ -47,6 +48,13 @@ namespace StelexarasApp.Services.Services
             if (_dutyRepository is null)
                 throw new ArgumentException("Duty Repository cannot be null");
             return await _dutyRepository.GetDutiesFromDb();
+        }
+
+        public Task<bool> HasData()
+        {
+            if (_dutyRepository is null)
+                throw new ArgumentException("Duty Repository cannot be null");
+            return Task.FromResult(_dutyRepository.GetDutiesFromDb().Result.Any());
         }
     }
 }

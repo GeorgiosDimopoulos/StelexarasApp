@@ -77,7 +77,7 @@ public class StaffRepositoryDbTests
         };
 
         // Act
-        var result = await _stelexiRepository.AddStelexosInDb(stelexos);
+        var result = await _stelexiRepository.AddOmadarxiInDb(stelexos);
 
         // Assert
         Assert.True(result);
@@ -98,7 +98,7 @@ public class StaffRepositoryDbTests
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(async () =>
         {
-            await _stelexiRepository.AddStelexosInDb(stelexos);
+            await _stelexiRepository.AddOmadarxiInDb(stelexos);
         });
     }
 
@@ -116,7 +116,7 @@ public class StaffRepositoryDbTests
         // Act & Assert
         await Assert.ThrowsAsync<DbUpdateException>(async () =>
         {
-            await _stelexiRepository.AddStelexosInDb(stelexos);
+            await _stelexiRepository.AddOmadarxiInDb(stelexos);
         });
     }
 

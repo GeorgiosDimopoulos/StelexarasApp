@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.UI", "StelexarasApp\StelexarasApp.UI.csproj", "{FF1494B4-ADF6-4F45-A578-F85973EF26B5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.ViewModels", "StelexarasApp.Library\StelexarasApp.ViewModels.csproj", "{266675D0-45DB-4C88-BA9A-0FC8334F44E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.DataAccess", "StelexarasApp.DataAccess\StelexarasApp.DataAccess.csproj", "{DCBDB39A-F2B3-430E-8D36-91340B37E069}"
@@ -14,8 +12,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA92051C-4811-46C7-8A16-A1F6F3611193}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		README.md = README.md
 		Logs.txt = Logs.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Tests", "StelexarasApp.Tests\StelexarasApp.Tests.csproj", "{A5C2B217-BED2-4914-8A6D-F0EEFDED004E}"
@@ -24,18 +22,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Web", "Stelex
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.ClientApp", "StelexarasApp.ClientApp\StelexarasApp.ClientApp.csproj", "{E53DDA0B-7541-4568-9204-8318B0BE5A5A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.UI", "StelexarasApp.UI\StelexarasApp.UI.csproj", "{1D5CB2ED-B755-4E76-B7CE-FA5485E8CB52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FF1494B4-ADF6-4F45-A578-F85973EF26B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF1494B4-ADF6-4F45-A578-F85973EF26B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF1494B4-ADF6-4F45-A578-F85973EF26B5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{FF1494B4-ADF6-4F45-A578-F85973EF26B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF1494B4-ADF6-4F45-A578-F85973EF26B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF1494B4-ADF6-4F45-A578-F85973EF26B5}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{266675D0-45DB-4C88-BA9A-0FC8334F44E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{266675D0-45DB-4C88-BA9A-0FC8334F44E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{266675D0-45DB-4C88-BA9A-0FC8334F44E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,6 +54,12 @@ Global
 		{E53DDA0B-7541-4568-9204-8318B0BE5A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E53DDA0B-7541-4568-9204-8318B0BE5A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E53DDA0B-7541-4568-9204-8318B0BE5A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D5CB2ED-B755-4E76-B7CE-FA5485E8CB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D5CB2ED-B755-4E76-B7CE-FA5485E8CB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D5CB2ED-B755-4E76-B7CE-FA5485E8CB52}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1D5CB2ED-B755-4E76-B7CE-FA5485E8CB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D5CB2ED-B755-4E76-B7CE-FA5485E8CB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D5CB2ED-B755-4E76-B7CE-FA5485E8CB52}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -62,4 +62,11 @@ public class ExpenseService : IExpenseService
             throw new ArgumentException("id cannot be null", nameof(id));
         return _expenseRepository.GetExpenseByIdAsync(id);
     }
+
+    public Task<bool> HasData()
+    {
+        if (_expenseRepository is null)
+            throw new ArgumentException("Expense Repository cannot be null");
+        return Task.FromResult(_expenseRepository.GetAllExpensesAsync().Result.Any());
+    }
 }

@@ -14,7 +14,7 @@ namespace StelexarasApp.Web.ApiControllers
         private readonly IStaffService _stelexiService = stelexiService;
 
         [HttpGet("Omadarxes")]
-        public async Task<ActionResult<IEnumerable<Stelexos>>> GetOmadarxes()
+        public async Task<ActionResult<IEnumerable<IStelexos>>> GetOmadarxes()
         {
             var result = await _stelexiService.GetAllOmadarxesInService();
 

@@ -11,10 +11,16 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Stelexos, OmadarxisDto>();
-        CreateMap<Stelexos, KoinotarxisDto>();
-        CreateMap<Stelexos, TomearxisDto>();
-
+        // CreateMap<IStelexos, OmadarxisDto>();
+        // CreateMap<IStelexos, KoinotarxisDto>();
+        // CreateMap<IStelexos, TomearxisDto>();
+        //CreateMap<StelexosDto, IStelexos>()
+        //   .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+        //   .ForMember(dest => dest.Id, opt => opt.Ignore())
+        //   .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
+        //   .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel));
+        CreateMap<StelexosDto, StelexosBase>();
+        
         CreateMap<StelexosDto, OmadarxisDto>()
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
             .ForMember(dest => dest.Age, opt => opt.Ignore())
@@ -65,12 +71,6 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId }))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Thesi, opt => opt.MapFrom(src => src.Thesi))
-            .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel));
-
-        CreateMap<StelexosDto, Stelexos>()
-            .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
             .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel));
 
         CreateMap<EkpaideutisDto, Ekpaideutis>()

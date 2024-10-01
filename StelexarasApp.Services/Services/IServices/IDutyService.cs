@@ -8,5 +8,6 @@ namespace StelexarasApp.Services.IServices
         Task<bool> DeleteDutyInService(string dutyName);
         Task<bool> UpdateDutyInService(string dutyName, Duty duty);
         Task<IEnumerable<Duty>> GetDutiesInService();
+        Task<bool> HasData();
     }
 }

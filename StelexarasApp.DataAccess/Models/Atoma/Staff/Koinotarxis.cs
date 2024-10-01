@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
-    public class Koinotarxis : Stelexos
+    public class Koinotarxis : StelexosBase
     {
         [Required]
         public string FullName { get; set; } = null!;

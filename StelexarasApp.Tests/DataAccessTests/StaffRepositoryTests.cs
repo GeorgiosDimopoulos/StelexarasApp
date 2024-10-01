@@ -55,7 +55,7 @@ public class StaffRepositoryTests
     {
         // Arrange
         var nonExistentId = 999;
-        var mockOmadarxisDbSet = SetupMockOmadarxisDbSet(new List<Omadarxis>());
+        var mockOmadarxisDbSet = SetupMockOmadarxisDbSet([]);
         _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
@@ -131,8 +131,8 @@ public class StaffRepositoryTests
         // Arrange
         var koinotarxisList = new List<Koinotarxis>
         {
-            new Koinotarxis { Id = 1, FullName = "Test Name 1", Age = 30, Tel = "1234567890", Koinotita = new Koinotita(), Thesi = Thesi.Koinotarxis},
-            new Koinotarxis { Id = 2, FullName = "Test Name 2", Age = 25, Tel = "0987654321", Koinotita = new Koinotita(), Thesi = Thesi.Koinotarxis}
+            new Koinotarxis { Id = 1, FullName = "Test Name1", Age = 30, Tel = "1234567890", Koinotita = new Koinotita(), Thesi = Thesi.Koinotarxis},
+            new Koinotarxis { Id = 2, FullName = "Test Name2", Age = 25, Tel = "0987654321", Koinotita = new Koinotita(), Thesi = Thesi.Koinotarxis}
         };
 
         var mockKoinotarxisDbSet = SetupMockKoinotarxisDbSet(koinotarxisList);
@@ -165,7 +165,8 @@ public class StaffRepositoryTests
     {
         var mockKoinotarxisDbSet = new Mock<DbSet<Koinotarxis>>();
         var koinotarxisQueryable = koinotarxisData.AsQueryable();
-
+        
+        var asyncEnumerable = new TestAsyncEnumerable<Koinotarxis>(koinotarxisQueryable);
         mockKoinotarxisDbSet.As<IQueryable<Koinotarxis>>().Setup(m => m.Provider).Returns(koinotarxisQueryable.Provider);
         mockKoinotarxisDbSet.As<IQueryable<Koinotarxis>>().Setup(m => m.Expression).Returns(koinotarxisQueryable.Expression);
         mockKoinotarxisDbSet.As<IQueryable<Koinotarxis>>().Setup(m => m.ElementType).Returns(koinotarxisQueryable.ElementType);

@@ -2,7 +2,7 @@
 
 namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
-    public class Ekpaideutis : Stelexos
+    public class Ekpaideutis : StelexosBase
     {
         [Required]
         public string FullName { get; set; } = null!;

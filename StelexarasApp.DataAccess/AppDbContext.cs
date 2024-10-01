@@ -13,9 +13,9 @@ namespace StelexarasApp.DataAccess
 
         public DbSet<Duty> Duties { get; set; }
 
-        public DbSet<Omadarxis> Omadarxes { get; set; }
-        public DbSet<Koinotarxis> Koinotarxes { get; set; }
-        public DbSet<Tomearxis> Tomearxes { get; set; }
+        public virtual DbSet<Omadarxis> Omadarxes { get; set; }
+        public virtual DbSet<Koinotarxis> Koinotarxes { get; set; }
+        public virtual DbSet<Tomearxis> Tomearxes { get; set; }
         public DbSet<Ekpaideutis> Ekpaideutes { get; set; }
         public DbSet<Paidi>? Paidia { get; set; }
 
