@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 

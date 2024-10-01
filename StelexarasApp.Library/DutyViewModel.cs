@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using StelexarasApp.DataAccess.Models;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.ViewModels
 {
@@ -34,21 +34,16 @@ namespace StelexarasApp.ViewModels
             return false;
         }
 
-        public async Task<bool> DeleteDuty(string dutyName)
+        public async Task<bool> DeleteDuty(int id)
         {
-            if (string.IsNullOrEmpty(dutyName))
-            {
-                return false;
-            }
-            
-            var result = await _dutyService.DeleteDutyInService(dutyName);
+            var result = await _dutyService.DeleteDutyInService(id);
             if (result)
                 return true;
 
             return false;
         }
 
-        public async Task<bool> UpdateDuty(Duty duty, string dutyNewName) 
+        public async Task<bool> UpdateDuty(Duty duty, string dutyNewName)
         {
             if (dutyNewName == null)
             {

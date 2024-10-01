@@ -4,17 +4,17 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface IStaffRepository
     {
-        Task<IEnumerable<Stelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName);
-
+        Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName);
         Task<IEnumerable<Omadarxis>> GetAllOmadarxesInDb();
+        Task<IStelexos> GetStelexosByIdInDb(int id, Thesi? thesi);
+        Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi); 
 
-        Task<Stelexos> GetStelexosByIdInDb(int id, Thesi? thesi);
-        Task<Stelexos> GetStelexosByNameInDb(string name, Thesi? thesi); 
+        Task<bool> AddOmadarxiInDb(Omadarxis omadarxis);
+        Task<bool> AddKoinotarxiInDb(Koinotarxis koinotarxis);
+        Task<bool> AddTomearxiInDb(Tomearxis tomearxis);
+        // Task<bool> AddStelexosInDb(IStelexos stelexos);
 
-        Task<bool> AddStelexosInDb(Stelexos stelexos);
-
-        Task<bool> UpdateStelexosInDb(Stelexos stelexos);
-
+        Task<bool> UpdateStelexosInDb(IStelexos stelexos);
         Task<bool> DeleteStelexosInDb(int id, Thesi thesi);
 
         Task<bool> MoveOmadarxisToAnotherSkiniInDb(int id, string newSkiniName);

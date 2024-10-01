@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.DtosModels;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 using System.Collections;
 
 namespace StelexarasApp.Web.WebControllers

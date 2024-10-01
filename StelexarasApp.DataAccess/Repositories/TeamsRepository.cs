@@ -57,7 +57,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager); 
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
@@ -287,7 +287,7 @@ namespace StelexarasApp.DataAccess.Repositories
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
                 LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
-                
+
                 if (transaction != null)
                     await transaction.RollbackAsync();
                 return false;
@@ -355,28 +355,33 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public Task<bool> AddKoinotitaInDb(Koinotita koinotita)
+        public async Task<bool> AddKoinotitaInDb(Koinotita koinotita)
         {
             if (koinotita is null || _dbContext.Koinotites is null)
-                return Task.FromResult(false);
+                return false;
 
-            var skiniInDb = _dbContext.Koinotites.FirstOrDefaultAsync(k => k.Id == koinotita.Id);
+            var koinotitaInDb = _dbContext.Koinotites.FirstOrDefaultAsync(k => k.Id == koinotita.Id);
+            if (koinotitaInDb != null)
+                return false;
 
-            if (skiniInDb != null)
-                return Task.FromResult(true);
-            else return Task.FromResult(false);
+            await _dbContext.Koinotites.AddAsync(koinotita);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public Task<bool> AddTomeasInDb(Tomeas tomeas)
+        public async Task<bool> AddTomeasInDb(Tomeas tomeas)
         {
             if (tomeas is null || _dbContext.Tomeis is null)
-                return Task.FromResult(false);
+                return false;
 
-            var skiniInDb = _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Id == tomeas.Id);
+            var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Name == tomeas.Name);
 
-            if (skiniInDb != null)
-                return Task.FromResult(true);
-            else return Task.FromResult(false);
+            if (existingTomeas != null)
+                return false;
+
+            await _dbContext.Tomeis.AddAsync(tomeas);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

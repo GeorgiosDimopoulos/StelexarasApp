@@ -1,61 +1,88 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.ApiControllers
+namespace StelexarasApp.Web.ApiControllers;
+
+[ApiController]
+[Route("[controller]")]
+[ApiExplorerSettings(IgnoreApi = false)]
+public class ExpensesController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    [ApiExplorerSettings(IgnoreApi = false)]
-    public class ExpensesController : ControllerBase
+    private readonly IExpenseService _expenseService;
+
+    public ExpensesController(IExpenseService expenseService)
     {
-        private readonly AppDbContext _context;
+        _expenseService = expenseService;
+    }
 
-        public ExpensesController(AppDbContext context)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var expenses = await _expenseService.GetExpensesInService();
+        if (expenses == null)
+            return NotFound();
+        return Ok(expenses);
+    }
+
+    [HttpGet("Expense/{id}")]
+    public async Task<ActionResult<Expense>> GetExpense(int id)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var expense = await _expenseService.GetExpenseByIdInService(id);
+        if (expense == null)
+            return NotFound();
+        return Ok(expense);
+    }
+
+    [HttpPost("Expense")]
+    public async Task<ActionResult<Expense>> PostExpense(Expense expense)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = await _expenseService.AddExpenseInService(expense);
+
+        if (result)
+            return CreatedAtAction("GetExpense", new { id = expense.Id }, expense);
+        return BadRequest();
+    }
+
+    [HttpPut("Expense/{id}")]
+    public async Task<IActionResult> PutExpense(int id, Expense expense)
+    {
+        if (id != expense.Id)
+            return BadRequest();
+
+        try
         {
-            _context = context;
+            await _expenseService.UpdateExpenseInService(id, expense);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _expenseService.HasData())
+                return NotFound();
+            throw;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
-        {
-            return await _context.Expenses.ToListAsync();
-        }
+        return NoContent();
+    }
 
-        [HttpGet("Expense/{id}")]
-        public async Task<ActionResult<Expense>> GetExpense(int id)
-        {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null) return NotFound();
-            return expense;
-        }
+    [HttpDelete("Expense/{id}")]
+    public async Task<IActionResult> DeleteExpense(int id)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-        [HttpPost("Expense")]
-        public async Task<ActionResult<Expense>> PostExpense(Expense expense)
-        {
-            _context.Expenses.Add(expense);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetExpense), new { id = expense.Id }, expense);
-        }
-
-        [HttpPut("Expense/{id}")]
-        public async Task<IActionResult> PutExpense(int id, Expense expense)
-        {
-            if (id != expense.Id) return BadRequest();
-            _context.Entry(expense).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
-        [HttpDelete("Expense/{id}")]
-        public async Task<IActionResult> DeleteExpense(int id)
-        {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null) return NotFound();
-            _context.Expenses.Remove(expense);
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
+        var result = await _expenseService.DeleteExpenseInService(id);
+        if (!result)
+            return NotFound();
+        return Ok(result);
     }
 }

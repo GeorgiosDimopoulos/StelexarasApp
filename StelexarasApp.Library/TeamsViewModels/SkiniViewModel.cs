@@ -3,7 +3,7 @@ using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Domi;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 

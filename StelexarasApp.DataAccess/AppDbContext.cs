@@ -100,19 +100,17 @@ namespace StelexarasApp.DataAccess
         private static void OnModelsRulesCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Paidi>().HasKey(p => p.Id);
-
             modelBuilder.Entity<Omadarxis>().HasKey(o => o.Id);
-
             modelBuilder.Entity<Koinotarxis>().HasKey(k => k.Id);
-
             modelBuilder.Entity<Tomearxis>().HasKey(t => t.Id);
-
             modelBuilder.Entity<Ekpaideutis>().HasKey(k => k.Id);
-            // modelBuilder.Entity<Ekpaideutis>().HasIndex(s => s.Tel).IsUnique();
 
             modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Tomeas>().HasKey(t => t.Id);
+
+            modelBuilder.Entity<Expense>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Duty>().Property(e => e.Id).ValueGeneratedOnAdd();
         }
 
         private static string? ConvertToString(Xwros xwros)

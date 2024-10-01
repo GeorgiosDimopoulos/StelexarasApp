@@ -1,6 +1,6 @@
 ﻿using Moq;
 using StelexarasApp.DataAccess.Models;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels;
 
 namespace StelexarasApp.Tests.ViewModelsTests;

@@ -44,7 +44,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteDutyInDb(string name)
+        public async Task<bool> DeleteDutyInDb(int value)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -54,7 +54,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (_dbContext.Duties is null)
                     return false;
 
-                var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Name.Equals(name));
+                var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Id == value);
                 if (existingDuty == null)
                     return false;
 

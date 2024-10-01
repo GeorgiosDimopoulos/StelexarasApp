@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using StelexarasApp.DataAccess.Models;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.ViewModels
 {

@@ -3,7 +3,7 @@ using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Services;
 
-namespace StelexarasApp.Tests.ServicesTests;
+namespace StelexarasApp.Services.Tests.ServicesTests;
 
 public class ExpensesServiceTests
 {
@@ -21,7 +21,7 @@ public class ExpensesServiceTests
     {
         // Arrange
         var expense = new Expense { Id = 1, Description = "TestExpense", Date = DateTime.Now, Amount = 100 };
-        _mockexpenseRepository.Setup(m => m.AddExpenseAsync(It.IsAny<Expense>())).ReturnsAsync(true);
+        _mockexpenseRepository.Setup(m => m.AddExpenseInDb(It.IsAny<Expense>())).ReturnsAsync(true);
 
         // Act
         var result = await _expenseService.AddExpenseInService(expense);
@@ -35,7 +35,7 @@ public class ExpensesServiceTests
     {
         // Arrange
         var expense = new Expense { Id = 1, Description = "TestExpense", Date = DateTime.Now, Amount = 100 };
-        _mockexpenseRepository.Setup(m => m.DeleteExpenseAsync(It.IsAny<int>())).ReturnsAsync(true);
+        _mockexpenseRepository.Setup(m => m.DeleteExpenseInDb(It.IsAny<int>())).ReturnsAsync(true);
 
         // Act
         var result = await _expenseService.DeleteExpenseInService(expense.Id);
@@ -53,7 +53,7 @@ public class ExpensesServiceTests
             new Expense { Id = 1, Description = "TestExpense1", Date = DateTime.Now, Amount = 100 },
             new Expense { Id = 2, Description = "TestExpense2", Date = DateTime.Now, Amount = 200 }
         };
-        _mockexpenseRepository.Setup(m => m.GetAllExpensesAsync()).ReturnsAsync(expenses);
+        _mockexpenseRepository.Setup(m => m.GetAllExpensesInDb()).ReturnsAsync(expenses);
 
         // Act
         var result = await _expenseService.GetExpensesInService();
@@ -68,7 +68,7 @@ public class ExpensesServiceTests
     {
         // Arrange
         var expense = new Expense { Id = 1, Description = "TestExpense", Date = DateTime.Now, Amount = 100 };
-        _mockexpenseRepository.Setup(m => m.UpdateExpenseAsync(It.IsAny<int>(), It.IsAny<Expense>())).ReturnsAsync(true);
+        _mockexpenseRepository.Setup(m => m.UpdateExpenseInDb(It.IsAny<int>(), It.IsAny<Expense>())).ReturnsAsync(true);
 
         // Act
         var result = await _expenseService.UpdateExpenseInService(expense.Id, expense);
@@ -82,7 +82,7 @@ public class ExpensesServiceTests
     {
         // Arrange
         var expense = new Expense { Id = 1, Description = "TestExpense", Date = DateTime.Now, Amount = 100 };
-        _mockexpenseRepository.Setup(m => m.GetExpenseByIdAsync(It.IsAny<int>())).ReturnsAsync(expense);
+        _mockexpenseRepository.Setup(m => m.GetExpenseByIdInDb(It.IsAny<int>())).ReturnsAsync(expense);
 
         // Act
         var result = await _expenseService.GetExpenseByIdInService(expense.Id);

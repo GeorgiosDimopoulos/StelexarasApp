@@ -53,12 +53,12 @@ public class DutyRepositoryDbTests
     public async Task DeleteDutyAsync_ShouldRemoveDuty()
     {
         // Arrange
-        var duty = new Duty { Name = "Test Duty", Date = DateTime.Now };
+        var duty = new Duty { Id = 1, Name = "Test Duty", Date = DateTime.Now };
         _dbContext.Duties!.Add(duty);
         await _dbContext.SaveChangesAsync();
 
         // Act
-        await dutyRepository.DeleteDutyInDb(duty.Name);
+        await dutyRepository.DeleteDutyInDb(duty.Id);
         var duties = await _dbContext.Duties.ToListAsync();
 
         // Assert

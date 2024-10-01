@@ -1,8 +1,7 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.Services.DtosModels.Atoma;
+﻿using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
 
-namespace StelexarasApp.Services.IServices;
+namespace StelexarasApp.Services.Services.IServices;
 
 public interface ITeamsService
 {

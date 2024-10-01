@@ -1,4 +1,4 @@
-﻿using StelexarasApp.Services.IServices;
+﻿using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.ViewModels.PeopleViewModels;

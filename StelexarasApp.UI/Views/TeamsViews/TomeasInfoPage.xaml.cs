@@ -1,7 +1,6 @@
 ﻿using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.TeamsViewModels;
 
 namespace StelexarasApp.Views.TeamsViews;

@@ -1,5 +1,5 @@
 ﻿using StelexarasApp.Services.DtosModels;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Windows.Input;
 

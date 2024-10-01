@@ -35,7 +35,7 @@ public class ExpenseRepositoryDbTests
         };
 
         // Act
-        var result = await expenseRepository.AddExpenseAsync(expense);
+        var result = await expenseRepository.AddExpenseInDb(expense);
 
         // Assert
         Assert.Equal(expectedResult, result);
@@ -68,7 +68,7 @@ public class ExpenseRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await expenseRepository.DeleteExpenseAsync(existingExpense.Id);
+        var result = await expenseRepository.DeleteExpenseInDb(existingExpense.Id);
 
         // Assert
         Assert.True(result);
@@ -87,7 +87,7 @@ public class ExpenseRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await expenseRepository.DeleteExpenseAsync(notIdDbExpense.Id);
+        var result = await expenseRepository.DeleteExpenseInDb(notIdDbExpense.Id);
 
         // Assert
         Assert.False(result);
@@ -121,7 +121,7 @@ public class ExpenseRepositoryDbTests
         };
 
         // Act
-        var result = await expenseRepository.UpdateExpenseAsync(expenseId, updatedExpense);
+        var result = await expenseRepository.UpdateExpenseInDb(expenseId, updatedExpense);
 
         // Assert
         Assert.Equal(expectedResult, result);
@@ -158,7 +158,7 @@ public class ExpenseRepositoryDbTests
         );
         await _dbContext.SaveChangesAsync();
 
-        var expenses = await expenseRepository.GetAllExpensesAsync();
+        var expenses = await expenseRepository.GetAllExpensesInDb();
 
         Assert.Equal(2, expenses.Count());
     }
@@ -169,7 +169,7 @@ public class ExpenseRepositoryDbTests
         _dbContext.Expenses = null;
         await _dbContext.SaveChangesAsync();
 
-        var expenses = await expenseRepository.GetAllExpensesAsync();
+        var expenses = await expenseRepository.GetAllExpensesInDb();
 
         Assert.Null(expenses);
     }

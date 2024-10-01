@@ -5,6 +5,7 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.DtosModels.Domi;
+using Newtonsoft.Json;
 
 namespace StelexarasApp.Services.Services;
 
@@ -51,24 +52,60 @@ public class StaffService : IStaffService
             return null!;
         }
     }
+    public async Task<bool> AddOmadarxisInService(OmadarxisDto omadarxisDto)
+    {
+        try
+        {
+            if (omadarxisDto == null || _mapper is null || _stelexiRepository is null)
+                throw new ArgumentNullException(nameof(omadarxisDto), "OmadarxisDto or _mapper cannot be null");
+
+            var omadarxis = _mapper.Map<Omadarxis>(omadarxisDto);
+            if (omadarxis == null)
+            {
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, Mapping Omadarxis with omadarxisDto failed", TypeOfOutput.DbErroMessager);
+                throw new ArgumentNullException(nameof(omadarxis), "Mapping failed");
+            }
+
+            return await _stelexiRepository!.AddOmadarxiInDb(omadarxis);
+        }
+        catch (Exception ex)
+        {
+            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+            return false;
+        }
+    }
 
     public async Task<bool> AddStelexosInService(StelexosDto stelexosDto)
     {
-        if (stelexosDto == null)
-            throw new ArgumentNullException(nameof(stelexosDto), "StelexosDto cannot be null");
+        try
+        {            
+            if (stelexosDto == null || _mapper is null || _stelexiRepository is null)
+                throw new ArgumentNullException(nameof(stelexosDto), "StelexosDto or _mapper cannot be null");
 
-        var stelexos = _mapper!.Map<Stelexos>(stelexosDto);
-        if (stelexos == null)
-        {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, Mapping Stelexos with stelexosDto failed", TypeOfOutput.DbErroMessager);
-            throw new ArgumentNullException(nameof(stelexos), "Mapping failed");
+            Console.WriteLine(JsonConvert.SerializeObject(stelexosDto));
+            // var stelexos = _mapper.Map<StelexosBase>(stelexosDto);
+            //if (stelexos == null)
+            //{
+            //    LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, Mapping Stelexos with stelexosDto failed", TypeOfOutput.DbErroMessager);
+            //    throw new ArgumentNullException(nameof(stelexos), "Mapping failed");
+            //}
+            var result = stelexosDto.Thesi switch
+            {
+                Thesi.Omadarxis => await _stelexiRepository!.AddOmadarxiInDb(_mapper.Map<Omadarxis>(stelexosDto as OmadarxisDto)),
+                Thesi.Koinotarxis => await _stelexiRepository!.AddKoinotarxiInDb(_mapper.Map<Koinotarxis>(stelexosDto as KoinotarxisDto)),
+                Thesi.Tomearxis => await _stelexiRepository!.AddTomearxiInDb(_mapper.Map<Tomearxis>(stelexosDto as TomearxisDto)),
+                Thesi.Ekpaideutis => throw new NotImplementedException("Thesi Ekpaideutis not yet implemented."),
+                Thesi.None => throw new ArgumentException("Thesi cannot be None!", nameof(stelexosDto.Thesi)),
+                _ => throw new ArgumentException("Invalid Thesi value!", nameof(stelexosDto.Thesi)),
+            };
+
+            return result;
         }
-
-        var result = await _stelexiRepository!.AddStelexosInDb(stelexos);
-        if (!result)
+        catch (Exception ex)
+        {
+            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             return false;
-
-        return true;
+        }
     }
 
     public async Task<bool> DeleteStelexosByIdInService(int id, Thesi thesi)
@@ -288,7 +325,7 @@ public class StaffService : IStaffService
         }
     }
 
-    private Stelexos MapDtoToEntity(StelexosDto stelexosDto)
+    private IStelexos MapDtoToEntity(StelexosDto stelexosDto)
     {
         if (stelexosDto is null)
             return null!;
@@ -298,7 +335,7 @@ public class StaffService : IStaffService
             Thesi.Omadarxis => _mapper!.Map<Omadarxis>(stelexosDto),
             Thesi.Koinotarxis => _mapper!.Map<Koinotarxis>(stelexosDto),
             Thesi.Tomearxis => _mapper!.Map<Tomearxis>(stelexosDto),
-            _ => _mapper!.Map<Stelexos>(stelexosDto),
+            _ => _mapper!.Map<IStelexos>(stelexosDto),
         };
     }
 }

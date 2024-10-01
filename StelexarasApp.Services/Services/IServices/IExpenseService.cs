@@ -1,6 +1,6 @@
 ﻿using StelexarasApp.DataAccess.Models;
 
-namespace StelexarasApp.Services.IServices
+namespace StelexarasApp.Services.Services.IServices
 {
     public interface IExpenseService
     {

@@ -1,7 +1,6 @@
 ﻿using StelexarasApp.DataAccess.Models;
-using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Services.Services
 {
@@ -28,11 +27,11 @@ namespace StelexarasApp.Services.Services
 
             return await _dutyRepository.AddDutyInDb(duty);
         }
-        public async Task<bool> DeleteDutyInService(string dutyName)
+        public async Task<bool> DeleteDutyInService(int dutyId)
         {
-            if (string.IsNullOrEmpty(dutyName) || _dutyRepository is null)
+            if (_dutyRepository is null)
                 throw new ArgumentException("Duty name or duty Repository cannot be null");
-            return await _dutyRepository.DeleteDutyInDb(dutyName);
+            return await _dutyRepository.DeleteDutyInDb(dutyId);
         }
 
         public async Task<bool> UpdateDutyInService(string dutyName, Duty updatedDuty)
@@ -55,6 +54,13 @@ namespace StelexarasApp.Services.Services
             if (_dutyRepository is null)
                 throw new ArgumentException("Duty Repository cannot be null");
             return Task.FromResult(_dutyRepository.GetDutiesFromDb().Result.Any());
+        }
+
+        public Task<Duty> GetDutyByIdInService(int id)
+        {
+            if (_dutyRepository is null)
+                throw new ArgumentException("Duty Repository cannot be null");
+            return _dutyRepository.GetDutyFromDb(id.ToString());
         }
     }
 }

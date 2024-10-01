@@ -4,11 +4,11 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface IExpenseRepository
     {
-        Task<IEnumerable<Expense>> GetAllExpensesAsync();
-        Task<Expense> GetExpenseByIdAsync(int id);
-        Task<bool> AddExpenseAsync(Expense expense);
-        Task<bool> DeleteExpenseAsync(int expenseId);
+        Task<IEnumerable<Expense>> GetAllExpensesInDb();
+        Task<Expense> GetExpenseByIdInDb(int id);
+        Task<bool> AddExpenseInDb(Expense expense);
+        Task<bool> DeleteExpenseInDb(int expenseId);
 
-        Task<bool> UpdateExpenseAsync(int id, Expense newExpense);
+        Task<bool> UpdateExpenseInDb(int id, Expense newExpense);
     }
 }

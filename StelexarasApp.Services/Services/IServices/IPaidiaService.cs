@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 
-namespace StelexarasApp.Services.IServices
+namespace StelexarasApp.Services.Services.IServices
 {
     public interface IPaidiaService
     {

@@ -1,6 +1,6 @@
 ﻿using StelexarasApp.DataAccess.Models;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Services.Services;
 
@@ -18,7 +18,7 @@ public class ExpenseService : IExpenseService
         if (expense.Amount <= 0 || _expenseRepository is null)
             throw new ArgumentException("Amount cannot be negative", nameof(expense.Amount));
 
-        return await _expenseRepository.AddExpenseAsync(expense);
+        return await _expenseRepository.AddExpenseInDb(expense);
     }
 
     public async Task<bool> DeleteExpenseInService(int expenseId)
@@ -27,7 +27,7 @@ public class ExpenseService : IExpenseService
         {
             if (expenseId <= 0 || _expenseRepository is null)
                 throw new ArgumentException("Amount cannot be negative", nameof(expenseId));
-            return await _expenseRepository.DeleteExpenseAsync(expenseId);
+            return await _expenseRepository.DeleteExpenseInDb(expenseId);
         }
         catch (Exception ex)
         {
@@ -41,7 +41,7 @@ public class ExpenseService : IExpenseService
         {
             if (expense.Amount <= 0 || string.IsNullOrEmpty(expense.Description) || _expenseRepository is null)
                 return false;
-            return await _expenseRepository.UpdateExpenseAsync(expenseId, expense);
+            return await _expenseRepository.UpdateExpenseInDb(expenseId, expense);
         }
         catch (Exception)
         {
@@ -53,20 +53,20 @@ public class ExpenseService : IExpenseService
     {
         if (_expenseRepository is null)
             throw new ArgumentException("Expense Repository cannot be null");
-        return await _expenseRepository.GetAllExpensesAsync();
+        return await _expenseRepository.GetAllExpensesInDb();
     }
 
     public Task<Expense> GetExpenseByIdInService(int id)
     {
         if (id <= 0 || _expenseRepository is null)
             throw new ArgumentException("id cannot be null", nameof(id));
-        return _expenseRepository.GetExpenseByIdAsync(id);
+        return _expenseRepository.GetExpenseByIdInDb(id);
     }
 
     public Task<bool> HasData()
     {
         if (_expenseRepository is null)
             throw new ArgumentException("Expense Repository cannot be null");
-        return Task.FromResult(_expenseRepository.GetAllExpensesAsync().Result.Any());
+        return Task.FromResult(_expenseRepository.GetAllExpensesInDb().Result.Any());
     }
 }

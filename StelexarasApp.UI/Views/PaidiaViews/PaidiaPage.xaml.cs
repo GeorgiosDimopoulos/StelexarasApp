@@ -1,4 +1,4 @@
-﻿using StelexarasApp.Services.IServices;
+﻿using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.DtosModels;
 
 namespace StelexarasApp.UI.Views.PaidiaViews

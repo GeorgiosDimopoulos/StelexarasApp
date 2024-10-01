@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.ApiControllers
 {
@@ -10,52 +10,68 @@ namespace StelexarasApp.Web.ApiControllers
     [ApiExplorerSettings(IgnoreApi = false)]
     public class DutiesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IDutyService _dutyService;
 
-        public DutiesController(AppDbContext context)
+        public DutiesController(IDutyService dutyService)
         {
-            _context = context;
+            _dutyService = dutyService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
         {
-            return await _context.Expenses.ToListAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var expenses = await _dutyService.GetDutiesInService();
+            if (expenses == null)
+                return NotFound();
+            return Ok(expenses);
         }
 
         [HttpGet("Duty/{id}")]
-        public async Task<ActionResult<Expense>> GetExpense(int id)
+        public async Task<ActionResult<Duty>> GetExpense(int id)
         {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null) return NotFound();
-            return expense;
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var expense = await _dutyService.GetDutyByIdInService(id);
+            if (expense == null) 
+                return NotFound();
+            return Ok(expense);
         }
 
         [HttpPost("Duty")]
-        public async Task<ActionResult<Expense>> PostExpense(Expense expense)
+        public async Task<ActionResult<Expense>> PostExpense(Duty duty)
         {
-            _context.Expenses.Add(expense);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetExpense), new { id = expense.Id }, expense);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var expense = await _dutyService.AddDutyInService(duty);
+            
+            if (expense == false)
+                return NotFound();
+            return Ok(expense);
         }
 
         [HttpPut("Duty/{id}")]
-        public async Task<IActionResult> PutExpense(int id, Expense expense)
+        public async Task<IActionResult> PutExpense(int id, Duty duty)
         {
-            if (id != expense.Id) return BadRequest();
-            _context.Entry(expense).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
+            if (id != duty.Id) 
+                return BadRequest();
+            
+            var isUpdated = await _dutyService.UpdateDutyInService(duty.Name, duty);
+            if (isUpdated == false)
+                return NotFound();
+            return Ok(isUpdated);
         }
 
         [HttpDelete("Duty/{id}")]
         public async Task<IActionResult> DeleteExpense(int id)
         {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null) return NotFound();
-            _context.Expenses.Remove(expense);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            var isDeleted = await _dutyService.DeleteDutyInService(id);
+            if (isDeleted == false)
+                return NotFound();
+            return Ok(isDeleted);
         }
     }
 }

@@ -5,7 +5,6 @@ using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.ViewModels;
 using StelexarasApp.Services.Services.IServices;
@@ -13,6 +12,7 @@ using StelexarasApp.ViewModels.TeamsViewModels;
 using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.Web;
 using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Services.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,6 +112,7 @@ void ConfigureServives(WebApplicationBuilder builder)
 
     // Add AutoMapper
     builder.Services.AddAutoMapper(typeof(MappingProfile));
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
     // Add DbContext with SQL Server
     builder.Services.AddDbContext<AppDbContext>(options =>
@@ -126,10 +127,10 @@ static async Task SeedDbWithMockData(WebApplication app)
     try
     {
         var dataSeeder = services.GetRequiredService<DataSeeder>();
-        await dataSeeder.SeedSDutiesData();
+        await dataSeeder.SeedDutiesData();
         await dataSeeder.SeedExpensesData();
         await dataSeeder.SeedTeamsData();
-        await dataSeeder.SeedStelexiData();
+        // await dataSeeder.SeedStelexiData();
     }
     catch (Exception ex)
     {

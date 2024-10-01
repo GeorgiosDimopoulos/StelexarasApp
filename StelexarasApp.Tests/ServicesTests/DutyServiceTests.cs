@@ -35,10 +35,10 @@ public class DutyServiceTests
     {
         // Arrange
         var duty = new Duty { Id = 1, Name = "TestDuty", Date = DateTime.Now };
-        _mockdutyRepository.Setup(m => m.DeleteDutyInDb(It.IsAny<string>())).ReturnsAsync(true);
+        _mockdutyRepository.Setup(m => m.DeleteDutyInDb(It.IsAny<int>())).ReturnsAsync(true);
 
         // Act
-        var result = await _dutyService.DeleteDutyInService(duty.Name);
+        var result = await _dutyService.DeleteDutyInService(duty.Id);
 
         // Assert
         Assert.True(result);

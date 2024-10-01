@@ -4,7 +4,6 @@ using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web;
@@ -92,7 +91,7 @@ public class DataSeeder
         }
     }
 
-    public async Task<bool> SeedSDutiesData()
+    public async Task<bool> SeedDutiesData()
     {
         if (await _dutyService.HasData())
         {
@@ -212,7 +211,7 @@ public class DataSeeder
                 Tel = "6987456321",
                 Thesi = Thesi.Omadarxis,
                 XwrosName = "Ξάνθη",
-                SkiniId = 1
+                // SkiniId = 1
             });
         }
         catch (Exception ex)
@@ -226,17 +225,20 @@ public class DataSeeder
         await _teamsService.AddTomeasInService(new TomeasDto
         {
             Name = "Τομέας 1",
-            KoinotitesNumber = 5
+            KoinotitesNumber = 5,
+            Id = 1
         });
         await _teamsService.AddTomeasInService(new TomeasDto
         {
             Name = "Τομέας 2",
-            KoinotitesNumber = 4
+            KoinotitesNumber = 4,
+            Id = 2
         });
         await _teamsService.AddTomeasInService(new TomeasDto
         {
             Name = "Σχολή",
-            KoinotitesNumber = 1
+            KoinotitesNumber = 1,
+            Id = 3
         });
     }
 

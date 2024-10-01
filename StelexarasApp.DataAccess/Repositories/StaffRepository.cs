@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
@@ -20,11 +21,85 @@ public class StaffRepository : IStaffRepository
         _logger = loggerFactory.CreateLogger<StaffRepository>();
     }
 
-    public async Task<bool> AddStelexosInDb(Stelexos stelexos)
+    public async Task<bool> AddOmadarxiInDb(Omadarxis omadarxis)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        if (omadarxis == null || _dbContext.Omadarxes is null)
+            throw new ArgumentNullException(nameof(omadarxis), "Omadarxis or Omadarxes cannot be null");
+
+        try
+        {
+            _dbContext.Omadarxes!.Add(omadarxis);
+            await _dbContext.SaveChangesAsync();
+            if (transaction != null)
+                await transaction.CommitAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            return false;
+        }
+    }
+
+    public async Task<bool> AddKoinotarxiInDb(Koinotarxis koinotarxis)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        if (koinotarxis == null || _dbContext.Koinotarxes is null)
+            throw new ArgumentNullException(nameof(koinotarxis), "Koinotarxis or Koinotarxes cannot be null");
+
+        try
+        {
+            _dbContext.Koinotarxes!.Add(koinotarxis);
+            await _dbContext.SaveChangesAsync();
+            if (transaction != null)
+                await transaction.CommitAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            return false;
+        }
+    }
+
+    public async Task<bool> AddTomearxiInDb(Tomearxis tomearxis)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        if (tomearxis == null || _dbContext.Tomearxes is null)
+            throw new ArgumentNullException(nameof(tomearxis), "Tomearxis or Tomearxes cannot be null");
+
+        try
+        {
+            _dbContext.Tomearxes!.Add(tomearxis);
+            await _dbContext.SaveChangesAsync();
+            if (transaction != null)
+                await transaction.CommitAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return await HandleDatabaseExceptionAsync(ex, transaction);
+        }
+    }
+
+    public async Task<bool> AddStelexosInDb(IStelexos stelexos)
     {
         var isInMemoryDatabase = _dbContext.Database?.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase || _dbContext.Database == null
-            ? null 
+            ? null
             : await _dbContext.Database.BeginTransactionAsync();
 
         if (stelexos == null)
@@ -148,7 +223,7 @@ public class StaffRepository : IStaffRepository
         return (IEnumerable<Omadarxis>)await GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotita.Name);
     }
 
-    public async Task<IEnumerable<Stelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName)
+    public async Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName)
     {
         try
         {
@@ -164,13 +239,13 @@ public class StaffRepository : IStaffRepository
         }
         catch (Exception ex)
         {
-           _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
-            return null!;
+            return [];
         }
     }
 
-    public async Task<Stelexos> GetStelexosByIdInDb(int id, Thesi? thesi)
+    public async Task<IStelexos> GetStelexosByIdInDb(int id, Thesi? thesi)
     {
         if (thesi == Thesi.None || id <= 0 || _dbContext is null)
             return null!;
@@ -199,7 +274,7 @@ public class StaffRepository : IStaffRepository
         return null!;
     }
 
-    public async Task<bool> UpdateStelexosInDb(Stelexos stelexos)
+    public async Task<bool> UpdateStelexosInDb(IStelexos stelexos)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -293,16 +368,16 @@ public class StaffRepository : IStaffRepository
         }
     }
 
-    public async Task<Stelexos> GetStelexosByNameInDb(string name, Thesi? thesi)
+    public async Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi)
     {
         if (string.IsNullOrEmpty(name) || thesi is null)
             return null!;
 
         if (thesi == Thesi.None)
         {
-            IQueryable<Stelexos> query = _dbContext.Omadarxes!.Cast<Stelexos>()
-                .Concat(_dbContext.Koinotarxes!.Cast<Stelexos>())
-                .Concat(_dbContext.Tomearxes!.Cast<Stelexos>());
+            IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
+                .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
+                .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
             return await query.FirstOrDefaultAsync(e => e.FullName == name);
         }
 
@@ -318,12 +393,34 @@ public class StaffRepository : IStaffRepository
         };
     }
 
+    private async Task<bool> HandleDatabaseExceptionAsync(Exception ex, IDbContextTransaction? transaction)
+    {
+        _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+        LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+
+        if (transaction != null)
+            await transaction.RollbackAsync();
+        _dbContext.Dispose();
+
+        switch (ex)
+        {
+            case DbUpdateException dbEx:
+                throw new DbUpdateException("Database update failed.", dbEx);
+            case InvalidCastException castEx:
+                throw new InvalidCastException("Invalid cast for Stelexos.", castEx);
+            case ArgumentException argEx:
+                throw new ArgumentException("Invalid argument passed.", argEx);
+            default:
+                return false;
+        }
+    }
+
     private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string xwrosName)
     {
         if (string.IsNullOrEmpty(xwrosName))
             return await GetAllOmadarxes();
 
-        var isXwrosAnKoinotita = _dbContext.Koinotites!.Any(k => k.Name.Equals(xwrosName));
+        var isXwrosAnKoinotita = await _dbContext.Koinotites!.AnyAsync(k => k.Name.Equals(xwrosName));
         if (isXwrosAnKoinotita)
             return await GetOmadarxesAnaKoinotita(xwrosName);
         else
@@ -331,16 +428,16 @@ public class StaffRepository : IStaffRepository
             var isXwrosATomeas = _dbContext.Tomeis!.Any(t => t.Name.Equals(xwrosName));
             if (isXwrosATomeas)
                 return await GetOmadarxesAnaTomea(xwrosName);
-            else
-                return await GetAllOmadarxes();
         }
+
+        return await GetAllOmadarxes();
     }
 
     private async Task<IEnumerable<Koinotarxis>> GetKoinotarxesAnaXwro(string xwrosName)
     {
         if (string.IsNullOrEmpty(xwrosName))
             return await _dbContext.Koinotarxes!.ToListAsync();
-        
+
         var isXwrosAnTomeas = _dbContext.Tomeis!.Any(k => k.Name.Equals(xwrosName));
         if (isXwrosAnTomeas)
             return await GetKoinotarxesAnaTomea(xwrosName);
