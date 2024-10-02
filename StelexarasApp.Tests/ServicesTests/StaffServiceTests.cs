@@ -201,7 +201,7 @@ public class StaffServiceTests
     public async Task GetKoinotarxesSeTomeaInService_ShouldReturnKoinotarxes()
     {
         // Arrange
-        var tomeaDto = new TomeasDto { Name = "TestTomea", Id = 1 };
+        var tomeaDto = new TomeasDto { Name = "TestTomea"};
         var koinotarxisList = new List<Koinotarxis>
         {
             new() { FullName = "Test Koinotarxis", Id = 1 , Tel = "1231231"}

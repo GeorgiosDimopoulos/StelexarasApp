@@ -109,8 +109,15 @@ namespace StelexarasApp.DataAccess
             modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Tomeas>().HasKey(t => t.Id);
 
+            modelBuilder.Entity<Skini>().HasKey(s => s.Id);
+            modelBuilder.Entity<Koinotita>().HasKey(s => s.Id);
+            modelBuilder.Entity<Tomeas>().HasKey(s => s.Id);
+
             modelBuilder.Entity<Expense>().Property(e => e.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Duty>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Skini>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Koinotita>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Tomeas>().Property(e => e.Id).ValueGeneratedOnAdd();
         }
 
         private static string? ConvertToString(Xwros xwros)

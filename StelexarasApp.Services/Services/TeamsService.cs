@@ -33,8 +33,16 @@ namespace StelexarasApp.Services.Services
 
         public async Task<IEnumerable<SkiniDto>> GetAllSkinesInService()
         {
-            var skini = await _teamsRepository.GetSkinesInDb();
-            return _mapper.Map<IEnumerable<SkiniDto>>(skini);
+            try
+            {
+                var skini = await _teamsRepository.GetSkinesInDb();
+                return _mapper.Map<IEnumerable<SkiniDto>>(skini);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         public async Task<SkiniDto> GetSkiniByNameInService
@@ -127,8 +135,16 @@ namespace StelexarasApp.Services.Services
 
         public Task<bool> AddTomeasInService(TomeasDto tomeasDto)
         {
-            var tomeas = _mapper.Map<Tomeas>(tomeasDto);
-            return _teamsRepository.AddTomeasInDb(tomeas);
+            try
+            {
+                var tomeas = _mapper.Map<Tomeas>(tomeasDto);
+                return _teamsRepository.AddTomeasInDb(tomeas);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Task.FromResult(false);
+            }
         }
 
         public Task<bool> HasData()

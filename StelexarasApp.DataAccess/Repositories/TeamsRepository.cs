@@ -335,15 +335,15 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (skini is null || _dbContext.Skines is null || skini.Id <= 0)
+                if (skini is null || _dbContext.Skines is null)
                     return false;
-
-                _dbContext.Skines.Add(skini);
+                skini.OmadarxisId ??= 0;
+                
+                await _dbContext.Skines.AddAsync(skini);
                 await _dbContext.SaveChangesAsync();
 
                 if (transaction != null)
                     await transaction.CommitAsync();
-
                 return true;
             }
             catch (Exception ex)
@@ -371,17 +371,32 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> AddTomeasInDb(Tomeas tomeas)
         {
-            if (tomeas is null || _dbContext.Tomeis is null)
+            try
+            {
+                if (tomeas is null || _dbContext.Tomeis is null)
+                    return false;
+
+                // tomeas.TomearxisId = null;
+                var tomearxisExists = await _dbContext.Tomearxes.AnyAsync(t => t.Id == tomeas.TomearxisId);
+                if (!tomearxisExists)
+                {
+                    LogFileWriter.WriteToLog($"Tomearxis with Id {tomeas.TomearxisId} does not exist", TypeOfOutput.DbErroMessager);
+                    return false;
+                }
+
+                var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Name == tomeas.Name);
+                if (existingTomeas != null)
+                    return false;
+
+                await _dbContext.Tomeis.AddAsync(tomeas);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return false;
-
-            var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Name == tomeas.Name);
-
-            if (existingTomeas != null)
-                return false;
-
-            await _dbContext.Tomeis.AddAsync(tomeas);
-            await _dbContext.SaveChangesAsync();
-            return true;
+            }
         }
     }
 }

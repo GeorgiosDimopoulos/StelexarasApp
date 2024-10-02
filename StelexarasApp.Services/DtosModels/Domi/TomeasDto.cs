@@ -1,10 +1,10 @@
-﻿namespace StelexarasApp.Services.DtosModels.Domi
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StelexarasApp.Services.DtosModels.Domi;
+
+public class TomeasDto
 {
-    public class TomeasDto
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int KoinotitesNumber { get; set; }
-        // public TomearxisDto? Tomearxis { get; set; }
-    }
+    [Required]
+    public string Name { get; set; } = string.Empty;
+    public int KoinotitesNumber { get; set; }
 }

@@ -169,7 +169,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpPost("Tomea")]
-    public async Task<ActionResult<TomeasDto>> PostTomea([FromBody] TomeasDto tomeasDto)
+    public async Task<ActionResult<TomeasDto>> PostTomea(TomeasDto tomeasDto)
     {
         var result = await _teamsService.AddTomeasInService(tomeasDto);
 

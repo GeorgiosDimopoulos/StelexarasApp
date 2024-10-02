@@ -130,7 +130,7 @@ static async Task SeedDbWithMockData(WebApplication app)
         await dataSeeder.SeedDutiesData();
         await dataSeeder.SeedExpensesData();
         await dataSeeder.SeedTeamsData();
-        // await dataSeeder.SeedStelexiData();
+        await dataSeeder.SeedStelexiData();
     }
     catch (Exception ex)
     {

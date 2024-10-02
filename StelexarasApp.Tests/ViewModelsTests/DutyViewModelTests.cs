@@ -50,15 +50,14 @@ public class DutyViewModelTests
     public async Task DeleteDuty_ShouldReturnTrue_WhenDutyIsDeletedSuccessfully()
     {
         // Arrange
-        var dutyName = "Test Duty";
-        _mockDutyService.Setup(service => service.DeleteDutyInService(dutyName)).ReturnsAsync(true);
+        _mockDutyService.Setup(service => service.DeleteDutyInService(1)).ReturnsAsync(true);
 
         // Act
-        var result = await dutyViewModel.DeleteDuty(dutyName);
+        var result = await dutyViewModel.DeleteDuty(1);
 
         // Assert
         Assert.True(result);
-        _mockDutyService.Verify(service => service.DeleteDutyInService(dutyName), Times.Once);
+        _mockDutyService.Verify(service => service.DeleteDutyInService(1), Times.Once);
     }
 
     [Fact]
