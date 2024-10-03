@@ -110,7 +110,8 @@ public class StaffRepositoryDbTests
         {
             Id = 1,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name"
+            FullName = "Test Name",
+            Tel = "12345678"
         };
 
         // Act & Assert

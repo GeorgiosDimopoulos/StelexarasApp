@@ -72,6 +72,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Koinotarxis, opt => opt.Ignore())
             .ForMember(dest => dest.KoinotarxisId, opt => opt.Ignore())
+            .ForMember(dest => dest.Tomeas, opt => opt.Ignore())
             .ForMember(dest => dest.Skines, opt => opt.MapFrom(src => new List<Skini>(new Skini [src.SkinesNumber])))
             .ReverseMap();
     }

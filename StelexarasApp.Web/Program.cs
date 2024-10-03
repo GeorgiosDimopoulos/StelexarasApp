@@ -4,7 +4,6 @@ using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.ViewModels;
 using StelexarasApp.Services.Services.IServices;
@@ -105,7 +104,10 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddControllers();
     builder.Services.AddControllersWithViews();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.EnableAnnotations();
+    });
     builder.Services.AddSignalR();
     builder.Services.AddHealthChecks()
         .AddCheck<DbHealthCheck>("Database");

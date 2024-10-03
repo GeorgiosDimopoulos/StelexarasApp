@@ -232,11 +232,11 @@ public class StaffServiceTests
         var koinotita = new KoinotitaDto { Name = "TestKoinotita" };
         var omadarxisList = new List<Omadarxis>
         {
-            new Omadarxis { FullName = "Test Omadarxis", Id = 1 }
+            new Omadarxis { FullName = "Test Omadarxis", Id = 1, Tel = "12313121" }
         };
         var omadarxisDtoList = new List<OmadarxisDto>
         {
-            new OmadarxisDto { FullName = "Test Omadarxis", Id = 1 }
+            new OmadarxisDto { FullName = "Test Omadarxis", Id = 1, Tel = "1235452" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotita.Name)).ReturnsAsync(omadarxisList);
@@ -260,7 +260,7 @@ public class StaffServiceTests
         var tomeaDto = new TomeasDto { Name = "TestTomea" };
         var omadarxisList = new List<Omadarxis>
         {
-            new Omadarxis { FullName = "Test Omadarxis", Id = 1 }
+            new Omadarxis { FullName = "Test Omadarxis", Id = 1, Tel = "122345678" }
         };
         var omadarxisDtoList = new List<OmadarxisDto>
         {

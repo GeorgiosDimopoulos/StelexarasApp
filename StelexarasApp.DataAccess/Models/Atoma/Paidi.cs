@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StelexarasApp.DataAccess.Models.Atoma
 {
-    public class Paidi : Atomo
+    public class Paidi : IPerson
     {
-        public string FullName { get; set; }
+        public required string FullName { get; set; }
 
         [Key]
         public int Id { get; set; }

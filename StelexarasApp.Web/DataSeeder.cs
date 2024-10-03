@@ -226,19 +226,16 @@ public class DataSeeder
         {
             Name = "Τομέας 1",
             KoinotitesNumber = 5,
-            Id = 1
         });
         await _teamsService.AddTomeasInService(new TomeasDto
         {
             Name = "Τομέας 2",
             KoinotitesNumber = 4,
-            Id = 2
         });
         await _teamsService.AddTomeasInService(new TomeasDto
         {
             Name = "Σχολή",
             KoinotitesNumber = 1,
-            Id = 3
         });
     }
 

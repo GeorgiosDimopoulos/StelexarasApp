@@ -5,20 +5,19 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
     public class Koinotarxis : StelexosBase
     {
-        [Required]
-        public string FullName { get; set; } = null!;
+        public new required string FullName { get; set; }
 
         [Key]
-        public int Id { get; set; }
-        public int Age { get; set; }
-        public Sex Sex { get; set; }
+        public new int Id { get; set; }
+        public new int Age { get; set; }
+        public new Sex Sex { get; set; }
 
         [Required]
         public Koinotita Koinotita { get; set; } = null!;
 
         [Required]
-        public string Tel { get; set; }
-        public Thesi Thesi { get; set; } = Thesi.Koinotarxis;
+        public new required string Tel { get; set; }
+        public new Thesi Thesi { get; set; } = Thesi.Koinotarxis;
         public IEnumerable<Omadarxis> Omadarxes { get; set; } = null!;
     }
 }

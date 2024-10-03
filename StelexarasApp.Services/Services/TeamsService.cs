@@ -8,25 +8,25 @@ using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Services.Services
 {
-    public class TeamsService : ITeamsService
+    public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : ITeamsService
     {
-        private readonly ITeamsRepository _teamsRepository;
-        private readonly IMapper _mapper;
-
-        public TeamsService(IMapper mapper, ITeamsRepository teamsRepository)
-        {
-            _teamsRepository = teamsRepository;
-            _mapper = mapper;
-        }
+        private readonly ITeamsRepository _teamsRepository = teamsRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<bool> AddSkiniInService(SkiniDto skiniDto)
         {
+            if (skiniDto is null || string.IsNullOrEmpty(skiniDto.Name) || string.IsNullOrEmpty(skiniDto.KoinotitaName))
+                return false;
+
             var skini = _mapper.Map<Skini>(skiniDto);
             return await _teamsRepository.AddSkiniInDb(skini);
         }
 
         public async Task<bool> AddKoinotitaInService(KoinotitaDto koinotitaDto)
         {
+            if (koinotitaDto is null || string.IsNullOrEmpty(koinotitaDto.Name))
+                return false;
+
             var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
             return await _teamsRepository.AddKoinotitaInDb(koinotita);
         }
@@ -133,17 +133,19 @@ namespace StelexarasApp.Services.Services
             return _mapper.Map<SkiniDto>(skini);
         }
 
-        public Task<bool> AddTomeasInService(TomeasDto tomeasDto)
+        public async Task<bool> AddTomeasInService(TomeasDto tomeasDto)
         {
             try
             {
+                if (tomeasDto is null || string.IsNullOrEmpty(tomeasDto.Name))
+                    return false;
                 var tomeas = _mapper.Map<Tomeas>(tomeasDto);
-                return _teamsRepository.AddTomeasInDb(tomeas);
+                return await _teamsRepository.AddTomeasInDb(tomeas);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Task.FromResult(false);
+                return false;
             }
         }
 

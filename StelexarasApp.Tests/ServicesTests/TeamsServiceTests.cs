@@ -92,17 +92,17 @@ public class TeamsServiceTests
         // Arrange
         var teams = new List<Koinotita>
         {
-            new Koinotita 
-            { 
+            new Koinotita
+            {
                 Id = 1, Name = "TestKoinotita1", Koinotarxis = new Koinotarxis
-                { 
-                    FullName = "Test Name1" 
+                {
+                    FullName = "Test Name1" , Tel = "1234567890"
                 }
             },
             new Koinotita
             { Id = 2, Name = "TestKoinotita2", Koinotarxis = new Koinotarxis()
             {
-                FullName = "Test Name2"
+                FullName = "Test Name2", Tel = "1334567890"
             }
             }
         };
@@ -126,14 +126,14 @@ public class TeamsServiceTests
             {
                 Id = 1, Name = "TestKoinotita1", Koinotarxis = new Koinotarxis
                 {
-                    FullName = "Test Name1"
+                    FullName = "Test Name1", Tel = "123456789"
                 }
             },
             new Koinotita
-            { 
+            {
                 Id = 2, Name = "TestKoinotita2", Koinotarxis = new Koinotarxis()
                 {
-                    FullName = "Test Name2"
+                    FullName = "Test Name2" , Tel = "123457890"
                 }
             }
         };

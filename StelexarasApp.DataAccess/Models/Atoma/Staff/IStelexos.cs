@@ -2,7 +2,7 @@
 
 namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
-    public interface IStelexos : Atomo
+    public interface IStelexos : IPerson
     {
         public new string FullName { get; set; }
         public string? Tel { get; set; }

@@ -2,7 +2,7 @@
 
 namespace StelexarasApp.DataAccess.Models.Atoma
 {
-    public interface Atomo
+    public interface IPerson
     {
         string FullName { get; set; }
 
