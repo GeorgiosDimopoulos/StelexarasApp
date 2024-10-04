@@ -24,11 +24,19 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> AddKoinotitaInService(KoinotitaDto koinotitaDto)
         {
-            if (koinotitaDto is null || string.IsNullOrEmpty(koinotitaDto.Name))
-                return false;
+            try
+            {
+                if (koinotitaDto is null || string.IsNullOrEmpty(koinotitaDto.Name))
+                    return false;
 
-            var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
-            return await _teamsRepository.AddKoinotitaInDb(koinotita);
+                var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
+                return await _teamsRepository.AddKoinotitaInDb(koinotita);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         public async Task<IEnumerable<SkiniDto>> GetAllSkinesInService()
@@ -110,9 +118,9 @@ namespace StelexarasApp.Services.Services
             return _teamsRepository.DeleteKoinotitaInDb(koinotitaId);
         }
 
-        public Task<bool> DeleteTomeasInService(int tomeasId)
+        public Task<bool> DeleteTomeasInService(string n)
         {
-            return _teamsRepository.DeleteTomeasInDb(tomeasId);
+            return _teamsRepository.DeleteTomeasInDb(n);
         }
 
         public async Task<TomeasDto> GetTomeaByNameInService(string name)
@@ -123,8 +131,18 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> UpdateTomeaInService(TomeasDto tomeas)
         {
-            var tomea = _mapper.Map<Tomeas>(tomeas);
-            return await _teamsRepository.UpdateTomeasInDb(tomea);
+            try
+            {
+                var tomea = _mapper.Map<Tomeas>(tomeas);
+                var array = new Koinotita [tomeas.KoinotitesNumber];
+                tomea.Koinotites = [.. array];
+                return await _teamsRepository.UpdateTomeasInDb(tomea);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         public async Task<SkiniDto> GetKoinotitaByNameInService(string name)

@@ -11,5 +11,6 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 
         Task<Duty> GetDutyFromDb(string name);
         Task<IEnumerable<Duty>> GetDutiesFromDb();
+        Task<bool> HasData();
     }
 }

@@ -23,7 +23,6 @@ builder.Logging.AddConsole();
 var app = builder.Build();
 SeedDbWithMockData(app).Wait();
 
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger(c =>
@@ -71,6 +70,7 @@ app.Run();
 
 void ConfigureServives(WebApplicationBuilder builder)
 {
+    // builder.Services.AddScoped<DtoDataSeeder>();
     builder.Services.AddScoped<DataSeeder>();
 
     // register Repositories
@@ -128,11 +128,10 @@ static async Task SeedDbWithMockData(WebApplication app)
 
     try
     {
-        var dataSeeder = services.GetRequiredService<DataSeeder>();
+        var dataSeeder = services.GetRequiredService<DataSeeder>(); // DtoDataSeeder
         await dataSeeder.SeedDutiesData();
         await dataSeeder.SeedExpensesData();
-        await dataSeeder.SeedTeamsData();
-        await dataSeeder.SeedStelexiData();
+        await dataSeeder.SeedTeamsAndStaffData();
     }
     catch (Exception ex)
     {

@@ -286,7 +286,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.DeleteTomeasInDb(tomeas.Id);
+            var result = await _teamsRepository.DeleteTomeasInDb(tomeas.Name);
 
             // Assert
             Assert.True(result);

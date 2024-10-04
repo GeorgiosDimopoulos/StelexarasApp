@@ -20,17 +20,17 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         {
             if (expense is null || _dbContext.Expenses is null)
                 return false;
-            
+
             var existingExpense = await _dbContext.Expenses.FindAsync(expense.Id);
             if (existingExpense != null)
                 return false;
-            
+
             _dbContext.Expenses?.Add(expense);
             await _dbContext.SaveChangesAsync();
 
             if (transaction != null)
                 await transaction.CommitAsync();
-            
+
             return true;
         }
         catch (Exception ex)
@@ -113,6 +113,14 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         }
     }
 
+    public Task<bool> HasData()
+    {
+        if (_dbContext.Expenses is null)
+            return Task.FromResult(false);
+
+        return Task.FromResult(_dbContext.Expenses.Any());
+    }
+
     public async Task<bool> UpdateExpenseInDb(int id, Expense newExpense)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
@@ -120,7 +128,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
 
         try
         {
-           if (_dbContext.Expenses is null)
+            if (_dbContext.Expenses is null)
             {
                 return false;
             }
@@ -149,7 +157,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
             Console.WriteLine(ex.Message);
-            
+
             if (transaction != null)
                 await transaction.RollbackAsync();
             return false;

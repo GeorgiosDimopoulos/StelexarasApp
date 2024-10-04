@@ -66,6 +66,20 @@ namespace StelexarasApp.DataAccess
 
             OnModelsRulesCreating(modelBuilder);
             OnModelsRelationsCreating(modelBuilder);
+            OnModelsUniquenessCreating(modelBuilder);
+        }
+
+        private void OnModelsUniquenessCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Skini>().HasIndex(s => s.Name).IsUnique();
+            modelBuilder.Entity<Koinotita>().HasIndex(k => k.Name).IsUnique();
+            modelBuilder.Entity<Tomeas>().HasIndex(k => k.Name).IsUnique();
+            modelBuilder.Entity<Duty>().HasIndex(k => k.Name).IsUnique();
+
+            modelBuilder.Entity<Tomearxis>().HasIndex(k => k.Tel).IsUnique();
+            modelBuilder.Entity<Koinotarxis>().HasIndex(k => k.Tel).IsUnique();
+            modelBuilder.Entity<Omadarxis>().HasIndex(k => k.Tel).IsUnique();
+            modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.Tel).IsUnique();
         }
 
         private static void OnModelsRelationsCreating(ModelBuilder modelBuilder)
@@ -115,9 +129,14 @@ namespace StelexarasApp.DataAccess
 
             modelBuilder.Entity<Expense>().Property(e => e.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Duty>().Property(e => e.Id).ValueGeneratedOnAdd();
+
             modelBuilder.Entity<Skini>().Property(e => e.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Koinotita>().Property(e => e.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Tomeas>().Property(e => e.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Omadarxis>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Koinotarxis>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Tomearxis>().Property(e => e.Id).ValueGeneratedOnAdd();
         }
 
         private static string? ConvertToString(Xwros xwros)

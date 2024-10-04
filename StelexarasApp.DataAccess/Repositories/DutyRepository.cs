@@ -93,6 +93,14 @@ namespace StelexarasApp.DataAccess.Repositories
             return await _dbContext.Duties.FirstAsync(d => d.Name.Equals(name));
         }
 
+        public Task<bool> HasData()
+        {
+            if (_dbContext.Duties is null)
+                return Task.FromResult(false);
+
+            return Task.FromResult(GetDutiesFromDb().Result.Any());
+        }
+
         public async Task<bool> UpdateDutyInDb(string name, Duty newDuty)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";

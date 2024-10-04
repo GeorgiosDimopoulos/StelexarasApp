@@ -10,9 +10,9 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
         public new int Id { get; set; }
         public Thesi Thesi { get; set; }
         public string? XwrosName { get; set; }
-        public Sex Sex { get; set; }
+        public new Sex Sex { get; set; }
 
-        public int Age { get; set; }
+        public new int Age { get; set; }
     }
 
     public enum Thesi 

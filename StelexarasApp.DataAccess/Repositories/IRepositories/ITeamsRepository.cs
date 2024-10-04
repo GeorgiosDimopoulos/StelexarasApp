@@ -4,6 +4,8 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface ITeamsRepository
     {
+        Task<bool> HasData();
+
         Task<bool> AddSkiniInDb(Skini skini);
         Task<bool> AddKoinotitaInDb(Koinotita koinotita);
         Task<bool> AddTomeasInDb(Tomeas koinotita); 
@@ -26,6 +28,6 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 
         Task<bool> DeleteSkiniInDb(int id);
         Task<bool> DeleteKoinotitaInDb(int id);
-        Task<bool> DeleteTomeasInDb(int id);
+        Task<bool> DeleteTomeasInDb(string id);
     }
 }

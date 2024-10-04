@@ -26,8 +26,8 @@ public class StaffRepository : IStaffRepository
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (omadarxis == null || _dbContext.Omadarxes is null)
-            throw new ArgumentNullException(nameof(omadarxis), "Omadarxis or Omadarxes cannot be null");
+        if ((await _dbContext.Omadarxes.FirstOrDefaultAsync(s => s.Tel == omadarxis.Tel)) is null || omadarxis == null || _dbContext.Omadarxes is null)
+            return false;
 
         try
         {
@@ -52,8 +52,8 @@ public class StaffRepository : IStaffRepository
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (koinotarxis == null || _dbContext.Koinotarxes is null)
-            throw new ArgumentNullException(nameof(koinotarxis), "Koinotarxis or Koinotarxes cannot be null");
+        if ((await _dbContext.Koinotarxes.FirstOrDefaultAsync(s => s.Tel == koinotarxis.Tel)) is null || koinotarxis == null || _dbContext.Omadarxes is null)
+            return false;
 
         try
         {
@@ -78,8 +78,8 @@ public class StaffRepository : IStaffRepository
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (tomearxis == null || _dbContext.Tomearxes is null)
-            throw new ArgumentNullException(nameof(tomearxis), "Tomearxis or Tomearxes cannot be null");
+        if ((await _dbContext.Tomearxes.FirstOrDefaultAsync(s => s.Tel == tomearxis.Tel)) is null || tomearxis == null || _dbContext.Omadarxes is null)
+            return false;
 
         try
         {

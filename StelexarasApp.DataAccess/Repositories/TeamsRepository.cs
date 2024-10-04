@@ -294,17 +294,17 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteTomeasInDb(int tomeasId)
+        public async Task<bool> DeleteTomeasInDb(string name)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
-                if (tomeasId <= 0 || _dbContext.Tomeis is null)
+                if (string.IsNullOrEmpty(name) || _dbContext.Tomeis is null)
                     return false;
 
-                var tomeas = await _dbContext.Tomeis.FindAsync(tomeasId);
+                var tomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name.Equals(name));
                 if (tomeas == null)
                     return false;
 
@@ -330,15 +330,17 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> AddSkiniInDb(Skini skini)
         {
+            if ((await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is null || skini is null || _dbContext.Skines is null)
+                return false;
+
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
-                if (skini is null || _dbContext.Skines is null)
-                    return false;
-                skini.OmadarxisId ??= 0;
-                
+                if (skini.Omadarxis == null && skini.OmadarxisId == null)
+                    skini.OmadarxisId = null;
+
                 await _dbContext.Skines.AddAsync(skini);
                 await _dbContext.SaveChangesAsync();
 
@@ -357,7 +359,7 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> AddKoinotitaInDb(Koinotita koinotita)
         {
-            if (koinotita is null || _dbContext.Koinotites is null)
+            if (koinotita is null || _dbContext.Koinotites is null || (await _dbContext.Koinotites.FirstOrDefaultAsync(s => s.Name == koinotita.Name)) is null)
                 return false;
 
             var koinotitaInDb = _dbContext.Koinotites.FirstOrDefaultAsync(k => k.Id == koinotita.Id);
@@ -373,7 +375,7 @@ namespace StelexarasApp.DataAccess.Repositories
         {
             try
             {
-                if (tomeas is null || _dbContext.Tomeis is null)
+                if ((await _dbContext.Tomeis.FirstOrDefaultAsync(s => s.Name == tomeas.Name)) is null || tomeas is null || _dbContext.Tomeis is null)
                     return false;
 
                 // tomeas.TomearxisId = null;
@@ -397,6 +399,18 @@ namespace StelexarasApp.DataAccess.Repositories
                 LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
                 return false;
             }
+        }
+
+        public Task<bool> HasData()
+        {
+            if (_dbContext is null)
+                throw new ArgumentException("Expense Repository cannot be null");
+
+            if (!GetSkinesInDb().Result.Any() &&
+                    !GetKoinotitesAnaTomeaInDb(2).Result.Any() &&
+                    !GetKoinotitesAnaTomeaInDb(1).Result.Any())
+                return Task.FromResult(false);
+            return Task.FromResult(true);
         }
     }
 }

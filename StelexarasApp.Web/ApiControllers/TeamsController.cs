@@ -66,7 +66,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpGet("Skines/{koinotitaName}")]
     public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkinesByKoinotita(string koinotitaName)
     {
-        var result =await _teamsService.GetSkinesAnaKoinotitaInService(koinotitaName);
+        var result = await _teamsService.GetSkinesAnaKoinotitaInService(koinotitaName);
 
         if (result is null)
             return NotFound();
@@ -179,10 +179,10 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("Tomea/{id}")]
-    public async Task<IActionResult> DeleteTomea(int id)
+    [HttpDelete("Tomea/{name}")]
+    public async Task<IActionResult> DeleteTomea(string name)
     {
-        var result = await _teamsService.DeleteTomeasInService(id);
+        var result = await _teamsService.DeleteTomeasInService(name);
 
         if (!result)
             return NotFound();
@@ -190,14 +190,20 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("Tomea/{id}")]
-    public async Task<IActionResult> PutTomea([FromBody] TomeasDto tomeasDto)
+    [HttpPut("Tomea/{name}")]
+    public async Task<IActionResult> PutTomea(string name, [FromBody] TomeasDto tomeasDto)
     {
+        var tomea = await _teamsService.GetTomeaByNameInService(name);
+        if (tomea == null)
+            return NotFound($"Tomea with name '{name}' not found.");
+
+        tomea.Name = tomeasDto.Name;
+        tomea.KoinotitesNumber = tomeasDto.KoinotitesNumber;
+
         var result = await _teamsService.UpdateTomeaInService(tomeasDto);
 
         if (!result)
-            return NotFound();
-
+            return StatusCode(500, "An error occurred while updating the Tomea.");
         return Ok(result);
     }
 }

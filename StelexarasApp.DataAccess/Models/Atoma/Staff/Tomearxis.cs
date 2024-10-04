@@ -5,21 +5,22 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff;
 
 public class Tomearxis : StelexosBase
 {
+    [Required]
     public required string FullName { get; set; }
 
     [Key]
-    public int Id { get; set; }
+    public new int Id { get; set; }
 
-    public int Age { get; set; }
+    public new int Age { get; set; }
 
-    public Sex Sex { get; set; }
+    public new Sex Sex { get; set; }
 
     [Required]
     public required string Tel { get; set; }
 
     [Required]
     public required Tomeas Tomeas { get; set; }
-    public Thesi Thesi { get; set; } = Thesi.Tomearxis;
-    // public int TomeasId { get; set; }
+    public new Thesi Thesi { get; set; } = Thesi.Tomearxis;
+
     public IEnumerable<Koinotarxis> Koinotarxes { get; set; } = null!;
 }

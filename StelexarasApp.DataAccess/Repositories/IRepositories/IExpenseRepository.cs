@@ -10,5 +10,6 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
         Task<bool> DeleteExpenseInDb(int expenseId);
 
         Task<bool> UpdateExpenseInDb(int id, Expense newExpense);
+        Task<bool> HasData();
     }
 }
