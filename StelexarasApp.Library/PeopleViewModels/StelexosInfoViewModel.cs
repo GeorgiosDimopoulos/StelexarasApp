@@ -54,7 +54,7 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
 
         public async Task MoveOmadarxisToAnotherSkini()
         {
-            var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(StelexosDto.Id, StelexosDto.XwrosName);
+            var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(StelexosDto.Id, StelexosDto.DtoXwrosName);
             StatusMessage = result ? "Move successful" : "Move failed";
             OnPropertyChanged(nameof(StelexosDto));
         }

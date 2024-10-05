@@ -229,7 +229,7 @@ public class StaffServiceTests
     public async Task GetOmadarxesSeKoinotitaInService_ShouldReturnOmadarxisDtos_WhenKoinotitaDtoIsValid()
     {
         // Arrange
-        var koinotita = new KoinotitaDto { Name = "TestKoinotita" };
+        var koinotita = new KoinotitaDto { Name = "TestKoinotita", TomeasName = "TestTomeasName" };
         var omadarxisList = new List<Omadarxis>
         {
             new Omadarxis { FullName = "Test Omadarxis", Id = 1, Tel = "12313121" }

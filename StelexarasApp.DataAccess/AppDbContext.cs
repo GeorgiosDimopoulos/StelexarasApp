@@ -76,10 +76,15 @@ namespace StelexarasApp.DataAccess
             modelBuilder.Entity<Tomeas>().HasIndex(k => k.Name).IsUnique();
             modelBuilder.Entity<Duty>().HasIndex(k => k.Name).IsUnique();
 
-            modelBuilder.Entity<Tomearxis>().HasIndex(k => k.Tel).IsUnique();
-            modelBuilder.Entity<Koinotarxis>().HasIndex(k => k.Tel).IsUnique();
             modelBuilder.Entity<Omadarxis>().HasIndex(k => k.Tel).IsUnique();
+            modelBuilder.Entity<Koinotarxis>().HasIndex(k => k.Tel).IsUnique();
+            modelBuilder.Entity<Tomearxis>().HasIndex(k => k.Tel).IsUnique();
             modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.Tel).IsUnique();
+
+            modelBuilder.Entity<Omadarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<Koinotarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<Tomearxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<Ekpaideutis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         }
 
         private static void OnModelsRelationsCreating(ModelBuilder modelBuilder)
@@ -90,19 +95,16 @@ namespace StelexarasApp.DataAccess
                 .HasForeignKey(p => p.SkiniId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Skini>()
                 .HasOne(sk => sk.Omadarxis)
                 .WithOne(om => om.Skini)
                 .HasForeignKey<Skini>(sk => sk.OmadarxisId);
 
-            modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);
             modelBuilder.Entity<Koinotita>()
                 .HasOne(k => k.Koinotarxis)
                 .WithOne(kt => kt.Koinotita)
                 .HasForeignKey<Koinotita>(kt => kt.KoinotarxisId);
 
-            modelBuilder.Entity<Tomeas>().HasKey(t => t.Id);
             modelBuilder.Entity<Tomeas>()
                 .HasOne(t => t.Tomearxis)
                 .WithOne(t => t.Tomeas)
@@ -117,26 +119,24 @@ namespace StelexarasApp.DataAccess
             modelBuilder.Entity<Omadarxis>().HasKey(o => o.Id);
             modelBuilder.Entity<Koinotarxis>().HasKey(k => k.Id);
             modelBuilder.Entity<Tomearxis>().HasKey(t => t.Id);
-            modelBuilder.Entity<Ekpaideutis>().HasKey(k => k.Id);
+            modelBuilder.Entity<Ekpaideutis>().HasKey(ek => ek.Id);
 
             modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
-            modelBuilder.Entity<Koinotita>().HasKey(sk => sk.Id);
+            modelBuilder.Entity<Koinotita>().HasKey(k => k.Id);
             modelBuilder.Entity<Tomeas>().HasKey(t => t.Id);
 
-            modelBuilder.Entity<Skini>().HasKey(s => s.Id);
-            modelBuilder.Entity<Koinotita>().HasKey(s => s.Id);
-            modelBuilder.Entity<Tomeas>().HasKey(s => s.Id);
-
             modelBuilder.Entity<Expense>().Property(e => e.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Duty>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Duty>().Property(d => d.Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Skini>().Property(e => e.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Koinotita>().Property(e => e.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Tomeas>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Skini>().Property(sk => sk.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Koinotita>().Property(k => k.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Tomeas>().Property(t => t.Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Omadarxis>().Property(e => e.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Koinotarxis>().Property(e => e.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Tomearxis>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Paidi>().Property(om => om.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Omadarxis>().Property(om => om.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Koinotarxis>().Property(k => k.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Tomearxis>().Property(t => t.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Ekpaideutis>().Property(ek => ek.Id).ValueGeneratedOnAdd();
         }
 
         private static string? ConvertToString(Xwros xwros)

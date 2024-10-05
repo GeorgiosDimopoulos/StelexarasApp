@@ -33,6 +33,13 @@ namespace StelexarasApp.UI
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+            
+//            builder.ConfigureMauiHandlers(handlers =>
+//            {
+//#if ANDROID
+//                handlers.AddHandler(typeof(Microsoft.Maui.Controls.Shell), typeof(SplashScreenHandler));
+//#endif
+//            });
             builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 
             var services = new ServiceCollection();

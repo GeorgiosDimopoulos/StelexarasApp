@@ -60,7 +60,7 @@ public class StelexosInfoViewModelTests
             Age = 20,
             FullName = name,
             Sex = Sex.Female,
-            XwrosName = xwrosName,
+            DtoXwrosName = xwrosName,
             Thesi = thesi ?? Thesi.None,
         };
     }

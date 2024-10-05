@@ -461,7 +461,7 @@ public class StaffRepository : IStaffRepository
 
     private async Task<List<Omadarxis>> GetAllOmadarxes()
     {
-        return await _dbContext.Omadarxes!.ToListAsync();
+        return await _dbContext.Omadarxes.ToListAsync();
     }
 
     private async Task<List<Koinotarxis>> GetKoinotarxesAnaTomea(string? tomeasName)
@@ -469,6 +469,6 @@ public class StaffRepository : IStaffRepository
         if (string.IsNullOrEmpty(tomeasName))
             return await _dbContext.Koinotarxes!.ToListAsync();
 
-        return await _dbContext.Koinotites!.Where(k => k.Tomeas.Name == tomeasName).Select(k => k.Koinotarxis).ToListAsync();
+        return await _dbContext.Koinotites!.Where(k => k.Tomeas!.Name == tomeasName).Select(k => k.Koinotarxis).ToListAsync();
     }
 }

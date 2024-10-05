@@ -35,7 +35,7 @@ public class AddStelexosViewModel
         var newStelexosDto = new StelexosDto
         {
             FullName = FullName,
-            XwrosName = XwrosName,
+            DtoXwrosName = XwrosName,
             Tel = PhoneNumber,
             Age = Age,
             Thesi = Enum.Parse<Thesi>(SelectedThesi)

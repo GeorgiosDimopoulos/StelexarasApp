@@ -77,7 +77,7 @@ public class StaffWebController(IStaffService staffService, ITeamsService teamsS
                 ModelState.AddModelError("", "An error occurred while adding the Stelexos.");
             }
 
-            ViewData ["SkiniId"] = new SelectList(await _teamsService.GetAllSkinesInService(), "Id", "Name", stelexos.XwrosName);
+            ViewData ["SkiniId"] = new SelectList(await _teamsService.GetAllSkinesInService(), "Id", "Name", stelexos.DtoXwrosName);
             return View(stelexos);
         }
         catch (Exception ex)
@@ -99,7 +99,7 @@ public class StaffWebController(IStaffService staffService, ITeamsService teamsS
             if (paidi == null)
                 return NotFound();
 
-            ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.XwrosName);
+            ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.DtoXwrosName);
             return View(paidi);
         }
         catch (Exception ex)
@@ -133,7 +133,7 @@ public class StaffWebController(IStaffService staffService, ITeamsService teamsS
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", stelexosDto.XwrosName);
+        ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", stelexosDto.DtoXwrosName);
         return View(stelexosDto);
     }
 

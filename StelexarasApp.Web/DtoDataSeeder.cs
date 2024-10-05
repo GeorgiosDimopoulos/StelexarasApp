@@ -122,9 +122,9 @@ public class DtoDataSeeder
         {
             FullName = "Γιάννης Παπαδόπουλος",
             Age = 25,
-            Tel = "6987456321",
+            Tel = "6987456325",
             Thesi = Thesi.Ekpaideutis,
-            XwrosName = "Ξάνθη",
+            DtoXwrosName = "Ξάνθη",
         });
     }
 
@@ -135,9 +135,9 @@ public class DtoDataSeeder
             FullName = "Πάυλος Ισαρης",
             Age = 33,
             Sex = Sex.Male,
-            Tel = "6987456321",
+            Tel = "6987453321",
             Thesi = Thesi.Tomearxis,
-            XwrosName = "Τομέας 1",
+            DtoXwrosName = "Τομέας 1",
         });
         await _staffService.AddStelexosInService(new TomearxisDto
         {
@@ -146,7 +146,7 @@ public class DtoDataSeeder
             Sex = Sex.Male,
             Tel = "6987453321",
             Thesi = Thesi.Tomearxis,
-            XwrosName = "Τομέας 2",
+            DtoXwrosName = "Τομέας 2",
         });
     }
 
@@ -159,7 +159,7 @@ public class DtoDataSeeder
             Sex = Sex.Female,
             Tel = "6987456329",
             Thesi = Thesi.Koinotarxis,
-            XwrosName = "Κρητη",
+            DtoXwrosName = "Κρητη",
         });
         await _staffService.AddStelexosInService(new KoinotarxisDto
         {
@@ -168,7 +168,7 @@ public class DtoDataSeeder
             Sex = Sex.Female,
             Tel = "6987456327",
             Thesi = Thesi.Koinotarxis,
-            XwrosName = "Στερεα",
+            DtoXwrosName = "Στερεα",
         });
         await _staffService.AddStelexosInService(new KoinotarxisDto
         {
@@ -177,7 +177,7 @@ public class DtoDataSeeder
             Sex = Sex.Male,
             Tel = "6987456324",
             Thesi = Thesi.Koinotarxis,
-            XwrosName = "Κυκλαδες",
+            DtoXwrosName = "Κυκλαδες",
         });
         await _staffService.AddStelexosInService(new KoinotarxisDto
         {
@@ -186,7 +186,7 @@ public class DtoDataSeeder
             Sex = Sex.Female,
             Tel = "6987456322",
             Thesi = Thesi.Koinotarxis,
-            XwrosName = "Ευβοια",
+            DtoXwrosName = "Ευβοια",
         });
         await _staffService.AddStelexosInService(new KoinotarxisDto
         {
@@ -195,7 +195,7 @@ public class DtoDataSeeder
             Sex = Sex.Male,
             Tel = "6987416322",
             Thesi = Thesi.Koinotarxis,
-            XwrosName = "Μακεδονια",
+            DtoXwrosName = "Μακεδονια",
         });
     }
 
@@ -208,9 +208,9 @@ public class DtoDataSeeder
                 FullName = "Γιάννης Παπαδόπουλος",
                 Age = 25,
                 Sex = Sex.Male,
-                Tel = "6987456321",
+                Tel = "6982456321",
                 Thesi = Thesi.Omadarxis,
-                XwrosName = "Ξάνθη",
+                DtoXwrosName = "Ξάνθη",
                 // SkiniId = 1
             });
         }

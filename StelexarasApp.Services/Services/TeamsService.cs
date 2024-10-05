@@ -30,6 +30,8 @@ namespace StelexarasApp.Services.Services
                     return false;
 
                 var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
+
+                koinotita.Tomeas = await _teamsRepository.GetTomeaByNameInDb(koinotitaDto.TomeasName);
                 return await _teamsRepository.AddKoinotitaInDb(koinotita);
             }
             catch (Exception ex)

@@ -42,6 +42,10 @@
 		<!-- App Icon -->
 
 		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Platforms\Android\Resources\drawable\typetlogo.png">
+		  <Color>#512BD4</Color>
+		  <BaseSize>128,128</BaseSize>
+		</MauiSplashScreen>
 		<MauiSplashScreen Include="Resources\Splash\typetlogo.png" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
@@ -56,10 +60,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Platforms\Android\Resources\drawable\splash_screen.xml" />
+	  <AndroidResource Remove="Platforms\Android\Resources\drawable\typetlogo.png" />
 	  <AndroidResource Remove="Platforms\Android\Resources\drawable\white-cross.png" />
+	  <AndroidResource Remove="Platforms\Android\Resources\values\styles.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Platforms\Android\Resources\drawable\typetlogo.png" />
 	  <None Remove="Resources\Images\typet.png" />
 	</ItemGroup>
 

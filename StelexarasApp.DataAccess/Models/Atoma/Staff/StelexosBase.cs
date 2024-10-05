@@ -6,7 +6,7 @@ public abstract class StelexosBase : IStelexos
 {
     [Required]
     public string? FullName { get; set; }
-    public string? Tel { get; set; }
+    public string Tel { get; set; } = null!;
     public int Id { get; set; }
     public Thesi Thesi { get; set; }
     public Sex Sex { get; set; }

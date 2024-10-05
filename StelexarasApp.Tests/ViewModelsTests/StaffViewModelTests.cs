@@ -42,7 +42,7 @@ namespace StelexarasApp.Tests.ViewModelsTests
                     Id = 1,
                     FullName = "Some Name",
                     Thesi = Thesi.Ekpaideutis,
-                    XwrosName = "SomeXwros",
+                    DtoXwrosName = "SomeXwros",
                     Sex = Sex.Male,
                     Age = 30,
                 }

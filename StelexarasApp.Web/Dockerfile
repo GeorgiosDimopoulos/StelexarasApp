@@ -1,22 +1,22 @@
-﻿# Use the official .NET SDK image to build the app
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+﻿# Use the official .NET runtime as a base image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-
-# Copy the project file and restore dependencies
-COPY *.csproj .
-RUN dotnet restore
-
-# Copy the rest of the app and build it
-COPY . .
-RUN dotnet publish -c Release -o out
-
-# Use the official runtime image to run the app
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
-WORKDIR /app
-COPY --from=build /app/out .
-
-# Expose port 80 for the web API
 EXPOSE 80
 
-# Define the entry point for the app
-ENTRYPOINT ["dotnet", "YourWebApiProjectName.dll"]
+# Use the .NET SDK to build the project
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+COPY ["YourProject.csproj", "./"]
+RUN dotnet restore "YourProject.csproj"
+COPY . .
+WORKDIR "/src"
+RUN dotnet build "YourProject.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "YourProject.csproj" -c Release -o /app/publish
+
+# Use the final runtime image
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "YourProject.dll"]

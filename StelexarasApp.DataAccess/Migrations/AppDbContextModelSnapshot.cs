@@ -76,10 +76,14 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Tel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
+
+                    b.Property<string>("XwrosName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -109,13 +113,17 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Tel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
 
                     b.Property<int?>("TomearxisId")
                         .HasColumnType("int");
+
+                    b.Property<string>("XwrosName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -150,10 +158,14 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Tel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
+
+                    b.Property<string>("XwrosName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -185,10 +197,14 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Tel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Thesi")
                         .HasColumnType("int");
+
+                    b.Property<string>("XwrosName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -206,12 +222,12 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("KoinotarxisId")
+                    b.Property<int?>("KoinotarxisId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TomeasId")
                         .HasColumnType("int");
@@ -219,6 +235,10 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("KoinotarxisId")
+                        .IsUnique()
+                        .HasFilter("[KoinotarxisId] IS NOT NULL");
+
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.HasIndex("TomeasId");
@@ -239,17 +259,24 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("OmadarxisId")
+                    b.Property<int?>("OmadarxisId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sex")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("KoinotitaId");
 
-                    b.HasIndex("OmadarxisId")
+                    b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("OmadarxisId")
+                        .IsUnique()
+                        .HasFilter("[OmadarxisId] IS NOT NULL");
 
                     b.ToTable("Skines");
                 });
@@ -264,15 +291,20 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("TomearxisId")
+                    b.Property<int?>("TomearxisId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TomearxisId")
+                    b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("TomearxisId")
+                        .IsUnique()
+                        .HasFilter("[TomearxisId] IS NOT NULL");
 
                     b.ToTable("Tomeis");
                 });
@@ -290,9 +322,12 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Duties");
                 });
@@ -349,9 +384,7 @@ namespace StelexarasApp.DataAccess.Migrations
                 {
                     b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", "Koinotarxis")
                         .WithOne("Koinotita")
-                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Koinotita", "KoinotarxisId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Koinotita", "KoinotarxisId");
 
                     b.HasOne("StelexarasApp.DataAccess.Models.Domi.Tomeas", "Tomeas")
                         .WithMany("Koinotites")
@@ -374,9 +407,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
                     b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", "Omadarxis")
                         .WithOne("Skini")
-                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Skini", "OmadarxisId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Skini", "OmadarxisId");
 
                     b.Navigation("Koinotita");
 
@@ -387,9 +418,7 @@ namespace StelexarasApp.DataAccess.Migrations
                 {
                     b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", "Tomearxis")
                         .WithOne("Tomeas")
-                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Tomeas", "TomearxisId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Tomeas", "TomearxisId");
 
                     b.Navigation("Tomearxis");
                 });

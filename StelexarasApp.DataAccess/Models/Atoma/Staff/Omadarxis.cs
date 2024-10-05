@@ -15,6 +15,9 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
         [Required]
         public Skini Skini { get; set; } = new Skini();
         public new Thesi Thesi { get; set; } = Thesi.Omadarxis;
-        public new required string Tel { get; set; } = null!;
+
+        [Required]
+        [MaxLength(100)]
+        public required string Tel { get; set; } = null!;
     }
 }

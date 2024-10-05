@@ -129,10 +129,10 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<Tomeas> GetTomeaByNameInDb(string name)
         {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException(nameof(name));
+            if (string.IsNullOrEmpty(name) || _dbContext.Tomeis is null)
+                return null!;
 
-            return await _dbContext.Tomeis!.FirstOrDefaultAsync(t => t.Name.Equals(name));
+            return await _dbContext.Tomeis!.FirstOrDefaultAsync(t => t.Name == name);
         }
 
         public async Task<bool> UpdateKoinotitaInDb(Koinotita koinotita)
@@ -404,7 +404,7 @@ namespace StelexarasApp.DataAccess.Repositories
         public Task<bool> HasData()
         {
             if (_dbContext is null)
-                throw new ArgumentException("Expense Repository cannot be null");
+                return Task.FromResult(false);
 
             if (!GetSkinesInDb().Result.Any() &&
                     !GetKoinotitesAnaTomeaInDb(2).Result.Any() &&

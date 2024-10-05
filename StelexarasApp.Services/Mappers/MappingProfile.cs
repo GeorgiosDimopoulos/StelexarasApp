@@ -13,19 +13,24 @@ public class MappingProfile : Profile
     {
         CreateMap<StelexosDto, StelexosBase>();
 
+        CreateMap<Omadarxis, StelexosBase>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.Skini.Name));
+
         CreateMap<TomearxisDto, Tomearxis>()
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
-            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.FullName))
-            .ForMember(dest => dest.Tomeas, opt => opt.MapFrom(src => new Tomeas { Id = src.TomeasId, Name = src.FullName }))
+            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.DtoXwrosName))
+            .ForMember(dest => dest.Tomeas, opt => opt.MapFrom(src => new Tomeas { Name = src.FullName }))
             .ForMember(dest => dest.Koinotarxes, opt => opt.Ignore())
             .ReverseMap();
 
         CreateMap<KoinotarxisDto, Koinotarxis>()
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
             .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.DtoXwrosName))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
             .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel))
             .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId ?? 0 }))
@@ -34,6 +39,7 @@ public class MappingProfile : Profile
 
         CreateMap<OmadarxisDto, Omadarxis>()
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.DtoXwrosName))
             .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
             .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId }))
@@ -85,6 +91,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Tomeas, opt => opt.Ignore())
             .ForMember(dest => dest.Skines, opt => opt.MapFrom(src => new List<Skini>(new Skini [src.SkinesNumber])))
             .ReverseMap()
+            .ForMember(dest => dest.TomeasName, opt => opt.MapFrom(src => src.Tomeas.Name))
             .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom(src => src.Skines.Count()));
     }
 }

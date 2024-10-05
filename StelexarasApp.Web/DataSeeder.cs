@@ -107,10 +107,16 @@ public class DataSeeder
         }
     }
 
-    private async Task SeedAllTeams()
+    private async Task<bool> SeedAllTeams()
     {
         try
         {
+            if (await _teamsRepository.HasData())
+            {
+                Console.WriteLine("Database has already been seeded.");
+                return false;
+            }
+
             var tomeas1 = new Tomeas
             {
                 Name = "Τομέας1"
@@ -249,7 +255,7 @@ public class DataSeeder
                             {
                                 FullName = "Γιάννης Παπαδόπουλος",
                                 Age = 25,
-                                Tel = "6987456321",
+                                Tel = "6987456322",
                                 Sex = Sex.Male,
                                 Skini = skiniXania,
                                 Thesi = Thesi.Omadarxis,
@@ -272,7 +278,7 @@ public class DataSeeder
                             {
                                 FullName = "Γιάννης Παπαδόπουλος",
                                 Age = 25,
-                                Tel = "6987456321",
+                                Tel = "6987456323",
                                 Sex = Sex.Male,
                                 Skini = skiniXalkida,
                             },
@@ -313,11 +319,13 @@ public class DataSeeder
                     }
                 ]
             });
+
+            return true;
         }
         catch (Exception ex)
         {
             Console.WriteLine("An error occurred while seeding the database: " + ex.Message);
-            return;
+            return false;
         }
     }
 }
