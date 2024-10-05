@@ -36,13 +36,13 @@ public partial class MainPage : ContentPage
         _signalRService = signalRService;
         _serviceProvider = serviceProvider;
 
-        SetSignalConenction();
+        // SetSignalConenction();
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _connection.StartAsync();
+        // await _connection.StartAsync();
     }
 
     private async void SendButton_Clicked(object sender, EventArgs e)
@@ -64,6 +64,16 @@ public partial class MainPage : ContentPage
                 DisplayAlert("New Message", $"{user}: {message}", "OK");
             });
         });
+
+        _connection.Closed += async (error) =>
+        {
+            await Dispatcher.DispatchAsync(async () =>
+            {
+                await DisplayAlert("Connection Closed", "Connection to the server was closed. Attempting to reconnect...", "OK");
+                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await _connection.StartAsync();
+            });
+        };
     }
 
     private void OnMessageReceived(string message)

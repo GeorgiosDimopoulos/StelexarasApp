@@ -4,10 +4,11 @@ namespace StelexarasApp.DataAccess.Helpers
 {
     public class LogFileWriter
     {
-        private static readonly string LogFileDbErrorPath = @"C:\Projects\GitHub\StelexarasApp\dbErrors.txt";
-        private static readonly string LogFileDbSuccessPath = @"C:\Projects\GitHub\StelexarasApp\dbSuccesses.txt";
-        private static readonly string LogFileUiWarrningsPath = @"C:\Projects\GitHub\StelexarasApp\uiWarning.txt";
-        private static readonly string logFilePath = @"C:\Projects\GitHub\StelexarasApp\Logs.txt";
+        private static readonly string LogDirectory = @"C:\Projects\GitHub\StelexarasApp\Logs";
+
+        private static readonly string LogFileDbErrorPath = Path.Combine(LogDirectory, "dbErrors.txt");
+        private static readonly string LogFileDbSuccessPath = Path.Combine(LogDirectory, "dbSuccesses.txt");
+        private static readonly string LogFileUiWarrningsPath = Path.Combine(LogDirectory, "uiWarning.txt");
 
         public static void WriteToLog(string message, TypeOfOutput typeOfOutput)
         {
@@ -18,36 +19,50 @@ namespace StelexarasApp.DataAccess.Helpers
                 switch (typeOfOutput)
                 {
                     case TypeOfOutput.DbSuccessMessage:
-                        message = $"[DB SUCCESS] {message}\n";
-                        File.AppendAllText(LogFileDbErrorPath, message);
+                        message = $"DB SUCCESS: {message}, {DateTime.Now:HH:mm:ss}\n";
+                        File.AppendAllText(LogFileDbSuccessPath, message);
                         break;
                     case TypeOfOutput.DbErroMessager:
-                        message = $"[DB ERROR] {message}\n";
+                        message = $"DB ERROR: {message}, {DateTime.Now:HH:mm:ss}\n";
                         File.AppendAllText(LogFileDbErrorPath, message);
                         break;
                     case TypeOfOutput.UiWarningMessage:
-                        message = $"[UI WARNING] {message}\n";
+                        message = $"UI WARNING: {message}, {DateTime.Now:HH:mm:ss}\n";
                         File.AppendAllText(LogFileUiWarrningsPath, message);
                         break;
                 }
-                
-                // File.AppendAllText(logFilePath, message);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("An error occurred while writing to the log file: " + ex.Message);
             }
-            
+
         }
 
         private static void InitializeLocalLogsPaths()
         {
             try
             {
-                var successLogsdirectory = Path.GetDirectoryName(LogFileDbSuccessPath);
-                var uiLogsdirectory = Path.GetDirectoryName(LogFileUiWarrningsPath);
-                var logsdirectory = Path.GetDirectoryName(logFilePath);
-                var errorsLogsdirectory = Path.GetDirectoryName(LogFileDbErrorPath);
+                if (!Directory.Exists(LogDirectory))
+                {
+                    Directory.CreateDirectory(LogDirectory);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while initializing the log files: " + ex.Message);
+            }
+        }
+
+        private static void InitializeLocalLogsPathsOld()
+        {
+            try
+            {
+                var defaultDirectory = @"C:\Projects\GitHub\StelexarasApp\defaultLogs.txt";
+
+                var successLogsdirectory = Path.GetDirectoryName(LogFileDbSuccessPath) ?? defaultDirectory;
+                var uiLogsdirectory = Path.GetDirectoryName(LogFileUiWarrningsPath) ?? defaultDirectory;
+                var errorsLogsdirectory = Path.GetDirectoryName(LogFileDbErrorPath) ?? defaultDirectory;
 
                 if (!Directory.Exists(errorsLogsdirectory))
                     Directory.CreateDirectory(errorsLogsdirectory);
@@ -55,8 +70,6 @@ namespace StelexarasApp.DataAccess.Helpers
                     Directory.CreateDirectory(successLogsdirectory);
                 if (!Directory.Exists(uiLogsdirectory))
                     Directory.CreateDirectory(uiLogsdirectory);
-                if (!Directory.Exists(logsdirectory))
-                    Directory.CreateDirectory(logsdirectory);
             }
             catch (Exception ex)
             {
