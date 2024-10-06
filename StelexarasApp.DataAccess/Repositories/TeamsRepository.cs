@@ -121,7 +121,7 @@ namespace StelexarasApp.DataAccess.Repositories
         public async Task<Koinotita> GetKoinotitaByNameInDb(string name)
         {
             if (string.IsNullOrEmpty(name))
-                throw new ArgumentException(nameof(name));
+                return null!;
 
             return await _dbContext.Koinotites!.FirstOrDefaultAsync(k => k.Name.Equals(name));
 
@@ -330,7 +330,7 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> AddSkiniInDb(Skini skini)
         {
-            if ((await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is null || skini is null || _dbContext.Skines is null)
+            if ((await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || skini is null || _dbContext.Skines is null)
                 return false;
 
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
@@ -359,33 +359,43 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> AddKoinotitaInDb(Koinotita koinotita)
         {
-            if (koinotita is null || _dbContext.Koinotites is null || (await _dbContext.Koinotites.FirstOrDefaultAsync(s => s.Name == koinotita.Name)) is null)
-                return false;
+            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-            var koinotitaInDb = _dbContext.Koinotites.FirstOrDefaultAsync(k => k.Id == koinotita.Id);
-            if (koinotitaInDb != null)
-                return false;
+            try
+            {
+                if (koinotita is null || _dbContext.Koinotites is null || (await _dbContext.Koinotites.FirstOrDefaultAsync(s => s.Name == koinotita.Name)) is not null)
+                    return false;
 
-            await _dbContext.Koinotites.AddAsync(koinotita);
-            await _dbContext.SaveChangesAsync();
-            return true;
+                await _dbContext.Koinotites.AddAsync(koinotita);
+                await _dbContext.SaveChangesAsync();
+
+                if (transaction != null)
+                    await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+                return false;
+            }
         }
 
         public async Task<bool> AddTomeasInDb(Tomeas tomeas)
         {
             try
             {
-                if ((await _dbContext.Tomeis.FirstOrDefaultAsync(s => s.Name == tomeas.Name)) is null || tomeas is null || _dbContext.Tomeis is null)
+                if ((await _dbContext.Tomeis.FirstOrDefaultAsync(s => s.Name == tomeas.Name)) is not null || tomeas is null || _dbContext.Tomeis is null)
                     return false;
 
-                // tomeas.TomearxisId = null;
-                var tomearxisExists = await _dbContext.Tomearxes.AnyAsync(t => t.Id == tomeas.TomearxisId);
-                if (!tomearxisExists)
-                {
-                    LogFileWriter.WriteToLog($"Tomearxis with Id {tomeas.TomearxisId} does not exist", TypeOfOutput.DbErroMessager);
-                    return false;
-                }
-
+                // var tomearxisExists = await _dbContext.Tomearxes.AnyAsync(t => t.Id == tomeas.TomearxisId);
+                //if (!tomearxisExists)
+                //{
+                //    LogFileWriter.WriteToLog($"Tomearxis with Id {tomeas.TomearxisId} does not exist", TypeOfOutput.DbErroMessager);
+                //    return false;
+                //}
                 var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Name == tomeas.Name);
                 if (existingTomeas != null)
                     return false;

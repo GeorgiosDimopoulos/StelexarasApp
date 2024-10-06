@@ -8,25 +8,18 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories;
 
-public class StaffRepository : IStaffRepository
+public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactory) : IStaffRepository
 {
-    private readonly AppDbContext _dbContext;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly ILogger<StaffRepository> _logger;
-
-    public StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactory)
-    {
-        _dbContext = dbContext;
-        _loggerFactory = loggerFactory;
-        _logger = loggerFactory.CreateLogger<StaffRepository>();
-    }
+    private readonly AppDbContext _dbContext = dbContext;
+    private readonly ILoggerFactory _loggerFactory = loggerFactory;
+    private readonly ILogger<StaffRepository> _logger = loggerFactory.CreateLogger<StaffRepository>();
 
     public async Task<bool> AddOmadarxiInDb(Omadarxis omadarxis)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if ((await _dbContext.Omadarxes.FirstOrDefaultAsync(s => s.Tel == omadarxis.Tel)) is null || omadarxis == null || _dbContext.Omadarxes is null)
+        if (await _dbContext.Omadarxes.FirstOrDefaultAsync(s => s.Tel == omadarxis.Tel) is not null || omadarxis == null || _dbContext.Omadarxes is null)
             return false;
 
         try
@@ -43,7 +36,7 @@ public class StaffRepository : IStaffRepository
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
                 await transaction.RollbackAsync();
-            return false;
+            return await HandleDatabaseExceptionAsync(ex, transaction);
         }
     }
 
@@ -52,7 +45,7 @@ public class StaffRepository : IStaffRepository
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if ((await _dbContext.Koinotarxes.FirstOrDefaultAsync(s => s.Tel == koinotarxis.Tel)) is null || koinotarxis == null || _dbContext.Omadarxes is null)
+        if ((await _dbContext.Koinotarxes.FirstOrDefaultAsync(s => s.Tel == koinotarxis.Tel)) is not null || koinotarxis == null || _dbContext.Omadarxes is null)
             return false;
 
         try
@@ -69,7 +62,7 @@ public class StaffRepository : IStaffRepository
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
                 await transaction.RollbackAsync();
-            return false;
+            return await HandleDatabaseExceptionAsync(ex, transaction);
         }
     }
 
@@ -78,8 +71,14 @@ public class StaffRepository : IStaffRepository
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if ((await _dbContext.Tomearxes.FirstOrDefaultAsync(s => s.Tel == tomearxis.Tel)) is null || tomearxis == null || _dbContext.Omadarxes is null)
+        Console.WriteLine("Tomearxis: " + tomearxis.FullName + " " + tomearxis.Tel + " " + tomearxis.Age + " " + tomearxis);
+
+        if ((await _dbContext.Tomearxes.FirstOrDefaultAsync(s => s.Tel == tomearxis.Tel)) is not null || tomearxis == null || _dbContext.Omadarxes is null)
             return false;
+
+        var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name.Equals(tomearxis.Tomeas.Name));
+        if (existingTomeas == null)
+            throw new Exception($"Tomeas with name {tomearxis.Tomeas.Name} does not exist.");
 
         try
         {
@@ -93,79 +92,6 @@ public class StaffRepository : IStaffRepository
         {
             return await HandleDatabaseExceptionAsync(ex, transaction);
         }
-    }
-
-    public async Task<bool> AddStelexosInDb(IStelexos stelexos)
-    {
-        var isInMemoryDatabase = _dbContext.Database?.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-        using var transaction = isInMemoryDatabase || _dbContext.Database == null
-            ? null
-            : await _dbContext.Database.BeginTransactionAsync();
-
-        if (stelexos == null)
-            throw new ArgumentNullException(nameof(stelexos), "Stelexos cannot be null");
-
-        try
-        {
-            var parts = stelexos.FullName.Trim().Split(' ');
-            if (parts.Length < 2)
-                throw new ArgumentException("Invalid FullName", nameof(stelexos.FullName));
-
-            switch (stelexos.Thesi)
-            {
-                case Thesi.Omadarxis:
-                    _dbContext.Omadarxes?.Add((Omadarxis)stelexos);
-                    break;
-                case Thesi.Koinotarxis:
-                    _dbContext.Koinotarxes?.Add((Koinotarxis)stelexos);
-                    break;
-                case Thesi.Tomearxis:
-                    _dbContext.Tomearxes?.Add((Tomearxis)stelexos);
-                    break;
-                case Thesi.Ekpaideutis:
-                    throw new NullReferenceException("Not yet implemented!");
-                case Thesi.None:
-                    throw new ArgumentException("Thesi cannot be None!", nameof(stelexos.Thesi));
-                default:
-                    throw new ArgumentException("Invalid Thesi value!", nameof(stelexos.Thesi));
-            }
-
-            await _dbContext.SaveChangesAsync();
-            if (transaction != null)
-                await transaction.CommitAsync();
-
-            return true;
-        }
-        catch (DbUpdateException ex)
-        {
-            _logger.LogError($"Database update exception: {ex.Message}");
-            _dbContext.Dispose();
-            throw new DbUpdateException("Invalid Thesi cast.", ex);
-        }
-        catch (InvalidCastException ex)
-        {
-            _logger.LogError($"Invalid cast for Stelexos of Thesi {stelexos.Thesi}: {ex.Message}");
-            _dbContext.Dispose();
-            throw new InvalidCastException("Invalid Thesi cast.", ex);
-        }
-        catch (ArgumentException ex)
-        {
-            _logger.LogError($"Invalid cast for Stelexos of Thesi {stelexos.Thesi}: {ex.Message}");
-            _dbContext.Dispose();
-            throw new ArgumentException("ArgumentException: ", ex.Message);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            if (transaction != null)
-                await transaction.RollbackAsync();
-            _dbContext.Dispose();
-            return false;
-        }
-        //finally
-        //{
-        //    _dbContext.Dispose(); 
-        //}
     }
 
     public async Task<IEnumerable<Omadarxis>> GetAllOmadarxesInDb()
@@ -211,10 +137,9 @@ public class StaffRepository : IStaffRepository
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
-            {
                 await transaction.RollbackAsync();
-            }
-            return false;
+
+            return await HandleDatabaseExceptionAsync(ex, transaction);
         }
     }
 
@@ -324,7 +249,7 @@ public class StaffRepository : IStaffRepository
             if (transaction != null)
                 await transaction.RollbackAsync();
 
-            return false;
+            return await HandleDatabaseExceptionAsync(ex, transaction);
         }
     }
 
@@ -361,10 +286,9 @@ public class StaffRepository : IStaffRepository
         {
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
-
             if (transaction != null)
                 await transaction.RollbackAsync();
-            return false;
+            return await HandleDatabaseExceptionAsync(ex, transaction);
         }
     }
 

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./ServerProject  # Context points to the server layer
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"  # Expose your API port
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

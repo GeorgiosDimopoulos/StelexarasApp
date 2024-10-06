@@ -31,12 +31,12 @@ namespace StelexarasApp.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Sex = table.Column<int>(type: "int", nullable: false),
                     Tel = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Thesi = table.Column<int>(type: "int", nullable: false),
-                    XwrosName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    XwrosName = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,7 +50,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<double>(type: "float", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -64,12 +64,12 @@ namespace StelexarasApp.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Sex = table.Column<int>(type: "int", nullable: false),
                     Tel = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Thesi = table.Column<int>(type: "int", nullable: false),
-                    XwrosName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    XwrosName = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,13 +82,13 @@ namespace StelexarasApp.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Sex = table.Column<int>(type: "int", nullable: false),
                     Tel = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Thesi = table.Column<int>(type: "int", nullable: false),
                     TomearxisId = table.Column<int>(type: "int", nullable: true),
-                    XwrosName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    XwrosName = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -125,13 +125,13 @@ namespace StelexarasApp.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Sex = table.Column<int>(type: "int", nullable: false),
                     Thesi = table.Column<int>(type: "int", nullable: false),
                     Tel = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     KoinotarxisId = table.Column<int>(type: "int", nullable: true),
-                    XwrosName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    XwrosName = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -202,7 +202,7 @@ namespace StelexarasApp.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     SeAdeia = table.Column<bool>(type: "bit", nullable: false),
                     Sex = table.Column<int>(type: "int", nullable: false),

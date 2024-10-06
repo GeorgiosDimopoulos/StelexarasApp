@@ -24,6 +24,10 @@ public class StaffViewModel : INotifyPropertyChanged
         try
         {
             var allStaff = await _staffService.GetAllStaffInService();
+
+            if (allStaff == null)
+                return;
+
             AllStaff.Clear();
 
             foreach (var staff in allStaff)

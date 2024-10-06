@@ -16,21 +16,21 @@ namespace StelexarasApp.DataAccess.Helpers
             {
                 InitializeLocalLogsPaths();
 
-                switch (typeOfOutput)
+                string logFilePath = typeOfOutput switch
                 {
-                    case TypeOfOutput.DbSuccessMessage:
-                        message = $"DB SUCCESS: {message}, {DateTime.Now:HH:mm:ss}\n";
-                        File.AppendAllText(LogFileDbSuccessPath, message);
-                        break;
-                    case TypeOfOutput.DbErroMessager:
-                        message = $"DB ERROR: {message}, {DateTime.Now:HH:mm:ss}\n";
-                        File.AppendAllText(LogFileDbErrorPath, message);
-                        break;
-                    case TypeOfOutput.UiWarningMessage:
-                        message = $"UI WARNING: {message}, {DateTime.Now:HH:mm:ss}\n";
-                        File.AppendAllText(LogFileUiWarrningsPath, message);
-                        break;
-                }
+                    TypeOfOutput.DbSuccessMessage => LogFileDbSuccessPath,
+                    TypeOfOutput.DbErroMessager => LogFileDbErrorPath,
+                    TypeOfOutput.UiWarningMessage => LogFileUiWarrningsPath,
+                    _ => throw new ArgumentOutOfRangeException(nameof(typeOfOutput), typeOfOutput, null)
+                };
+
+                string logMessage = typeOfOutput switch
+                {
+                    TypeOfOutput.DbSuccessMessage => $"DB SUCCESS: {message}, {DateTime.Now:HH:mm:ss}\n",
+                    TypeOfOutput.DbErroMessager => $"DB ERROR: {message}, {DateTime.Now:HH:mm:ss}\n",
+                    TypeOfOutput.UiWarningMessage => $"UI WARNING: {message}, {DateTime.Now:HH:mm:ss}\n",
+                    _ => throw new ArgumentOutOfRangeException(nameof(typeOfOutput), typeOfOutput, null)
+                };
             }
             catch (Exception ex)
             {
