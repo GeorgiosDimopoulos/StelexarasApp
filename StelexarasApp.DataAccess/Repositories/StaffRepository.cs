@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
@@ -44,7 +43,8 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            return await ExceptionHelper.HandleDatabaseExceptionAsync(ex, transaction, _logger);
+            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
         }
     }
 
@@ -81,11 +81,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message + ex.InnerException);
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
                 await transaction.RollbackAsync();
-            return await HandleDatabaseExceptionAsync(ex, transaction);
+            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
         }
     }
 
@@ -113,11 +112,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message + ex.InnerException);
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
                 await transaction.RollbackAsync();
-            return await HandleDatabaseExceptionAsync(ex, transaction);
+            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
         }
     }
 
@@ -161,12 +159,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
                 await transaction.RollbackAsync();
-
-            return await HandleDatabaseExceptionAsync(ex, transaction);
+            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
         }
     }
 
@@ -191,8 +187,9 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+
+            // return await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, null!, _logger);
             return [];
         }
     }
@@ -271,12 +268,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
                 await transaction.RollbackAsync();
-
-            return await HandleDatabaseExceptionAsync(ex, transaction);
+            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
         }
     }
 
@@ -311,11 +306,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
             if (transaction != null)
                 await transaction.RollbackAsync();
-            return await HandleDatabaseExceptionAsync(ex, transaction);
+            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
         }
     }
 
@@ -342,28 +336,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             null => throw new NotImplementedException(),
             _ => throw new ArgumentOutOfRangeException(nameof(thesi), thesi, null)
         };
-    }
-
-    private async Task<bool> HandleDatabaseExceptionAsync(Exception ex, IDbContextTransaction? transaction)
-    {
-        _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-        LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
-
-        if (transaction != null)
-            await transaction.RollbackAsync();
-        _dbContext.Dispose();
-
-        switch (ex)
-        {
-            case DbUpdateException dbEx:
-                throw new DbUpdateException("Database update failed.", dbEx);
-            case InvalidCastException castEx:
-                throw new InvalidCastException("Invalid cast for Stelexos.", castEx);
-            case ArgumentException argEx:
-                throw new ArgumentException("Invalid argument passed.", argEx);
-            default:
-                return false;
-        }
     }
 
     private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string xwrosName)
