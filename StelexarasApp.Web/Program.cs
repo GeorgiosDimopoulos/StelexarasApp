@@ -113,8 +113,7 @@ void ConfigureServives(WebApplicationBuilder builder)
         .AddCheck<DbHealthCheck>("Database");
 
     // Add AutoMapper
-    builder.Services.AddAutoMapper(typeof(MappingProfile));
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
     // Add DbContext with SQL Server
     builder.Services.AddDbContext<AppDbContext>(options =>

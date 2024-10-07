@@ -33,8 +33,6 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                string className = this.GetType().Name;
-                string className2 = typeof(DutyRepository).Name;
                 LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " " + ex.Message, TypeOfOutput.DbErroMessager);
                 _logger.LogError("Attempted to AddDutyInDb, exception: " + ex.Message);
 

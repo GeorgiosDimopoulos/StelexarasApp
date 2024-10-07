@@ -7,24 +7,16 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.Web;
 
-public class DataSeeder
+public class DataSeeder(
+    IStaffRepository staffRepository,
+    IExpenseRepository expenseRepository,
+    IDutyRepository dutyRepository,
+    ITeamsRepository teamsRepository)
 {
-    private readonly IStaffRepository _staffRepository;
-    private readonly ITeamsRepository _teamsRepository;
-    private readonly IExpenseRepository _expenseRepository;
-    private readonly IDutyRepository _dutyRepository;
-
-    public DataSeeder(
-        IStaffRepository staffRepository,
-        IExpenseRepository expenseRepository,
-        IDutyRepository dutyRepository,
-        ITeamsRepository teamsRepository)
-    {
-        _staffRepository = staffRepository;
-        _teamsRepository = teamsRepository;
-        _expenseRepository = expenseRepository;
-        _dutyRepository = dutyRepository;
-    }
+    private readonly IStaffRepository _staffRepository = staffRepository;
+    private readonly ITeamsRepository _teamsRepository = teamsRepository;
+    private readonly IExpenseRepository _expenseRepository = expenseRepository;
+    private readonly IDutyRepository _dutyRepository = dutyRepository;
 
     public async Task<bool> SeedTeamsAndStaffData()
     {
@@ -37,7 +29,7 @@ public class DataSeeder
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Database has already been seeded.");
+            Console.WriteLine("Database has already been seeded." + ex.InnerException);
             throw;
         }
         //if (await _teamsRepository.HasData())
@@ -109,223 +101,221 @@ public class DataSeeder
 
     private async Task<bool> SeedAllTeams()
     {
-        try
+        //if (await _teamsRepository.HasData())
+        //{
+        //    Console.WriteLine("Database has already been seeded.");
+        //    return false;
+        //}
+
+        var tomeas1 = new Tomeas
         {
-            if (await _teamsRepository.HasData())
-            {
-                Console.WriteLine("Database has already been seeded.");
-                return false;
-            }
-
-            var tomeas1 = new Tomeas
-            {
-                Name = "Τομέας1"
-            };
-            var tomeas2 = new Tomeas
-            {
-                Name = "Τομέας2"
-            };
-            await _teamsRepository.AddTomeasInDb(tomeas1);
-            await _teamsRepository.AddTomeasInDb(tomeas2);
-
-            var koinotitaKriti = new Koinotita
-            {
-                Name = "Κρήτη",
-                Tomeas = tomeas1,
-            };
-            var koinotitaKiklades = new Koinotita
-            {
-                Name = "Κυκλάδες",
-                Tomeas = tomeas2,
-            };
-            var koinotitaSterea = new Koinotita
-            {
-                Name = "Στερεα",
-                Tomeas = tomeas2,
-            };
-            var koinotitaEvia = new Koinotita
-            {
-                Name = "Εύβοια",
-                Tomeas = tomeas1,
-            };
-            await _teamsRepository.AddKoinotitaInDb(koinotitaSterea);
-            await _teamsRepository.AddKoinotitaInDb(koinotitaKiklades);
-            await _teamsRepository.AddKoinotitaInDb(koinotitaEvia);
-            await _teamsRepository.AddKoinotitaInDb(koinotitaKriti);
-
-            var skiniIos = new Skini
-            {
-                Name = "Ιος",
-                Koinotita = koinotitaKiklades
-            };
-            var skiniAthina = new Skini
-            {
-                Name = "Αθηνα",
-                Koinotita = koinotitaSterea
-            };
-            var skiniMesologgi = new Skini
-            {
-                Name = "Μεσολογγι",
-                Koinotita = koinotitaSterea
-            };
-            var skiniXania = new Skini
-            {
-                Name = "Χανια",
-                Koinotita = koinotitaKriti
-            };
-            var skiniLevadiakou = new Skini
-            {
-                Name = "Λεβαδεικος",
-                Koinotita = koinotitaSterea
-            };
-            var skiniXalkida = new Skini
-            {
-                Name = "Χαλκιδα",
-                Koinotita = koinotitaEvia
-            };
-
-            var skiniMilos = new Skini
-            {
-                Name = "Μηλος",
-                Koinotita = koinotitaKiklades
-            };
-
-            await _teamsRepository.AddSkiniInDb(skiniIos);
-            await _teamsRepository.AddSkiniInDb(skiniAthina);
-            await _teamsRepository.AddSkiniInDb(skiniXania);
-            await _teamsRepository.AddSkiniInDb(skiniXalkida);
-
-            await _staffRepository.AddTomearxiInDb(new Tomearxis
-            {
-                FullName = "Πάυλος Ισαρης",
-                Sex = Sex.Male,
-                Tomeas = tomeas2,
-                Age = 33,
-                Tel = "6987456321",
-                Thesi = Thesi.Tomearxis,
-                XwrosName = "Τομέας1",
-                Koinotarxes =
-                [
-                    new Koinotarxis
-                    {
-                        FullName = "Νικος Βελλας",
-                        Age = 28,
-                        Sex = Sex.Male,
-                        Tel = "6987416322",
-                        Thesi = Thesi.Koinotarxis,
-                        XwrosName = koinotitaSterea.Name,
-                        Koinotita = koinotitaSterea,
-                        Omadarxes =
-                        [
-                            new Omadarxis
-                            {
-                                FullName = "Γιάννης Μαρκου",
-                                Age = 27,
-                                Tel = "6987333331",
-                                Sex = Sex.Male,
-                                Skini = skiniMesologgi,
-                                Thesi = Thesi.Omadarxis,
-                                XwrosName = skiniMesologgi.Name,
-                            },
-                            new Omadarxis
-                            {
-                                FullName = "Αννα Ψηλα",
-                                Age = 22,
-                                Tel = "69888888",
-                                Sex = Sex.Female,
-                                Skini = skiniLevadiakou,
-                                Thesi = Thesi.Omadarxis,
-                                XwrosName = skiniLevadiakou.Name,
-                            },
-                        ],
-
-                    },
-                    new Koinotarxis
-                    {
-                        FullName = "Λυδία Βακρα",
-                        Age = 25,
-                        Sex = Sex.Female,
-                        Thesi = Thesi.Koinotarxis,
-                        XwrosName = koinotitaKriti.Name,
-                        Tel = "6987456329",
-                        Koinotita = koinotitaKriti,
-                        Omadarxes =
-                        [
-                            new Omadarxis
-                            {
-                                FullName = "Γιάννης Παπαδόπουλος",
-                                Age = 25,
-                                Tel = "6987456322",
-                                Sex = Sex.Male,
-                                Skini = skiniXania,
-                                Thesi = Thesi.Omadarxis,
-                                XwrosName = skiniXania.Name,
-                            },
-                        ],
-                    },
-                    new Koinotarxis
-                    {
-                        FullName = "Μάρω Γκουντα",
-                        Age = 20,
-                        Koinotita = koinotitaEvia,
-                        Tel = "6987456327",
-                        Sex = Sex.Female,
-                        Thesi = Thesi.Koinotarxis,
-                        XwrosName = koinotitaEvia.Name,
-                        Omadarxes =
-                        [
-                            new Omadarxis
-                            {
-                                FullName = "Γιάννης Παπαδόπουλος",
-                                Age = 25,
-                                Tel = "6987456323",
-                                Sex = Sex.Male,
-                                Skini = skiniXalkida,
-                            },
-                        ],
-                    },
-                    new Koinotarxis
-                    {
-                        FullName = "Αργυρακης Γιωργος",
-                        Age = 26,
-                        Sex = Sex.Male,
-                        Tel = "6987456324",
-                        Thesi = Thesi.Koinotarxis,
-                        Koinotita = koinotitaKiklades,
-                        XwrosName = koinotitaKiklades.Name,
-                        Omadarxes =
-                        [
-                            new Omadarxis
-                            {
-                                FullName = "Ιωαννα Μηρτου",
-                                Age = 20,
-                                Tel = "6987412111",
-                                Thesi = Thesi.Koinotarxis,
-                                Sex = Sex.Female,
-                                Skini = skiniIos,
-                                XwrosName = skiniIos.Name,
-                            },
-                            new Omadarxis
-                            {
-                                FullName = "Γιάννης Μπατος",
-                                Age = 19,
-                                Sex = Sex.Male,
-                                Tel = "6987333321",
-                                Thesi = Thesi.Omadarxis,
-                                Skini = skiniMilos,
-                                XwrosName = skiniMilos.Name,
-                            }
-                        ]
-                    }
-                ]
-            });
-
-            return true;
-        }
-        catch (Exception ex)
+            Name = "Τομέας 1"
+        };
+        var tomeas2 = new Tomeas
         {
-            Console.WriteLine("An error occurred while seeding the database: " + ex.Message);
-            return false;
-        }
+            Name = "Τομέας 2"
+        };
+
+        await _teamsRepository.AddTomeasInDb(tomeas1);
+        await _teamsRepository.AddTomeasInDb(tomeas2);
+
+        await _staffRepository.AddTomearxiInDb(new Tomearxis
+        {
+            FullName = "Κωστας Τατσης",
+            Sex = Sex.Male,
+            Tomeas = tomeas2,
+            Age = 31,
+            Tel = "6981456321",
+            Thesi = Thesi.Tomearxis,
+            XwrosName = tomeas2.Name,
+            Koinotarxes = []
+        });
+
+        await _staffRepository.AddTomearxiInDb(new Tomearxis
+        {
+            FullName = "Παυλος Ισαρης",
+            Sex = Sex.Male,
+            Tomeas = tomeas1,
+            Age = 33,
+            Tel = "6911456321",
+            Thesi = Thesi.Tomearxis,
+            XwrosName = tomeas1.Name,
+            Koinotarxes = []
+        });
+
+        var koinotitaEvia = new Koinotita
+        {
+            Name = "Εύβοια",
+            Tomeas = tomeas1,
+        };
+
+        var koinotitaKriti = new Koinotita
+        {
+            Name = "Κρήτη",
+            Tomeas = tomeas1,
+        };
+        var koinotitaKiklades = new Koinotita
+        {
+            Name = "Κυκλάδες",
+            Tomeas = tomeas2,
+        };
+        var koinotitaSterea = new Koinotita
+        {
+            Name = "Στερεα",
+            Tomeas = tomeas2,
+        };
+
+        await _teamsRepository.AddKoinotitaInDb(koinotitaSterea);
+        await _teamsRepository.AddKoinotitaInDb(koinotitaKiklades);
+        await _teamsRepository.AddKoinotitaInDb(koinotitaEvia);
+        await _teamsRepository.AddKoinotitaInDb(koinotitaKriti);
+
+        await _staffRepository.AddKoinotarxiInDb(new Koinotarxis
+        {
+            FullName = "Νικος Βελλας",
+            Age = 28,
+            Sex = Sex.Male,
+            Tel = "6987415322",
+            Thesi = Thesi.Koinotarxis,
+            XwrosName = koinotitaSterea.Name,
+            Koinotita = koinotitaSterea,
+            Omadarxes = [],
+        });
+
+        await _staffRepository.AddKoinotarxiInDb(new Koinotarxis
+        {
+            FullName = "Λυδία Βακρα",
+            Age = 25,
+            Sex = Sex.Female,
+            Thesi = Thesi.Koinotarxis,
+            XwrosName = koinotitaKriti.Name,
+            Tel = "6987456329",
+            Koinotita = koinotitaKriti,
+        });
+
+        await _staffRepository.AddKoinotarxiInDb(new Koinotarxis
+        {
+            FullName = "Μάρω Γκουντα",
+            Age = 20,
+            Koinotita = koinotitaEvia,
+            Tel = "6987456327",
+            Omadarxes = [],
+            Sex = Sex.Female,
+            Thesi = Thesi.Koinotarxis,
+            XwrosName = koinotitaEvia.Name,
+        });
+
+        await _staffRepository.AddKoinotarxiInDb(new Koinotarxis
+        {
+            FullName = "Αργυρακης Γιωργος",
+            Age = 26,
+            Sex = Sex.Male,
+            Tel = "6987456324",
+            Thesi = Thesi.Koinotarxis,
+            Koinotita = koinotitaKiklades,
+            XwrosName = koinotitaKiklades.Name,
+            Omadarxes = [],
+        });
+
+        var skiniIos = new Skini
+        {
+            Name = "Ιος",
+            Koinotita = koinotitaKiklades
+        };
+        var skiniAthina = new Skini
+        {
+            Name = "Αθηνα",
+            Koinotita = koinotitaSterea
+        };
+        var skiniMesologgi = new Skini
+        {
+            Name = "Μεσολογγι",
+            Koinotita = koinotitaSterea
+        };
+        var skiniXania = new Skini
+        {
+            Name = "Χανια",
+            Koinotita = koinotitaKriti
+        };
+
+        var skiniMilos = new Skini
+        {
+            Name = "Μηλος",
+            Koinotita = koinotitaKiklades
+        };
+
+        var skiniXalkida = new Skini
+        {
+            Name = "Χαλκιδα",
+            Koinotita = koinotitaEvia
+        };
+
+        var skiniLevadiakou = new Skini
+        {
+            Name = "Λεβαδειακος",
+            Koinotita = koinotitaEvia
+        };
+
+        await _teamsRepository.AddSkiniInDb(skiniIos);
+        await _teamsRepository.AddSkiniInDb(skiniAthina);
+        await _teamsRepository.AddSkiniInDb(skiniXania);
+        await _teamsRepository.AddSkiniInDb(skiniXalkida);
+        await _teamsRepository.AddSkiniInDb(skiniLevadiakou);
+
+        await _staffRepository.AddOmadarxiInDb(new Omadarxis
+        {
+            FullName = "Γιάννης Παπαδόπουλος",
+            Age = 25,
+            Tel = "6987456322",
+            Sex = Sex.Male,
+            Skini = skiniXania,
+            Thesi = Thesi.Omadarxis,
+            XwrosName = skiniXania.Name,
+        });
+
+        await _staffRepository.AddOmadarxiInDb(new Omadarxis
+        {
+            FullName = "Νικος Βελλας",
+            Age = 28,
+            Sex = Sex.Male,
+            Tel = "6987215322",
+            Thesi = Thesi.Omadarxis,
+            XwrosName = skiniAthina.Name,
+            Skini = skiniAthina
+        });
+
+        await _staffRepository.AddOmadarxiInDb(new Omadarxis
+        {
+            FullName = "Γιάννης Μαρκου",
+            Age = 27,
+            Tel = "698733331",
+            Sex = Sex.Male,
+            Skini = skiniXalkida,
+            Thesi = Thesi.Omadarxis,
+            XwrosName = skiniXalkida.Name,
+        });
+        await _staffRepository.AddOmadarxiInDb(new Omadarxis
+        {
+            FullName = "Αννα Ψηλα",
+            Age = 22,
+            Tel = "698881888",
+            Sex = Sex.Female,
+            Skini = skiniLevadiakou,
+            Thesi = Thesi.Omadarxis,
+            XwrosName = skiniLevadiakou.Name,
+        });
+
+        await _staffRepository.AddOmadarxiInDb(new Omadarxis
+        {
+            FullName = "Ιωαννα Μηρτου",
+            Age = 20,
+            Tel = "6987412111",
+            Thesi = Thesi.Koinotarxis,
+            Sex = Sex.Female,
+            Skini = skiniIos,
+            XwrosName = skiniIos.Name,
+        });
+
+        return true;
     }
 }

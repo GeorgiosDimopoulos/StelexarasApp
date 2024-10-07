@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
@@ -26,7 +27,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
@@ -39,7 +40,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message + ex.InnerException);
                 LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 return null!;
             }
@@ -57,7 +58,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
@@ -70,7 +71,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message + ex.InnerException);
                 LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
                 return null!;
             }
@@ -85,7 +86,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}: {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
@@ -113,7 +114,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 return null!;
             }
         }
@@ -155,7 +156,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
 
                 if (transaction != null)
                 {
@@ -190,7 +191,7 @@ namespace StelexarasApp.DataAccess.Repositories
                     await transaction.RollbackAsync();
 
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 return false;
             }
         }
@@ -219,7 +220,7 @@ namespace StelexarasApp.DataAccess.Repositories
                     await transaction.RollbackAsync();
 
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 return false;
             }
         }
@@ -250,7 +251,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 if (transaction != null)
                 {
                     await transaction.RollbackAsync();
@@ -286,7 +287,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
 
                 if (transaction != null)
                     await transaction.RollbackAsync();
@@ -319,7 +320,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
 
                 if (transaction != null)
                     await transaction.RollbackAsync();
@@ -341,6 +342,14 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (skini.Omadarxis == null && skini.OmadarxisId == null)
                     skini.OmadarxisId = null;
 
+                var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name == skini.Koinotita.Tomeas.Name);
+                if (existingTomeas != null)
+                    skini.Koinotita.Tomeas = existingTomeas;
+
+                var existingKoinotita = await _dbContext.Koinotites.FirstOrDefaultAsync(t => t.Name == skini.Koinotita.Name);
+                if (existingKoinotita != null)
+                    skini.Koinotita= existingKoinotita;
+
                 await _dbContext.Skines.AddAsync(skini);
                 await _dbContext.SaveChangesAsync();
 
@@ -350,7 +359,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 if (transaction != null)
                     await transaction.RollbackAsync();
                 return false;
@@ -376,7 +385,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 if (transaction != null)
                     await transaction.RollbackAsync();
                 return false;
@@ -406,7 +415,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
                 return false;
             }
         }

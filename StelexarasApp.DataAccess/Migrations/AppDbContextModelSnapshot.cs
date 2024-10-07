@@ -389,7 +389,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.HasOne("StelexarasApp.DataAccess.Models.Domi.Tomeas", "Tomeas")
                         .WithMany("Koinotites")
                         .HasForeignKey("TomeasId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Koinotarxis");
@@ -402,7 +402,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.HasOne("StelexarasApp.DataAccess.Models.Domi.Koinotita", "Koinotita")
                         .WithMany("Skines")
                         .HasForeignKey("KoinotitaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", "Omadarxis")

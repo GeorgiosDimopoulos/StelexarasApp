@@ -69,7 +69,7 @@ namespace StelexarasApp.DataAccess
             OnModelsUniquenessCreating(modelBuilder);
         }
 
-        private void OnModelsUniquenessCreating(ModelBuilder modelBuilder)
+        private static void OnModelsUniquenessCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Skini>().HasIndex(s => s.Name).IsUnique();
             modelBuilder.Entity<Koinotita>().HasIndex(k => k.Name).IsUnique();
@@ -110,6 +110,16 @@ namespace StelexarasApp.DataAccess
                 .WithOne(t => t.Tomeas)
                 .HasForeignKey<Tomeas>(kt => kt.TomearxisId);
 
+            modelBuilder.Entity<Koinotita>()
+                .HasOne(k => k.Tomeas)
+                .WithMany(t => t.Koinotites)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Skini>()
+               .HasOne(sk => sk.Koinotita)
+               .WithMany(k=> k.Skines)
+               .OnDelete(DeleteBehavior.Restrict);
+
             // modelBuilder.Entity<Skini>().ToTable("Skines");
         }
 
@@ -136,13 +146,7 @@ namespace StelexarasApp.DataAccess
             modelBuilder.Entity<Omadarxis>().Property(om => om.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Koinotarxis>().Property(k => k.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Tomearxis>().Property(t => t.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Ekpaideutis>().Property(ek => ek.Id).ValueGeneratedOnAdd();
-        }
-
-        private static string? ConvertToString(Xwros xwros)
-        {
-            return xwros != null ? $"{xwros.Id},{xwros.Name}" : null;
-
+            // modelBuilder.Entity<Ekpaideutis>().Property(ek => ek.Id).ValueGeneratedOnAdd();
         }
 
         //private static Xwros ConvertToXwros(string value, int type)

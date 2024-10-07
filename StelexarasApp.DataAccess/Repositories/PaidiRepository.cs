@@ -241,7 +241,7 @@ namespace StelexarasApp.DataAccess.Repositories
             {
                 _logger.LogError("Attempted to DeletePaidiInDb, exception: " + ex.Message);
                 LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
-                await transaction.RollbackAsync();
+                await transaction!.RollbackAsync();
                 return false;
             }
         }

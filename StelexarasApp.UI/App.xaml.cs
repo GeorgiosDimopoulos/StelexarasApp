@@ -22,6 +22,7 @@ public partial class App : Application
         using (var scope = serviceProvider.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            await dbContext.Database.EnsureDeletedAsync();
             await dbContext.Database.MigrateAsync();
         }
     }
