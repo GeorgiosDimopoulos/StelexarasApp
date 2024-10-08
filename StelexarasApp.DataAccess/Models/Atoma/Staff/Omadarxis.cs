@@ -3,21 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
-    public class Omadarxis : StelexosBase
+    public class Omadarxis : IStelexos
     {
-        public new required string FullName { get; set; } = null!;
-
         [Key]
-        public new int Id { get; set ; }
-        public new int Age { get; set ; }
-        public new Sex Sex { get; set ; }
-        
+        public int Id { get; set; }
+
         [Required]
         public Skini Skini { get; set; } = new Skini();
-        public new Thesi Thesi { get; set; } = Thesi.Omadarxis;
-
-        [Required]
-        [MaxLength(100)]
-        public required string Tel { get; set; } = null!;
+        public required string FullName { get; set; }
+        public required string Tel { get; set; }
+        public Thesi Thesi { get; set; }
+        public string? XwrosName { get; set; }
+        public Sex Sex { get; set; }
+        public int Age { get; set; }
     }
 }

@@ -3,9 +3,9 @@ using StelexarasApp.DataAccess.Models.Atoma.Staff;
 
 namespace StelexarasApp.Services.Mappers;
 
-public class NonNullAgeResolver : IValueResolver<Tomearxis, StelexosBase, int>
+public class NonNullAgeResolver : IValueResolver<Tomearxis, IStelexos, int>
 {
-    public int Resolve(Tomearxis source, StelexosBase destination, int destMember, ResolutionContext context)
+    public int Resolve(Tomearxis source, IStelexos destination, int destMember, ResolutionContext context)
     {
         return source.Age != 0 ? source.Age : destination.Age;
     }

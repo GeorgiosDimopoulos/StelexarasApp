@@ -4,16 +4,16 @@ namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
     public interface IStelexos : IPerson
     {
-        public new string FullName { get; set; }
+        public string FullName { get; set; }
         public string Tel { get; set; }
 
         [Key]
-        public new int Id { get; set; }
+        public int Id { get; set; }
         public Thesi Thesi { get; set; }
         public string? XwrosName { get; set; }
-        public new Sex Sex { get; set; }
+        public Sex Sex { get; set; }
 
-        public new int Age { get; set; }
+        public int Age { get; set; }
     }
 
     public enum Thesi 

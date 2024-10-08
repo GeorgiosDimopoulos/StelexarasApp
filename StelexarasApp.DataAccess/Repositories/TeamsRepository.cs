@@ -313,6 +313,9 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> AddSkiniInDb(Skini skini)
         {
+            if (skini == null || skini.Koinotita == null || skini.Koinotita.Tomeas == null)
+                return false;
+
             if ((await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || skini is null || _dbContext.Skines is null)
                 return false;
 
@@ -321,9 +324,8 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                if (skini.Omadarxis == null && skini.OmadarxisId == null)
-                    skini.OmadarxisId = null;
-
+                //if (skini.Omadarxis == null && skini.OmadarxisId == null)
+                //    skini.OmadarxisId = null;
                 var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name == skini.Koinotita.Tomeas.Name);
                 if (existingTomeas != null)
                     skini.Koinotita.Tomeas = existingTomeas;

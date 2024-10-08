@@ -2,17 +2,18 @@
 
 namespace StelexarasApp.DataAccess.Models.Atoma.Staff
 {
-    public class Ekpaideutis : StelexosBase
+    public class Ekpaideutis : IStelexos
     {
-        public new required string FullName { get; set; } = null!;
+        public required string FullName { get; set; }
 
         [Key]
-        public new int Id { get; set; }
-        public new int Age { get; set; }
-        public new Sex Sex { get; set; }
+        public int Id { get; set; }
+        public int Age { get; set; }
+        public Sex Sex { get; set; }
 
         [Required]
         public string Tel { get; set; }
-        public new Thesi Thesi { get; set; } = Thesi.Ekpaideutis;
+        public Thesi Thesi { get; set; } = Thesi.Ekpaideutis;
+        public string? XwrosName { get; set; }
     }
 }

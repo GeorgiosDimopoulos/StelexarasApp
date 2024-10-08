@@ -176,7 +176,7 @@ public class StaffServiceTests
         // Arrange
         var koinotarxisList = new List<Koinotarxis>
         {
-            new() { FullName = "Test Koinotarxis", Id = 1, Tel = "1231231" }
+            new() { FullName = "Test Koinotarxis", Id = 1, Tel = "1231231", Thesi = Thesi.Koinotarxis, Age = 29, Sex = Sex.Female}
         };
         var koinotarxisDtoList = new List<KoinotarxisDto>
         {
@@ -201,14 +201,14 @@ public class StaffServiceTests
     public async Task GetKoinotarxesSeTomeaInService_ShouldReturnKoinotarxes()
     {
         // Arrange
-        var tomeaDto = new TomeasDto { Name = "TestTomea"};
+        var tomeaDto = new TomeasDto { Name = "TestTomea" };
         var koinotarxisList = new List<Koinotarxis>
         {
-            new() { FullName = "Test Koinotarxis", Id = 1 , Tel = "1231231"}
+            new() { FullName = "Test Koinotarxis", Id = 1 , Tel = "1231231", Sex = Sex.Female, Age = 19 , Thesi = Thesi.Koinotarxis }
         };
         var koinotarxisDtoList = new List<KoinotarxisDto>
         {
-            new() { FullName = "Test Koinotarxis", Id = 1, Tel = "1231231" }
+            new() { FullName = "Test Koinotarxis", Id = 1, Tel = "1231231" , Sex = Sex.Female}
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, tomeaDto.Name)).ReturnsAsync(koinotarxisList);
@@ -282,9 +282,9 @@ public class StaffServiceTests
     }
 
     [Theory]
-    [InlineData("Test Name", Thesi.Omadarxis, 2)]
+    [InlineData("Test Name", 2)]
     public async Task AddOmadarxisInService_ShouldReturnExpectedResult(
-        string fullName, Thesi thesi, int id)
+        string fullName, int id)
     {
         // Arrange
         var stelexosDto = new OmadarxisDto
@@ -293,7 +293,11 @@ public class StaffServiceTests
             Id = id,
             Age = 30,
             Sex = Sex.Male,
-            Thesi = thesi
+            Tel = "11111111",
+            DtoXwrosName = "TestXwros",
+            SkiniId = 1,
+            Thesi = Thesi.Omadarxis
+
         };
         var stelexos = new Omadarxis
         {
@@ -301,11 +305,28 @@ public class StaffServiceTests
             Id = id,
             Age = 30,
             Sex = Sex.Male,
-            Tel = "1234567890",
-            Thesi = thesi
+            XwrosName = "TestXwros",
+            Skini = new Skini 
+            {
+                Name = "TestXwros",
+                Paidia = new List<Paidi>(),
+                Sex = Sex.Male,
+                Koinotita = new Koinotita
+                {
+                    Name = "TestKoinotita",
+                    Tomeas = new Tomeas
+                    {
+                        Name = "TestTomea"
+                    },
+                    Id = 1
+                }
+            },
+            Tel = "11111111",
+            Thesi = Thesi.Omadarxis,
+
         };
 
-        _mockMapper.Setup(m => m.Map<IStelexos>(stelexosDto)).Returns(stelexos);
+        _mockMapper.Setup(m => m.Map<Omadarxis>(stelexosDto)).Returns(stelexos);
         _mockStelexiRepository.Setup(repo => repo.AddOmadarxiInDb(stelexos)).ReturnsAsync(true);
 
         // Act

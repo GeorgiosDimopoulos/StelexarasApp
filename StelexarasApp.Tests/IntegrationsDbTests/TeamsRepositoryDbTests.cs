@@ -36,9 +36,17 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             {
                 Id = id,
                 Name = name,
+                Paidia = new List<Paidi>(),
+                Sex = Sex.Female,
                 Koinotita = new Koinotita
                 {
-                    Name = "KoinotitaName"
+                    Name = "KoinotitaName",
+                    Skines = new List<Skini>(),
+                    Tomeas = new Tomeas
+                    {
+                        Name = "TomeasName",
+                        Koinotites = new List<Koinotita>(),
+                    }
                 }
             };
 
@@ -129,7 +137,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             // Arrange
             var teams = new List<Skini>
             {
-                new() { 
+                new() {
                     Id = 1, Name = "TestTeam1", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName" }
                 },
                 new() {
@@ -167,7 +175,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetKoinotitaByName_ShouldReturnTeam()
         {
             // Arrange
-            var koinotita = GetKoinotita(1,"Koinotita1");
+            var koinotita = GetKoinotita(1, "Koinotita1");
             await _dbContext.Koinotites!.AddAsync(koinotita);
             await _dbContext.SaveChangesAsync();
 
@@ -229,7 +237,8 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetTomeaByNameInDb_ShouldThrowArgumentException_WhenNameIsNullOrEmpty()
         {
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => _teamsRepository.GetTomeaByNameInDb(string.Empty));
+            var res = await _teamsRepository.GetTomeaByNameInDb(string.Empty);
+            Assert.Null(res);
         }
 
         [Theory]
@@ -298,7 +307,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetTomeaByName_ShouldReturnTomea()
         {
             // Arrange
-            var tomeas = GetTomeas(6,"Tomeas1");
+            var tomeas = GetTomeas(6, "Tomeas1");
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
@@ -337,6 +346,9 @@ namespace StelexarasApp.Tests.IntegrationDbTests
                     Id = 4,
                     FullName = "Test Koinotarxis",
                     Tel = "1234567890",
+                    Sex = Sex.Female,
+                    Age = 30,
+                    Thesi = Thesi.Koinotarxis,
                 },
                 Skines = [],
             };

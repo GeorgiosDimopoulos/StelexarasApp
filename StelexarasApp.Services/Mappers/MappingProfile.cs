@@ -12,12 +12,11 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // CreateMap<StelexosDto, StelexosBase>();
+        //CreateMap<Omadarxis, IStelexos>()
+        //    .ForMember(dest => dest.Id, opt => opt.Ignore())
+        //    .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.Skini.Name));
 
-        CreateMap<Omadarxis, StelexosBase>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.Skini.Name));
-
-        CreateMap<Tomearxis, StelexosBase>()
+        CreateMap<Tomearxis, IStelexos>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom<NonNullIdResolver>())
             .ForMember(dest => dest.FullName, opt => opt.MapFrom<NonNullNameResolver>())
             .ForMember(dest => dest.Tel, opt => opt.MapFrom<NonNullTelResolver>())
@@ -41,7 +40,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel ?? string.Empty))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
             .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.DtoXwrosName ?? string.Empty))
-            //.ForMember(dest => dest.Tomeas, opt => opt.MapFrom(src => new Tomeas { Name = src.FullName }))
+            //.ForMember(dest => dest.Tomeas, opt => opt.MapFrom(src => new Tomeas { Name = src.FullName }))  // ToDo: NOT SURE IF NEEDED
             .ForMember(dest => dest.Koinotarxes, opt => opt.Ignore())
             .ReverseMap();
 
@@ -51,7 +50,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.DtoXwrosName))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
             .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel))
-            //.ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId ?? 0 }))
+            .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId ?? 0 })) // ToDo: NOT SURE IF NEEDED
             .ForMember(dest => dest.Omadarxes, opt => opt.Ignore())
             .ReverseMap();
 
@@ -60,7 +59,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.DtoXwrosName))
             .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
-            //.ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId }))
+            .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId }))  // ToDo: NOT SURE IF NEEDED
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id ?? 0))
             .ForMember(dest => dest.Thesi, opt => opt.MapFrom(src => src.Thesi))
             .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel)).

@@ -6,6 +6,7 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
+using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
@@ -26,7 +27,7 @@ public class TeamsServiceTests
     public async Task AddSkiniInService_ShouldReturnTrue()
     {
         // Arrange
-        var team = new SkiniDto { Id = 1, Name = "TestTeam" };
+        var team = new SkiniDto { Id = 1, Name = "TestTeam", KoinotitaName = "KoinotitaName", PaidiaNumber = 1, Sex = Sex.Female };
         _mockdteamsRepository.Setup(m => m.AddSkiniInDb(It.IsAny<Skini>())).ReturnsAsync(true);
 
         // Act
@@ -34,6 +35,7 @@ public class TeamsServiceTests
 
         // Assert
         Assert.True(result);
+        _mockdteamsRepository.Verify(m => m.AddSkiniInDb(It.IsAny<Skini>()), Times.Once);
     }
 
     [Fact]
@@ -96,13 +98,13 @@ public class TeamsServiceTests
             {
                 Id = 1, Name = "TestKoinotita1", Koinotarxis = new Koinotarxis
                 {
-                    FullName = "Test Name1" , Tel = "1234567890"
+                    FullName = "Test Name1" , Tel = "123456790" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
                 }
             },
             new Koinotita
             { Id = 2, Name = "TestKoinotita2", Koinotarxis = new Koinotarxis()
             {
-                FullName = "Test Name2", Tel = "1334567890"
+                FullName = "Test Name2", Tel = "1334567890", Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
             }
             }
         };
@@ -126,14 +128,14 @@ public class TeamsServiceTests
             {
                 Id = 1, Name = "TestKoinotita1", Koinotarxis = new Koinotarxis
                 {
-                    FullName = "Test Name1", Tel = "123456789"
+                    FullName = "Test Name1", Tel = "1256789" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
                 }
             },
             new Koinotita
             {
                 Id = 2, Name = "TestKoinotita2", Koinotarxis = new Koinotarxis()
                 {
-                    FullName = "Test Name2" , Tel = "123457890"
+                    FullName = "Test Name2" , Tel = "23457890" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
                 }
             }
         };

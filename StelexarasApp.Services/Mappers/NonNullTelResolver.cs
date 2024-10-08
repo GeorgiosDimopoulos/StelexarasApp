@@ -3,9 +3,9 @@ using StelexarasApp.DataAccess.Models.Atoma.Staff;
 
 namespace StelexarasApp.Services.Mappers;
 
-public class NonNullTelResolver : IValueResolver<Tomearxis, StelexosBase, string>
+public class NonNullTelResolver : IValueResolver<Tomearxis, IStelexos, string>
 {
-    public string Resolve(Tomearxis source, StelexosBase destination, string destMember, ResolutionContext context)
+    public string Resolve(Tomearxis source, IStelexos destination, string destMember, ResolutionContext context)
     {
         return source.Tel ?? "N/A";
     }

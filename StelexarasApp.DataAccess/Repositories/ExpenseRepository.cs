@@ -18,7 +18,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
 
         try
         {
-            if (expense is null || _dbContext.Expenses is null)
+            if (expense is null || _dbContext.Expenses is null || expense.Id <= 0)
                 return false;
 
             var existingExpense = await _dbContext.Expenses.FindAsync(expense.Id);
@@ -134,10 +134,8 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
             }
 
             var existingExpense = await _dbContext.Expenses.FindAsync(id);
-            if (existingExpense == null || string.IsNullOrEmpty(newExpense.Description)) // || newExpense.Id <= 0
-            {
+            if (existingExpense == null || string.IsNullOrEmpty(newExpense.Description)) // || newExpense.Id <= 0            
                 return false;
-            }
 
             existingExpense.Description = newExpense.Description;
             existingExpense.Amount = newExpense.Amount;

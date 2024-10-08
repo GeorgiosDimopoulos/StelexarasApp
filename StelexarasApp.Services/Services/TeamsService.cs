@@ -15,11 +15,19 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> AddSkiniInService(SkiniDto skiniDto)
         {
-            if (skiniDto is null || string.IsNullOrEmpty(skiniDto.Name) || string.IsNullOrEmpty(skiniDto.KoinotitaName))
-                return false;
+            try
+            {
+                if (skiniDto is null || string.IsNullOrEmpty(skiniDto.Name) || string.IsNullOrEmpty(skiniDto.KoinotitaName))
+                    return false;
 
-            var skini = _mapper.Map<Skini>(skiniDto);
-            return await _teamsRepository.AddSkiniInDb(skini);
+                var skini = _mapper.Map<Skini>(skiniDto);
+                return await _teamsRepository.AddSkiniInDb(skini);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         public async Task<bool> AddKoinotitaInService(KoinotitaDto koinotitaDto)

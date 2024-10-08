@@ -16,14 +16,21 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
     public async Task<bool> AddOmadarxiInDb(Omadarxis omadarxis)
     {
+        if (omadarxis == null || omadarxis.Id <= 0 || omadarxis.Id > 100 || (int)omadarxis.Thesi > 4)
+            throw new ArgumentException(nameof(omadarxis), "Omadarxis cannot be null or its id negative or huge value!");
+        if (_dbContext.Omadarxes == null)
+            throw new InvalidOperationException("Omadarxes DbSet cannot be null");
+
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (await _dbContext.Omadarxes.FirstOrDefaultAsync(s => s.Tel == omadarxis.Tel) is not null || omadarxis == null || _dbContext.Omadarxes is null)
+        if (await _dbContext.Omadarxes.AnyAsync(s => s.Tel == omadarxis.Tel))
             return false;
-
         try
         {
+            if (omadarxis.Skini == null || omadarxis.Skini.Koinotita == null || omadarxis.Skini.Koinotita.Tomeas == null)
+                throw new ArgumentException("Skini, Koinotita, and Tomeas must not be null.");
+
             if (omadarxis.Thesi != Thesi.Omadarxis)
                 throw new InvalidOperationException($"Invalid Thesi for Tomearxis. Expected {Thesi.Omadarxis}, but got {omadarxis.Thesi}.");
 
@@ -315,27 +322,33 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
     public async Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi)
     {
-        if (string.IsNullOrEmpty(name) || thesi is null)
-            return null!;
-
-        if (thesi == Thesi.None)
+        try
         {
-            IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
-                .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
-                .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
-            return await query.FirstOrDefaultAsync(e => e.FullName == name) ?? null!;
+            if (string.IsNullOrEmpty(name) || thesi is null)
+                return null!;
+
+            if (thesi == Thesi.None)
+            {
+                IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
+                    .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
+                    .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
+                return await query.FirstOrDefaultAsync(e => e.FullName == name) ?? null!;
+            }
+
+            return thesi switch
+            {
+                Thesi.Omadarxis => await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.FullName == name) ?? null!,
+                Thesi.Koinotarxis => await _dbContext.Koinotarxes!.FirstOrDefaultAsync(k => k.FullName == name) ?? null!,
+                Thesi.Tomearxis => await _dbContext.Tomearxes!.FirstOrDefaultAsync(t => t.FullName == name) ?? null!,
+                Thesi.Ekpaideutis => await _dbContext.Ekpaideutes!.FirstOrDefaultAsync(t => t.FullName == name) ?? null!,
+                _ => throw new ArgumentOutOfRangeException(nameof(thesi), thesi, null)
+            };
         }
-
-        return thesi switch
+        catch (Exception ex)
         {
-            Thesi.Omadarxis => await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.FullName == name) ?? null!,
-            Thesi.Koinotarxis => await _dbContext.Koinotarxes!.FirstOrDefaultAsync(k => k.FullName == name) ?? null!,
-            Thesi.Tomearxis => await _dbContext.Tomearxes!.FirstOrDefaultAsync(t => t.FullName == name) ?? null!,
-            Thesi.Ekpaideutis => await _dbContext.Ekpaideutes!.FirstOrDefaultAsync(t => t.FullName == name) ?? null!,
-            Thesi.None => throw new NotImplementedException(),
-            null => throw new NotImplementedException(),
-            _ => throw new ArgumentOutOfRangeException(nameof(thesi), thesi, null)
-        };
+            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
+        }
     }
 
     private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string xwrosName)

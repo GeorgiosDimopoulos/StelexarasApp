@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.DataAccess.Models.Domi;
 
 namespace StelexarasApp.Tests.IntegrationDbTests;
 
@@ -73,7 +74,25 @@ public class StaffRepositoryDbTests
             Id = 1,
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
-            Tel = "123-456-7890"
+            Tel = "123-456-7890",
+            Age = 30,
+            XwrosName = "TestSkini",
+            Sex = Sex.Male,
+            Skini = new Skini
+            {
+                Id = 1,
+                Name = "TestSkini",
+                Koinotita = new Koinotita
+                {
+                    Id = 1,
+                    Name = "TestKoinotita",
+                    Tomeas = new Tomeas
+                    {
+                        Id = 1,
+                        Name = "TestTomeas"
+                    }
+                }
+            }
         };
 
         // Act
@@ -90,7 +109,7 @@ public class StaffRepositoryDbTests
         var stelexos = new Omadarxis
         {
             Id = 1,
-            Thesi = (Thesi)999, // Invalid Thesi value
+            Thesi = (Thesi)999,
             FullName = "Test Name",
             Tel = "123-456-7890"
         };
@@ -103,19 +122,19 @@ public class StaffRepositoryDbTests
     }
 
     [Fact]
-    public async Task AddStelexosInDb_ShouldThrowException_WhenRequiredPropertiesAreMissing()
+    public async Task AddStelexosInDb_ShouldThrowException_WhenRequiredIdInvalid()
     {
         // Arrange
         var stelexos = new Omadarxis
         {
-            Id = 1,
+            Id = 111,
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
-            Tel = "12345678"
+            Tel = string.Empty
         };
 
         // Act & Assert
-        await Assert.ThrowsAsync<DbUpdateException>(async () =>
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
         {
             await _stelexiRepository.AddOmadarxiInDb(stelexos);
         });
@@ -188,8 +207,8 @@ public class StaffRepositoryDbTests
     public async Task GetAllKoinotarxesInDb_ShouldReturnAllStelexos()
     {
         // Arrange
-        var stelexos2 = new Koinotarxis { Id = 4, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890" };
-        var stelexos = new Koinotarxis { Id = 5, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890" };
+        var stelexos2 = new Koinotarxis { Id = 4, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890", Sex = Sex.Male, Age = 22 };
+        var stelexos = new Koinotarxis { Id = 5, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890", Sex = Sex.Male, Age = 22 };
 
         await _dbContext.Koinotarxes!.AddRangeAsync(stelexos, stelexos2);
         await _dbContext.SaveChangesAsync();
