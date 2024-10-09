@@ -1,10 +1,7 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.IServices;
-using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.PeopleViewModels;
-using StelexarasApp.Views.StaffViews;
 
 namespace StelexarasApp.UI.Views.StaffViews;
 

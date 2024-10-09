@@ -1,9 +1,7 @@
-using StelexarasApp.Services.IServices;
-using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.PeopleViewModels;
 
-namespace StelexarasApp.Views.StaffViews;
+namespace StelexarasApp.UI.Views.StaffViews;
 
 public partial class AddStelexosPage : ContentPage
 {

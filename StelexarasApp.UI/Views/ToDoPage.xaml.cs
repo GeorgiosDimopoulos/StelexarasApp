@@ -5,8 +5,7 @@ namespace StelexarasApp.UI.Views
 {
     public partial class ToDoPage : ContentPage
     {
-        private DutyViewModel _dutyViewModel;
-        private IDutyService _dutyService;
+        private readonly IDutyService _dutyService;
 
         public ToDoPage(IDutyService dutyService)
         {

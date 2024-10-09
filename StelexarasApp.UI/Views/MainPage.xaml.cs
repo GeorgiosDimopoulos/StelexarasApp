@@ -3,7 +3,7 @@ using StelexarasApp.Services;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.UI.Views.PaidiaViews;
 using StelexarasApp.UI.Views.StaffViews;
-using StelexarasApp.Views.TeamsViews;
+using StelexarasApp.UI.Views.TeamsViews;
 
 namespace StelexarasApp.UI.Views;
 

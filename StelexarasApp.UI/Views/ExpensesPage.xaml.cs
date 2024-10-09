@@ -4,7 +4,7 @@ namespace StelexarasApp.UI.Views
 {
     public partial class ExpensesPage : ContentPage
     {
-        private ExpensesViewModel _viewModel;
+        private readonly ExpensesViewModel _viewModel;
 
         public ExpensesPage(IExpenseService expenseService)
         {

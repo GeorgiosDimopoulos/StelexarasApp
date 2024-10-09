@@ -84,15 +84,37 @@ public class StaffService : IStaffService
             if (_mapper == null || _stelexiRepository == null)
                 throw new InvalidOperationException("Mapper or repository cannot be null");
 
-            IStelexos stelexosEntity = stelexosDto.Thesi switch
+            //IStelexos stelexosEntity = stelexosDto.Thesi switch
+            //{
+            //    Thesi.Omadarxis => _mapper.Map<Omadarxis>(stelexosDto as OmadarxisDto),
+            //    Thesi.Koinotarxis => _mapper.Map<Koinotarxis>(stelexosDto as KoinotarxisDto),
+            //    Thesi.Tomearxis => _mapper.Map<Tomearxis>(stelexosDto as TomearxisDto),
+            //    Thesi.Ekpaideutis => throw new NotSupportedException("Thesi Ekpaideutis is not supported."),
+            //    Thesi.None => throw new ArgumentException("Thesi cannot be None!", nameof(stelexosDto.Thesi)),
+            //    _ => throw new ArgumentOutOfRangeException(nameof(stelexosDto.Thesi), "Invalid Thesi value.")
+            //};
+
+            Console.WriteLine(stelexosDto.Thesi);
+
+            IStelexos stelexosEntity;
+            switch (stelexosDto.Thesi)
             {
-                Thesi.Omadarxis => _mapper.Map<Omadarxis>(stelexosDto as OmadarxisDto),
-                Thesi.Koinotarxis => _mapper.Map<Koinotarxis>(stelexosDto as KoinotarxisDto),
-                Thesi.Tomearxis => _mapper.Map<Tomearxis>(stelexosDto as TomearxisDto),
-                Thesi.Ekpaideutis => throw new NotSupportedException("Thesi Ekpaideutis is not supported."),
-                Thesi.None => throw new ArgumentException("Thesi cannot be None!", nameof(stelexosDto.Thesi)),
-                _ => throw new ArgumentOutOfRangeException(nameof(stelexosDto.Thesi), "Invalid Thesi value.")
-            };
+                case Thesi.Omadarxis:
+                    stelexosEntity = _mapper.Map<Omadarxis>(stelexosDto as OmadarxisDto);
+                    break;
+                case Thesi.Koinotarxis:
+                    stelexosEntity = _mapper.Map<Koinotarxis>(stelexosDto as KoinotarxisDto);
+                    break;
+                case Thesi.Tomearxis:
+                    stelexosEntity = _mapper.Map<Tomearxis>(stelexosDto as TomearxisDto);
+                    break;
+                case Thesi.Ekpaideutis:
+                    throw new NotSupportedException("Thesi Ekpaideutis is not supported.");
+                case Thesi.None:
+                    throw new ArgumentException("Thesi cannot be None!", nameof(stelexosDto.Thesi));
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(stelexosDto.Thesi), "Invalid Thesi value.");
+            }
 
             if (stelexosEntity == null)
             {

@@ -1,9 +1,8 @@
 ﻿using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.UI.Views.TeamsViews;
 using StelexarasApp.ViewModels.TeamsViewModels;
 
-namespace StelexarasApp.Views.TeamsViews;
+namespace StelexarasApp.UI.Views.TeamsViews;
 
 public partial class GeneralTeamsPage : ContentPage
 {

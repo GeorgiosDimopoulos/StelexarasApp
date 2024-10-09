@@ -281,60 +281,50 @@ public class StaffServiceTests
         _mockMapper.Verify(m => m.Map<IEnumerable<OmadarxisDto>>(omadarxisList), Times.Once);
     }
 
-    [Theory]
-    [InlineData("Test Name", 2)]
-    public async Task AddOmadarxisInService_ShouldReturnExpectedResult(
-        string fullName, int id)
+    [Fact]
+    public async Task AddStelexosInService_ShouldThrowArgumentNullExceptionOrFalse_WhenDtoIsNull()
     {
         // Arrange
-        var stelexosDto = new OmadarxisDto
+        OmadarxisDto? omadarxisDto = null;
+
+        // Act & Assert
+        var rest = await _stelexiService.AddStelexosInService(omadarxisDto);
+        Assert.False(rest);
+    }
+
+    [Fact]
+    public async Task AddOmadarxisInService_ShouldReturnExpectedResult()
+    {
+        // Arrange
+        var omadarxisDto = new OmadarxisDto
         {
-            FullName = fullName,
-            Id = id,
+            FullName = "Ιωαννα Μηρτου",
             Age = 30,
             Sex = Sex.Male,
             Tel = "11111111",
-            DtoXwrosName = "TestXwros",
             SkiniId = 1,
             Thesi = Thesi.Omadarxis
-
         };
-        var stelexos = new Omadarxis
+        var omadarxis = new Omadarxis
         {
-            FullName = fullName,
-            Id = id,
-            Age = 30,
-            Sex = Sex.Male,
-            XwrosName = "TestXwros",
-            Skini = new Skini 
-            {
-                Name = "TestXwros",
-                Paidia = new List<Paidi>(),
-                Sex = Sex.Male,
-                Koinotita = new Koinotita
-                {
-                    Name = "TestKoinotita",
-                    Tomeas = new Tomeas
-                    {
-                        Name = "TestTomea"
-                    },
-                    Id = 1
-                }
-            },
-            Tel = "11111111",
+            FullName = omadarxisDto.FullName,
+            Age = omadarxisDto.Age,
+            Tel = omadarxisDto.Tel,
             Thesi = Thesi.Omadarxis,
-
+            Skini = new Skini { Id = 1 },
+            Sex = omadarxisDto.Sex
         };
 
-        _mockMapper.Setup(m => m.Map<Omadarxis>(stelexosDto)).Returns(stelexos);
-        _mockStelexiRepository.Setup(repo => repo.AddOmadarxiInDb(stelexos)).ReturnsAsync(true);
+        _mockMapper.Setup(m => m.Map<Omadarxis>(It.IsAny<OmadarxisDto>())).Returns(omadarxis);
+        _mockStelexiRepository.Setup(r => r.AddOmadarxiInDb(It.IsAny<Omadarxis>())).ReturnsAsync(true);
 
         // Act
-        var result = await _stelexiService.AddStelexosInService(stelexosDto);
+        var result = await _stelexiService.AddStelexosInService(omadarxisDto);
 
         // Assert
         Assert.True(result);
-        _mockStelexiRepository.Verify(r => r.AddOmadarxiInDb(stelexos), Times.Once);
+        _mockMapper.Verify(m => m.Map<Omadarxis>(omadarxisDto), Times.Once);
+        _mockStelexiRepository.Verify(r => r.AddOmadarxiInDb(omadarxis), Times.Once);
     }
 
     [Fact]

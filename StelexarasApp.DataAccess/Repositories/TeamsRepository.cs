@@ -56,7 +56,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name,  _logger);
+                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return null!;
             }
         }
@@ -69,7 +69,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name,  _logger);
+                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return null!;
             }
         }
@@ -313,10 +313,7 @@ namespace StelexarasApp.DataAccess.Repositories
 
         public async Task<bool> AddSkiniInDb(Skini skini)
         {
-            if (skini == null || skini.Koinotita == null || skini.Koinotita.Tomeas == null)
-                return false;
-
-            if ((await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || skini is null || _dbContext.Skines is null)
+            if (skini == null || skini.Koinotita == null || skini.Koinotita.Tomeas == null || skini.Id <= 0 || (await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || _dbContext.Skines is null)
                 return false;
 
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
@@ -324,8 +321,6 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                //if (skini.Omadarxis == null && skini.OmadarxisId == null)
-                //    skini.OmadarxisId = null;
                 var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name == skini.Koinotita.Tomeas.Name);
                 if (existingTomeas != null)
                     skini.Koinotita.Tomeas = existingTomeas;

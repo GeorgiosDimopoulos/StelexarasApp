@@ -3,14 +3,14 @@ using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.TeamsViewModels;
 
-namespace StelexarasApp.Views.TeamsViews;
+namespace StelexarasApp.UI.Views.TeamsViews;
 
 public partial class TomeasInfoPage : ContentPage
 {
-    private TomeasViewModel _tomeasViewModel;
-    private KoinotitaViewModel _koinotitaViewModel;
-    private IPaidiaService _paidiaService;
-    private ITeamsService _teamsService;
+    private readonly TomeasViewModel _tomeasViewModel;
+    private readonly KoinotitaViewModel _koinotitaViewModel;
+    private readonly IPaidiaService _paidiaService;
+    private readonly ITeamsService _teamsService;
 
     public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiaService paidiaService)
     {
