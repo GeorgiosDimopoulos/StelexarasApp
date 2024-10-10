@@ -11,6 +11,10 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+
+        // Just for local/Development phase testing purposes (temporarily)
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
+        
         InitializeDatabaseAsync(ServiceProvider).Wait();
         ListTablesAsync().Wait();
 
@@ -19,11 +23,23 @@ public partial class App : Application
 
     private static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider)
     {
-        using (var scope = serviceProvider.CreateScope())
+        try
         {
+            using var scope = serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            await dbContext.Database.EnsureDeletedAsync();
-            await dbContext.Database.MigrateAsync();
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            if (environment == "Development")
+            {
+                await dbContext.Database.EnsureDeletedAsync();
+                await dbContext.Database.EnsureCreatedAsync();
+            }
+            else
+                await dbContext.Database.MigrateAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while initializing the database: " + ex.InnerException + ex.Message);
         }
     }
 

@@ -10,12 +10,12 @@ namespace StelexarasApp.ViewModels.PeopleViewModels;
 public class StaffViewModel : INotifyPropertyChanged
 {
     private readonly IStaffService _staffService;
-    public ObservableCollection<StelexosDto> AllStaff { get; set; }
+    public ObservableCollection<IStelexosDto> AllStaff { get; set; }
 
     public StaffViewModel(IStaffService staffService)
     {
         _staffService = staffService ?? throw new ArgumentNullException(nameof(staffService));
-        AllStaff = new ObservableCollection<StelexosDto>();
+        AllStaff = new ObservableCollection<IStelexosDto>();
         _ = LoadAllStaffAsync();
     }
 
@@ -41,7 +41,7 @@ public class StaffViewModel : INotifyPropertyChanged
         }
     }
 
-    public async Task<IEnumerable<StelexosDto>> GetAllStaff()
+    public async Task<IEnumerable<IStelexosDto>> GetAllStaff()
     {
         return await _staffService.GetAllStaffInService();
     }

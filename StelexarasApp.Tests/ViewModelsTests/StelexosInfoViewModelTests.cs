@@ -11,7 +11,7 @@ public class StelexosInfoViewModelTests
 {
     private readonly Mock<IStaffService> _mockstelexiService;
     private readonly StelexosInfoViewModel stelexosInfoViewModel;
-    private readonly StelexosDto stelexosDto;
+    private readonly IStelexosDto stelexosDto;
 
     public StelexosInfoViewModelTests()
     {
@@ -53,15 +53,36 @@ public class StelexosInfoViewModelTests
         _mockstelexiService.Verify(service => service.DeleteStelexosByIdInService(stelexos.Id, stelexos.Thesi), Times.Once);
     }
 
-    private StelexosDto GetMockUpStelexos(Thesi? thesi = Thesi.Omadarxis, string name = "Some name", string xwrosName = "someXwros")
+    private IStelexosDto GetMockUpStelexos(Thesi? thesi = Thesi.Omadarxis, string name = "Some name", string xwrosName = "someXwros")
     {
-        return new StelexosDto
+        return thesi switch
         {
-            Age = 20,
-            FullName = name,
-            Sex = Sex.Female,
-            DtoXwrosName = xwrosName,
-            Thesi = thesi ?? Thesi.None,
+            Thesi.Omadarxis => new OmadarxisDto
+            {
+                Age = 20,
+                FullName = name,
+                Sex = Sex.Female,
+                DtoXwrosName = xwrosName,
+                Thesi = thesi ?? Thesi.None,
+            },
+            Thesi.Koinotarxis => new KoinotarxisDto
+            {
+                Age = 20,
+                FullName = name,
+                Sex = Sex.Female,
+                DtoXwrosName = xwrosName,
+                Thesi = thesi ?? Thesi.None,
+            },
+            Thesi.Tomearxis => new TomearxisDto
+            {
+                Age = 20,
+                FullName = name,
+                Sex = Sex.Female,
+                DtoXwrosName = xwrosName,
+                Thesi = thesi ?? Thesi.None,
+            },
+            _ => throw new ArgumentException("Invalid Thesi value", nameof(thesi)),
         };
     }
+
 }

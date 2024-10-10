@@ -2,10 +2,10 @@
 using Moq;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.Services;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.Services.DtosModels.Atoma;
 
 namespace StelexarasApp.Tests.ServicesTests;
 

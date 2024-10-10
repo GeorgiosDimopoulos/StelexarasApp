@@ -1,6 +1,5 @@
 ﻿using Moq;
 using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.PeopleViewModels;
 
@@ -34,7 +33,7 @@ public class AddStelexosViewModelTests
 
         // Assert
         Assert.False(result);
-        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Never);
+        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<IStelexosDto>()), Times.Never);
     }
 
     [Fact]
@@ -52,7 +51,7 @@ public class AddStelexosViewModelTests
 
         // Assert
         Assert.False(result);
-        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Never);
+        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<IStelexosDto>()), Times.Never);
     }
 
     [Fact]
@@ -70,7 +69,7 @@ public class AddStelexosViewModelTests
 
         // Assert
         Assert.False(result);
-        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Never);
+        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<IStelexosDto>()), Times.Never);
     }
 
     [Fact]
@@ -88,7 +87,7 @@ public class AddStelexosViewModelTests
 
         // Assert
         Assert.False(result);
-        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<StelexosDto>()), Times.Never);
+        _mockstaffService.Verify(x => x.AddStelexosInService(It.IsAny<IStelexosDto>()), Times.Never);
     }
 
     [Fact]
@@ -103,15 +102,15 @@ public class AddStelexosViewModelTests
 
         // Act
         _mockstaffService
-            .Setup(x => x.AddStelexosInService(It.IsAny<StelexosDto>()))
+            .Setup(x => x.AddStelexosInService(It.IsAny<IStelexosDto>()))
             .ReturnsAsync(true);
         _mockTeamsService
-           .Setup(x => x.CheckStelexousXwroNameInService(It.IsAny<StelexosDto>(), It.IsAny<string>()))
+           .Setup(x => x.CheckStelexousXwroNameInService(It.IsAny<IStelexosDto>(), It.IsAny<string>()))
            .ReturnsAsync(true);
         var result = await dutyViewModel.TrySaveStelexosAsync();
 
         // Assert
         Assert.True(result);
-        _mockTeamsService.Verify(x => x.CheckStelexousXwroNameInService(It.IsAny<StelexosDto>(), It.IsAny<string>()), Times.Once);
+        _mockTeamsService.Verify(x => x.CheckStelexousXwroNameInService(It.IsAny<IStelexosDto>(), It.IsAny<string>()), Times.Once);
     }
 }

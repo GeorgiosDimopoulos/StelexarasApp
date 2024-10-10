@@ -64,7 +64,7 @@ public class StaffWebController(IStaffService staffService, ITeamsService teamsS
     // POST: StaffWeb/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("FullName,Age,Sex,XwrosName")] StelexosDto stelexos, Thesi thesi)
+    public async Task<IActionResult> Create([Bind("FullName,Age,Sex,XwrosName")] IStelexosDto stelexos, Thesi thesi)
     {
         try
         {
@@ -112,7 +112,7 @@ public class StaffWebController(IStaffService staffService, ITeamsService teamsS
     // POST: StaffWeb/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("FullName,Id,Age,Sex,Thesi,SkiniName")] StelexosDto stelexosDto, Thesi thesi)
+    public async Task<IActionResult> Edit(int id, [Bind("FullName,Id,Age,Sex,Thesi,SkiniName")] IStelexosDto stelexosDto, Thesi thesi)
     {
         if (id != stelexosDto.Id || stelexosDto is null)
             return NotFound();

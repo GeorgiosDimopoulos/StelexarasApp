@@ -12,6 +12,8 @@ using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.Web;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Mappers;
+using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using Microsoft.DotNet.Scaffolding.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,7 +100,7 @@ void ConfigureServives(WebApplicationBuilder builder)
     builder.Services.AddScoped<PaidiInfoViewModel>(provider =>
         new PaidiInfoViewModel(new PaidiDto(), provider.GetRequiredService<IPaidiaService>(), "Skini"));
     builder.Services.AddScoped<StelexosInfoViewModel>(provider =>
-        new StelexosInfoViewModel(new StelexosDto(), provider.GetRequiredService<IStaffService>()));
+        new StelexosInfoViewModel(null!, provider.GetRequiredService<IStaffService>()));
 
     // MVC and Health Checks
     builder.Services.AddControllers();
@@ -136,4 +138,16 @@ static async Task SeedDbWithMockData(WebApplication app)
     {
         Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
     }
+}
+
+static IStelexosDto CreateStelexosDto(Thesi thesi)
+{
+    return thesi switch
+    {
+        Thesi.Omadarxis => new OmadarxisDto(),
+        Thesi.Koinotarxis => new KoinotarxisDto(),
+        Thesi.Tomearxis => new TomearxisDto(),
+        Thesi.None => null,
+        _ => throw new ArgumentException("Invalid Thesi", nameof(thesi))
+    };
 }

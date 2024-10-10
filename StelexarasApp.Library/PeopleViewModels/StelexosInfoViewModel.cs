@@ -10,9 +10,9 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
     {
         private readonly IStaffService _stelexiService;
         private readonly bool skiniIsChanged;
-        private StelexosDto _stelexosDto;
+        private IStelexosDto _stelexosDto;
 
-        public StelexosDto StelexosDto
+        public IStelexosDto StelexosDto
         {
             get => _stelexosDto;
             set
@@ -29,7 +29,7 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
         public ICommand SaveStelexosCommand { get; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public StelexosInfoViewModel(StelexosDto stelexosDto, IStaffService stelexiService)
+        public StelexosInfoViewModel(IStelexosDto stelexosDto, IStaffService stelexiService)
         {
             _stelexosDto = stelexosDto ?? throw new ArgumentNullException(nameof(stelexosDto));
             _stelexiService = stelexiService;
@@ -37,7 +37,7 @@ namespace StelexarasApp.ViewModels.PeopleViewModels
             SaveStelexosCommand = new Command(async () => await OnSaveStelexos());
         }
 
-        public async Task<bool> DeleteStelexos(StelexosDto s)
+        public async Task<bool> DeleteStelexos(IStelexosDto s)
         {
             return await _stelexiService.DeleteStelexosByIdInService(s.Id, s.Thesi);
         }

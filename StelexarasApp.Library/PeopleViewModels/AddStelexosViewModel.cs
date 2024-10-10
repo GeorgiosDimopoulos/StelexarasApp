@@ -32,14 +32,38 @@ public class AddStelexosViewModel
         if (!IsValidFullNameInput(FullName) || string.IsNullOrWhiteSpace(XwrosName) || string.IsNullOrWhiteSpace(PhoneNumber) || Age < 18)
             return false;
 
-        var newStelexosDto = new StelexosDto
+        IStelexosDto newStelexosDto = Enum.Parse<Thesi>(SelectedThesi) switch
         {
-            FullName = FullName,
-            DtoXwrosName = XwrosName,
-            Tel = PhoneNumber,
-            Age = Age,
-            Thesi = Enum.Parse<Thesi>(SelectedThesi)
+            Thesi.Omadarxis => new OmadarxisDto
+            {
+                FullName = FullName,
+                DtoXwrosName = XwrosName,
+                Tel = PhoneNumber,
+                Age = Age,
+                Thesi = Thesi.Omadarxis,
+                //Sex = Sex
+            },
+            Thesi.Koinotarxis => new KoinotarxisDto
+            {
+                FullName = FullName,
+                DtoXwrosName = XwrosName,
+                Tel = PhoneNumber,
+                Age = Age,
+                Thesi = Thesi.Koinotarxis,
+                //Sex = Sex
+            },
+            Thesi.Tomearxis => new TomearxisDto
+            {
+                FullName = FullName,
+                DtoXwrosName = XwrosName,
+                Tel = PhoneNumber,
+                Age = Age,
+                Thesi = Thesi.Tomearxis,
+                //Sex = Sex
+            },
+            _ => throw new ArgumentException("Invalid Thesi value")
         };
+
 
         bool isOkToBeAdded = await _teamsService.CheckStelexousXwroNameInService(newStelexosDto, XwrosName);
         if (!isOkToBeAdded)

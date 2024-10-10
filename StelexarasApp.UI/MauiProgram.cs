@@ -14,128 +14,126 @@ using StelexarasApp.ViewModels.TeamsViewModels;
 using StelexarasApp.ViewModels;
 using StelexarasApp.UI.Views.StaffViews;
 using StelexarasApp.UI.Views.TeamsViews;
-using StelexarasApp.Views.TeamsViews;
 using StelexarasApp.UI.Views;
 using StelexarasApp.UI.Views.PaidiaViews;
 
-namespace StelexarasApp.UI
-{
-    public static class MauiProgram
-    {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .UseMauiCommunityToolkit()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
-            
-//            builder.ConfigureMauiHandlers(handlers =>
-//            {
-//#if ANDROID
-//                handlers.AddHandler(typeof(Microsoft.Maui.Controls.Shell), typeof(SplashScreenHandler));
-//#endif
-//            });
-            builder.UseMauiApp<App>().UseMauiCommunityToolkit();
+namespace StelexarasApp.UI;
 
-            var services = new ServiceCollection();
-            RegisterDatabase(services);
-            RegisterServices(services);
-            RegisterViewModels(services);
-            RegisterRepositories(services);
-            RegisterPages(services);
-            RegisterLogging(services);
+public static class MauiProgram
+{
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
+
+        //            builder.ConfigureMauiHandlers(handlers =>
+        //            {
+        //#if ANDROID
+        //                handlers.AddHandler(typeof(Microsoft.Maui.Controls.Shell), typeof(SplashScreenHandler));
+        //#endif
+        //            });
+        builder.UseMauiApp<App>().UseMauiCommunityToolkit();
+
+        var services = new ServiceCollection();
+        RegisterDatabase(services);
+        RegisterServices(services);
+        RegisterViewModels(services);
+        RegisterRepositories(services);
+        RegisterPages(services);
+        RegisterLogging(services);
 
 #if DEBUG
-            builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
-            var serviceProvider = services.BuildServiceProvider();
-            App.ServiceProvider = serviceProvider;
-            
-            return builder.Build();
-        }
+        var serviceProvider = services.BuildServiceProvider();
+        App.ServiceProvider = serviceProvider;
 
-        private static void RegisterLogging(ServiceCollection services)
+        return builder.Build();
+    }
+
+    private static void RegisterLogging(ServiceCollection services)
+    {
+        services.AddLogging(loggingBuilder =>
         {
-            services.AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.AddConsole();
-                loggingBuilder.AddDebug();
-            });
-        }
+            loggingBuilder.AddConsole();
+            loggingBuilder.AddDebug();
+        });
+    }
 
-        private static void RegisterPages(ServiceCollection services)
-        {
-            services.AddTransient<AppShell>();
+    private static void RegisterPages(ServiceCollection services)
+    {
+        services.AddTransient<AppShell>();
 
-            services.AddScoped<GeneralTeamsPage>();
-            services.AddScoped<TomeasInfoPage>();
-            services.AddScoped<SxoliInfoPage>();
-            services.AddScoped<KoinotitaInfoPage>();
-            services.AddScoped<SkiniInfoPage>();
-            services.AddScoped<ExpensesPage>();
-            services.AddScoped<ToDoPage>();
+        services.AddScoped<GeneralTeamsPage>();
+        services.AddScoped<TomeasInfoPage>();
+        services.AddScoped<SxoliInfoPage>();
+        services.AddScoped<KoinotitaInfoPage>();
+        services.AddScoped<SkiniInfoPage>();
+        services.AddScoped<ExpensesPage>();
+        services.AddScoped<ToDoPage>();
 
-            services.AddScoped<MainPage>();
-            services.AddScoped<StaffPage>();
-            services.AddScoped<StelexosInfoPage>();
-            services.AddScoped<PaidiInfoPage>();
-            services.AddScoped<PaidiaPage>();
-        }
+        services.AddScoped<MainPage>();
+        services.AddScoped<StaffPage>();
+        services.AddScoped<StelexosInfoPage>();
+        services.AddScoped<PaidiInfoPage>();
+        services.AddScoped<PaidiaPage>();
+    }
 
-        private static void RegisterRepositories(ServiceCollection services)
-        {
-            services.AddScoped<IStaffRepository, StaffRepository>();
-            services.AddScoped<IPaidiRepository, PaidiRepository>();
-            services.AddScoped<ITeamsRepository, TeamsRepository>();
-            services.AddScoped<IExpenseRepository, ExpenseRepository>();
-            services.AddScoped<IDutyRepository, DutyRepository>();
-        }
+    private static void RegisterRepositories(ServiceCollection services)
+    {
+        services.AddScoped<IStaffRepository, StaffRepository>();
+        services.AddScoped<IPaidiRepository, PaidiRepository>();
+        services.AddScoped<ITeamsRepository, TeamsRepository>();
+        services.AddScoped<IExpenseRepository, ExpenseRepository>();
+        services.AddScoped<IDutyRepository, DutyRepository>();
+    }
 
-        private static void RegisterViewModels(ServiceCollection services)
-        {
-            services.AddTransient<SxoliViewModel>();
-            services.AddTransient<ExpensesViewModel>();
-            services.AddTransient<StaffViewModel>();
-            services.AddTransient<DutyViewModel>();
-            services.AddTransient<PaidiInfoViewModel>();
-            services.AddTransient<StelexosInfoViewModel>();
-        }
+    private static void RegisterViewModels(ServiceCollection services)
+    {
+        services.AddTransient<SxoliViewModel>();
+        services.AddTransient<ExpensesViewModel>();
+        services.AddTransient<StaffViewModel>();
+        services.AddTransient<DutyViewModel>();
+        services.AddTransient<PaidiInfoViewModel>();
+        services.AddTransient<StelexosInfoViewModel>();
+    }
 
-        private static void RegisterServices(ServiceCollection services)
-        {
-            services.AddScoped<IDutyService, DutyService>();
-            services.AddScoped<IStaffService, StaffService>();
-            services.AddScoped<IPaidiaService, PaidiaService>();
-            services.AddScoped<IExpenseService, ExpenseService>();
-            services.AddScoped<ITeamsService, TeamsService>();
-            services.AddScoped<SignalrService>();
-        }
+    private static void RegisterServices(ServiceCollection services)
+    {
+        services.AddScoped<IDutyService, DutyService>();
+        services.AddScoped<IStaffService, StaffService>();
+        services.AddScoped<IPaidiaService, PaidiaService>();
+        services.AddScoped<IExpenseService, ExpenseService>();
+        services.AddScoped<ITeamsService, TeamsService>();
+        services.AddScoped<SignalrService>();
+    }
 
-        private static void RegisterDatabase(IServiceCollection services)
-        {
-            services.AddSingleton<IDatabasePathProvider, DatabasePathProvider>();
-            services.AddAutoMapper(typeof(MappingProfile));
+    private static void RegisterDatabase(IServiceCollection services)
+    {
+        services.AddSingleton<IDatabasePathProvider, DatabasePathProvider>();
+        services.AddAutoMapper(typeof(MappingProfile));
 
 #if DEBUG
-            // Use SQLite in Debug mode
-            var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "app.db");
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlite($"Data Source={dbPath}");
-            });
-#else
-        // Use SQL Server in Release mode
+        // Use SQLite in Debug mode
+        var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "app.db");
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            options.UseSqlite($"Data Source={dbPath}");
         });
+#else
+    // Use SQL Server in Release mode
+    services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+    });
 #endif
-        }
     }
 }

@@ -33,20 +33,37 @@ namespace StelexarasApp.Tests.ViewModelsTests
         //    _mockPaidiaService.Verify(service => service.GetStelexoiAnaThesiInService(Thesi.Omadarxis), Times.Once);
         //}
 
-        private IEnumerable<StelexosDto> GetMockUpStelexoi()
+        private IStelexosDto GetMockUpStelexos(Thesi? thesi = Thesi.Omadarxis, string name = "Some name", string xwrosName = "someXwros")
         {
-            return
-            [
-                new()
+            return thesi switch
+            {
+                Thesi.Omadarxis => new OmadarxisDto
                 {
-                    Id = 1,
-                    FullName = "Some Name",
-                    Thesi = Thesi.Ekpaideutis,
-                    DtoXwrosName = "SomeXwros",
-                    Sex = Sex.Male,
-                    Age = 30,
-                }
-            ];
+                    Age = 20,
+                    FullName = name,
+                    Sex = Sex.Female,
+                    DtoXwrosName = xwrosName,
+                    Thesi = thesi ?? Thesi.None,
+                },
+                Thesi.Koinotarxis => new KoinotarxisDto
+                {
+                    Age = 20,
+                    FullName = name,
+                    Sex = Sex.Female,
+                    DtoXwrosName = xwrosName,
+                    Thesi = thesi ?? Thesi.None,
+                },
+                Thesi.Tomearxis => new TomearxisDto
+                {
+                    Age = 20,
+                    FullName = name,
+                    Sex = Sex.Female,
+                    DtoXwrosName = xwrosName,
+                    Thesi = thesi ?? Thesi.None,
+                },
+                _ => throw new ArgumentException("Invalid Thesi value", nameof(thesi)),
+            };
         }
+
     }
 }

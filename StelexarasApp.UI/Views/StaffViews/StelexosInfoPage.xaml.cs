@@ -2,33 +2,30 @@
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.PeopleViewModels;
 
-namespace StelexarasApp.UI.Views.StaffViews
+namespace StelexarasApp.UI.Views.StaffViews;
+
+public partial class StelexosInfoPage : ContentPage
 {
-    public partial class StelexosInfoPage : ContentPage
+    private readonly StelexosInfoViewModel? _stelexosinfoViewModel;
+    private readonly IStelexosDto stelexosDto1;
+
+    public StelexosInfoPage(IStaffService stelexiService, IStelexosDto stelexosDto)
     {
-        private StelexosInfoViewModel? _stelexosinfoViewModel;
-        private StelexosDto stelexosDto1;
+        InitializeComponent();
+        if (stelexosDto == null)
+            throw new ArgumentNullException(nameof(stelexosDto), "StelexosDto cannot be null");
 
-        public StelexosInfoPage(IStaffService stelexiService, StelexosDto stelexosDto, StelexosInfoViewModel stelexosInfoViewModel)
-        {
-            InitializeComponent();
-            if (stelexosDto == null)
-                throw new ArgumentNullException(nameof(stelexosDto), "StelexosDto cannot be null");
-            
-            _stelexosinfoViewModel = stelexosInfoViewModel ?? new StelexosInfoViewModel(stelexosDto, stelexiService);
-            stelexosDto1 = stelexosDto;
-            BindingContext = _stelexosinfoViewModel;
-        }
+        _stelexosinfoViewModel = new StelexosInfoViewModel(stelexosDto, stelexiService);
+        stelexosDto1 = stelexosDto;
+        BindingContext = _stelexosinfoViewModel;
+    }
 
-        private async void OnDeleteClicked(object sender, EventArgs e)
-        {
-            if (_stelexosinfoViewModel is null)
-            {
-                return;
-            }
+    private async void OnDeleteClicked(object sender, EventArgs e)
+    {
+        if (_stelexosinfoViewModel is null)
+            return;
 
-            await _stelexosinfoViewModel.DeleteStelexos(stelexosDto1);
-            await Navigation.PopAsync();
-        }
+        await _stelexosinfoViewModel.DeleteStelexos(stelexosDto1);
+        await Navigation.PopAsync();
     }
 }

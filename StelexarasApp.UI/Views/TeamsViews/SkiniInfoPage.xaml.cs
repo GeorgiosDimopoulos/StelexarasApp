@@ -1,5 +1,5 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.Services.DtosModels;
+using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.UI.Views.PaidiaViews;

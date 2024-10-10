@@ -26,7 +26,7 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<IEnumerable<StelexosDto>> GetAllStaffInService()
+    public async Task<IEnumerable<IStelexosDto>> GetAllStaffInService()
     {
         try
         {
@@ -39,7 +39,7 @@ public class StaffService : IStaffService
             var ekpaiduetesInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Ekpaideutis, string.Empty);
 
             var allStelexoiInDb = omadarxesInDb.Concat(koinotarxesInDb).Concat(tomearxesInDb).Concat(ekpaiduetesInDb);
-            var stelexoiInService = _mapper.Map<IEnumerable<StelexosDto>>(allStelexoiInDb);
+            var stelexoiInService = _mapper.Map<IEnumerable<IStelexosDto>>(allStelexoiInDb);
 
             if (stelexoiInService is null || !stelexoiInService.Any())
                 return null!;
@@ -74,7 +74,7 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<bool> AddStelexosInService(StelexosDto stelexosDto)
+    public async Task<bool> AddStelexosInService(IStelexosDto stelexosDto)
     {
         try
         {
@@ -181,7 +181,7 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<StelexosDto> GetStelexosByNameInService(string name, Thesi? thesi)
+    public async Task<IStelexosDto> GetStelexosByNameInService(string name, Thesi? thesi)
     {
         try
         {
@@ -189,7 +189,7 @@ public class StaffService : IStaffService
                 throw new InvalidOperationException("StaffRepository or _mapper cannot be null");
 
             var stelexosInDb = await _stelexiRepository.GetStelexosByNameInDb(name, thesi);
-            var stelexosInService = _mapper.Map<StelexosDto>(stelexosInDb);
+            var stelexosInService = _mapper.Map<IStelexosDto>(stelexosInDb);
             return stelexosInService;
         }
         catch (Exception ex)
@@ -279,7 +279,7 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<StelexosDto> GetStelexosByIdInService(int id, Thesi? thesi)
+    public async Task<IStelexosDto> GetStelexosByIdInService(int id, Thesi? thesi)
     {
         try
         {
@@ -290,7 +290,7 @@ public class StaffService : IStaffService
             if (stelexosInDb is null)
                 return null!;
 
-            var stelexosInService = _mapper.Map<StelexosDto>(stelexosInDb);
+            var stelexosInService = _mapper.Map<IStelexosDto>(stelexosInDb);
             return stelexosInService;
         }
         catch (Exception ex)
@@ -320,7 +320,7 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<bool> UpdateStelexosInService(StelexosDto stelexosDto)
+    public async Task<bool> UpdateStelexosInService(IStelexosDto stelexosDto)
     {
         if (_stelexiRepository is null || stelexosDto is null)
             throw new ArgumentException("StaffRepository or stelexosDto cannot be null");
@@ -354,7 +354,7 @@ public class StaffService : IStaffService
         }
     }
 
-    private IStelexos MapDtoToEntity(StelexosDto stelexosDto)
+    private IStelexos MapDtoToEntity(IStelexosDto stelexosDto)
     {
         if (stelexosDto is null)
             return null!;

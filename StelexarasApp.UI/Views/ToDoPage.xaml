@@ -8,6 +8,7 @@
 				<DataTemplate>
 					<StackLayout Padding="10">
 						<Label Text="{Binding Name}" FontSize="20"/>
+						<Label Text="{Binding Date, StringFormat='{0:MM/dd/yyyy}'}" FontSize="20"/>
 					</StackLayout>
 				</DataTemplate>
 			</CollectionView.ItemTemplate>

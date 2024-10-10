@@ -11,56 +11,50 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Tomearxis, IStelexos>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom<NonNullIdResolver>())
-            .ForMember(dest => dest.FullName, opt => opt.MapFrom<NonNullNameResolver>())
-            .ForMember(dest => dest.Tel, opt => opt.MapFrom<NonNullTelResolver>())
-            .ForMember(dest => dest.Age, opt => opt.MapFrom<NonNullAgeResolver>())
-            .ForMember(dest => dest.Sex, opt => opt.MapFrom<NonNullSexResolver>())
-            .ForMember(dest => dest.Thesi, opt => opt.MapFrom(src => src.Thesi))
-            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.Tomeas.Name))
+        CreateMap<IStelexosDto, IStelexos>()
+            //.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            //.ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+            //.ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel))
+            //.ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age))
+            //.ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
+            //.ForMember(dest => dest.Thesi, opt => opt.MapFrom(src => src.Thesi))
             .ReverseMap();
-        CreateMap<StelexosDto, IStelexos>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-            .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.Tel))
-            .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age))
-            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
-            .ForMember(dest => dest.Thesi, opt => opt.MapFrom(src => src.Thesi));
 
         CreateMap<TomearxisDto, Tomearxis>()
-            .IncludeBase<StelexosDto, IStelexos>()
-            .ForMember(dest => dest.Koinotarxes, opt => opt.MapFrom(src => src.KoinotarxesIds.Select(id => new Koinotarxis
-            {
-                Id = id,
-                Thesi = Thesi.Tomearxis,
-                Tel = src.Tel ?? string.Empty,
-                Age = src.Age,
-                FullName = src.FullName ?? string.Empty,
-                Sex = src.Sex
-            })))
+            .IncludeBase<IStelexosDto, IStelexos>()
+            //.ForMember(dest => dest.Koinotarxes, opt => opt.MapFrom(src => src.KoinotarxesIds != null ?
+            //src.KoinotarxesIds.Select(id => new Koinotarxis
+            //{
+            //    Id = id,
+            //    Thesi = Thesi.Tomearxis,
+            //    Tel = src.Tel ?? string.Empty,
+            //    Age = src.Age,
+            //    FullName = src.FullName ?? string.Empty,
+            //    Sex = src.Sex
+            //}) : new List<Koinotarxis>()))                        
+            .ForMember(dest => dest.Koinotarxes, opt => opt.Ignore())
             .ReverseMap();
 
         CreateMap<OmadarxisDto, Omadarxis>()
-            .IncludeBase<StelexosDto, IStelexos>()
+            .IncludeBase<IStelexosDto, IStelexos>()
             .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.DtoXwrosName))
             .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Id = src.SkiniId }))
             .ReverseMap();
 
         CreateMap<KoinotarxisDto, Koinotarxis>()
-            .IncludeBase<StelexosDto, IStelexos>()
+            .IncludeBase<IStelexosDto, IStelexos>()
             .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId ?? 0 }))
             .ReverseMap();
 
         CreateMap<EkpaideutisDto, Ekpaideutis>()
-            .IncludeBase<StelexosDto, IStelexos>()
+            .IncludeBase<IStelexosDto, IStelexos>()
             .ReverseMap();
 
         CreateMap<TomeasDto, Tomeas>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.TomearxisId, opt => opt.Ignore())
-            .ForMember(dest => dest.Tomearxis, opt => opt.Ignore())
+            .ForMember(dest => dest.Tomearxis, opt => opt.Ignore())                        
             .ForMember(dest => dest.Koinotites, opt => opt.MapFrom(src => new Tomeas
             {
                 Name = src.Name,

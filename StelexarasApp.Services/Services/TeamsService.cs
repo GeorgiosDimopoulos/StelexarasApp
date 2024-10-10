@@ -186,7 +186,7 @@ namespace StelexarasApp.Services.Services
             return Task.FromResult(true);
         }
 
-        public async Task<bool> CheckStelexousXwroNameInService(StelexosDto stelexosDto, string xwrosName)
+        public async Task<bool> CheckStelexousXwroNameInService(IStelexosDto stelexosDto, string xwrosName)
         {
             switch (stelexosDto.Thesi)
             {

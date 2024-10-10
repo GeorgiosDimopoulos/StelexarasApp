@@ -1,4 +1,4 @@
-﻿using StelexarasApp.Services.DtosModels;
+﻿using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Windows.Input;

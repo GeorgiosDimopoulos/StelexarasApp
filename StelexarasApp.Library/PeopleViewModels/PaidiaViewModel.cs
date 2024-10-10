@@ -1,4 +1,5 @@
-﻿using StelexarasApp.Services.DtosModels;
+﻿using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -6,11 +7,14 @@ namespace StelexarasApp.ViewModels.PeopleViewModels;
 
 public class PaidiaViewModel : INotifyPropertyChanged
 {
+    private readonly IPaidiaService _peopleService;
+
     public ObservableCollection<PaidiDto> PaidiaList { get; set; }
 
-    public PaidiaViewModel()
+    public PaidiaViewModel(IPaidiaService peopleService)
     {
-        PaidiaList = new ObservableCollection<PaidiDto>();
+        _peopleService = peopleService;
+        PaidiaList = [];
         LoadPaidia();
     }
 
@@ -19,7 +23,7 @@ public class PaidiaViewModel : INotifyPropertyChanged
         // ToDo: Load your data into PaidiaList
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

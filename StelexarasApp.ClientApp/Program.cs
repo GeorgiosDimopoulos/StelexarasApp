@@ -6,7 +6,6 @@ using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
-using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
@@ -167,12 +166,34 @@ class Program
         };
     }
 
-    private static StelexosDto CreateStelexosFromUserInput(Thesi stelexosThesi) => new()
+    private static IStelexosDto CreateStelexosFromUserInput(Thesi stelexosThesi)
     {
-        FullName = GetPersonName(),
-        Age = GetPersonAge(),
-        Thesi = stelexosThesi
-    };
+        var fullName = GetPersonName();
+        var age = GetPersonAge();
+
+        return stelexosThesi switch
+        {
+            Thesi.Omadarxis => new OmadarxisDto
+            {
+                FullName = fullName,
+                Age = age,
+                Thesi = stelexosThesi
+            },
+            Thesi.Koinotarxis => new KoinotarxisDto
+            {
+                FullName = fullName,
+                Age = age,
+                Thesi = stelexosThesi
+            },
+            Thesi.Tomearxis => new TomearxisDto
+            {
+                FullName = fullName,
+                Age = age,
+                Thesi = stelexosThesi
+            },
+            _ => throw new ArgumentException("Invalid Thesi value")
+        };
+    }
 
     private static PaidiDto CreatePaidiFromUserInput(int typeOfPaidi) => new()
     {

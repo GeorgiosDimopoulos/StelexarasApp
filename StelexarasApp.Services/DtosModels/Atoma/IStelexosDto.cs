@@ -3,7 +3,7 @@ using StelexarasApp.DataAccess.Models.Atoma;
 
 namespace StelexarasApp.Services.DtosModels.Atoma
 {
-    public class StelexosDto
+    public interface IStelexosDto
     {
         public string? FullName { get; set; }
         public int Age { get; set; }

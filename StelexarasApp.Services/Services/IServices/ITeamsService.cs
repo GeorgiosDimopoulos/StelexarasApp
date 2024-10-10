@@ -9,7 +9,7 @@ public interface ITeamsService
     Task<bool> AddSkiniInService(SkiniDto skini);
     Task<bool> AddKoinotitaInService(KoinotitaDto skini);
     Task<bool> AddTomeasInService(TomeasDto skini);
-    Task<bool> CheckStelexousXwroNameInService(StelexosDto stelexosDto, string xwrosName);
+    Task<bool> CheckStelexousXwroNameInService(IStelexosDto stelexosDto, string xwrosName);
 
     Task<bool> DeleteSkiniInService(int skiniId);
     Task<bool> DeleteKoinotitaInService(int koinotitaId);

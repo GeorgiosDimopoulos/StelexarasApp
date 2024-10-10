@@ -22,7 +22,7 @@ public class StaffServiceTests
         // ToDo: do we need it here?
         var config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Omadarxis, StelexosDto>();
+            cfg.CreateMap<Omadarxis, IStelexosDto>();
         });
         _mapper = config.CreateMapper();
 
@@ -58,7 +58,7 @@ public class StaffServiceTests
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(id, thesi)).ReturnsAsync(stelexos);
-        _mockMapper.Setup(m => m.Map<StelexosDto>(stelexos)).Returns(expectedStelexosDto);
+        _mockMapper.Setup(m => m.Map<IStelexosDto>(stelexos)).Returns(expectedStelexosDto);
 
         // Act
         var result = await _stelexiService.GetStelexosByIdInService(id, thesi);
@@ -66,7 +66,7 @@ public class StaffServiceTests
         // Assert
         Assert.NotNull(result);
         _mockStelexiRepository.Verify(r => r.GetStelexosByIdInDb(id, thesi), Times.Once);
-        _mockMapper.Verify(m => m.Map<StelexosDto>(stelexos), Times.Once);
+        _mockMapper.Verify(m => m.Map<IStelexosDto>(stelexos), Times.Once);
     }
 
     [Theory]
@@ -77,13 +77,52 @@ public class StaffServiceTests
     public async Task GetStelexosByNameInService(string name, Thesi thesi)
     {
         // Arrange
-        var expectedStelexosDto = new StelexosDto
+        IStelexosDto stelexosDto = null!;
+        switch (thesi)
         {
-            FullName = name,
-            Age = 30,
-            Tel = "1234567890",
-            Thesi = thesi
-        };
+            case Thesi.None:
+                break;
+            case Thesi.Omadarxis:
+                stelexosDto = new OmadarxisDto
+                {
+                    FullName = name,
+                    Age = 30,
+                    Tel = "1234567890",
+                    Thesi = thesi,
+                    Sex = Sex.Male,
+                    DtoXwrosName = "TestXwros",
+                    SkiniId = 1,
+                };
+                break;
+            case Thesi.Tomearxis:
+                stelexosDto = new TomearxisDto
+                {
+                    FullName = name,
+                    Age = 30,
+                    Tel = "1234567890",
+                    Thesi = thesi,
+                    Sex = Sex.Male,
+                    DtoXwrosName = "TestXwros",
+                    KoinotarxesIds = new List<int> { 1, 2 },
+                };
+                break;
+            case Thesi.Koinotarxis:
+                stelexosDto = new KoinotarxisDto
+                {
+                    FullName = name,
+                    Age = 30,
+                    Tel = "1234567890",
+                    Thesi = thesi,
+                    Sex = Sex.Male,
+                    TomeasName = "TestTomea",
+                    KoinotitaId = 1,
+                    DtoXwrosName = "TestXwros",
+                };
+                break;
+            default:
+                break;
+        }
+
         IStelexos stelexos = null;
         switch (thesi)
         {
@@ -131,7 +170,7 @@ public class StaffServiceTests
         }
 
         _mockStelexiRepository.Setup(r => r.GetStelexosByNameInDb(name, thesi)).ReturnsAsync(stelexos);
-        _mockMapper.Setup(m => m.Map<StelexosDto>(stelexos)).Returns(expectedStelexosDto);
+        _mockMapper.Setup(m => m.Map<IStelexosDto>(stelexos)).Returns(stelexosDto);
 
         // Act
         var result = await _stelexiService.GetStelexosByNameInService(name, thesi);
@@ -140,7 +179,7 @@ public class StaffServiceTests
         Assert.NotNull(result);
         Assert.Equal(name, result.FullName);
         _mockStelexiRepository.Verify(r => r.GetStelexosByNameInDb(name, thesi), Times.Once);
-        _mockMapper.Verify(m => m.Map<StelexosDto>(stelexos), Times.Once);
+        _mockMapper.Verify(m => m.Map<IStelexosDto>(stelexos), Times.Once);
     }
 
     [Fact]
@@ -403,7 +442,7 @@ public class StaffServiceTests
         Assert.Equal("John Doe", result.First().FullName);
 
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotitaName), Times.Once);
-        _mockMapper.Verify(m => m.Map<IEnumerable<StelexosDto>>(stelexoi), Times.Once);
+        _mockMapper.Verify(m => m.Map<IEnumerable<IStelexosDto>>(stelexoi), Times.Once);
     }
 
     [Fact]

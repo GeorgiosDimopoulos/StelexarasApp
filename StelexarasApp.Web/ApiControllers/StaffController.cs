@@ -151,7 +151,7 @@ namespace StelexarasApp.Web.ApiControllers
         }
 
         [HttpGet("StelexosByName")]
-        public async Task<ActionResult<StelexosDto>> GetStelexosByNameInService(string name, string? thesiStr)
+        public async Task<ActionResult<IStelexosDto>> GetStelexosByNameInService(string name, string? thesiStr)
         {
             var thesi = Thesi.None;
             if (thesiStr is not null)

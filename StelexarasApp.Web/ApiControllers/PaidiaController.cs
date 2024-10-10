@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Services.DtosModels;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
+using StelexarasApp.Services.DtosModels.Atoma;
 namespace StelexarasApp.Web.ApiControllers
 {
     [ApiController]
