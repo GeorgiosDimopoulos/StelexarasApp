@@ -78,7 +78,7 @@ public static class MauiProgram
         services.AddScoped<KoinotitaInfoPage>();
         services.AddScoped<SkiniInfoPage>();
         services.AddScoped<ExpensesPage>();
-        services.AddScoped<ToDoPage>();
+        services.AddScoped<DutiesPage>();
 
         services.AddScoped<MainPage>();
         services.AddScoped<StaffPage>();

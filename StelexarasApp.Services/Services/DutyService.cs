@@ -22,10 +22,18 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> AddDutyInService(Duty duty)
         {
-            if (string.IsNullOrEmpty(duty.Name) || _dutyRepository is null)
-                throw new ArgumentException("Duty name or duty Repository cannot be null");
+            try
+            {
+                if (string.IsNullOrEmpty(duty.Name) || _dutyRepository is null)
+                    throw new ArgumentException("Duty name or duty Repository cannot be null");
 
-            return await _dutyRepository.AddDutyInDb(duty);
+                return await _dutyRepository.AddDutyInDb(duty);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
         public async Task<bool> DeleteDutyInService(int dutyId)
         {

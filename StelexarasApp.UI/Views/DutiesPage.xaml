@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StelexarasApp.UI.Views.ToDoPage">
+             x:Class="StelexarasApp.UI.Views.DutiesPage" Title="Υποχρεωσεις!">
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="+" Order="Primary" Priority="0" Clicked="AddDuty_Clicked"/>
+	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
-		<CollectionView ItemsSource="{Binding Duties}">
+		<CollectionView ItemsSource="{Binding Duties}" SelectionChanged="OnDutyTapped">
 			<CollectionView.ItemTemplate>
 				<DataTemplate>
 					<StackLayout Padding="10">

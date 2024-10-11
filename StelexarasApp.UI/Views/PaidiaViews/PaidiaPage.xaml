@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StelexarasApp.UI.Views.PaidiaViews.PaidiaPage"
-             Title="Paidia">
+             Title="Παιδιά">
 	<ContentPage.Content>
 		<CollectionView ItemsSource="{Binding PaidiaList}" SelectionMode="Single" SelectionChanged="OnPaidiSelected">
 			<CollectionView.Header>

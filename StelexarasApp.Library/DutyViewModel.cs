@@ -7,38 +7,24 @@ namespace StelexarasApp.ViewModels;
 public class DutyViewModel
 {
     private readonly IDutyService _dutyService;
+
     public ObservableCollection<Duty> Duties { get; set; } = [];
 
+    // public Command<Duty> DeleteDutyCommand { get; }
     public DutyViewModel(IDutyService dutyService)
     {
-        _dutyService = dutyService;        
+        _dutyService = dutyService;
+
+        // DeleteDutyCommand = new Command<Duty>(async (duty) => await DeleteDutyAsync(duty));
         LoadDuties();
-    }
-
-    public async Task<bool> AddDuty(string dutyName)
-    {
-        if (string.IsNullOrEmpty(dutyName))
-            return false;
-
-        var duty = new Duty
-        {
-            Name = dutyName,
-            Date = DateTime.Now
-        };
-
-        var result = await _dutyService.AddDutyInService(duty);
-        if (result)
-            return true;
-
-        return false;
     }
 
     public async Task<bool> DeleteDuty(int id)
     {
         var result = await _dutyService.DeleteDutyInService(id);
+
         if (result)
             return true;
-
         return false;
     }
 
@@ -61,5 +47,22 @@ public class DutyViewModel
 
         foreach (var duty in duties)
             Duties.Add(duty);
+    }
+
+    public async Task<bool> AddDuty(string dutyName)
+    {
+        var duty = new Duty
+        {
+            Name = dutyName,
+            Date = DateTime.Now
+        };
+        var result = await _dutyService.AddDutyInService(duty);
+
+        if (result)
+        {
+            Duties.Add(duty);
+            return true;
+        }
+        return false;
     }
 }

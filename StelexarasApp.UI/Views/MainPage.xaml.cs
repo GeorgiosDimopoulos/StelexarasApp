@@ -98,6 +98,6 @@ public partial class MainPage : ContentPage
         await Navigation.PushAsync(staffPage);
     }
 
-    private async void OnDutiesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new ToDoPage(_dutiesService));
+    private async void OnDutiesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new DutiesPage(_dutiesService));
     private async void OnPaidiaButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new PaidiaPage(_paidiaService));
 }
