@@ -57,6 +57,36 @@ public class ExpenseViewModelTest
         Assert.Equal("Load successful", _expenseInfoViewModel.StatusMessage);
     }
 
+    [Theory]
+    [InlineData(1, "New Description", true)]
+    public async Task UpdateExpense_PositiveTest(int id, string newName, bool expectedResult)
+    {
+        // Arrange
+        var expense = new Expense { Id = id, Description = "Old Description", Amount = 100, Date = DateTime.Today };
+        _expenseService.Setup(service => service.UpdateExpenseInService(id, It.IsAny<Expense>())).ReturnsAsync(expectedResult);
+
+        // Act
+        await _expenseInfoViewModel.UpdateExpense(expense, newName);
+
+        // Assert
+        _expenseService.Verify(service => service.UpdateExpenseInService(id, It.Is<Expense>(e => e.Description == newName)), Times.Once);
+    }
+
+    [Theory]
+    [InlineData(1, "New Description", false)]
+    public async Task UpdateExpense_NegativeTest(int id, string newName, bool expectedResult)
+    {
+        // Arrange
+        var expense = new Expense { Id = id, Description = "Old Description", Amount = 100, Date = DateTime.Today };
+        _expenseService.Setup(service => service.UpdateExpenseInService(id, It.IsAny<Expense>())).ReturnsAsync(expectedResult);
+
+        // Act
+        await _expenseInfoViewModel.UpdateExpense(expense, newName);
+
+        // Assert
+        _expenseService.Verify(service => service.UpdateExpenseInService(id, It.Is<Expense>(e => e.Description == newName)), Times.Once);
+    }
+
     private Expense GetMockUpExpense()
     {
         return new Expense

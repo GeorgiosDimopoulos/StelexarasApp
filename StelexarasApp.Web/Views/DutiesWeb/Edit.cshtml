@@ -1,10 +1,10 @@
 ﻿@model StelexarasApp.DataAccess.Models.Duty
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData ["Title"] = "Edit Duty";
 }
 
-<h1>Edit</h1>
+<h1>Edit Duty</h1>
 
 <h4>Duty</h4>
 <hr />
@@ -13,16 +13,20 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
+            <!-- Updated: Add 'type=date' for date input -->
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" class="form-control" type="date" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -35,5 +39,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

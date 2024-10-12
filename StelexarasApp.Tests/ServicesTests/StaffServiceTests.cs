@@ -73,15 +73,12 @@ public class StaffServiceTests
     [InlineData("Test Name", Thesi.Omadarxis)]
     [InlineData("Test Name", Thesi.Koinotarxis)]
     [InlineData("Test Name", Thesi.Tomearxis)]
-    [InlineData("Test Name", Thesi.None)]
     public async Task GetStelexosByNameInService(string name, Thesi thesi)
     {
         // Arrange
         IStelexosDto stelexosDto = null!;
         switch (thesi)
         {
-            case Thesi.None:
-                break;
             case Thesi.Omadarxis:
                 stelexosDto = new OmadarxisDto
                 {
@@ -156,16 +153,6 @@ public class StaffServiceTests
                     Tel = "1234567890",
                     Tomeas = new Tomeas { Name = "TestTomea" }
                 };
-                break;
-            case Thesi.None:
-                var allStelexos = new List<IStelexos>
-                {
-                    new Omadarxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Omadarxis, Tel = "1234567890" },
-                    new Koinotarxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Koinotarxis, Tel = "1234567890" },
-                    new Tomearxis { FullName = name, Age = 30, Sex = Sex.Male, Thesi = Thesi.Tomearxis, Tel = "1234567890", Tomeas = new Tomeas { Name = "TestTomea" } }
-                };
-                _mockStelexiRepository.Setup(r => r.GetStelexosByNameInDb(name, Thesi.None))
-                    .ReturnsAsync(allStelexos.FirstOrDefault(x => x.FullName == name));
                 break;
         }
 

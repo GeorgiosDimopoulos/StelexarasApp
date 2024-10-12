@@ -6,7 +6,7 @@
 		<ToolbarItem Text="Προσθήκη" Order="Primary" Priority="0" Clicked="OnAddExpenseClicked" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
-		<CollectionView ItemsSource="{Binding Expenses}">
+		<CollectionView ItemsSource="{Binding Expenses}" SelectionChanged="OnExpenseTapped">
 			<CollectionView.Header>
 				<Grid Padding="10">
 					<Grid.ColumnDefinitions>

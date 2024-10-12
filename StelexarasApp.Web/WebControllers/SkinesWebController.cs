@@ -1,21 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 
-public class TeamsWebController (ITeamsService teamsService, ILogger<TeamsWebController> logger) : Controller
+[Route("[controller]")]
+public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebController> logger) : Controller
 {
     private readonly ITeamsService _teamsService = teamsService;
-    private readonly ILogger<TeamsWebController> _logger = logger;
+    private readonly ILogger<SkinesWebController> _logger = logger;
 
     // GET: TeamsWeb
     public async Task<IActionResult> Index()
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         try
         {
             var allSkines = await _teamsService.GetAllSkinesInService();
@@ -28,6 +25,7 @@ public class TeamsWebController (ITeamsService teamsService, ILogger<TeamsWebCon
                 _logger.LogWarning("Not all Teams found.");
                 return NotFound("Not all Teams Data");
             }
+
             return View(allTeams);
         }
         catch (Exception ex)

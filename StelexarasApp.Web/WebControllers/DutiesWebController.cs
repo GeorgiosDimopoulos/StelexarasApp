@@ -5,6 +5,7 @@ using StelexarasApp.DataAccess.Models;
 
 namespace StelexarasApp.Web.WebControllers;
 
+[Route("[controller]")]
 public class DutiesWebController(AppDbContext context) : Controller
 {
     private readonly AppDbContext _context = context;

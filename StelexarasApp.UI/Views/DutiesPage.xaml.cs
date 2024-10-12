@@ -75,7 +75,6 @@ public partial class DutiesPage : ContentPage
                 break;
         }
 
-    // Deselect the item
     ((CollectionView)sender).SelectedItem = null;
     }
 }

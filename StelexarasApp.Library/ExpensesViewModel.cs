@@ -26,9 +26,9 @@ namespace StelexarasApp.ViewModels
             OnPropertyChanged(nameof(StatusMessage));
         }
 
-        public void DeleteExpense(int id)
+        public async Task DeleteExpense(int id)
         {
-            _expenseService.DeleteExpenseInService(id);
+            await _expenseService.DeleteExpenseInService(id);
         }
 
         public async Task LoadExpensesAsync()
@@ -45,6 +45,12 @@ namespace StelexarasApp.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public async Task UpdateExpense(Expense selected, string newName)
+        {
+            selected.Description = newName;
+            await _expenseService.UpdateExpenseInService(selected.Id, selected);
         }
     } 
 }

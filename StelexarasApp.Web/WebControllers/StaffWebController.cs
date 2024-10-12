@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services.IServices;
 using System.Collections;
 
 namespace StelexarasApp.Web.WebControllers;
 
+[Route("[controller]")]
 public class StaffWebController(IStaffService staffService, ITeamsService teamsService, ILogger<StaffWebController> logger) : Controller
 {
     private readonly IStaffService _staffService = staffService;

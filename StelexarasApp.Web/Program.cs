@@ -3,7 +3,6 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Services.DtosModels;
 using StelexarasApp.Services.Services;
 using StelexarasApp.ViewModels;
 using StelexarasApp.Services.Services.IServices;
@@ -12,8 +11,6 @@ using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.Web;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Mappers;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using Microsoft.DotNet.Scaffolding.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +22,65 @@ builder.Logging.AddConsole();
 var app = builder.Build();
 SeedDbWithMockData(app).Wait();
 
+var koinotitaRedirectUrl = builder.Configuration ["KoinotitaRedirectUrl"];
+var dutiesRedirectUrl = builder.Configuration ["DutiesRedirectUrl"];
+var expensesRedirectUrl = builder.Configuration ["ExpensesRedirectUrl"];
+
+// Custom redirect middleware
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.ToString();
+
+    if (string.IsNullOrEmpty(path) || path == "")
+    {
+        Console.WriteLine("Redirecting to default: /KoinotitaWeb/Index");
+        context.Response.Redirect("/KoinotitaWeb/Index");
+        return;
+    }
+    else if (context.Request.Path == "/")
+    {
+        Console.WriteLine("Redirecting to /: /KoinotitaWeb/Index");
+        context.Response.Redirect("KoinotitaWeb/Index"); // KoinotitaWeb
+        return;
+    }
+    else if (path.StartsWith("/koinotita", StringComparison.OrdinalIgnoreCase))
+    {
+        Console.WriteLine($"Redirecting to Koinotita RedirectUrl: {koinotitaRedirectUrl}");
+        context.Response.Redirect(koinotitaRedirectUrl!);
+        return;
+    }   
+    else if (path.StartsWith("/duties", StringComparison.OrdinalIgnoreCase))
+    {
+        Console.WriteLine($"Redirecting to duties RedirectUrl: {dutiesRedirectUrl}");
+        context.Response.Redirect(dutiesRedirectUrl!);
+        return;
+    }
+    else if (path.StartsWith("/expenses", StringComparison.OrdinalIgnoreCase))
+    {
+        Console.WriteLine($"Redirecting to ExpensesRedirectUrl: {expensesRedirectUrl}");
+        context.Response.Redirect(expensesRedirectUrl!);
+        return;
+    }
+    
+    Console.WriteLine("No redirect, processing request further.");
+    await next();
+});
+
+// Middleware order
+app.UseRouting();
+app.UseStaticFiles();
+app.MapHealthChecks("/health");
+app.UseHttpsRedirection();
+app.UseAuthorization();
+
+// Map routes for controllers
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
+app.MapControllers();
+app.MapHub<MyHub>("/myhub");
+
+// Swagger setup
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger(c =>
@@ -40,33 +96,6 @@ if (app.Environment.IsDevelopment())
 
     app.UseDeveloperExceptionPage();
 }
-
-// var redirectUrl = Environment.GetEnvironmentVariable("DEFAULT_REDIRECT_URL") ?? "/KoinotitaWeb/Index";
-var redirectUrl = builder.Configuration ["DefaultRedirectUrl"];
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path == "/")
-    {
-        context.Response.Redirect(redirectUrl);
-        return;
-    }
-
-    await next();
-});
-
-// Middleware order
-app.UseRouting();
-app.UseStaticFiles();
-
-app.MapHealthChecks("/health");
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-
-app.MapControllerRoute(name: "default", pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
-
-app.MapControllers();
-app.MapHub<MyHub>("/myhub");
 
 app.Run();
 
@@ -119,7 +148,7 @@ void ConfigureServives(WebApplicationBuilder builder)
 
     // Add DbContext with SQL Server
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 }
 
 static async Task SeedDbWithMockData(WebApplication app)
@@ -138,16 +167,4 @@ static async Task SeedDbWithMockData(WebApplication app)
     {
         Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
     }
-}
-
-static IStelexosDto CreateStelexosDto(Thesi thesi)
-{
-    return thesi switch
-    {
-        Thesi.Omadarxis => new OmadarxisDto(),
-        Thesi.Koinotarxis => new KoinotarxisDto(),
-        Thesi.Tomearxis => new TomearxisDto(),
-        Thesi.None => null,
-        _ => throw new ArgumentException("Invalid Thesi", nameof(thesi))
-    };
 }
