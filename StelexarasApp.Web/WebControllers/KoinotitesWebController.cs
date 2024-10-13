@@ -2,144 +2,137 @@
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.WebControllers
+namespace StelexarasApp.Web.WebControllers;
+
+[Route("[controller]")]
+public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<KoinotitaWebController> logger) : Controller
 {
-    [Route("[controller]")]
-    public class KoinotitesWebController : Controller
+    private readonly ITeamsService _koinotitaService = koinotitaService;
+    private readonly ILogger<KoinotitaWebController> _logger = logger;
+
+    // GET: KoinotitaWeb
+    public async Task<IActionResult> Index()
     {
-        private readonly ITeamsService _koinotitaService;
-        private readonly ILogger<KoinotitaWebControllerOLD> _logger;
-
-        public KoinotitesWebController(ITeamsService koinotitaService, ILogger<KoinotitaWebControllerOLD> logger)
+        try
         {
-            _koinotitaService = koinotitaService;
-            _logger = logger;
+            var allKoinotites = await _koinotitaService.GetAllKoinotitesInService();
+            if (allKoinotites == null || !allKoinotites.Any())
+            {
+                _logger.LogWarning("No Koinotites found.");
+                return NotFound("No Koinotites Data");
+            }
+            return View(allKoinotites);
         }
-
-        // GET: KoinotitaWeb
-        public async Task<IActionResult> Index()
+        catch (Exception ex)
         {
-            try
-            {
-                var allKoinotites = await _koinotitaService.GetAllKoinotitesInService();
-                if (allKoinotites == null || !allKoinotites.Any())
-                {
-                    _logger.LogWarning("No Koinotites found.");
-                    return NotFound("No Koinotites Data");
-                }
-                return View(allKoinotites);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching Koinotites.");
-                return View("Error");
-            }
+            _logger.LogError(ex, "An error occurred while fetching Koinotites.");
+            return View("Error");
         }
+    }
 
-        // GET: KoinotitaWeb/Details/5
-        public async Task<IActionResult> Details(string name)
+    // GET: KoinotitaWeb/Details/5
+    public async Task<IActionResult> Details(string name)
+    {
+        try
         {
-            try
+            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
+            if (koinotita == null)
             {
-                var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
-                if (koinotita == null)
-                {
-                    _logger.LogWarning("Koinotita not found.");
-                    return NotFound("Koinotita not found.");
-                }
-                return View(koinotita);
+                _logger.LogWarning("Koinotita not found.");
+                return NotFound("Koinotita not found.");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching Koinotita details.");
-                return View("Error");
-            }
+            return View(koinotita);
         }
-
-        // POST: KoinotitaWeb/Create
-        [HttpPost]
-        public async Task<IActionResult> Create(KoinotitaDto koinotita)
+        catch (Exception ex)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            try
-            {
-                var result = await _koinotitaService.AddKoinotitaInService(koinotita);
-                if (!result)
-                {
-                    _logger.LogWarning("Koinotita not created.");
-                    return NotFound("Koinotita not created.");
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while creating Koinotita.");
-                return View("Error");
-            }
+            _logger.LogError(ex, "An error occurred while fetching Koinotita details.");
+            return View("Error");
         }
+    }
 
-        // GET: KoinotitaWeb/Edit/5
-        public async Task<IActionResult> Edit(string name)
+    // POST: KoinotitaWeb/Create
+    [HttpPost]
+    public async Task<IActionResult> Create(KoinotitaDto koinotita)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
         {
-            try
+            var result = await _koinotitaService.AddKoinotitaInService(koinotita);
+            if (!result)
             {
-                var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
-                if (koinotita == null)
-                {
-                    _logger.LogWarning("Koinotita not found.");
-                    return NotFound("Koinotita not found.");
-                }
-                return View(koinotita);
+                _logger.LogWarning("Koinotita not created.");
+                return NotFound("Koinotita not created.");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching Koinotita for editing.");
-                return View("Error");
-            }
+            return RedirectToAction(nameof(Index));
         }
-
-        // GET: KoinotitaWeb/Delete/5
-        public async Task<IActionResult> Delete(string name)
+        catch (Exception ex)
         {
-            try
-            {
-                var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
-                if (koinotita == null)
-                {
-                    _logger.LogWarning("Koinotita not found.");
-                    return NotFound("Koinotita not found.");
-                }
-                return View(koinotita);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching Koinotita for deletion.");
-                return View("Error");
-            }
+            _logger.LogError(ex, "An error occurred while creating Koinotita.");
+            return View("Error");
         }
+    }
 
-        // POST: KoinotitaWeb/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+    // GET: KoinotitaWeb/Edit/5
+    public async Task<IActionResult> Edit(string name)
+    {
+        try
         {
-            try
+            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
+            if (koinotita == null)
             {
-                var result = await _koinotitaService.DeleteKoinotitaInService(id);
-                if (!result)
-                {
-                    _logger.LogWarning("Koinotita not deleted.");
-                    return NotFound("Koinotita not deleted.");
-                }
-                return RedirectToAction(nameof(Index));
+                _logger.LogWarning("Koinotita not found.");
+                return NotFound("Koinotita not found.");
             }
-            catch (Exception ex)
+            return View(koinotita);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while fetching Koinotita for editing.");
+            return View("Error");
+        }
+    }
+
+    // GET: KoinotitaWeb/Delete/5
+    public async Task<IActionResult> Delete(string name)
+    {
+        try
+        {
+            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
+            if (koinotita == null)
             {
-                _logger.LogError(ex, "An error occurred while deleting Koinotita.");
-                return View("Error");
+                _logger.LogWarning("Koinotita not found.");
+                return NotFound("Koinotita not found.");
             }
+            return View(koinotita);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while fetching Koinotita for deletion.");
+            return View("Error");
+        }
+    }
+
+    // POST: KoinotitaWeb/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        try
+        {
+            var result = await _koinotitaService.DeleteKoinotitaInService(id);
+            if (!result)
+            {
+                _logger.LogWarning("Koinotita not deleted.");
+                return NotFound("Koinotita not deleted.");
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while deleting Koinotita.");
+            return View("Error");
         }
     }
 }

@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\SkinesWeb\Create.cshtml" />
+    <Content Remove="Views\SkinesWeb\Details.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,6 +28,15 @@
     <ProjectReference Include="..\StelexarasApp.DataAccess\StelexarasApp.DataAccess.csproj" />
     <ProjectReference Include="..\StelexarasApp.Library\StelexarasApp.ViewModels.csproj" />
     <ProjectReference Include="..\StelexarasApp.Services\StelexarasApp.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\StaffWeb\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\SkinesWeb\Create.cshtml" />
+    <None Include="Views\SkinesWeb\Details.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -1,180 +1,203 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Services.IServices;
-using System.Collections;
 
 namespace StelexarasApp.Web.WebControllers;
 
 [Route("[controller]")]
-public class StaffWebController(IStaffService staffService, ITeamsService teamsService, ILogger<StaffWebController> logger) : Controller
+public class StaffWebController : Controller
 {
-    private readonly IStaffService _staffService = staffService;
-    private readonly ILogger<StaffWebController> _logger = logger;
-    private readonly ITeamsService _teamsService = teamsService;
+    private readonly IStaffService _staffService;
+    private readonly ILogger<StaffWebController> _logger;
+
+    public StaffWebController(IStaffService staffService, ILogger<StaffWebController> logger)
+    {
+        _staffService = staffService;
+        _logger = logger;
+    }
 
     // GET: StaffWeb
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         try
         {
-            var staff = await _staffService.GetAllStaffInService();
-            if (staff == null || !staff.Any())
+            var staffList = await _staffService.GetAllStaffInService();
+            if (staffList == null || !staffList.Any())
             {
-                _logger.LogWarning("No Staff found.");
-                return NotFound("No Staff Data");
+                _logger.LogWarning("No staff members found.");
+                return NotFound("No staff data available.");
             }
-            return View(staff);
+            return View(staffList);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching in Index Staff.");
+            _logger.LogError(ex, "An error occurred while fetching the staff list.");
             return View("Error");
         }
     }
 
     // GET: StaffWeb/Details/5
+    [HttpGet("Details/{id:int}")]
     public async Task<IActionResult> Details(int id, Thesi thesi)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        if (id <= 0)
+            return BadRequest("Invalid staff ID.");
 
         try
         {
-            var staff = await _staffService.GetStelexosByIdInService(id, thesi);
-            if (staff == null)
+            var staffMember = await _staffService.GetStelexosByIdInService(id, thesi);
+            if (staffMember == null)
             {
-                _logger.LogWarning("No Staff found.");
-                return NotFound("No Staff Data");
+                _logger.LogWarning($"Staff member with ID {id} not found.");
+                return NotFound("Staff member not found.");
             }
-            return View(staff);
+            return View(staffMember);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching in Details Staff.");
+            _logger.LogError(ex, $"An error occurred while fetching details for staff member with ID {id}.");
             return View("Error");
         }
     }
 
-    // POST: StaffWeb/Create
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("FullName,Age,Sex,XwrosName")] IStelexosDto stelexos, Thesi thesi)
+    // GET: StaffWeb/Create
+    [HttpGet("Create")]
+    public IActionResult Create()
     {
+        return View();
+    }
+
+    // POST: StaffWeb/Create
+    [HttpPost("Create")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("FullName,Position,Phone")] IStelexosDto staffDto)
+    {
+        if (!ModelState.IsValid)
+            return View(staffDto);
+
         try
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _staffService.AddStelexosInService(stelexos);
-                if (result)
-                    return RedirectToAction("Index");
+            var result = await _staffService.AddStelexosInService(staffDto);
+            if (result)
+                return RedirectToAction(nameof(Index));
 
-                ModelState.AddModelError("", "An error occurred while adding the Stelexos.");
-            }
-
-            ViewData ["SkiniId"] = new SelectList(await _teamsService.GetAllSkinesInService(), "Id", "Name", stelexos.DtoXwrosName);
-            return View(stelexos);
+            ModelState.AddModelError("", "Failed to create staff member.");
+            return View(staffDto);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while Create Stelexos.");
+            _logger.LogError(ex, "An error occurred while creating a new staff member.");
             return View("Error");
         }
     }
 
     // GET: StaffWeb/Edit/5
+    [HttpGet("Edit/{id:int}")]
     public async Task<IActionResult> Edit(int id, Thesi thesi)
     {
+        if (id <= 0)
+            return BadRequest("Invalid staff ID.");
+
         try
         {
-            if (id <= 0)
-                return NotFound();
-
-            var paidi = await _staffService.GetStelexosByIdInService(id, thesi);
-            if (paidi == null)
-                return NotFound();
-
-            ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.DtoXwrosName);
-            return View(paidi);
+            var staffMember = await _staffService.GetStelexosByIdInService(id, thesi);
+            if (staffMember == null)
+            {
+                _logger.LogWarning($"Staff member with ID {id} not found.");
+                return NotFound("Staff member not found.");
+            }
+            return View(staffMember);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while Edit Stelexos.");
+            _logger.LogError(ex, $"An error occurred while fetching staff member with ID {id} for editing.");
             return View("Error");
         }
     }
 
     // POST: StaffWeb/Edit/5
-    [HttpPost]
+    [HttpPost("Edit/{id:int}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("FullName,Id,Age,Sex,Thesi,SkiniName")] IStelexosDto stelexosDto, Thesi thesi)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Position,Phone")] IStelexosDto staffDto, Thesi? thesi)
     {
-        if (id != stelexosDto.Id || stelexosDto is null)
-            return NotFound();
+        if (id != staffDto.Id)
+            return BadRequest("Mismatched staff ID.");
 
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                await _staffService.UpdateStelexosInService(stelexosDto);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                var existed = _staffService.GetStelexosByIdInService(id, thesi);
-                if (existed is null)
-                    return NotFound("DbUpdateConcurrencyException: Stelexos not found in Db");
-                else
-                    return NotFound();
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", stelexosDto.DtoXwrosName);
-        return View(stelexosDto);
-    }
+        if (!ModelState.IsValid)
+            return View(staffDto);
 
-    // GET: StaffWeb/Delete/5
-    public async Task<IActionResult> Delete(int id, Thesi thesi)
-    {
         try
         {
-            if (id <= 0)
-                return NotFound();
+            var result = await _staffService.UpdateStelexosInService(staffDto);
+            if (!result)
+            {
+                _logger.LogWarning($"Failed to update staff member with ID {id}.");
+                ModelState.AddModelError("", "Failed to update staff member.");
+                return View(staffDto);
+            }
 
-            var paidi = await _staffService.DeleteStelexosByIdInService(id, thesi);
-            if (paidi == false)
-                return NotFound();
-
-            return View(paidi);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (await _staffService.GetStelexosByIdInService(id, thesi) is null)
+                return NotFound("Staff member not found.");
+            else
+                throw;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while Delete Stelexos.");
+            _logger.LogError(ex, $"An error occurred while updating staff member with ID {id}.");
+            return View("Error");
+        }
+    }
+
+    // GET: StaffWeb/Delete/5
+    [HttpGet("Delete/{id:int}")]
+    public async Task<IActionResult> Delete(int id, Thesi thesi)
+    {
+        if (id <= 0)
+            return BadRequest("Invalid staff ID.");
+
+        try
+        {
+            var staffMember = await _staffService.GetStelexosByIdInService(id, thesi);
+            if (staffMember == null)
+            {
+                _logger.LogWarning($"Staff member with ID {id} not found.");
+                return NotFound("Staff member not found.");
+            }
+            return View(staffMember);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred while fetching staff member with ID {id} for deletion.");
             return View("Error");
         }
     }
 
     // POST: StaffWeb/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost("Delete/{id:int}"), ActionName("DeleteConfirmed")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id, Thesi thesi)
     {
         try
         {
             var result = await _staffService.DeleteStelexosByIdInService(id, thesi);
-            if (result == false)
-                return RedirectToAction(nameof(Index));
+            if (!result)
+            {
+                ModelState.AddModelError("", "Failed to delete staff member.");
+                return View("Error");
+            }
 
-            ModelState.AddModelError("", "An error occurred while deleting the Stelexos.");
-            return View("Error");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while Delete Stelexos.");
+            _logger.LogError(ex, $"An error occurred while deleting staff member with ID {id}.");
             return View("Error");
         }
     }

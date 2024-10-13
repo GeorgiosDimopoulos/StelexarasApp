@@ -20,7 +20,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
             var allTomeis = await _teamsService.GetAllTomeisInService();
             var allTeams = allSkines.Cast<object>().Concat(allKoinotites).Concat(allTomeis);
 
-            if (allTeams == null || !allTeams.Any())
+            if ((allSkines == null || !allSkines.Any()) && (allKoinotites == null || !allKoinotites.Any()) && (allTomeis == null || !allTomeis.Any()))
             {
                 _logger.LogWarning("Not all Teams found.");
                 return NotFound("Not all Teams Data");
@@ -34,6 +34,13 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
             return View("Error");
         }
     }
+
+    // GET: SkinesWeb/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
 
     // GET: TeamsWeb/Details/5
     public async Task<IActionResult> Details(string name)
@@ -59,6 +66,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
     }
 
     // POST: TeamsWeb/Create
+    [ValidateAntiForgeryToken]
     [HttpPost]
     public async Task<IActionResult> Create(SkiniDto skini)
     {

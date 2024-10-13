@@ -1,0 +1,29 @@
+﻿@model IEnumerable<TomeasDto>
+
+<h2>All Tomeis</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tomeas in Model)
+        {
+            <tr>
+                <td>@tomeas.Name</td>
+                <td>@tomeas.Description</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@tomeas.Name">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@tomeas.Name">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@tomeas.Name">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create">Create New Tomeas</a>

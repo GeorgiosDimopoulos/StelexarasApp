@@ -1,0 +1,35 @@
+﻿@model IEnumerable<IStelexosDto>
+
+@{
+    ViewData ["Title"] = "Staff List";
+}
+
+<h1>Staff List</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Position</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var staff in Model)
+        {
+            <tr>
+                <td>@staff.FullName</td>
+                <td>@staff.Position</td>
+                <td>@staff.Phone</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@staff.Id" asp-route-thesi="@staff.Position">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@staff.Id" asp-route-thesi="@staff.Position">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@staff.Id" asp-route-thesi="@staff.Position">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Add New Staff</a>
