@@ -1,11 +1,12 @@
-﻿@model SkiniDto
+﻿@using StelexarasApp.Services.DtosModels.Domi
+@model SkiniDto
 
 <h2>Edit Skini</h2>
 
 <form asp-action="Edit" method="post">
     <div class="form-group">
         <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" readonly /> <!-- Read-only as Name might be a primary identifier -->
+        <input asp-for="Name" class="form-control" readonly />
     </div>
     <div class="form-group">
         <label asp-for="Description"></label>

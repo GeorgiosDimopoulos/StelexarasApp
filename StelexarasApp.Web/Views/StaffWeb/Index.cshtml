@@ -1,4 +1,5 @@
-﻿@model IEnumerable<IStelexosDto>
+﻿@using StelexarasApp.Services.DtosModels.Atoma
+@model IEnumerable<IStelexosDto>
 
 @{
     ViewData ["Title"] = "Staff List";
@@ -20,12 +21,12 @@
         {
             <tr>
                 <td>@staff.FullName</td>
-                <td>@staff.Position</td>
-                <td>@staff.Phone</td>
+                <td>@staff.Thesi</td>
+                <td>@staff.Tel</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@staff.Id" asp-route-thesi="@staff.Position">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@staff.Id" asp-route-thesi="@staff.Position">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@staff.Id" asp-route-thesi="@staff.Position">Delete</a>
+                    <a asp-action="Details" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi">Delete</a>
                 </td>
             </tr>
         }

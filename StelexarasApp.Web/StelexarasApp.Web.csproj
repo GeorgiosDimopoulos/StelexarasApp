@@ -31,10 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\StaffWeb\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Views\SkinesWeb\Create.cshtml" />
     <None Include="Views\SkinesWeb\Details.cshtml" />
   </ItemGroup>

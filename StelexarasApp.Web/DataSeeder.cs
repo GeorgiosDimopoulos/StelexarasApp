@@ -30,7 +30,7 @@ public class DataSeeder(
         catch (Exception ex)
         {
             Console.WriteLine("Database has already been seeded." + ex.InnerException);
-            throw;
+            return false;
         }
         //if (await _teamsRepository.HasData())
         //{

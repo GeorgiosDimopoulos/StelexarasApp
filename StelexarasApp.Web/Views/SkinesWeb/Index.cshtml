@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SkiniDto>
+﻿@using StelexarasApp.Services.DtosModels.Domi
+@model IEnumerable<SkiniDto>
 
 <h2>All Skines</h2>
 
@@ -15,7 +16,7 @@
         {
             <tr>
                 <td>@skini.Name</td>
-                <td>@skini.Description</td>
+                <td>@skini.KoinotitaName</td>
                 <td>
                     <a asp-action="Details" asp-route-name="@skini.Name">Details</a> |
                     <a asp-action="Edit" asp-route-name="@skini.Name">Edit</a> |

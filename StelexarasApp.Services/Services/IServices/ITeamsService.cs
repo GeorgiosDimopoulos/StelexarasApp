@@ -7,8 +7,8 @@ public interface ITeamsService
 {
     Task<bool> HasData();
     Task<bool> AddSkiniInService(SkiniDto skini);
-    Task<bool> AddKoinotitaInService(KoinotitaDto skini);
-    Task<bool> AddTomeasInService(TomeasDto skini);
+    Task<bool> AddKoinotitaInService(KoinotitaDto koinotita);
+    Task<bool> AddTomeasInService(TomeasDto tomeas);
     Task<bool> CheckStelexousXwroNameInService(IStelexosDto stelexosDto, string xwrosName);
 
     Task<bool> DeleteSkiniInService(int skiniId);

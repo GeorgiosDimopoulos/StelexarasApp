@@ -1,4 +1,5 @@
-﻿@model SkiniDto
+﻿@using StelexarasApp.Services.DtosModels.Domi
+@model SkiniDto
 
 <h2>Delete Skini</h2>
 
@@ -9,8 +10,8 @@
         <dt>Name</dt>
         <dd>@Model.Name</dd>
 
-        <dt>Description</dt>
-        <dd>@Model.Description</dd>
+        <dt>Koinotita</dt>
+        <dd>@Model.KoinotitaName</dd>
     </dl>
 
     <form asp-action="DeleteConfirmed" method="post">

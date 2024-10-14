@@ -26,7 +26,6 @@ var koinotitaRedirectUrl = builder.Configuration ["KoinotitaRedirectUrl"];
 var dutiesRedirectUrl = builder.Configuration ["DutiesRedirectUrl"];
 var expensesRedirectUrl = builder.Configuration ["ExpensesRedirectUrl"];
 
-// Custom redirect middleware
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path.ToString();
@@ -40,7 +39,7 @@ app.Use(async (context, next) =>
     else if (context.Request.Path == "/")
     {
         Console.WriteLine("Redirecting to /: /KoinotitaWeb/Index");
-        context.Response.Redirect("KoinotitaWeb/Index"); // KoinotitaWeb
+        context.Response.Redirect("KoinotitaWeb/Index");
         return;
     }
     else if (path.StartsWith("/koinotita", StringComparison.OrdinalIgnoreCase))
@@ -96,6 +95,11 @@ if (app.Environment.IsDevelopment())
 
     app.UseDeveloperExceptionPage();
 }
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
 app.Run();
 
@@ -145,6 +149,7 @@ void ConfigureServives(WebApplicationBuilder builder)
 
     // Add AutoMapper
     builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+    builder.Services.AddLogging();
 
     // Add DbContext with SQL Server
     builder.Services.AddDbContext<AppDbContext>(options =>

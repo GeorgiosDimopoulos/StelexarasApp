@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TomeasDto>
+﻿@using StelexarasApp.Services.DtosModels.Domi
+@model IEnumerable<TomeasDto>
 
 <h2>All Tomeis</h2>
 
@@ -15,7 +16,6 @@
         {
             <tr>
                 <td>@tomeas.Name</td>
-                <td>@tomeas.Description</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@tomeas.Name">Details</a> |
                     <a asp-action="Edit" asp-route-id="@tomeas.Name">Edit</a> |
