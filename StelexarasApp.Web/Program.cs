@@ -20,23 +20,39 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 var app = builder.Build();
-SeedDbWithMockData(app).Wait();
+await SeedDbWithMockData(app); // SeedDbWithMockData(app).Wait();
 
 var koinotitaRedirectUrl = builder.Configuration ["KoinotitaRedirectUrl"];
 var dutiesRedirectUrl = builder.Configuration ["DutiesRedirectUrl"];
 var expensesRedirectUrl = builder.Configuration ["ExpensesRedirectUrl"];
 
+// Middleware order
+app.UseRouting();
+
+// Map routes for controllers
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
+app.MapControllers();
+app.MapHub<MyHub>("/myhub");
+
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path.ToString();
 
-    if (string.IsNullOrEmpty(path) || path == "")
+    if (string.IsNullOrEmpty(path))
     {
-        Console.WriteLine("Redirecting to default: /KoinotitaWeb/Index");
-        context.Response.Redirect("/KoinotitaWeb/Index");
+        Console.WriteLine("Redirecting to default: /StaffWeb/Index");
+        context.Response.Redirect("/StaffWeb/Index");
+        return;
+    }    
+    else if (context.Request.Path == "/")
+    {
+        Console.WriteLine("Redirecting to /: /KoinotitaWeb/Index");
+        context.Response.Redirect("KoinotitaWeb/Index");
         return;
     }
-    else if (context.Request.Path == "/")
+    else if (context.Request.Path == "")
     {
         Console.WriteLine("Redirecting to /: /KoinotitaWeb/Index");
         context.Response.Redirect("KoinotitaWeb/Index");
@@ -65,19 +81,10 @@ app.Use(async (context, next) =>
     await next();
 });
 
-// Middleware order
-app.UseRouting();
 app.UseStaticFiles();
-app.MapHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
-// Map routes for controllers
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
-app.MapControllers();
-app.MapHub<MyHub>("/myhub");
+app.MapHealthChecks("/health");
 
 // Swagger setup
 if (app.Environment.IsDevelopment())

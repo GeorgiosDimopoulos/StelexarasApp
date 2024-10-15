@@ -6,7 +6,7 @@ using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 
-[Route("[controller]")]
+[Route("StaffWeb")]
 public class StaffWebController : Controller
 {
     private readonly IStaffService _staffService;

@@ -4,18 +4,19 @@ using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 
-[Route("[controller]")]
+[Route("KoinotitaWeb")]
 public class KoinotitaWebController(ITeamsService teamsService, ILogger<KoinotitaWebController> logger) : Controller
 {
-    // private readonly AppDbContext _context = context;
     private readonly ITeamsService _teamsService = teamsService ?? throw new ArgumentNullException(nameof(teamsService));
     private readonly ILogger<KoinotitaWebController> _logger = logger;
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        Console.WriteLine("Starting Index method in KoinotitaWebController!");
+
         try
-        {
+        {            
             var allKoinotites = await teamsService.GetAllKoinotitesInService();
             if (allKoinotites == null || !allKoinotites.Any())
             {
@@ -32,7 +33,7 @@ public class KoinotitaWebController(ITeamsService teamsService, ILogger<Koinotit
     }
 
     // GET: Koinotita/Details/5
-    [HttpGet]
+    [HttpGet("Details/{name}")]
     public async Task<IActionResult> Details(string name)
     {
         if (name == null)
@@ -47,7 +48,7 @@ public class KoinotitaWebController(ITeamsService teamsService, ILogger<Koinotit
     }
 
     // POST: Koinotita/Create
-    [HttpPost]
+    [HttpPost("Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(KoinotitaDto koinotita)
     {
@@ -71,23 +72,8 @@ public class KoinotitaWebController(ITeamsService teamsService, ILogger<Koinotit
         }
     }
 
-    //// POST: Koinotita/Create
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Create([Bind("Id,Name,KoinotarxisId")] KoinotitaDto koinotita)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        await _teamsService.AddKoinotitaInService(koinotita);
-    //        return RedirectToAction(nameof(Index));
-    //    }
-
-    //    // ViewData ["KoinotarxisId"] = new SelectList(_context.Koinotarxes, "Id", "FullName", koinotita.KoinotarxisId);
-    //    return View(koinotita);
-    //}
-
     // GET: Koinotita/Edit/5
-    [HttpGet]
+    [HttpGet("edit/{name}")]
     public async Task<IActionResult> Edit(string name)
     {
         if (name == null)
@@ -102,6 +88,7 @@ public class KoinotitaWebController(ITeamsService teamsService, ILogger<Koinotit
     }
 
     // GET: Koinotita/Delete/5
+    [HttpGet("delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         if (id <= 0)
@@ -115,7 +102,7 @@ public class KoinotitaWebController(ITeamsService teamsService, ILogger<Koinotit
     }
 
     // POST: Koinotita/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost("DeleteConfirmed/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(string id)
     {
@@ -125,9 +112,4 @@ public class KoinotitaWebController(ITeamsService teamsService, ILogger<Koinotit
 
         return RedirectToAction(nameof(Index));
     }
-
-    //private bool KoinotitaExists(int id)
-    //{
-    //    return _teamsService.GetAllKoinotitesInService().Any(e => e.Id == id);
-    //}
 }

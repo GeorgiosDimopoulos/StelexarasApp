@@ -4,13 +4,14 @@ using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 
-[Route("[controller]")]
+[Route("SkinesWeb")]
 public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebController> logger) : Controller
 {
     private readonly ITeamsService _teamsService = teamsService;
     private readonly ILogger<SkinesWebController> _logger = logger;
 
     // GET: TeamsWeb
+    [HttpGet("index")]
     public async Task<IActionResult> Index()
     {
         try
@@ -36,6 +37,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
     }
 
     // GET: SkinesWeb/Create
+    [HttpGet("create")]
     public IActionResult Create()
     {
         return View();
@@ -43,6 +45,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
 
 
     // GET: TeamsWeb/Details/5
+    [HttpPost("Details/{name}")]
     public async Task<IActionResult> Details(string name)
     {
         if (!ModelState.IsValid)
@@ -67,7 +70,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
 
     // POST: TeamsWeb/Create
     [ValidateAntiForgeryToken]
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create(SkiniDto skini)
     {
         if (!ModelState.IsValid)
@@ -91,6 +94,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
     }
 
     // GET: TeamsWeb/Edit/5
+    [HttpGet("edit/{id:int}")]
     public async Task<IActionResult> Edit(string name)
     {
         if (!ModelState.IsValid)
@@ -114,6 +118,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
     }
 
     // GET: TeamsWeb/Delete/5
+    [HttpGet("delete/{id:int}")]
     public async Task<IActionResult> Delete(string name)
     {
         if (!ModelState.IsValid)
@@ -137,7 +142,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
     }
 
     // POST: TeamsWeb/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost("deleteconfirmed/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

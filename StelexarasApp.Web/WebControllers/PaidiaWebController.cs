@@ -8,7 +8,7 @@ using System.Collections;
 
 namespace StelexarasApp.Web.WebControllers;
 
-[Route("[controller]")]
+[Route("PaidiaWeb")]
 public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService teamsService, ILogger<PaidiaWebController> logger) : Controller
 {
     private readonly IPaidiaService _paidiaService = paidiaService;
@@ -16,6 +16,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
     private readonly ILogger<PaidiaWebController> _logger = logger;
 
     // GET: PaidiaWeb
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
         if (!ModelState.IsValid)
@@ -39,6 +40,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
     }
 
     // GET: PaidiaWeb/Details/5
+    [HttpGet("Details/{id}")]
     public async Task<IActionResult> Details(int id)
     {
         try
@@ -60,6 +62,8 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
     }
 
     // GET: PaidiaWeb/Create
+    [HttpGet("Create")]
+    [ValidateAntiForgeryToken]
     public IActionResult Create()
     {
         try
@@ -75,7 +79,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
     }
 
     // POST: PaidiaWeb/Create
-    [HttpPost]
+    [HttpPost("create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("FullName,Age,Sex,PaidiType,SkiniName")] PaidiDto paidi)
     {
@@ -86,7 +90,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
                 var result = await _paidiaService.AddPaidiInService(paidi);
 
                 if (result)
-                    return View(paidi); //  return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
                 ModelState.AddModelError("", "An error occurred while adding the Paidi.");
             }
 
@@ -101,6 +105,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
     }
 
     // GET: PaidiaWeb/Edit/5
+    [HttpGet("Edit/{id}")]
     public async Task<IActionResult> Edit(int id)
     {
         try
@@ -123,7 +128,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
     }
 
     // POST: PaidiaWeb/Edit/5
-    [HttpPost]
+    [HttpPost("Edit")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, [Bind("FullName,Id,Age,Sex,PaidiType,SkiniName")] PaidiDto paidi)
     {
@@ -151,6 +156,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
     }
 
     // GET: PaidiaWeb/Delete/5
+    [HttpGet("Delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         try
@@ -158,8 +164,8 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
             if (id <= 0)
                 return NotFound();
 
-            var paidi = await _paidiaService.DeletePaidiInService(id);
-            if (paidi == false)
+            var paidi = await _paidiaService.GetPaidiByIdInService(id);
+            if (paidi == null)
                 return NotFound();
 
             return View(paidi);
@@ -179,11 +185,13 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
         try
         {
             var result = await _paidiaService.DeletePaidiInService(id);
-            if (result == false)
-                return RedirectToAction(nameof(Index));
+            if (!result)
+            {
+                ModelState.AddModelError("", "An error occurred while deleting the Paidi.");
+                return View("Error");
+            }
 
-            ModelState.AddModelError("", "An error occurred while deleting the Paidi.");
-            return View("Error");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
         {

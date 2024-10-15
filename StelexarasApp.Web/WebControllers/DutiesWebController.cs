@@ -5,18 +5,20 @@ using StelexarasApp.DataAccess.Models;
 
 namespace StelexarasApp.Web.WebControllers;
 
-[Route("[controller]")]
+[Route("DutiesWeb")]
 public class DutiesWebController(AppDbContext context) : Controller
 {
     private readonly AppDbContext _context = context;
 
     // GET: DutiesWeb
+    [HttpGet] // Explicitly specify that this action is a GET request
     public async Task<IActionResult> Index()
     {
         return View(await _context.Duties.ToListAsync());
     }
 
     // GET: DutiesWeb/Details/5
+    [HttpGet("{id:int}")] // Explicit GET method with id parameter
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -35,15 +37,14 @@ public class DutiesWebController(AppDbContext context) : Controller
     }
 
     // GET: DutiesWeb/Create
+    [HttpGet("create")]
     public IActionResult Create()
     {
         return View();
     }
 
     // POST: DutiesWeb/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
+    [HttpPost("create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Name,Date")] Duty duty)
     {
@@ -57,6 +58,7 @@ public class DutiesWebController(AppDbContext context) : Controller
     }
 
     // GET: DutiesWeb/Edit/5
+    [HttpGet("edit/{id:int}")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -73,9 +75,7 @@ public class DutiesWebController(AppDbContext context) : Controller
     }
 
     // POST: DutiesWeb/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
+    [HttpPost("edit/{id:int}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date")] Duty duty)
     {
@@ -107,7 +107,8 @@ public class DutiesWebController(AppDbContext context) : Controller
         return View(duty);
     }
 
-    // GET: DutiesWeb/Delete/5
+    // GET: DutiesWeb/Delete/5    
+    [HttpGet("delete/{id:int}")] // Explicit GET method for delete confirmation
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -126,7 +127,7 @@ public class DutiesWebController(AppDbContext context) : Controller
     }
 
     // POST: DutiesWeb/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost("delete/{id:int}"), ActionName("DeleteConfirmed")] // Specify this as a POST request for delete confirmation
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

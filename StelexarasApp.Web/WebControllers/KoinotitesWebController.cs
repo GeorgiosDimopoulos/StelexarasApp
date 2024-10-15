@@ -4,13 +4,14 @@ using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 
-[Route("[controller]")]
+[Route("KoinotitesWeb")]
 public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<KoinotitaWebController> logger) : Controller
 {
     private readonly ITeamsService _koinotitaService = koinotitaService;
     private readonly ILogger<KoinotitaWebController> _logger = logger;
 
     // GET: KoinotitaWeb
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
         try
@@ -31,6 +32,7 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     }
 
     // GET: KoinotitaWeb/Details/5
+    [HttpGet("Details/{name}")]
     public async Task<IActionResult> Details(string name)
     {
         try
@@ -51,7 +53,8 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     }
 
     // POST: KoinotitaWeb/Create
-    [HttpPost]
+    [HttpPost("Create")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(KoinotitaDto koinotita)
     {
         if (!ModelState.IsValid)
@@ -75,6 +78,7 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     }
 
     // GET: KoinotitaWeb/Edit/5
+    [HttpGet("edit/{name}")]
     public async Task<IActionResult> Edit(string name)
     {
         try
@@ -95,6 +99,7 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     }
 
     // GET: KoinotitaWeb/Delete/5
+    [HttpGet("delete/{name}")]
     public async Task<IActionResult> Delete(string name)
     {
         try

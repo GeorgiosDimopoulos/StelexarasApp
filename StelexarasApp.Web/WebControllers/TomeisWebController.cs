@@ -4,7 +4,7 @@ using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 
-[Route("[controller]")]
+[Route("TomeisWeb")]
 public class TomeisWebController : Controller
 {
     private readonly ITeamsService _tomeisService;
@@ -17,6 +17,7 @@ public class TomeisWebController : Controller
     }
 
     // GET: TomeisWeb
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
         try
@@ -37,6 +38,7 @@ public class TomeisWebController : Controller
     }
 
     // GET: TomeisWeb/Details/5
+    [HttpGet("Details/{id}")]
     public async Task<IActionResult> Details(string id)
     {
         try
@@ -57,7 +59,7 @@ public class TomeisWebController : Controller
     }
 
     // POST: TomeisWeb/Create
-    [HttpPost]
+    [HttpPost("Create")]
     public async Task<IActionResult> Create(TomeasDto tomeis)
     {
         if (!ModelState.IsValid)
@@ -81,6 +83,7 @@ public class TomeisWebController : Controller
     }
 
     // GET: TomeisWeb/Edit/5
+    [HttpGet("Edit/{id:int}")]
     public async Task<IActionResult> Edit(string id)
     {
         try
@@ -101,6 +104,7 @@ public class TomeisWebController : Controller
     }
 
     // GET: TomeisWeb/Delete/5
+    [HttpGet("Delete/{id:int}")]
     public async Task<IActionResult> Delete(string id)
     {
         try
@@ -121,7 +125,7 @@ public class TomeisWebController : Controller
     }
 
     // POST: TomeisWeb/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost("DeleteConfirmed/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(string id)
     {
