@@ -1,44 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Web.WebControllers;
 
 namespace StelexarasApp.Tests.WebControllersTests;
 
-public class TomeisWebControllerTests
+public class KoinotitesWebControllerTests
 {
     private readonly Mock<ITeamsService> _mockService;
-    private readonly TomeisWebController _controller;
-    private readonly Mock<ILogger<TomeisWebController>> _mockLogger;
+    private readonly KoinotitesWebController _controller;
+    private readonly Mock<ILogger<KoinotitesWebController>> _mockLogger;
 
-    public TomeisWebControllerTests()
+    public KoinotitesWebControllerTests()
     {
         _mockService = new Mock<ITeamsService>();
-        _mockLogger = new Mock<ILogger<TomeisWebController>>();
-        _controller = new TomeisWebController(_mockService.Object, _mockLogger.Object);
+        _mockLogger = new Mock<ILogger<KoinotitesWebController>>();
+        _controller = new KoinotitesWebController(_mockService.Object, _mockLogger.Object);
     }
 
     [Fact]
     public async Task Index_ReturnsViewResult_WithList()
     {
         // Arrange
-        var staffList = new List<TomeasDto>
+        var koinotites = new List<KoinotitaDto>
         {
-            new TomeasDto { KoinotitesNumber= 5, Name = "Tomeas 1" },
-            new TomeasDto { KoinotitesNumber = 2, Name = "Tomeas 2" }
+            new KoinotitaDto { Id = 1, Name = "Koinotita1", TomeasName ="TomeasName1" },
+            new KoinotitaDto { Id = 2, Name = "Koinotita2" , TomeasName ="TomeasName1" },
         };
 
-        _mockService.Setup(service => service.GetAllTomeisInService()).ReturnsAsync(staffList);
+        _mockService.Setup(service => service.GetAllKoinotitesInService()).ReturnsAsync(koinotites);
 
         // Act
         var result = await _controller.Index();
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var model = Assert.IsAssignableFrom<IEnumerable<IStelexosDto>>(viewResult.Model);
+        var model = Assert.IsAssignableFrom<IEnumerable<KoinotitaDto>>(viewResult.Model);
         Assert.Equal(2, model.Count());
     }
 
@@ -46,21 +45,21 @@ public class TomeisWebControllerTests
     public async Task Index_ReturnsNotFound_WhenNoTeamsAvailable()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllTomeisInService()).ReturnsAsync((List<TomeasDto>)null);
+        _mockService.Setup(service => service.GetAllKoinotitesInService()).ReturnsAsync(() => null);
 
         // Act
         var result = await _controller.Index();
 
         // Assert
-        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-        Assert.Equal("No Tomeis Data", notFoundResult.Value);
+        var viewResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("No Koinotites Data", viewResult.Value);
     }
 
     [Fact]
     public async Task Index_ReturnsErrorView_WhenExceptionThrown()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllTomeisInService()).ThrowsAsync(new Exception());
+        _mockService.Setup(service => service.GetAllKoinotitesInService()).ThrowsAsync(new Exception());
 
         // Act
         var result = await _controller.Index();

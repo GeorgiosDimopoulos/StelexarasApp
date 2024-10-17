@@ -5,10 +5,10 @@ using StelexarasApp.Services.Services.IServices;
 namespace StelexarasApp.Web.WebControllers;
 
 [Route("KoinotitesWeb")]
-public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<KoinotitaWebController> logger) : Controller
+public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<KoinotitesWebController> logger) : Controller
 {
     private readonly ITeamsService _koinotitaService = koinotitaService;
-    private readonly ILogger<KoinotitaWebController> _logger = logger;
+    private readonly ILogger<KoinotitesWebController> _logger = logger;
 
     // GET: KoinotitaWeb
     [HttpGet]

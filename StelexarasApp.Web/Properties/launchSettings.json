@@ -9,31 +9,20 @@
     }
   },
   "profiles": {
-    "http": {
+    "UI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "/", // swagger
-      "applicationUrl": "http://localhost:5030",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "launchUrl": "swagger",
+      "launchUrl": "StaffWeb/Index",
       "applicationUrl": "https://localhost:7127;http://localhost:5030",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "UI": {
+    "Headless": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "",
       "applicationUrl": "https://localhost:7127;http://localhost:5030",
       "environmentVariables": {
@@ -58,20 +47,5 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
-    //"Staging": {
-    //  "commandName": "Project",
-    //  "launchBrowser": false,
-    //  "applicationUrl": "https://staging.yourapp.com",
-    //  "environmentVariables": {
-    //    "ASPNETCORE_ENVIRONMENT": "Staging"
-    //  }
-    //},
-    //"Production": {
-    //  "commandName": "Project",
-    //  "launchBrowser": false,
-    //  "applicationUrl": "https://yourapp.com",
-    //  "environmentVariables": {
-    //    "ASPNETCORE_ENVIRONMENT": "Production"
-    //  }
   }
-} }
+}
