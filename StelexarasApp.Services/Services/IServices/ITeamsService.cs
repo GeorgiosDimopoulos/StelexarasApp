@@ -27,7 +27,7 @@ public interface ITeamsService
     Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomeaInService(int name);
 
     Task<SkiniDto> GetSkiniByNameInService(string name);
-    Task<SkiniDto> GetKoinotitaByNameInService(string name);
+    Task<KoinotitaDto> GetKoinotitaByNameInService(string name);
     Task<TomeasDto> GetTomeaByNameInService(string name);
 
     Task<IEnumerable<SkiniDto>> GetSkinesEkpaideuomenonInService();

@@ -155,10 +155,10 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        public async Task<SkiniDto> GetKoinotitaByNameInService(string name)
+        public async Task<KoinotitaDto> GetKoinotitaByNameInService(string name)
         {
-            var skini = await _teamsRepository.GetSkiniByNameInDb(name);
-            return _mapper.Map<SkiniDto>(skini);
+            var skini = await _teamsRepository.GetKoinotitaByNameInDb(name);
+            return _mapper.Map<KoinotitaDto>(skini);
         }
 
         public async Task<bool> AddTomeasInService(TomeasDto tomeasDto)

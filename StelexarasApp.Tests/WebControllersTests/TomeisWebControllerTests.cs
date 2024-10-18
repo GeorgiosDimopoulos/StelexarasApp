@@ -69,4 +69,143 @@ public class TomeisWebControllerTests
         var viewResult = Assert.IsType<ViewResult>(result);
         Assert.Equal("Error", viewResult.ViewName);
     }
+
+    [Fact]
+    public async Task Edit_ReturnsViewResult_WithTomeas()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        var tomeas = new TomeasDto { Name = tomeasId, KoinotitesNumber = 5 };
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync(tomeas);
+
+        // Act
+        var result = await _controller.Edit(tomeasId);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        var model = Assert.IsAssignableFrom<TomeasDto>(viewResult.ViewData.Model);
+        Assert.Equal(tomeasId, model.Name);
+    }
+
+    [Fact]
+    public async Task Edit_ReturnsNotFound_WhenTomeasNotFound()
+    {
+        // Arrange
+        var tomeasId = "NonExistentTomeas";
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync((TomeasDto)null);
+
+        // Act
+        var result = await _controller.Edit(tomeasId);
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("Tomeis not found.", notFoundResult.Value);
+    }
+
+    [Fact]
+    public async Task Edit_ReturnsErrorView_WhenExceptionThrown()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ThrowsAsync(new Exception("Test exception"));
+
+        // Act
+        var result = await _controller.Edit(tomeasId);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal("Error", viewResult.ViewName);
+    }
+
+    [Fact]
+    public async Task Delete_ReturnsViewResult_WithTomeas()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        var tomeas = new TomeasDto { Name = tomeasId, KoinotitesNumber = 5 };
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync(tomeas);
+
+        // Act
+        var result = await _controller.Delete(tomeasId);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        var model = Assert.IsAssignableFrom<TomeasDto>(viewResult.ViewData.Model);
+        Assert.Equal(tomeasId, model.Name);
+    }
+
+    [Fact]
+    public async Task Delete_ReturnsNotFound_WhenTomeasNotFound()
+    {
+        // Arrange
+        var tomeasId = "NonExistentTomeas";
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync((TomeasDto)null);
+
+        // Act
+        var result = await _controller.Delete(tomeasId);
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("Tomeis not found.", notFoundResult.Value);
+    }
+
+    [Fact]
+    public async Task Delete_ReturnsErrorView_WhenExceptionThrown()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ThrowsAsync(new Exception("Test exception"));
+
+        // Act
+        var result = await _controller.Delete(tomeasId);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal("Error", viewResult.ViewName);
+    }
+
+    [Fact]
+    public async Task DeleteConfirmed_RedirectsToIndex_WhenTomeasDeleted()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        _mockService.Setup(service => service.DeleteTomeasInService(tomeasId)).ReturnsAsync(true);
+
+        // Act
+        var result = await _controller.DeleteConfirmed(tomeasId);
+
+        // Assert
+        var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal(nameof(TomeisWebController.Index), redirectToActionResult.ActionName);
+    }
+
+    [Fact]
+    public async Task DeleteConfirmed_ReturnsNotFound_WhenTomeasNotDeleted()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        _mockService.Setup(service => service.DeleteTomeasInService(tomeasId)).ReturnsAsync(false);
+
+        // Act
+        var result = await _controller.DeleteConfirmed(tomeasId);
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("Tomeis not deleted.", notFoundResult.Value);
+    }
+
+    [Fact]
+    public async Task DeleteConfirmed_ReturnsErrorView_WhenExceptionThrown()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        _mockService.Setup(service => service.DeleteTomeasInService(tomeasId)).ThrowsAsync(new Exception("Test exception"));
+
+        // Act
+        var result = await _controller.DeleteConfirmed(tomeasId);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal("Error", viewResult.ViewName);
+    }
 }
