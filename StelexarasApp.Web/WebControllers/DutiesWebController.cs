@@ -2,19 +2,29 @@
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 
 [Route("DutiesWeb")]
-public class DutiesWebController(AppDbContext context) : Controller
+public class DutiesWebController : Controller
 {
-    private readonly AppDbContext _context = context;
+    private readonly IDutyService _dutyService;
+
+    public DutiesWebController(IDutyService dutyService)
+    {
+        _dutyService = dutyService;
+    }
 
     // GET: DutiesWeb
     [HttpGet] // Explicitly specify that this action is a GET request
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Duties.ToListAsync());
+        var duties = await _dutyService.GetDutiesInService();
+        if (duties == null)
+            return NotFound();
+
+        return View(duties);
     }
 
     // GET: DutiesWeb/Details/5
@@ -26,12 +36,9 @@ public class DutiesWebController(AppDbContext context) : Controller
             return NotFound();
         }
 
-        var duty = await _context.Duties
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var duty = await _dutyService.GetDutyByIdInService(id.Value);
         if (duty == null)
-        {
             return NotFound();
-        }
 
         return View(duty);
     }
@@ -50,10 +57,10 @@ public class DutiesWebController(AppDbContext context) : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Add(duty);
-            await _context.SaveChangesAsync();
+            await _dutyService.AddDutyInService(duty);
             return RedirectToAction(nameof(Index));
         }
+
         return View(duty);
     }
 
@@ -62,48 +69,26 @@ public class DutiesWebController(AppDbContext context) : Controller
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
-        {
             return NotFound();
-        }
 
-        var duty = await _context.Duties.FindAsync(id);
+        var duty = await _dutyService.GetDutyByIdInService(id.Value);
         if (duty == null)
-        {
             return NotFound();
-        }
+
         return View(duty);
     }
 
     // POST: DutiesWeb/Edit/5
-    [HttpPost("edit/{id:int}")]
+    [HttpPost("edit/{id:string}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date")] Duty duty)
+    public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Date")] Duty duty)
     {
-        if (id != duty.Id)
-        {
-            return NotFound();
-        }
-
         if (ModelState.IsValid)
         {
-            try
-            {
-                _context.Update(duty);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DutyExists(duty.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _dutyService.UpdateDutyInService(id, duty);
             return RedirectToAction(nameof(Index));
         }
+
         return View(duty);
     }
 
@@ -112,16 +97,11 @@ public class DutiesWebController(AppDbContext context) : Controller
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
-        {
             return NotFound();
-        }
 
-        var duty = await _context.Duties
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var duty = await _dutyService.GetDutyByIdInService(id.Value);
         if (duty == null)
-        {
             return NotFound();
-        }
 
         return View(duty);
     }
@@ -131,18 +111,16 @@ public class DutiesWebController(AppDbContext context) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var duty = await _context.Duties.FindAsync(id);
+        var duty = await _dutyService.GetDutyByIdInService(id);
         if (duty != null)
-        {
-            _context.Duties.Remove(duty);
-        }
+            await _dutyService.DeleteDutyInService(id);
 
-        await _context.SaveChangesAsync();
+        await _dutyService.DeleteDutyInService(id);
         return RedirectToAction(nameof(Index));
     }
 
     private bool DutyExists(int id)
     {
-        return _context.Duties.Any(e => e.Id == id);
+        return _dutyService.GetDutyByIdInService(id) != null;
     }
 }

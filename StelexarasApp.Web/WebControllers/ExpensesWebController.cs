@@ -1,20 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.WebControllers;
 
 [Route("ExpensesWeb")]
-public class ExpensesWebController(AppDbContext context) : Controller
+public class ExpensesWebController(IExpenseService expenseService) : Controller
 {
-    private readonly AppDbContext _context = context;
+    private readonly IExpenseService _expenseService = expenseService;
 
     // GET: ExpensesWeb
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Expenses.ToListAsync());
+        try
+        {
+            var expenses = await _expenseService.GetExpensesInService();
+            if (expenses == null || !expenses.Any())
+                return NotFound("No Expenses Data");
+
+            return View(expenses);
+        }
+        catch (Exception ex)
+        {
+            return View("Error");
+        }
     }
 
     // GET: ExpensesWeb/Details/5
@@ -24,8 +35,8 @@ public class ExpensesWebController(AppDbContext context) : Controller
         if (id == null)
             return NotFound();
 
-        var expense = await _context.Expenses
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var expense = await _expenseService.GetExpenseByIdInService(id.Value);
+
         if (expense == null)
             return NotFound();
 
@@ -46,8 +57,7 @@ public class ExpensesWebController(AppDbContext context) : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Add(expense);
-            await _context.SaveChangesAsync();
+            await _expenseService.AddExpenseInService(expense);
             return RedirectToAction(nameof(Index));
         }
         return View(expense);
@@ -55,12 +65,13 @@ public class ExpensesWebController(AppDbContext context) : Controller
 
     // GET: ExpensesWeb/Edit/5
     [HttpGet("edit/{id:int}")]
-    public async Task<IActionResult> Edit(int? id)
+    public async Task<IActionResult> Edit(int id)
     {
-        if (id == null)
+        if (id <= 0)
             return NotFound();
 
-        var expense = await _context.Expenses.FindAsync(id);
+        var expense = await _expenseService.GetExpenseByIdInService(id);
+
         if (expense == null)
             return NotFound();
 
@@ -79,20 +90,19 @@ public class ExpensesWebController(AppDbContext context) : Controller
         {
             try
             {
-                _context.Update(expense);
-                await _context.SaveChangesAsync();
+                await _expenseService.UpdateExpenseInService(id, expense);
             }
             catch (DbUpdateConcurrencyException)
             {
-                var expenseExists = _context.Expenses.Any(e => e.Id == id);
-                if (!expenseExists)
+                if (!await _expenseService.HasData())
                     return NotFound();
                 else
-                    return RedirectToAction(nameof(Index));
+                    throw;
             }
-            return RedirectToAction(nameof(Index));
+            return View(expense);
         }
-        return View(expense);
+
+        return View(null);
     }
 
     // GET: ExpensesWeb/Delete/5
@@ -102,8 +112,7 @@ public class ExpensesWebController(AppDbContext context) : Controller
         if (id == null)
             return NotFound();
 
-        var expense = await _context.Expenses
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var expense = await _expenseService.GetExpenseByIdInService(id.Value);
         if (expense == null)
             return NotFound();
 
@@ -115,11 +124,7 @@ public class ExpensesWebController(AppDbContext context) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var expense = await _context.Expenses.FindAsync(id);
-        if (expense != null)
-            _context.Expenses.Remove(expense);
-
-        await _context.SaveChangesAsync();
+        await _expenseService.DeleteExpenseInService(id);
         return RedirectToAction(nameof(Index));
     }
 }

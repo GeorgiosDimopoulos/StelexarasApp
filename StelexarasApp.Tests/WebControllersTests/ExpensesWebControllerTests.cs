@@ -2,19 +2,19 @@
 using Moq;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Web.ApiControllers;
+using StelexarasApp.Web.WebControllers;
 
 namespace StelexarasApp.Tests.WebControllersTests;
 
 public class ExpensesWebControllerTests
 {
     private readonly Mock<IExpenseService> _mockService;
-    private readonly ExpensesController _controller;
+    private readonly ExpensesWebController _controller;
 
     public ExpensesWebControllerTests()
     {
         _mockService = new Mock<IExpenseService>();
-        _controller = new ExpensesController(_mockService.Object);
+        _controller = new ExpensesWebController(_mockService.Object);
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class ExpensesWebControllerTests
         _mockService.Setup(repo => repo.GetExpensesInService()).ReturnsAsync(expensesList);
 
         // Act
-        var result = await _controller.GetExpenses();
+        var result = await _controller.Index();
 
         // Assert
         var viewResult = Assert.IsType<ActionResult<IEnumerable<Expense>>>(result);
@@ -43,10 +43,10 @@ public class ExpensesWebControllerTests
         _mockService.Setup(repo => repo.GetExpensesInService()).ReturnsAsync(() => null);
 
         // Act
-        var result = await _controller.GetExpenses();
+        var result = await _controller.Index();
 
         // Assert
-        var viewResult = Assert.IsType<NotFoundResult>(result.Result);
+        var viewResult = Assert.IsType<NotFoundResult>(result.ExecuteResultAsync);
     }
 
     [Fact]
@@ -56,10 +56,9 @@ public class ExpensesWebControllerTests
         _mockService.Setup(repo => repo.GetExpensesInService()).ThrowsAsync(new Exception());
 
         // Act
-        var result = await _controller.GetExpenses();
+        var result = await _controller.Index();
 
         // Assert
-        var viewResult = Assert.IsType<ObjectResult>(result.Result);
-        Assert.Equal(500, viewResult.StatusCode);
+        var viewResult = Assert.IsType<ViewResult>(result.ExecuteResultAsync);
     }
 }

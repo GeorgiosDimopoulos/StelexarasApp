@@ -19,13 +19,22 @@ public class DutiesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Duty>>> GetDuties()
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        try
+        {
 
-        var duties = await _dutyService.GetDutiesInService();
-        if (duties == null)
-            return NotFound();
-        return Ok(duties);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var duties = await _dutyService.GetDutiesInService();
+            if (duties == null)
+                return NotFound();
+            return Ok(duties);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return BadRequest();
+        }
     }
 
     [HttpGet("Duty/{id}")]

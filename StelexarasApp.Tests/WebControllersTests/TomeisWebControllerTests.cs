@@ -57,6 +57,112 @@ public class TomeisWebControllerTests
     }
 
     [Fact]
+    public async Task Details_ReturnsViewResult_WithTomeas()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        var tomeas = new TomeasDto { Name = tomeasId, KoinotitesNumber = 5 };
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync(tomeas);
+
+        // Act
+        var result = await _controller.Details(tomeasId);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        var model = Assert.IsAssignableFrom<TomeasDto>(viewResult.ViewData.Model);
+        Assert.Equal(tomeasId, model.Name);
+    }
+
+    [Fact]
+    public async Task Details_ReturnsNotFound_WhenTomeasNotFound()
+    {
+        // Arrange
+        var tomeasId = "NonExistentTomeas";
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync((TomeasDto)null);
+
+        // Act
+        var result = await _controller.Details(tomeasId);
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("Tomeis not found.", notFoundResult.Value);
+    }
+
+    [Fact]
+    public async Task Details_ReturnsErrorView_WhenExceptionThrown()
+    {
+        // Arrange
+        var tomeasId = "TestTomeas";
+        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ThrowsAsync(new Exception("Test exception"));
+
+        // Act
+        var result = await _controller.Details(tomeasId);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal("Error", viewResult.ViewName);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsBadRequest_WhenModelStateIsInvalid()
+    {
+        // Arrange
+        _controller.ModelState.AddModelError("Name", "Required");
+
+        // Act
+        var result = await _controller.Create(new TomeasDto());
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.IsType<SerializableError>(badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsNotFound_WhenTomeasNotCreated()
+    {
+        // Arrange
+        var tomeas = new TomeasDto { Name = "TestTomeas", KoinotitesNumber = 5 };
+        _mockService.Setup(service => service.AddTomeasInService(tomeas)).ReturnsAsync(false);
+
+        // Act
+        var result = await _controller.Create(tomeas);
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("Tomeis not created.", notFoundResult.Value);
+    }
+
+    [Fact]
+    public async Task Create_RedirectsToIndex_WhenTomeasCreated()
+    {
+        // Arrange
+        var tomeas = new TomeasDto { Name = "TestTomeas", KoinotitesNumber = 5 };
+        _mockService.Setup(service => service.AddTomeasInService(tomeas)).ReturnsAsync(true);
+
+        // Act
+        var result = await _controller.Create(tomeas);
+
+        // Assert
+        var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal(nameof(TomeisWebController.Index), redirectToActionResult.ActionName);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsErrorView_WhenExceptionThrown()
+    {
+        // Arrange
+        var tomeas = new TomeasDto { Name = "TestTomeas", KoinotitesNumber = 5 };
+        _mockService.Setup(service => service.AddTomeasInService(tomeas)).ThrowsAsync(new Exception("Test exception"));
+
+        // Act
+        var result = await _controller.Create(tomeas);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal("Error", viewResult.ViewName);
+    }
+
+    [Fact]
     public async Task Index_ReturnsErrorView_WhenExceptionThrown()
     {
         // Arrange
