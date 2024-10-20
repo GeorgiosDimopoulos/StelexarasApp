@@ -25,20 +25,20 @@ public class TomeisWebControllerTests
     public async Task Index_ReturnsViewResult_WithList()
     {
         // Arrange
-        var staffList = new List<TomeasDto>
+        var tomeisList = new List<TomeasDto>
         {
-            new TomeasDto { KoinotitesNumber= 5, Name = "Tomeas 1" },
-            new TomeasDto { KoinotitesNumber = 2, Name = "Tomeas 2" }
+            new () { KoinotitesNumber= 5, Name = "Tomeas 1" },
+            new (){ KoinotitesNumber = 2, Name = "Tomeas 2" }
         };
 
-        _mockService.Setup(service => service.GetAllTomeisInService()).ReturnsAsync(staffList);
+        _mockService.Setup(service => service.GetAllTomeisInService()).ReturnsAsync(tomeisList);
 
         // Act
         var result = await _controller.Index();
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var model = Assert.IsAssignableFrom<IEnumerable<IStelexosDto>>(viewResult.Model);
+        var model = Assert.IsAssignableFrom<IEnumerable<TomeasDto>>(viewResult.Model);
         Assert.Equal(2, model.Count());
     }
 

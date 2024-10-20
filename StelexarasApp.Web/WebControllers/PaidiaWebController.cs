@@ -9,11 +9,18 @@ using System.Collections;
 namespace StelexarasApp.Web.WebControllers;
 
 [Route("PaidiaWeb")]
-public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService teamsService, ILogger<PaidiaWebController> logger) : Controller
+public class PaidiaWebController : Controller
 {
-    private readonly IPaidiaService _paidiaService = paidiaService;
-    private readonly ITeamsService _teamsService = teamsService;
-    private readonly ILogger<PaidiaWebController> _logger = logger;
+    private readonly IPaidiaService _paidiaService;
+    private readonly ITeamsService _teamsService;
+    private readonly ILogger<PaidiaWebController> _logger;
+
+    public PaidiaWebController(IPaidiaService paidiaService, ITeamsService teamsService, ILogger<PaidiaWebController> logger)
+    {
+        _paidiaService = paidiaService;
+        _teamsService = teamsService;
+        _logger = logger;
+    }
 
     // GET: PaidiaWeb
     [HttpGet]
@@ -63,7 +70,6 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
 
     // GET: PaidiaWeb/Create
     [HttpGet("Create")]
-    [ValidateAntiForgeryToken]
     public IActionResult Create()
     {
         try
@@ -79,7 +85,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
     }
 
     // POST: PaidiaWeb/Create
-    [HttpPost("create")]
+    [HttpPost("Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("FullName,Age,Sex,PaidiType,SkiniName")] PaidiDto paidi)
     {
@@ -143,7 +149,7 @@ public class PaidiaWebController(IPaidiaService paidiaService, ITeamsService tea
             }
             catch (DbUpdateConcurrencyException)
             {
-                var existed = _paidiaService.GetPaidiByIdInService(paidi.Id);
+                var existed = await _paidiaService.GetPaidiByIdInService(paidi.Id);
                 if (existed is null)
                     return NotFound("DbUpdateConcurrencyException: Paidi not found in Db");
                 else

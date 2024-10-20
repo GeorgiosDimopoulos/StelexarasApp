@@ -90,7 +90,11 @@ public class ExpensesWebController(IExpenseService expenseService) : Controller
         {
             try
             {
-                await _expenseService.UpdateExpenseInService(id, expense);
+                var updateResult = await _expenseService.UpdateExpenseInService(id, expense);
+                if (updateResult)
+                    return RedirectToAction(nameof(Index));
+
+                ModelState.AddModelError("", "Unable to update expense. Please try again.");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -99,10 +103,8 @@ public class ExpensesWebController(IExpenseService expenseService) : Controller
                 else
                     throw;
             }
-            return View(expense);
         }
-
-        return View(null);
+        return View(expense);
     }
 
     // GET: ExpensesWeb/Delete/5

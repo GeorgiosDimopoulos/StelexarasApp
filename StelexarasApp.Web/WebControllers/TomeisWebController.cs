@@ -60,6 +60,7 @@ public class TomeisWebController : Controller
 
     // POST: TomeisWeb/Create
     [HttpPost("Create")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(TomeasDto tomeis)
     {
         if (!ModelState.IsValid)
@@ -83,7 +84,7 @@ public class TomeisWebController : Controller
     }
 
     // GET: TomeisWeb/Edit/5
-    [HttpGet("Edit/{id:int}")]
+    [HttpGet("Edit/{id}")]
     public async Task<IActionResult> Edit(string id)
     {
         try
@@ -103,8 +104,36 @@ public class TomeisWebController : Controller
         }
     }
 
+    // POST: TomeisWeb/Edit/5
+    [HttpPost("Edit/{id}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(string id, TomeasDto tomeis)
+    {
+        if (id != tomeis.Name)
+            return BadRequest("Tomeis ID mismatch.");
+
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
+        {
+            var result = await _tomeisService.UpdateTomeaInService(tomeis);
+            if (!result)
+            {
+                _logger.LogWarning("Tomeis not updated.");
+                return NotFound("Tomeis not updated.");
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while updating Tomeis.");
+            return View("Error");
+        }
+    }
+
     // GET: TomeisWeb/Delete/5
-    [HttpGet("Delete/{id:int}")]
+    [HttpGet("Delete/{id}")]
     public async Task<IActionResult> Delete(string id)
     {
         try

@@ -69,4 +69,18 @@ public class DutiesWebControllerTests
         var viewResult = Assert.IsType<ViewResult>(result);
         Assert.Equal("Error", viewResult.ViewName);
     }
+
+    [Fact]
+    public async Task Details_ReturnsViewResult_WithDuty()
+    {
+        // Arrange
+        var duty = new Duty { Id = 1, Name = "Duty 1", Date = DateTime.Now };
+        _mockService.Setup(service => service.GetDutyByIdInService(duty.Id));
+
+        // Act
+        var result = await _controller.Details(duty.Id);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+    }
 }

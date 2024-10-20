@@ -19,7 +19,6 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
             var allSkines = await _teamsService.GetAllSkinesInService();
             var allKoinotites = await _teamsService.GetAllKoinotitesInService();
             var allTomeis = await _teamsService.GetAllTomeisInService();
-            var allTeams = allSkines.Cast<object>().Concat(allKoinotites).Concat(allTomeis);
 
             if ((allSkines == null || !allSkines.Any()) && (allKoinotites == null || !allKoinotites.Any()) && (allTomeis == null || !allTomeis.Any()))
             {
@@ -27,12 +26,13 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
                 return NotFound("Not all Teams Data");
             }
 
+            var allTeams = allSkines.Cast<object>().Concat(allKoinotites).Concat(allTomeis);
             return View(allTeams);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while fetching in Index Teams.");
-            return View("Error");
+            return View(null);
         }
     }
 
@@ -94,7 +94,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
     }
 
     // GET: TeamsWeb/Edit/5
-    [HttpGet("edit/{id:int}")]
+    [HttpGet("edit/{name}")]
     public async Task<IActionResult> Edit(string name)
     {
         if (!ModelState.IsValid)
@@ -118,7 +118,7 @@ public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebC
     }
 
     // GET: TeamsWeb/Delete/5
-    [HttpGet("delete/{id:int}")]
+    [HttpGet("delete/{name}")]
     public async Task<IActionResult> Delete(string name)
     {
         if (!ModelState.IsValid)

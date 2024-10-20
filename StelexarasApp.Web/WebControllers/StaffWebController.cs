@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Services.IServices;
@@ -19,7 +18,7 @@ public class StaffWebController : Controller
     }
 
     // GET: StaffWeb
-    [HttpGet]
+    [HttpGet("Index")]
     public async Task<IActionResult> Index()
     {
         try
@@ -35,13 +34,14 @@ public class StaffWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while fetching the staff list.");
+            ViewData ["ErrorMessage"] = "An error occurred while fetching the staff list. Please try again later.";
             return View("Error");
         }
     }
 
     // GET: StaffWeb/Details/5
     [HttpGet("Details/{id:int}")]
-    public async Task<IActionResult> Details(int id, Thesi thesi)
+    public async Task<IActionResult> Details(int id, [FromQuery] Thesi? thesi)
     {
         if (id <= 0)
             return BadRequest("Invalid staff ID.");
@@ -59,7 +59,7 @@ public class StaffWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, $"An error occurred while fetching details for staff member with ID {id}.");
-            return View("Error");
+            return View("Error", new { message = $"An error occurred while fetching details for staff member with ID {id}." });
         }
     }
 
@@ -90,13 +90,13 @@ public class StaffWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while creating a new staff member.");
-            return View("Error");
+            return View("Error", new { message = "An error occurred while creating a new staff member." });
         }
     }
 
     // GET: StaffWeb/Edit/5
     [HttpGet("Edit/{id:int}")]
-    public async Task<IActionResult> Edit(int id, Thesi thesi)
+    public async Task<IActionResult> Edit(int id, [FromQuery] Thesi? thesi)
     {
         if (id <= 0)
             return BadRequest("Invalid staff ID.");
@@ -114,50 +114,13 @@ public class StaffWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, $"An error occurred while fetching staff member with ID {id} for editing.");
-            return View("Error");
-        }
-    }
-
-    // POST: StaffWeb/Edit/5
-    [HttpPost("Edit/{id:int}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Position,Phone")] IStelexosDto staffDto, Thesi? thesi)
-    {
-        if (id != staffDto.Id)
-            return BadRequest("Mismatched staff ID.");
-
-        if (!ModelState.IsValid)
-            return View(staffDto);
-
-        try
-        {
-            var result = await _staffService.UpdateStelexosInService(staffDto);
-            if (!result)
-            {
-                _logger.LogWarning($"Failed to update staff member with ID {id}.");
-                ModelState.AddModelError("", "Failed to update staff member.");
-                return View(staffDto);
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (await _staffService.GetStelexosByIdInService(id, thesi) is null)
-                return NotFound("Staff member not found.");
-            else
-                throw;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"An error occurred while updating staff member with ID {id}.");
-            return View("Error");
+            return View("Error", new { message = $"An error occurred while fetching staff member with ID {id} for editing." });
         }
     }
 
     // GET: StaffWeb/Delete/5
     [HttpGet("Delete/{id:int}")]
-    public async Task<IActionResult> Delete(int id, Thesi thesi)
+    public async Task<IActionResult> Delete(int id, [FromQuery] Thesi? thesi)
     {
         if (id <= 0)
             return BadRequest("Invalid staff ID.");
@@ -175,14 +138,14 @@ public class StaffWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, $"An error occurred while fetching staff member with ID {id} for deletion.");
-            return View("Error");
+            return View("Error", new { message = $"An error occurred while fetching staff member with ID {id} for deletion." });
         }
     }
 
     // POST: StaffWeb/Delete/5
     [HttpPost("Delete/{id:int}"), ActionName("DeleteConfirmed")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id, Thesi thesi)
+    public async Task<IActionResult> DeleteConfirmed(int id, [FromQuery] Thesi thesi)
     {
         try
         {
@@ -190,7 +153,7 @@ public class StaffWebController : Controller
             if (!result)
             {
                 ModelState.AddModelError("", "Failed to delete staff member.");
-                return View("Error");
+                return View("Error", new { message = "Failed to delete staff member." });
             }
 
             return RedirectToAction(nameof(Index));
@@ -198,7 +161,7 @@ public class StaffWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, $"An error occurred while deleting staff member with ID {id}.");
-            return View("Error");
+            return View("Error", new { message = $"An error occurred while deleting staff member with ID {id}." });
         }
     }
 }
