@@ -2,7 +2,7 @@
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.WebControllers;
+namespace StelexarasApp.Web.Controllers.WebControllers;
 
 [Route("DutiesWeb")]
 public class DutiesWebController : Controller

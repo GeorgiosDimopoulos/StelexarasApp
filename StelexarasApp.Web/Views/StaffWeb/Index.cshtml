@@ -1,4 +1,6 @@
-﻿@using StelexarasApp.Services.DtosModels.Atoma
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using StelexarasApp.Services.DtosModels.Atoma
 @model IEnumerable<IStelexosDto>
 
 @{
@@ -24,7 +26,7 @@
                 <td>@staff.Thesi</td>
                 <td>@staff.Tel</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi">Details</a> |
+                    <a asp-action="Details" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi">Details</a>
                     <a asp-action="Edit" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi">Delete</a>
                 </td>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.WebControllers;
+namespace StelexarasApp.Web.Controllers.WebControllers;
 
 [Route("ExpensesWeb")]
 public class ExpensesWebController(IExpenseService expenseService) : Controller

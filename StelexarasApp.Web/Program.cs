@@ -32,7 +32,8 @@ app.UseRouting();
 // Map routes for controllers
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
+    pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}",
+    defaults: new { controller = "KoinotitaWeb", action = "Index" });
 app.MapControllers();
 app.MapHub<MyHub>("/myhub");
 
@@ -45,7 +46,7 @@ app.Use(async (context, next) =>
         Console.WriteLine("Redirecting to default: /StaffWeb/Index");
         context.Response.Redirect("/StaffWeb/Index");
         return;
-    }    
+    }
     else if (context.Request.Path == "/")
     {
         Console.WriteLine("Redirecting to /: /KoinotitaWeb/Index");
@@ -63,7 +64,7 @@ app.Use(async (context, next) =>
         Console.WriteLine($"Redirecting to Koinotita RedirectUrl: {koinotitaRedirectUrl}");
         context.Response.Redirect(koinotitaRedirectUrl!);
         return;
-    }   
+    }
     else if (path.StartsWith("/duties", StringComparison.OrdinalIgnoreCase))
     {
         Console.WriteLine($"Redirecting to duties RedirectUrl: {dutiesRedirectUrl}");
@@ -76,7 +77,7 @@ app.Use(async (context, next) =>
         context.Response.Redirect(expensesRedirectUrl!);
         return;
     }
-    
+
     Console.WriteLine("No redirect, processing request further.");
     await next();
 });
@@ -160,7 +161,7 @@ void ConfigureServives(WebApplicationBuilder builder)
 
     // Add DbContext with SQL Server
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); 
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 }
 
 static async Task SeedDbWithMockData(WebApplication app)

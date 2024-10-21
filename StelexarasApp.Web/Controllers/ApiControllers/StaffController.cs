@@ -4,7 +4,7 @@ using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.ApiControllers
+namespace StelexarasApp.Web.Controllers.ApiControllers
 {
     [ApiController]
     [Route("[controller]")]

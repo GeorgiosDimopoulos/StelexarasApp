@@ -35,4 +35,8 @@
     <None Include="Views\SkinesWeb\Details.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Staff\" />
+  </ItemGroup>
+
 </Project>

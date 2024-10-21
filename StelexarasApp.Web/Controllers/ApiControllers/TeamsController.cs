@@ -2,7 +2,7 @@
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.ApiControllers;
+namespace StelexarasApp.Web.Controllers.ApiControllers;
 
 public class TeamsController(ITeamsService teamsService) : ControllerBase
 {

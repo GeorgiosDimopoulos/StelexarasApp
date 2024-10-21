@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Web.WebControllers;
+using StelexarasApp.Web.Controllers.WebControllers;
 
 namespace StelexarasApp.Tests.WebControllersTests;
 

@@ -2,7 +2,7 @@
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.WebControllers;
+namespace StelexarasApp.Web.Controllers.WebControllers;
 
 [Route("TomeisWeb")]
 public class TomeisWebController : Controller

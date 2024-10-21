@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
-namespace StelexarasApp.Web.ApiControllers
+namespace StelexarasApp.Web.Controllers.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]

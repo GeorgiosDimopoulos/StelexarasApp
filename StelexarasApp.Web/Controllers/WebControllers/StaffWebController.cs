@@ -3,7 +3,7 @@ using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.WebControllers;
+namespace StelexarasApp.Web.Controllers.WebControllers;
 
 [Route("StaffWeb")]
 public class StaffWebController : Controller
@@ -34,7 +34,7 @@ public class StaffWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while fetching the staff list.");
-            ViewData ["ErrorMessage"] = "An error occurred while fetching the staff list. Please try again later.";
+            ViewData["ErrorMessage"] = "An error occurred while fetching the staff list. Please try again later.";
             return View("Error");
         }
     }

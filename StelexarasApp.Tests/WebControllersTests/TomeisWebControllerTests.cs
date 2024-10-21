@@ -4,7 +4,7 @@ using Moq;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Web.WebControllers;
+using StelexarasApp.Web.Controllers.WebControllers;
 
 namespace StelexarasApp.Tests.WebControllersTests;
 

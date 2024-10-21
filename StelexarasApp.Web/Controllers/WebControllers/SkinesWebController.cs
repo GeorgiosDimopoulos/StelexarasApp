@@ -2,10 +2,10 @@
 using StelexarasApp.Services.DtosModels.Domi;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.WebControllers;
+namespace StelexarasApp.Web.Controllers.WebControllers;
 
 [Route("SkinesWeb")]
-public class SkinesWebController (ITeamsService teamsService, ILogger<SkinesWebController> logger) : Controller
+public class SkinesWebController(ITeamsService teamsService, ILogger<SkinesWebController> logger) : Controller
 {
     private readonly ITeamsService _teamsService = teamsService;
     private readonly ILogger<SkinesWebController> _logger = logger;

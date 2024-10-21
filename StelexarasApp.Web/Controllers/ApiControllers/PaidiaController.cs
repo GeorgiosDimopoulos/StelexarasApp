@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.DtosModels.Atoma;
-namespace StelexarasApp.Web.ApiControllers
+namespace StelexarasApp.Web.Controllers.ApiControllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -21,7 +21,7 @@ namespace StelexarasApp.Web.ApiControllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             var paidia = await _paidiaService.GetPaidiaInService(PaidiType.Kataskinotis);
             return Ok(paidia);
         }
