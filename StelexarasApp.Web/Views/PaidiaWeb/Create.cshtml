@@ -1,57 +1,33 @@
-﻿@model StelexarasApp.DataAccess.Models.Atoma.Paidi
+﻿@model StelexarasApp.Services.DtosModels.Atoma.IStelexosDto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData ["Title"] = "Create Staff";
 }
 
-<h1>Create</h1>
+<h1>Create Staff Member</h1>
 
-<h4>Paidi</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FullName" class="control-label"></label>
-                <input asp-for="FullName" class="form-control" />
-                <span asp-validation-for="FullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SeAdeia" /> @Html.DisplayNameFor(model => model.SeAdeia)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sex" class="control-label"></label>
-                <select asp-for="Sex" class="form-control"></select>
-                <span asp-validation-for="Sex" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaidiType" class="control-label"></label>
-                <select asp-for="PaidiType" class="form-control"></select>
-                <span asp-validation-for="PaidiType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SkiniId" class="control-label"></label>
-                <select asp-for="SkiniId" class ="form-control" asp-items="ViewBag.SkiniId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="FullName" class="control-label">Full Name</label>
+        <input asp-for="FullName" class="form-control" placeholder="Enter full name" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Thesi" class="control-label">Position</label>
+        <input asp-for="Thesi" class="form-control" placeholder="Enter position" />
+        <span asp-validation-for="Thesi" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tel" class="control-label">Phone</label>
+        <input asp-for="Tel" class="form-control" placeholder="Enter phone number" />
+        <span asp-validation-for="Tel" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
