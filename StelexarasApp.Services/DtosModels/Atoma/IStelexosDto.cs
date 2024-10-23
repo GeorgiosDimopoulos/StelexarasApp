@@ -1,5 +1,6 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Atoma;
+using System.ComponentModel.DataAnnotations;
 
 namespace StelexarasApp.Services.DtosModels.Atoma
 {
@@ -11,6 +12,8 @@ namespace StelexarasApp.Services.DtosModels.Atoma
         public int Id { get; set; }
         public Thesi Thesi { get; set; }
         public string? DtoXwrosName { get; set; }
+
+        [Phone]
         public string? Tel { get; set; }
     }
 }
