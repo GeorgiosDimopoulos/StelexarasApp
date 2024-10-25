@@ -10,6 +10,30 @@ services:
     restart: always
     networks:
       - app-network
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"  # Expose the database port
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./FrontendProject  # Context points to the frontend layer
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Expose your frontend port
+    restart: always
+    networks:
+      - app-network
+    depends_on:
+      - api
 
 networks:
   app-network:
