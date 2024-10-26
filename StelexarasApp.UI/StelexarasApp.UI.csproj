@@ -84,6 +84,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\StelexarasApp.Library\StelexarasApp.ViewModels.csproj" />
+	  <ProjectReference Include="..\StelexarasApp.ViewModels\StelexarasApp.ViewModels.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

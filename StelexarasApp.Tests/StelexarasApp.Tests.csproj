@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StelexarasApp.Library\StelexarasApp.ViewModels.csproj" />
+    <ProjectReference Include="..\StelexarasApp.ViewModels\StelexarasApp.ViewModels.csproj" />
     <ProjectReference Include="..\StelexarasApp.Web\StelexarasApp.Web.csproj" />
   </ItemGroup>
 

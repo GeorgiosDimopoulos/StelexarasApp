@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Models;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.Web.Controllers.ApiControllers;
+namespace StelexarasApp.API.ApiControllers;
 
 [ApiController]
 [Route("[controller]")]

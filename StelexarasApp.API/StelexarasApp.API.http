@@ -1,0 +1,6 @@
+@StelexarasApp.API_HostAddress = http://localhost:5010
+
+GET {{StelexarasApp.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

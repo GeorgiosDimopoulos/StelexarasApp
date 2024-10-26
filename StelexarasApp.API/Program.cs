@@ -1,45 +1,58 @@
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.Repositories;
+using StelexarasApp.API;
+using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.DataAccess.Repositories;
+using StelexarasApp.DataAccess;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services for API layer
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations();
+});
+
+// Configure dependencies
 ConfigureServices(builder);
 
 var app = builder.Build();
 
-// Middleware and routing configuration
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = "swagger";
+    });
     app.UseDeveloperExceptionPage();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 
-// Map default MVC routes
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+// Map endpoints
+app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
 
 void ConfigureServices(WebApplicationBuilder builder)
 {
-    // Add DbContext
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    builder.Services.ConfigureHealthChecks(builder.Configuration);
+    builder.Services.AddHealthChecks()
+        .AddCheck<DbHealthCheck>("Database");
 
     // Register Repositories and Services used by API
     builder.Services.AddScoped<IPaidiRepository, PaidiRepository>();
@@ -54,8 +67,13 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddScoped<ITeamsService, TeamsService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
 
+    // Add AutoMapper
     builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
-    // Add MVC services
-    builder.Services.AddControllersWithViews();
+    // Add DbContext
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    // Add Health Checks UI
+    builder.Services.AddHealthChecksUI().AddInMemoryStorage();
 }
