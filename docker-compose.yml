@@ -16,16 +16,16 @@ services:
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      SA_PASSWORD: "YourStrong!Passw0rd"
+      SA_PASSWORD: "SA_PASSWORD"
       ACCEPT_EULA: "Y"
     ports:
-      - "1433:1433"  # Expose the database port
+      - "1433:1433" # Expose the database port
     networks:
       - app-network
 
   frontend:
     build:
-      context: ./FrontendProject  # Context points to the frontend layer
+      context: ./UI  # Context points to the frontend layer
       dockerfile: Dockerfile
     ports:
       - "3000:3000"  # Expose your frontend port
