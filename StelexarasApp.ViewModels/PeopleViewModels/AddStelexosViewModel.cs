@@ -1,6 +1,5 @@
 ﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;
 
@@ -16,7 +15,7 @@ public class AddStelexosViewModel
     public string FullName { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public string XwrosName { get; set; } = string.Empty;
-    public int Age { get; set; } = 0;
+    public int Age { get; set; } = default!;
     public Command SaveCommand { get; }
 
     public AddStelexosViewModel(IStaffService staffService, ITeamsService teamsService)
