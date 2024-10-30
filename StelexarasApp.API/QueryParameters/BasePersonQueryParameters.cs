@@ -2,7 +2,7 @@
 {
     public class BasePersonQueryParameters
     {
-        public Guid? Id { get; set; }
+        public int Id { get; set; } // Guid
         public string? FullName { get; set; }
     }
 }

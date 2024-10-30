@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.API.QueryParameters;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.Services.DtosModels.Domi;
@@ -35,15 +36,33 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPost("Omadarxi")]
-    public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] OmadarxisDto omadarxisDto)
+    public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] OmadarxisQueryParameters omadarxisParams)
     {
+        if (omadarxisParams == null)
+        {
+            return BadRequest("Omadarxis parameters cannot be null");
+        }
+
+        var omadarxisDto = new OmadarxisDto
+        {
+            Age = omadarxisParams.Age,
+            Sex = omadarxisParams.Sex,
+            Id = omadarxisParams.Id,
+            Thesi = omadarxisParams.Thesi ?? Thesi.Omadarxis,
+            DtoXwrosName = omadarxisParams.DtoXwrosName,
+            Tel = omadarxisParams.Tel
+        };
+
         var result = await _stelexiService.AddStelexosInService(omadarxisDto);
 
         if (!result)
-            return NotFound();
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Error creating new Omadarxis record");
+        }
 
-        return Ok(result);
+        return CreatedAtAction(nameof(GetOmadarxis), new { id = omadarxisDto.Id }, omadarxisDto);
     }
+
 
     [HttpPut("Omadarxi/{id}")]
     public async Task<IActionResult> PutOmadarxi([FromBody] OmadarxisDto omadarxisDto)
@@ -118,8 +137,23 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPost("Koinotarxi")]
-    public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] KoinotarxisDto koinotarxisDto)
+    public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] KoinotarxisQueryParameters koinotarxisQueryParameters)
     {
+        if (koinotarxisQueryParameters == null)
+        {
+            return BadRequest("Koinotarxis parameters cannot be null");
+        }
+
+        var koinotarxisDto = new KoinotarxisDto
+        {
+            Age = koinotarxisQueryParameters.Age,
+            Sex = koinotarxisQueryParameters.Sex,
+            Id = koinotarxisQueryParameters.Id,
+            Thesi = koinotarxisQueryParameters.Thesi ?? Thesi.Omadarxis,
+            DtoXwrosName = koinotarxisQueryParameters.DtoXwrosName,
+            Tel = koinotarxisQueryParameters.Tel
+        };
+
         var result = await _stelexiService.AddStelexosInService(koinotarxisDto);
 
         if (!result)
@@ -194,8 +228,26 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPost("Tomearxi")]
-    public async Task<ActionResult<Tomearxis>> PostTomearxi([FromBody] TomearxisDto tomearxisDto)
+    public async Task<ActionResult<Tomearxis>> PostTomearxi([FromBody] TomearxisQueryParameters tomearxisQueryParameters)
     {
+        if (tomearxisQueryParameters == null)
+        {
+            return BadRequest("Tomearxis parameters cannot be null");
+        }
+
+        var tomearxisDto = new TomearxisDto
+        {
+            Age = tomearxisQueryParameters.Age,
+            Thesi = tomearxisQueryParameters.Thesi ?? Thesi.Tomearxis,
+            DtoXwrosName = tomearxisQueryParameters.DtoXwrosName,
+            Tel = tomearxisQueryParameters.Tel,
+            Id = tomearxisQueryParameters.Id,
+            // KoinotarxesIds = new List<int>(),
+            FullName = tomearxisQueryParameters.FullName,
+            Sex = tomearxisQueryParameters.Sex            
+        };
+
+
         var result = await _stelexiService.AddStelexosInService(tomearxisDto);
 
         if (!result)
