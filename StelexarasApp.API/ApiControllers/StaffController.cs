@@ -242,7 +242,6 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
             DtoXwrosName = tomearxisQueryParameters.DtoXwrosName,
             Tel = tomearxisQueryParameters.Tel,
             Id = tomearxisQueryParameters.Id,
-            // KoinotarxesIds = new List<int>(),
             FullName = tomearxisQueryParameters.FullName,
             Sex = tomearxisQueryParameters.Sex            
         };

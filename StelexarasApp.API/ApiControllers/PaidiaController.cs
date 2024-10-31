@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.API.QueryParameters;
 
 namespace StelexarasApp.API.ApiControllers;
 
@@ -51,11 +52,19 @@ public class PaidiaController : ControllerBase
     }
 
     [HttpPost("Paidi")]
-    public async Task<ActionResult<Paidi>> PostPaidi([FromBody] PaidiDto paidiDto)
+    public async Task<ActionResult<Paidi>> PostPaidi([FromBody] PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
+        var paidiDto = new PaidiDto
+        {
+            FullName = paidiQueryParameters.FullName,
+            Id = paidiQueryParameters.Id,
+            PaidiType = paidiQueryParameters.PaidiType,
+            SeAdeia = paidiQueryParameters.SeAdeia,
+        };
+            
         var result = await _paidiaService.AddPaidiInService(paidiDto);
 
         if (result)

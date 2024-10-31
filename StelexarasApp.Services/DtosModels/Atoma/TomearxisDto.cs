@@ -5,7 +5,7 @@ namespace StelexarasApp.Services.DtosModels.Atoma;
 
 public class TomearxisDto : IStelexosDto
 {
-    public List<int> KoinotarxesIds { get; set; } = [];
+    public List<int>? KoinotarxesIds { get; set; }
     public string? FullName { get; set; }
     public int Age { get; set; }
     public Sex Sex { get; set; }
