@@ -45,9 +45,9 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
 
         var omadarxisDto = new OmadarxisDto
         {
+            // Id = omadarxisParams.Id,
             Age = omadarxisParams.Age,
             Sex = omadarxisParams.Sex,
-            Id = omadarxisParams.Id,
             Thesi = omadarxisParams.Thesi ?? Thesi.Omadarxis,
             DtoXwrosName = omadarxisParams.DtoXwrosName,
             Tel = omadarxisParams.Tel
@@ -148,7 +148,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
         {
             Age = koinotarxisQueryParameters.Age,
             Sex = koinotarxisQueryParameters.Sex,
-            Id = koinotarxisQueryParameters.Id,
+            // Id = koinotarxisQueryParameters.Id,
             Thesi = koinotarxisQueryParameters.Thesi ?? Thesi.Omadarxis,
             DtoXwrosName = koinotarxisQueryParameters.DtoXwrosName,
             Tel = koinotarxisQueryParameters.Tel
@@ -163,8 +163,24 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPut("Koinotarxi/{id}")]
-    public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisDto koinotarxisDto)
+    public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisQueryParameters koinotarxisQueryParameters, int id)
     {
+        if (koinotarxisQueryParameters == null)
+        {
+            return BadRequest("Koinotarxis parameters cannot be null");
+        }
+
+        var koinotarxisDto = new KoinotarxisDto
+        {
+            Age = koinotarxisQueryParameters.Age,
+            Sex = koinotarxisQueryParameters.Sex,
+            Id = id,
+            Thesi = Thesi.Omadarxis,
+            DtoXwrosName = koinotarxisQueryParameters.DtoXwrosName,
+            Tel = koinotarxisQueryParameters.Tel,
+            FullName = koinotarxisQueryParameters.FullName,
+        };
+
         var result = await _stelexiService.UpdateStelexosInService(koinotarxisDto);
 
         if (!result)
@@ -237,13 +253,13 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
 
         var tomearxisDto = new TomearxisDto
         {
+            // Id = tomearxisQueryParameters.Id,
             Age = tomearxisQueryParameters.Age,
             Thesi = tomearxisQueryParameters.Thesi ?? Thesi.Tomearxis,
             DtoXwrosName = tomearxisQueryParameters.DtoXwrosName,
             Tel = tomearxisQueryParameters.Tel,
-            Id = tomearxisQueryParameters.Id,
             FullName = tomearxisQueryParameters.FullName,
-            Sex = tomearxisQueryParameters.Sex            
+            Sex = tomearxisQueryParameters.Sex
         };
 
 
@@ -256,8 +272,24 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPut("Tomearxi/{id}")]
-    public async Task<IActionResult> PutTomearxi([FromBody] TomearxisDto tomearxisDto)
+    public async Task<IActionResult> PutTomearxi([FromBody] TomearxisQueryParameters tomearxisQueryParameters)
     {
+        if (tomearxisQueryParameters == null)
+        {
+            return BadRequest("Tomearxis parameters cannot be null");
+        }
+
+        var tomearxisDto = new TomearxisDto
+        {
+            // Id = tomearxisQueryParameters.Id,
+            Age = tomearxisQueryParameters.Age,
+            Sex = tomearxisQueryParameters.Sex,
+            Thesi = tomearxisQueryParameters.Thesi ?? Thesi.Tomearxis,
+            DtoXwrosName = tomearxisQueryParameters.DtoXwrosName,
+            Tel = tomearxisQueryParameters.Tel,            
+            FullName = tomearxisQueryParameters.FullName
+        };
+
         var result = await _stelexiService.UpdateStelexosInService(tomearxisDto);
 
         if (!result)

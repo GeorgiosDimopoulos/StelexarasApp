@@ -59,12 +59,15 @@ public class PaidiaController : ControllerBase
 
         var paidiDto = new PaidiDto
         {
+            // Id = paidiQueryParameters.Id,
             FullName = paidiQueryParameters.FullName,
-            Id = paidiQueryParameters.Id,
             PaidiType = paidiQueryParameters.PaidiType,
             SeAdeia = paidiQueryParameters.SeAdeia,
+            Age = paidiQueryParameters.Age,
+            Sex = paidiQueryParameters.Sex,
+            SkiniName = paidiQueryParameters.SkiniName
         };
-            
+
         var result = await _paidiaService.AddPaidiInService(paidiDto);
 
         if (result)

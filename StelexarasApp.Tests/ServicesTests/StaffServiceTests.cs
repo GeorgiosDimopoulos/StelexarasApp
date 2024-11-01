@@ -88,7 +88,6 @@ public class StaffServiceTests
                     Thesi = thesi,
                     Sex = Sex.Male,
                     DtoXwrosName = "TestXwros",
-                    SkiniId = 1,
                 };
                 break;
             case Thesi.Tomearxis:
@@ -111,8 +110,6 @@ public class StaffServiceTests
                     Tel = "1234567890",
                     Thesi = thesi,
                     Sex = Sex.Male,
-                    TomeasName = "TestTomea",
-                    KoinotitaId = 1,
                     DtoXwrosName = "TestXwros",
                 };
                 break;
@@ -328,7 +325,6 @@ public class StaffServiceTests
             Age = 30,
             Sex = Sex.Male,
             Tel = "11111111",
-            SkiniId = 1,
             Thesi = Thesi.Omadarxis
         };
         var omadarxis = new Omadarxis
