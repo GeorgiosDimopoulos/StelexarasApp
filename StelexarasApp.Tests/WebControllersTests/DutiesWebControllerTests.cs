@@ -75,12 +75,16 @@ public class DutiesWebControllerTests
     {
         // Arrange
         var duty = new Duty { Id = 1, Name = "Duty 1", Date = DateTime.Now };
-        _mockService.Setup(service => service.GetDutyByIdInService(duty.Id));
+        _mockService.Setup(service => service.GetDutyByIdInService(duty.Id)).ReturnsAsync(duty);
 
         // Act
         var result = await _controller.Details(duty.Id);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
+        var model = Assert.IsAssignableFrom<Duty>(viewResult.Model);
+        Assert.Equal(duty.Id, model.Id);
+        Assert.Equal(duty.Name, model.Name);
+        Assert.Equal(duty.Date, model.Date);
     }
 }

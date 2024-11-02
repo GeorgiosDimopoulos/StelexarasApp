@@ -32,7 +32,7 @@ public class SkinesWebController(ITeamsService teamsService, ILogger<SkinesWebCo
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while fetching in Index Teams.");
-            return View(null);
+            return View("Error");
         }
     }
 

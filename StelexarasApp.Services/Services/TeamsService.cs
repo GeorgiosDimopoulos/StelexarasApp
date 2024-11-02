@@ -58,8 +58,7 @@ namespace StelexarasApp.Services.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                return new List<SkiniDto>();
             }
         }
 

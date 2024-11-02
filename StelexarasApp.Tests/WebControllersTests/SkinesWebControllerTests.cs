@@ -57,10 +57,10 @@ public class SkinesWebControllerTests
     }
 
     [Fact]
-    public async Task Index_ReturnsErrorView_WhenExceptionThrown()
+    public async Task Index_ReturnsNothing_WhenExceptionThrown()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllSkinesInService()).ThrowsAsync(new Exception("Test exception"));
+        _mockService.Setup(service => service.GetAllSkinesInService()).Returns(() => throw new Exception());
 
         // Act
         var result = await _controller.Index();
