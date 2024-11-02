@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models;
+using StelexarasApp.DataAccess.Models.Logs;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories;
@@ -35,7 +36,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             if (transaction != null)
                 await transaction.RollbackAsync();
@@ -74,7 +75,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         catch (Exception ex)
         {
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
             if (transaction != null)
             {
                 await transaction.RollbackAsync();
@@ -108,7 +109,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         catch (Exception ex)
         {
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
             return null!;
         }
     }
@@ -153,7 +154,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         catch (Exception ex)
         {
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
             Console.WriteLine(ex.Message);
 
             if (transaction != null)

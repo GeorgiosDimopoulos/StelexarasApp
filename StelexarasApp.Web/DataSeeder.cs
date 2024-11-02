@@ -11,12 +11,14 @@ public class DataSeeder(
     IStaffRepository staffRepository,
     IExpenseRepository expenseRepository,
     IDutyRepository dutyRepository,
+    ILogger<DataSeeder> logger,
     ITeamsRepository teamsRepository)
 {
     private readonly IStaffRepository _staffRepository = staffRepository;
     private readonly ITeamsRepository _teamsRepository = teamsRepository;
     private readonly IExpenseRepository _expenseRepository = expenseRepository;
     private readonly IDutyRepository _dutyRepository = dutyRepository;
+    private readonly ILogger<DataSeeder> logger = logger;
 
     public async Task<bool> SeedTeamsAndStaffData()
     {
@@ -24,7 +26,6 @@ public class DataSeeder(
         {
             await SeedAllTeams();
 
-            LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
             return true;
         }
         catch (Exception ex)
@@ -32,18 +33,6 @@ public class DataSeeder(
             Console.WriteLine("Database has already been seeded." + ex.InnerException);
             return false;
         }
-        //if (await _teamsRepository.HasData())
-        //{
-        //    Console.WriteLine("Database has already been seeded.");
-        //    return false;
-        //}
-        //else
-        //{
-        //    await SeedAllTeams();
-
-        //    LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
-        //    return true;
-        //}
     }
 
     public async Task<bool> SeedExpensesData()
@@ -69,7 +58,6 @@ public class DataSeeder(
             });
 
             Console.WriteLine("Database of Expenses has been seeded!");
-            LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
             return true;
         }
     }
@@ -93,8 +81,8 @@ public class DataSeeder(
                 Name = "Καθαρισμός2",
                 Date = DateTime.Now,
             });
-
-            LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
+            
+            logger.LogInformation("This is an informational message about a successful operation.");
             return true;
         }
     }

@@ -93,3 +93,4 @@ packages/
 TestResults/
 *.trx
 *.coverage
+/venv

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models;
+using StelexarasApp.DataAccess.Models.Logs;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories
@@ -28,12 +29,11 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (transaction != null)
                     await transaction.CommitAsync();
 
-                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
                 return true;
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " " + ex.Message, TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " " + ex.Message, LogErrorType.DbError);
                 _logger.LogError("Attempted to AddDutyInDb, exception: " + ex.Message);
 
                 if (transaction != null)
@@ -61,7 +61,6 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (transaction != null)
                     await transaction.CommitAsync();
 
-                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed!", TypeOfOutput.DbSuccessMessage);
                 return true;
             }
             catch (Exception ex)

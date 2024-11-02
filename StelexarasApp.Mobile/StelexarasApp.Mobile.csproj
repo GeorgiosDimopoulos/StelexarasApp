@@ -46,6 +46,10 @@
 		  <Color>#512BD4</Color>
 		  <BaseSize>128,128</BaseSize>
 		</MauiSplashScreen>
+		<MauiSplashScreen Include="Resources\drawable\typetlogo.png">
+		  <Color>#512BD4</Color>
+		  <BaseSize>128,128</BaseSize>
+		</MauiSplashScreen>
 		<MauiSplashScreen Include="Resources\Splash\typetlogo.png" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
@@ -68,6 +72,7 @@
 
 	<ItemGroup>
 	  <None Remove="Platforms\Android\Resources\drawable\typetlogo.png" />
+	  <None Remove="Resources\drawable\typetlogo.png" />
 	  <None Remove="Resources\Images\typet.png" />
 	</ItemGroup>
 

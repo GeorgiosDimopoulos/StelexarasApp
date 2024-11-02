@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma;
 using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.DataAccess.Models.Logs;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories;
@@ -65,7 +66,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
             if (transaction != null)
             {
                 await transaction.RollbackAsync();
@@ -112,7 +113,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (Exception ex)
         {
             _logger.LogError("Attempted to add Paidi, exception: " + ex.Message);
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
 
             if (transaction != null)
                 await transaction.RollbackAsync();
@@ -156,7 +157,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (Exception ex)
         {
             _logger.LogError("Attempted to UpdatePaidiInDb, exception: " + ex.Message);
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
 
             if (transaction != null)
                 await transaction.RollbackAsync();
@@ -192,7 +193,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (Exception ex)
         {
             _logger.LogError("Attempted to AddSkinesInDb, exception: " + ex.Message);
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
 
             if (transaction != null)
             {
@@ -233,7 +234,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (Exception ex)
         {
             _logger.LogError("Attempted to DeletePaidiInDb, exception: " + ex.Message);
-            LogFileWriter.WriteToLog(ex.Message, TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog(ex.Message, LogErrorType.DbError);
             await transaction!.RollbackAsync();
             return false;
         }

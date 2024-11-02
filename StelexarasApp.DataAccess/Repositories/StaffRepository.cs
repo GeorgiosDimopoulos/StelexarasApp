@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.DataAccess.Models.Logs;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories;
@@ -50,7 +51,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
             return false;
         }
     }
@@ -81,7 +82,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (DbUpdateException dbEx) when (dbEx.InnerException is SqlException sqlEx && sqlEx.Number == 2601)
         {
             _logger.LogError(dbEx, "{MethodName}, exception: {ExceptionMessage}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, dbEx.Message);
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {dbEx.Message}", TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {dbEx.Message}", LogErrorType.DbError);
             if (transaction != null)
                 await transaction.RollbackAsync();
             return false;
@@ -90,7 +91,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         {
             if (transaction != null)
                 await transaction.RollbackAsync();
-            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
             return false;
         }
     }
@@ -121,7 +122,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         {
             if (transaction != null)
                 await transaction.RollbackAsync();
-            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
             return false;
         }
     }
@@ -168,7 +169,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         {
             if (transaction != null)
                 await transaction.RollbackAsync();
-            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
             return false;
         }
     }
@@ -194,7 +195,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", TypeOfOutput.DbErroMessager);
+            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.DbError);
 
             // return await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, null!, _logger);
             return [];
@@ -277,7 +278,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         {
             if (transaction != null)
                 await transaction.RollbackAsync();
-            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
             return false;
         }
     }
@@ -315,7 +316,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         {
             if (transaction != null)
                 await transaction.RollbackAsync();
-            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
             return false;
         }
     }
@@ -346,7 +347,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
             return null!;
         }
     }

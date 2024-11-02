@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.DataAccess.Models.Logs;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories
@@ -17,17 +18,14 @@ namespace StelexarasApp.DataAccess.Repositories
             try
             {
                 if (await _dbContext.Koinotites!.ToListAsync() != null)
-                {
-                    LogFileWriter.WriteToLog("GetKoinotites completed!", TypeOfOutput.DbSuccessMessage);
                     return await _dbContext.Koinotites!.ToListAsync();
-                }
 
                 return null!;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", TypeOfOutput.DbErroMessager);
+                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", LogErrorType.DbError);
                 return null!;
             }
         }
@@ -40,7 +38,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return null!;
             }
         }
@@ -56,7 +54,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return null!;
             }
         }
@@ -69,7 +67,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return null!;
             }
         }
@@ -82,7 +80,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return null!;
             }
         }
@@ -109,7 +107,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return null!;
             }
         }
@@ -151,7 +149,7 @@ namespace StelexarasApp.DataAccess.Repositories
             {
                 if (transaction != null)
                     await transaction.RollbackAsync();
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }
@@ -180,7 +178,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (transaction != null)
                     await transaction.RollbackAsync();
 
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }
@@ -208,7 +206,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (transaction != null)
                     await transaction.RollbackAsync();
 
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }
@@ -241,7 +239,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (transaction != null)
                     await transaction.RollbackAsync();
 
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }
@@ -274,7 +272,7 @@ namespace StelexarasApp.DataAccess.Repositories
             {
                 if (transaction != null)
                     await transaction.RollbackAsync();
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }
@@ -306,7 +304,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (transaction != null)
                     await transaction.RollbackAsync();
 
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }
@@ -340,7 +338,7 @@ namespace StelexarasApp.DataAccess.Repositories
             {
                 if (transaction != null)
                     await transaction.RollbackAsync();
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }
@@ -366,7 +364,7 @@ namespace StelexarasApp.DataAccess.Repositories
             {
                 if (transaction != null)
                     await transaction.RollbackAsync();
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }
@@ -396,7 +394,7 @@ namespace StelexarasApp.DataAccess.Repositories
             {
                 if (transaction != null)
                     await transaction.RollbackAsync();
-                await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
                 return false;
             }
         }

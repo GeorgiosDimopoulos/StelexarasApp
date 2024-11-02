@@ -14,17 +14,20 @@ public class DtoDataSeeder
     private readonly ITeamsService _teamsService;
     private readonly IExpenseService _expenseService;
     private readonly IDutyService _dutyService;
+    private readonly ILogger<DtoDataSeeder> logger;
 
     public DtoDataSeeder(
         IStaffService staffService,
         IExpenseService expenseService,
         IDutyService dutyService,
-        ITeamsService teamsService)
+        ITeamsService teamsService,
+        ILogger<DtoDataSeeder> logger)
     {
         _staffService = staffService;
         _expenseService = expenseService;
         _dutyService = dutyService;
         _teamsService = teamsService;
+        this.logger = logger;
     }
 
     public async Task<bool> SeedTeamsData()
@@ -40,7 +43,7 @@ public class DtoDataSeeder
             await SeedKoinotites();
             await SeedSkines();
 
-            LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
+            // LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
             return true;
         }
     }
@@ -59,7 +62,7 @@ public class DtoDataSeeder
             await SeedTomearxes();
             await SeedEkpaideutes();
 
-            LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
+            logger.LogInformation("This is an informational message about a successful SeedStelexiData operation.");
             return true;
         }
     }
@@ -86,7 +89,7 @@ public class DtoDataSeeder
             });
 
             Console.WriteLine("Database of Expenses has been seeded!");
-            LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
+            logger.LogInformation("This is an informational message about a successful SeedExpensesData operation.");
             return true;
         }
     }
@@ -111,7 +114,7 @@ public class DtoDataSeeder
                 Date = DateTime.Now,
             });
 
-            LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
+            logger.LogInformation("This is an informational message about a successful SeedDutiesData operation.");
             return true;
         }
     }
