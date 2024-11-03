@@ -62,7 +62,7 @@ public class StaffService : IStaffService
             var omadarxis = _mapper.Map<Omadarxis>(omadarxisDto);
             if (omadarxis == null)
             {
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, Mapping Omadarxis with omadarxisDto failed", LogErrorType.ServiceError);
+                LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, Mapping Omadarxis with omadarxisDto failed", ErrorType.ServiceError);
                 throw new ArgumentNullException(nameof(omadarxis), "Mapping failed");
             }
 
@@ -70,7 +70,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return false;
         }
     }
@@ -119,7 +119,7 @@ public class StaffService : IStaffService
 
             if (stelexosEntity == null)
             {
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, Mapping Stelexos failed", LogErrorType.ServiceError);
+                LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, Mapping Stelexos failed", ErrorType.ServiceError);
                 throw new ArgumentNullException(nameof(stelexosEntity), "Mapping failed");
             }
 
@@ -133,7 +133,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return false;
         }
     }
@@ -156,7 +156,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return null!;
         }
     }
@@ -177,7 +177,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return null!;
         }
     }
@@ -195,7 +195,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return null!;
         }
     }
@@ -213,7 +213,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return null!;
         }
     }
@@ -234,7 +234,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return Enumerable.Empty<OmadarxisDto>();
         }
     }
@@ -254,7 +254,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return null!;
         }
     }
@@ -275,7 +275,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return [];
         }
     }
@@ -296,7 +296,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return null!;
         }
     }
@@ -316,7 +316,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return false;
         }
     }
@@ -350,7 +350,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.ServiceError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.ServiceError);
             return null!;
         }
     }

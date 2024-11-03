@@ -82,7 +82,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (DbUpdateException dbEx) when (dbEx.InnerException is SqlException sqlEx && sqlEx.Number == 2601)
         {
             _logger.LogError(dbEx, "{MethodName}, exception: {ExceptionMessage}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, dbEx.Message);
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {dbEx.Message}", LogErrorType.DbError);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {dbEx.Message}", ErrorType.DbError);
             if (transaction != null)
                 await transaction.RollbackAsync();
             return false;
@@ -195,9 +195,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", LogErrorType.DbError);
-
-            // return await ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, null!, _logger);
+            LogFileWriter.WriteErrorToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message}", ErrorType.DbError);
             return [];
         }
     }

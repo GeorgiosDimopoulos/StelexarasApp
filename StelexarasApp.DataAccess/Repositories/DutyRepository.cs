@@ -33,7 +33,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " " + ex.Message, LogErrorType.DbError);
+                LogFileWriter.WriteErrorToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " " + ex.Message, ErrorType.DbError);
                 _logger.LogError("Attempted to AddDutyInDb, exception: " + ex.Message);
 
                 if (transaction != null)
