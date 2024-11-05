@@ -36,7 +36,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteErrorToLog(ex.Message, ErrorType.DbError);
+            LogFileWriter.WriteToLog(ex.Message, ErrorType.DbError);
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
             if (transaction != null)
                 await transaction.RollbackAsync();
@@ -75,7 +75,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         catch (Exception ex)
         {
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteErrorToLog(ex.Message, ErrorType.DbError);
+            LogFileWriter.WriteToLog(ex.Message, ErrorType.DbError);
             if (transaction != null)
             {
                 await transaction.RollbackAsync();
@@ -109,7 +109,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         catch (Exception ex)
         {
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteErrorToLog(ex.Message, ErrorType.DbError);
+            LogFileWriter.WriteToLog(ex.Message, ErrorType.DbError);
             return null!;
         }
     }
@@ -154,7 +154,7 @@ public class ExpenseRepository(AppDbContext dbContext, ILoggerFactory loggerFact
         catch (Exception ex)
         {
             _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-            LogFileWriter.WriteErrorToLog(ex.Message, ErrorType.DbError);
+            LogFileWriter.WriteToLog(ex.Message, ErrorType.DbError);
             Console.WriteLine(ex.Message);
 
             if (transaction != null)

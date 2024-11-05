@@ -7,78 +7,37 @@ public class LogFileWriter
     private static readonly string LogDirectory = @"C:\Projects\GitHub\StelexarasApp\Logs";
     private static readonly string LogFilePath = Path.Combine(LogDirectory, "applicationLogs.txt");
 
-    public static void WriteToLogNEW(string message, string category, string type)
+    public static void WriteToLog(string message, Enum actionType)
     {
         try
         {
-            if (!Directory.Exists(LogDirectory))
+            string logMessage;
+
+            if (actionType is ErrorType errorType)
             {
-                Directory.CreateDirectory(LogDirectory);
+                logMessage = errorType switch
+                {
+                    ErrorType.DbError => $"DB ERROR, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    ErrorType.UiWarning => $"UI WARNING, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    ErrorType.ServiceError => $"SERVICE ERROR, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    ErrorType.ValidationError => $"VALIDATION ERROR, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    _ => throw new ArgumentOutOfRangeException(nameof(actionType), actionType, null)
+                };
             }
-
-            string logMessage = $"{category.ToUpper()}, {type.ToUpper()}, {message}, {DateTime.Now:HH:mm:ss}\n";
-
-            lock (LogFilePath)
+            else if (actionType is CrudType crudType)
             {
-                File.AppendAllText(LogFilePath, logMessage);
+                logMessage = crudType switch
+                {
+                    CrudType.Create => $"CREATE, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    CrudType.Read => $"READ, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    CrudType.Update => $"UPDATE, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    CrudType.Delete => $"DELETE, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    _ => throw new ArgumentOutOfRangeException(nameof(actionType), actionType, null)
+                };
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("An error occurred while writing to the log file: " + ex.Message);
-        }
-    }
-
-    public static void WriteErrorToLog(string message, ErrorType typeOfOutput)
-    {
-        try
-        {
-            if (!Directory.Exists(LogDirectory))
+            else
             {
-                Directory.CreateDirectory(LogDirectory);
-            }
-
-            string logMessage = typeOfOutput switch
-            {
-                ErrorType.DbError=> $"DB ERROR, {message}, {DateTime.Now:HH:mm:ss}\n",
-                ErrorType.UiWarning => $"UI WARNING, {message}, {DateTime.Now:HH:mm:ss}\n",
-                ErrorType.ServiceError => $"SERVICE ERROR, {message}, {DateTime.Now:HH:mm:ss}\n",
-                ErrorType.ValidationError => $"VALIDATION ERROR, {message}, {DateTime.Now:HH:mm:ss}\n",
-                _ => throw new ArgumentOutOfRangeException(nameof(typeOfOutput), typeOfOutput, null)
-            };
-
-            lock (LogFilePath)
-            {
-                File.AppendAllText(LogFilePath, logMessage);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("An error occurred while writing to the log file: " + ex.Message);
-        }
-    }
-
-    public static void WriteCrudToLog(string message, CrudType typeOfOutput)
-    {
-        try
-        {
-            if (!Directory.Exists(LogDirectory))
-            {
-                Directory.CreateDirectory(LogDirectory);
-            }
-
-            string logMessage = typeOfOutput switch
-            {
-                CrudType.Create => $"CREATE, {message}, {DateTime.Now:HH:mm:ss}\n",
-                CrudType.Read => $"READ, {message}, {DateTime.Now:HH:mm:ss}\n",
-                CrudType.Update => $"UPDATE, {message}, {DateTime.Now:HH:mm:ss}\n",
-                CrudType.Delete => $"DELETE, {message}, {DateTime.Now:HH:mm:ss}\n",
-                _ => throw new ArgumentOutOfRangeException(nameof(typeOfOutput), typeOfOutput, null)
-            };
-
-            lock (LogFilePath)
-            {
-                File.AppendAllText(LogFilePath, logMessage);
+                throw new ArgumentException("Unsupported log type", nameof(actionType));
             }
         }
         catch (Exception ex)
