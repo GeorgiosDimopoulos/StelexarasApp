@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;

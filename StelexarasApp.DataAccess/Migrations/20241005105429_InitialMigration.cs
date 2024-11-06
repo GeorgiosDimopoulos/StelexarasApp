@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace StelexarasApp.DataAccess.Migrations
+namespace StelexarasApp.Library.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration

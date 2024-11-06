@@ -3,12 +3,12 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Atoma.Staff;
 using Moq;
 using System.Linq.Expressions;
-using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Tests.TestsHelpers;
-using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma;
 
 namespace StelexarasApp.Tests.DataAccessTests;
 

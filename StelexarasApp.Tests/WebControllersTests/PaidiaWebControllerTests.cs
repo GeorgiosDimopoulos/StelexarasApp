@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Web.Controllers.WebControllers;
 

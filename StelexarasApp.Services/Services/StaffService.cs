@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Services.DtosModels.Domi;
-using StelexarasApp.DataAccess.Models.Logs;
+using StelexarasApp.Library.Models.Logs;
+using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.Dtos.Domi;
 
 namespace StelexarasApp.Services.Services;
 

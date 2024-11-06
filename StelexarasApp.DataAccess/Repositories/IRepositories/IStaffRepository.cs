@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
+﻿using StelexarasApp.Library.Models.Atoma.Staff;
 
 namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {

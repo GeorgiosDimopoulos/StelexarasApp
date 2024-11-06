@@ -1,5 +1,5 @@
 ﻿using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.DataAccess.Models.Logs;
+using StelexarasApp.Library.Models.Logs;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
 using System.Collections;
 

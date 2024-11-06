@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess.Models;
-using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.Library.Models;
+using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Domi;
 
 namespace StelexarasApp.DataAccess
 {

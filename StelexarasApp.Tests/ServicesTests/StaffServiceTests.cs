@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Moq;
-using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.DataAccess.Models.Domi;
+using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.Tests.ServicesTests;

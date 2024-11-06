@@ -1,9 +1,9 @@
 ﻿using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.DataAccess.Models;
-using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.Library.Models;
+using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web;

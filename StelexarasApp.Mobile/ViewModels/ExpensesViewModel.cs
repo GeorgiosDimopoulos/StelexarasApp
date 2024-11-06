@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.ViewModels

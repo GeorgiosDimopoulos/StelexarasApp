@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 		Logs.txt = Logs.txt
 		README.md = README.md
+		test.yml = test.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Tests", "StelexarasApp.Tests\StelexarasApp.Tests.csproj", "{A5C2B217-BED2-4914-8A6D-F0EEFDED004E}"
@@ -23,11 +24,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.ClientApp", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.API", "StelexarasApp.API\StelexarasApp.API.csproj", "{6E487748-6467-4783-841F-02C347D3E273}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.ViewModels", "StelexarasApp.ViewModels\StelexarasApp.ViewModels.csproj", "{075FF935-D16F-423B-B654-F68C1E9F2565}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Mobile", "StelexarasApp.Mobile\StelexarasApp.Mobile.csproj", "{74856196-C172-4165-97D1-4753B95A9187}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.LogsDashboard", "StelexarasApp.LogsDashboard\StelexarasApp.LogsDashboard.csproj", "{83329B56-1DA6-4C67-8A31-2D88E59B40E5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Library", "StelexarasApp.Library\StelexarasApp.Library.csproj", "{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +60,6 @@ Global
 		{6E487748-6467-4783-841F-02C347D3E273}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E487748-6467-4783-841F-02C347D3E273}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E487748-6467-4783-841F-02C347D3E273}.Release|Any CPU.Build.0 = Release|Any CPU
-		{075FF935-D16F-423B-B654-F68C1E9F2565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{075FF935-D16F-423B-B654-F68C1E9F2565}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{075FF935-D16F-423B-B654-F68C1E9F2565}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{075FF935-D16F-423B-B654-F68C1E9F2565}.Release|Any CPU.Build.0 = Release|Any CPU
 		{74856196-C172-4165-97D1-4753B95A9187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{74856196-C172-4165-97D1-4753B95A9187}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74856196-C172-4165-97D1-4753B95A9187}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -73,6 +70,10 @@ Global
 		{83329B56-1DA6-4C67-8A31-2D88E59B40E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83329B56-1DA6-4C67-8A31-2D88E59B40E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83329B56-1DA6-4C67-8A31-2D88E59B40E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

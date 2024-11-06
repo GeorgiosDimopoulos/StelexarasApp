@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models;
+﻿using StelexarasApp.Library.Models;
 
 namespace StelexarasApp.Services.Services.IServices;
 

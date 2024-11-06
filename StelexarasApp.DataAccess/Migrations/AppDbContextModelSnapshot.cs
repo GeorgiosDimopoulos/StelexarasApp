@@ -8,7 +8,7 @@ using StelexarasApp.DataAccess;
 
 #nullable disable
 
-namespace StelexarasApp.DataAccess.Migrations
+namespace StelexarasApp.Library.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace StelexarasApp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidi", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Paidi", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,7 +56,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Paidia");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Ekpaideutis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Ekpaideutis", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,7 +93,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Ekpaideutes");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,7 +135,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Koinotarxes");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Omadarxis", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -177,7 +177,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Omadarxes");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Tomearxis", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -214,7 +214,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Tomearxes");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Koinotita", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Koinotita", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -246,7 +246,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Koinotites");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Skini", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Skini", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -281,7 +281,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Skines");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Tomeas", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Tomeas", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -309,7 +309,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Tomeis");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Duty", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Duty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -332,7 +332,7 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Duties");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Expense", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Expense", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -355,9 +355,9 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Paidi", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Paidi", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Domi.Skini", "Skini")
+                    b.HasOne("StelexarasApp.Library.Models.Domi.Skini", "Skini")
                         .WithMany("Paidia")
                         .HasForeignKey("SkiniId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -366,27 +366,27 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.Navigation("Skini");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", null)
+                    b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Tomearxis", null)
                         .WithMany("Koinotarxes")
                         .HasForeignKey("TomearxisId");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Omadarxis", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", null)
+                    b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", null)
                         .WithMany("Omadarxes")
                         .HasForeignKey("KoinotarxisId");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Koinotita", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Koinotita", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", "Koinotarxis")
+                    b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", "Koinotarxis")
                         .WithOne("Koinotita")
-                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Koinotita", "KoinotarxisId");
+                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Koinotita", "KoinotarxisId");
 
-                    b.HasOne("StelexarasApp.DataAccess.Models.Domi.Tomeas", "Tomeas")
+                    b.HasOne("StelexarasApp.Library.Models.Domi.Tomeas", "Tomeas")
                         .WithMany("Koinotites")
                         .HasForeignKey("TomeasId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -397,33 +397,33 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.Navigation("Tomeas");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Skini", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Skini", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Domi.Koinotita", "Koinotita")
+                    b.HasOne("StelexarasApp.Library.Models.Domi.Koinotita", "Koinotita")
                         .WithMany("Skines")
                         .HasForeignKey("KoinotitaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", "Omadarxis")
+                    b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Omadarxis", "Omadarxis")
                         .WithOne("Skini")
-                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Skini", "OmadarxisId");
+                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Skini", "OmadarxisId");
 
                     b.Navigation("Koinotita");
 
                     b.Navigation("Omadarxis");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Tomeas", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Tomeas", b =>
                 {
-                    b.HasOne("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", "Tomearxis")
+                    b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Tomearxis", "Tomearxis")
                         .WithOne("Tomeas")
-                        .HasForeignKey("StelexarasApp.DataAccess.Models.Domi.Tomeas", "TomearxisId");
+                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Tomeas", "TomearxisId");
 
                     b.Navigation("Tomearxis");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Koinotarxis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", b =>
                 {
                     b.Navigation("Koinotita")
                         .IsRequired();
@@ -431,13 +431,13 @@ namespace StelexarasApp.DataAccess.Migrations
                     b.Navigation("Omadarxes");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Omadarxis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Omadarxis", b =>
                 {
                     b.Navigation("Skini")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Atoma.Staff.Tomearxis", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Tomearxis", b =>
                 {
                     b.Navigation("Koinotarxes");
 
@@ -445,17 +445,17 @@ namespace StelexarasApp.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Koinotita", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Koinotita", b =>
                 {
                     b.Navigation("Skines");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Skini", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Skini", b =>
                 {
                     b.Navigation("Paidia");
                 });
 
-            modelBuilder.Entity("StelexarasApp.DataAccess.Models.Domi.Tomeas", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Tomeas", b =>
                 {
                     b.Navigation("Koinotites");
                 });

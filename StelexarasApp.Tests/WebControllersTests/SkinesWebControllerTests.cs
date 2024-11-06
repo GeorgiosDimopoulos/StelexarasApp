@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Web.Controllers.WebControllers;
 

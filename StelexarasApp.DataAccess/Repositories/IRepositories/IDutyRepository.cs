@@ -1,5 +1,5 @@
 ﻿
-using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Library.Models;
 
 namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {

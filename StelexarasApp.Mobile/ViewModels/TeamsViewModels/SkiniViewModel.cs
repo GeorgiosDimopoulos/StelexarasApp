@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.Services.DtosModels.Atoma;
-using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

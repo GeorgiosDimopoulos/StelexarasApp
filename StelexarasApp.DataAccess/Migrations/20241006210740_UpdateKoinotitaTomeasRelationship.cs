@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace StelexarasApp.DataAccess.Migrations
+namespace StelexarasApp.Library.Migrations
 {
     /// <inheritdoc />
     public partial class UpdateKoinotitaTomeasRelationship : Migration

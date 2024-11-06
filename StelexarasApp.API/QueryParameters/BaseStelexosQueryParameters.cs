@@ -1,5 +1,5 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
+﻿using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma.Staff;
 
 namespace StelexarasApp.API.QueryParameters
 {

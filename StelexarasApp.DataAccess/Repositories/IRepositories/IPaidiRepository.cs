@@ -1,5 +1,5 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Domi;
+﻿using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Domi;
 
 namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {

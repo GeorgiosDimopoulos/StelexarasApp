@@ -1,5 +1,5 @@
-using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.Services.DtosModels.Domi;
+using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.TeamsViewModels;
 

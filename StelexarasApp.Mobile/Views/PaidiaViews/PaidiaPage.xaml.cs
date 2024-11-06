@@ -1,6 +1,6 @@
 ﻿using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.ViewModels.PeopleViewModels;
+using StelexarasApp.Library.Dtos.Atoma;
 
 namespace StelexarasApp.UI.Views.PaidiaViews
 {

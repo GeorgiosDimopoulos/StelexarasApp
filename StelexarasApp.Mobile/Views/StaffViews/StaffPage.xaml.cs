@@ -1,5 +1,5 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma.Staff;
-using StelexarasApp.Services.DtosModels.Atoma;
+﻿using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.PeopleViewModels;
 

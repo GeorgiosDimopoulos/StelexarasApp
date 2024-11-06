@@ -1,4 +1,4 @@
-﻿using StelexarasApp.Services.DtosModels.Atoma;
+﻿using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

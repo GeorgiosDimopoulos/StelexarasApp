@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Domi;
+﻿using StelexarasApp.Library.Models.Domi;
 using System.Globalization;
 
 namespace StelexarasApp.DataAccess.Helpers

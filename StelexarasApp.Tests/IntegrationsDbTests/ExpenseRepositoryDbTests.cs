@@ -1,5 +1,5 @@
 ﻿using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.Models;
+using StelexarasApp.Library.Models;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;

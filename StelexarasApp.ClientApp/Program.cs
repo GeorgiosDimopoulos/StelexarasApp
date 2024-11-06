@@ -2,15 +2,16 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
-using StelexarasApp.Services.DtosModels.Atoma;
+using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
 using System.Text.RegularExpressions;
+using StelexarasApp.Library.Dtos.Atoma;
 
 namespace StelexarasApp.ClientApp;
 

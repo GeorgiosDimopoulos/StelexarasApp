@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Atoma.Staff;
 
 namespace StelexarasApp.Services.Mappers;
 

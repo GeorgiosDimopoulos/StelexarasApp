@@ -4,9 +4,9 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using StelexarasApp.DataAccess.Models.Domi;
-using StelexarasApp.DataAccess.Models.Atoma;
-using StelexarasApp.DataAccess.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Domi;
+using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma.Staff;
 
 namespace StelexarasApp.Tests.IntegrationDbTests
 {

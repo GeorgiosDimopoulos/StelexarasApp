@@ -1,4 +1,4 @@
-﻿using StelexarasApp.DataAccess.Models.Atoma;
+﻿using StelexarasApp.Library.Models.Atoma;
 
 namespace StelexarasApp.API.QueryParameters;
 

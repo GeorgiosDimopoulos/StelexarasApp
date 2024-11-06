@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.DataAccess.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Services.DtosModels.Atoma;
 using StelexarasApp.API.QueryParameters;
+using StelexarasApp.Library.Dtos.Atoma;
 
 namespace StelexarasApp.API.ApiControllers;
 
