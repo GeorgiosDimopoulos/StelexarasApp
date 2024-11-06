@@ -4,5 +4,8 @@
 - check for duplicates via Unit Tests
 - check for the id of the Duty, not the name
 - check for unused methods and call them properly (also check for relevant UT)
-- add UT for logging like: Logger_ShouldLogErrorCorrectly()
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
+- Tools to be used:
+  - FluentValidation
+  - ILogger
+  - Docker images via yaml
