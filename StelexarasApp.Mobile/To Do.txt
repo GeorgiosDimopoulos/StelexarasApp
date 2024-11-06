@@ -7,5 +7,6 @@
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
 - Tools to be used:
   - FluentValidation
+  - IDisposable and IHostedService
   - ILogger
   - Docker images via yaml
