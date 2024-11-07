@@ -1,0 +1,61 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'  # Adjust the version as needed
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Run E2E tests
+        run: dotnet test --filter "Category=E2E"
+
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'  # Adjust the version as needed
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Run API tests
+        run: dotnet test --filter "Category=API"
+
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'  # Adjust the version as needed
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Run Unit tests
+        run: dotnet test --filter "Category=Unit"

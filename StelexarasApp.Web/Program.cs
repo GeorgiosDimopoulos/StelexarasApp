@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Repositories;
@@ -5,6 +6,7 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
+using StelexarasApp.Web.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,4 +60,7 @@ void ConfigureServices(WebApplicationBuilder builder)
 
     // Add MVC services
     builder.Services.AddControllersWithViews();
+
+    // Add FluentValidation
+    builder.Services.AddValidatorsFromAssemblyContaining<UserDtoValidator>();
 }
