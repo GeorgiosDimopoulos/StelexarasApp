@@ -17,16 +17,14 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-
     - name: List files
       run: ls -R
-
+    - name: Print current directory
+      run: pwd
     - name: Restore dependencies
       run: dotnet restore ../../StelexarasApp.sln
-
     - name: Build
-      run: dotnet build --no-restore ../../StelexarasApp.sln
-
+      run: dotnet build ../../StelexarasApp.sln --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal ../../StelexarasApp.Tests/StelexarasApp.Tests.csproj
 
