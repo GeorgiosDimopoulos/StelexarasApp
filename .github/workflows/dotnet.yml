@@ -17,8 +17,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Install MAUI Workloads
-      run: dotnet workload install maui-android
+    - name: Install .NET MAUI Workloads
+      run: |
+        dotnet workload install maui-android
+        dotnet workload install maui-ios
     - name: List files
       run: ls -R
     - name: Print current directory
