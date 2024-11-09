@@ -21,6 +21,7 @@ jobs:
       run: |
         dotnet workload install maui-android
         dotnet workload install maui-ios
+        dotnet workload install maccatalyst
     - name: List files
       run: ls -R
     - name: Print current directory
