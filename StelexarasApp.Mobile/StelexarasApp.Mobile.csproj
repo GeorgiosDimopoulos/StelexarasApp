@@ -78,6 +78,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<AndroidResource Include="Platforms\Android\AndroidManifest.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
