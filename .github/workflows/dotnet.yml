@@ -22,10 +22,12 @@ jobs:
       run: ls -R
 
     - name: Restore dependencies
-      run: dotnet restore ../../StelexarasApp/StelexarasApp.sln
+      run: dotnet restore ../../StelexarasApp.sln
 
     - name: Build
-      run: dotnet build --no-restore ../../StelexarasApp/StelexarasApp.sln
+      run: dotnet build --no-restore ../../StelexarasApp.sln
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal ../../StelexarasApp.Tests/StelexarasApp.Tests.csproj
+
+
