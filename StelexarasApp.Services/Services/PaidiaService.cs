@@ -3,40 +3,53 @@ using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Library.Dtos.Atoma;
+using Microsoft.Extensions.Logging;
+using FluentValidation;
 
 namespace StelexarasApp.Services.Services
 {
     public class PaidiaService : IPaidiaService
     {
-        // private readonly ILogger<TeamsService> _logger;
+        private readonly ILogger<PaidiaService> _logger;
         private readonly IPaidiRepository? _paidiRepository;
         private readonly IMapper? _mapper;
+        private readonly IValidator<PaidiDto> _paidiValidator;
 
-        public PaidiaService(IPaidiRepository paidiRepository, IMapper mapper)
+        public PaidiaService(
+            IPaidiRepository paidiRepository,
+            IMapper mapper, 
+            ILogger<PaidiaService> logger,
+            IValidator<PaidiDto> paidiValidator)
         {
-            try
-            {
-                _paidiRepository = paidiRepository;
-                _mapper = mapper;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            _paidiRepository = paidiRepository;
+            _mapper = mapper;
+            _logger = logger;
+            _paidiValidator = paidiValidator;
         }
 
         public async Task<bool> AddPaidiInService(PaidiDto paidiDto)
         {
-            if (paidiDto == null || _mapper == null || _paidiRepository is null)
-                return false;
+            var validationResult = _paidiValidator.Validate(paidiDto);
 
-            var paidi = _mapper.Map<Paidi>(paidiDto);
-            if (paidi == null)
-                return false;
+            if (!validationResult.IsValid)
+            {
+                if (paidiDto == null || _mapper == null || _paidiRepository is null)
+                    return false;
 
-            return await _paidiRepository.AddPaidiInDb(paidi);
+                var paidi = _mapper.Map<Paidi>(paidiDto);
+                if (paidi == null)
+                    return false;
+
+                return await _paidiRepository.AddPaidiInDb(paidi);
+            }
+            else
+            {
+                _logger.LogError("Validation failed for PaidiDto");
+                return false;
+            }
         }
 
+        / add _paidiValidator everywhere here
         public async Task<bool> DeletePaidiInService(int id)
         {
             if (id <= 0 || _mapper == null || _paidiRepository is null)
