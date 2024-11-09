@@ -49,7 +49,7 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        / add _paidiValidator everywhere here
+        // add _paidiValidator everywhere here
         public async Task<bool> DeletePaidiInService(int id)
         {
             if (id <= 0 || _mapper == null || _paidiRepository is null)
