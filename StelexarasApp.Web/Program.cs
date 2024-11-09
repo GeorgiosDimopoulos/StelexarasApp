@@ -62,5 +62,7 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddControllersWithViews();
 
     // Add FluentValidation
-    builder.Services.AddValidatorsFromAssemblyContaining<UserDtoValidator>();
+    builder.Services.AddValidatorsFromAssemblyContaining<StelexosValidator>();
+    builder.Services.AddValidatorsFromAssemblyContaining<XwrosValidator>();
+    builder.Services.AddValidatorsFromAssemblyContaining<PaidiValidator>();
 }

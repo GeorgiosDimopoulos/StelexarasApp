@@ -3,7 +3,7 @@ using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 
-namespace StelexarasApp.UI.Views.PaidiaViews
+namespace StelexarasApp.Mobile.Views.PaidiaViews
 {
     public partial class PaidiInfoPage : ContentPage
     {

@@ -3,7 +3,7 @@ using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.PeopleViewModels;
 
-namespace StelexarasApp.UI.Views.StaffViews;
+namespace StelexarasApp.Mobile.Views.StaffViews;
 
 public partial class StaffPage : ContentPage
 {

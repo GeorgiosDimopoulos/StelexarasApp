@@ -1,10 +1,10 @@
 ﻿using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.UI.Views.PaidiaViews;
+using StelexarasApp.Mobile.Views.PaidiaViews;
 using StelexarasApp.ViewModels.TeamsViewModels;
 
-namespace StelexarasApp.UI.Views.TeamsViews;
+namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class SxoliInfoPage : ContentPage
 {

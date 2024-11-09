@@ -2,7 +2,7 @@
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels;
 
-namespace StelexarasApp.UI.Views;
+namespace StelexarasApp.Mobile.Views;
 
 public partial class DutiesPage : ContentPage
 {

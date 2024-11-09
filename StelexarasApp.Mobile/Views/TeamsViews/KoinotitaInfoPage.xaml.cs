@@ -3,7 +3,7 @@ using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.ViewModels.TeamsViewModels;
 
-namespace StelexarasApp.UI.Views.TeamsViews;
+namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class KoinotitaInfoPage : ContentPage
 {

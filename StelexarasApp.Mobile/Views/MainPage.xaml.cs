@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using StelexarasApp.Services;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.UI.Views.PaidiaViews;
-using StelexarasApp.UI.Views.StaffViews;
-using StelexarasApp.UI.Views.TeamsViews;
+using StelexarasApp.Mobile.Views.PaidiaViews;
+using StelexarasApp.Mobile.Views.StaffViews;
+using StelexarasApp.Mobile.Views.TeamsViews;
 
-namespace StelexarasApp.UI.Views;
+namespace StelexarasApp.Mobile.Views;
 
 public partial class MainPage : ContentPage
 {

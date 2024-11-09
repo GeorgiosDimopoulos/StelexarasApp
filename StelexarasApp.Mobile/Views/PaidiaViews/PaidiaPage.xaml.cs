@@ -2,7 +2,7 @@
 using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.Library.Dtos.Atoma;
 
-namespace StelexarasApp.UI.Views.PaidiaViews
+namespace StelexarasApp.Mobile.Views.PaidiaViews
 {
     public partial class PaidiaPage : ContentPage
     {

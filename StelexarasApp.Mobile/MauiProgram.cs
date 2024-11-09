@@ -12,12 +12,12 @@ using StelexarasApp.Services;
 using StelexarasApp.ViewModels.PeopleViewModels;
 using StelexarasApp.ViewModels.TeamsViewModels;
 using StelexarasApp.ViewModels;
-using StelexarasApp.UI.Views.StaffViews;
-using StelexarasApp.UI.Views.TeamsViews;
-using StelexarasApp.UI.Views;
-using StelexarasApp.UI.Views.PaidiaViews;
+using StelexarasApp.Mobile.Views.StaffViews;
+using StelexarasApp.Mobile.Views.TeamsViews;
+using StelexarasApp.Mobile.Views;
+using StelexarasApp.Mobile.Views.PaidiaViews;
 
-namespace StelexarasApp.UI;
+namespace StelexarasApp.Mobile;
 
 public static class MauiProgram
 {

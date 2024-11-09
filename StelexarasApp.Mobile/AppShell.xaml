@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:local="clr-namespace:StelexarasApp.UI.Views"
+       xmlns:local="clr-namespace:StelexarasApp.Mobile.Views"
        Shell.FlyoutBehavior="Disabled"
        Title="Stelexaras"
-       x:Class="StelexarasApp.UI.AppShell">
+       x:Class="StelexarasApp.Mobile.AppShell">
 	<ShellContent Title="ΤΥΠΕΤ" ContentTemplate="{DataTemplate local:MainPage}"/>
 </Shell>

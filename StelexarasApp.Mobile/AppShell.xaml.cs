@@ -1,4 +1,4 @@
-﻿namespace StelexarasApp.UI
+﻿namespace StelexarasApp.Mobile
 {
     public partial class AppShell : Shell
     {

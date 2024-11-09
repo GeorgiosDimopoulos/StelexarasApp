@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess;
-using StelexarasApp.UI.Views;
+using StelexarasApp.Mobile.Views;
 
-namespace StelexarasApp.UI;
+namespace StelexarasApp.Mobile;
 
 public partial class App : Application
 {

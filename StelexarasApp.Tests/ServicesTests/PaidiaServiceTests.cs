@@ -6,6 +6,7 @@ using StelexarasApp.Services.Services;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Library.Dtos.Atoma;
+using FluentValidation;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
@@ -16,14 +17,15 @@ public class PaidiaServiceTests
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<AppDbContext> _mockDbContext;
     private readonly Mock<ILoggerFactory> _loggerFactory;
+    private readonly Mock<IValidator<PaidiDto>> _paidiValidatorMock;
+
     public PaidiaServiceTests()
     {
         _mockDbContext = new Mock<AppDbContext>();
         _loggerFactory = new Mock<ILoggerFactory>();
-
-        // _mockPaidiRepository = new Mock<PaidiRepository>(_mockDbContext.Object, _loggerFactory.Object);
         _mockPaidiRepository = new Mock<IPaidiRepository>();
         _mockMapper = new Mock<IMapper>();
+        _paidiValidatorMock = new Mock<IValidator<PaidiDto>>();
 
         _mockMapper.Setup(m => m.Map<Paidi>(It.IsAny<PaidiDto>()))
           .Returns((PaidiDto dto) => new Paidi
@@ -33,7 +35,12 @@ public class PaidiaServiceTests
               Age = dto.Age,
               PaidiType = dto.PaidiType
           });
-        _paidiaService = new PaidiaService(_mockPaidiRepository.Object, _mockMapper.Object);
+        _paidiaService = new PaidiaService(
+            _mockPaidiRepository.Object,
+            _mockMapper.Object,
+            _loggerFactory.Object.CreateLogger<PaidiaService>(),
+            _paidiValidatorMock.Object);
+
     }
 
     [Fact]
