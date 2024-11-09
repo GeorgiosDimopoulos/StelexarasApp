@@ -1,6 +1,6 @@
 ﻿using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.ViewModels;
+using StelexarasApp.Mobile.ViewModels;
 
 namespace StelexarasApp.Mobile.Views;
 

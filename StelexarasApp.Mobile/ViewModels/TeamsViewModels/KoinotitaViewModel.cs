@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 
-namespace StelexarasApp.ViewModels.TeamsViewModels
+namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 {
     public class KoinotitaViewModel : INotifyPropertyChanged
     {

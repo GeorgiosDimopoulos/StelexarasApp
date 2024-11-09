@@ -3,7 +3,7 @@ using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Windows.Input;
 
-namespace StelexarasApp.ViewModels.PeopleViewModels
+namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 {
     public class PaidiInfoViewModel : INotifyPropertyChanged
     {

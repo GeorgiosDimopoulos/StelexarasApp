@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace StelexarasApp.ViewModels.PeopleViewModels;
+namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class StaffViewModel : INotifyPropertyChanged
 {

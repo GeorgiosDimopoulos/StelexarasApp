@@ -1,5 +1,5 @@
 ﻿using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.ViewModels.PeopleViewModels;
+using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 

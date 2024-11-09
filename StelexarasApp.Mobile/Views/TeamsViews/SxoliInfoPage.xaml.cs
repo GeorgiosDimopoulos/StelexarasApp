@@ -2,7 +2,7 @@
 using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Mobile.Views.PaidiaViews;
-using StelexarasApp.ViewModels.TeamsViewModels;
+using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 
 namespace StelexarasApp.Mobile.Views.TeamsViews;
 

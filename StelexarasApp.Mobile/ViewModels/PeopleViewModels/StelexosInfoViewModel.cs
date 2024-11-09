@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace StelexarasApp.ViewModels.PeopleViewModels
+namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 {
     public class StelexosInfoViewModel : INotifyPropertyChanged
     {

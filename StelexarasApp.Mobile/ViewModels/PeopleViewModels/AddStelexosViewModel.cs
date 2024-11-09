@@ -3,7 +3,7 @@ using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;
 
-namespace StelexarasApp.ViewModels.PeopleViewModels;
+namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class AddStelexosViewModel
 {

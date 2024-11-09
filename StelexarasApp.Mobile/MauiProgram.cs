@@ -9,13 +9,13 @@ using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services;
-using StelexarasApp.ViewModels.PeopleViewModels;
-using StelexarasApp.ViewModels.TeamsViewModels;
-using StelexarasApp.ViewModels;
+using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
+using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 using StelexarasApp.Mobile.Views.StaffViews;
 using StelexarasApp.Mobile.Views.TeamsViews;
 using StelexarasApp.Mobile.Views;
 using StelexarasApp.Mobile.Views.PaidiaViews;
+using StelexarasApp.Mobile.ViewModels;
 
 namespace StelexarasApp.Mobile;
 

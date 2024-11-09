@@ -3,7 +3,7 @@ using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace StelexarasApp.ViewModels.PeopleViewModels;
+namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class PaidiaViewModel : INotifyPropertyChanged
 {

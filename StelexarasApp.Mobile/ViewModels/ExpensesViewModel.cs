@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.ViewModels
+namespace StelexarasApp.Mobile.ViewModels
 {
     public class ExpensesViewModel(IExpenseService expenseService) : INotifyPropertyChanged
     {

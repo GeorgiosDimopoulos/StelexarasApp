@@ -3,7 +3,7 @@ using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace StelexarasApp.ViewModels.TeamsViewModels
+namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 {
     public class SxoliViewModel : INotifyPropertyChanged
     {

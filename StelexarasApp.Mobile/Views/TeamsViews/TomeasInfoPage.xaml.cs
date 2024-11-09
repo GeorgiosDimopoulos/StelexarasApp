@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.ViewModels.TeamsViewModels;
+using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 
 namespace StelexarasApp.Mobile.Views.TeamsViews;
 

@@ -2,7 +2,7 @@
 using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.ViewModels;
+namespace StelexarasApp.Mobile.ViewModels;
 
 public class DutyViewModel
 {
