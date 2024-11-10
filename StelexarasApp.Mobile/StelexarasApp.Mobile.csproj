@@ -78,7 +78,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<AndroidResource Include="Platforms\Android\AndroidManifest.xml" />
+		<AndroidResource Include="Platforms/Android/AndroidManifest.xml" Condition="Exists('Platforms/Android/AndroidManifest.xml')" />
 	</ItemGroup>
 
 	<ItemGroup>
