@@ -1,0 +1,11 @@
+﻿<!-- Resources/drawable/splash_screen.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item>
+		<color android:color="#FFFFFF" />
+	</item>
+	<item>
+		<bitmap
+            android:gravity="center"
+            android:src="@drawable/splash_image" />
+	</item>
+</layer-list>

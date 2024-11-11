@@ -1,0 +1,11 @@
+﻿<resources>
+	<!-- Base application theme -->
+	<style name="MainTheme" parent="Theme.Maui.Splash">
+		<!-- Customize your theme here. -->
+	</style>
+
+	<!-- Splash screen theme -->
+	<style name="Maui.SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="android:windowBackground">@drawable/splash_screen</item>
+	</style>
+</resources>

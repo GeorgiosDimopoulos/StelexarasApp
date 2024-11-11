@@ -1,7 +1,6 @@
 # Build Folders
 bin/
 obj/
-platforms/
 .idea/
 .vscode/
 .vs/
