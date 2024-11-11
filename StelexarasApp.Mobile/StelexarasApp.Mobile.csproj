@@ -1,158 +1,132 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>StelexarasApp</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AndroidManifestFile>Platforms/Android/AndroidManifest.xml</AndroidManifestFile>
+    <ApplicationTitle>Stelexaras</ApplicationTitle>
+    <ApplicationId>com.companyname.stelexarasapp</ApplicationId>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+  </PropertyGroup>
 
-		<!-- Note for MacCatalyst:
-		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
-		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
-		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
-		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
-		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+  <ItemGroup>
+    <MauiSplashScreen Include="Platforms\Android\Resources\drawable\typetlogo.png">
+      <Color>#512BD4</Color>
+      <BaseSize>128,128</BaseSize>
+    </MauiSplashScreen>
+    <MauiSplashScreen Include="Resources\drawable\typetlogo.png">
+      <Color>#512BD4</Color>
+      <BaseSize>128,128</BaseSize>
+    </MauiSplashScreen>
+    <MauiSplashScreen Include="Resources\Splash\typetlogo.png" Color="#512BD4" BaseSize="128,128" />
+    <MauiImage Include="Resources\Images\*" />
+    <MauiImage Include="Platforms\Android\Resources\drawable\typetlogo.png" />
+    <MauiImage Update="Resources\Images\typet.png" Resize="True" BaseSize="300,185" />
+    <MauiFont Include="Resources\Fonts\*" />
+    <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
 
-		<OutputType>Exe</OutputType>
-		<RootNamespace>StelexarasApp</RootNamespace>
-		<UseMaui>true</UseMaui>
-		<SingleProject>true</SingleProject>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+  <ItemGroup>
+    <AndroidResource Remove="Platforms\Android\Resources\drawable\splash_screen.xml" />
+    <AndroidResource Remove="Platforms\Android\Resources\drawable\typetlogo.png" />
+    <AndroidResource Remove="Platforms\Android\Resources\drawable\white-cross.png" />
+    <AndroidResource Remove="Platforms\Android\Resources\values\styles.xml" />
+  </ItemGroup>
 
-		<!-- Display name -->
-		<ApplicationTitle>Stelexaras</ApplicationTitle>
+  <ItemGroup>
+    <None Remove="Platforms\Android\Resources\drawable\typetlogo.png" />
+    <None Remove="Resources\drawable\typetlogo.png" />
+    <None Remove="Resources\Images\typet.png" />
+  </ItemGroup>
 
-		<!-- App Identifier -->
-		<ApplicationId>com.companyname.stelexarasapp</ApplicationId>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.82" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.71" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+  </ItemGroup>
 
-		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+  <ItemGroup>
+    <ProjectReference Include="..\StelexarasApp.Services\StelexarasApp.Services.csproj" />
+  </ItemGroup>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-	</PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Views\PaidiaViews\PaidiaPage.xaml.cs">
+      <DependentUpon>PaidiaPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\StaffViews\AddStelexosPage.xaml.cs">
+      <DependentUpon>AddStelexosPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TeamsViews\SxoliInfoPage.xaml.cs">
+      <DependentUpon>SxoliInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\StaffViews\StaffPage.xaml.cs">
+      <DependentUpon>StaffPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TeamsViews\SkiniInfoPage.xaml.cs">
+      <DependentUpon>SkiniInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PaidiaViews\PaidiInfoPage.xaml.cs">
+      <DependentUpon>PaidiInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TeamsViews\TomeasInfoPage.xaml.cs">
+      <DependentUpon>TomeasInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DutiesPage.xaml.cs">
+      <DependentUpon>DutiesPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
-	<ItemGroup>
-		<!-- App Icon -->
+  <ItemGroup>
+    <MauiXaml Update="Views\PaidiaViews\PaidiaPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\StaffViews\AddStelexosPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\TeamsViews\GeneralTeamsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\TeamsViews\KoinotitaInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\TeamsViews\SxoliInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\StaffViews\StaffPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\StaffViews\StelexosInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\TeamsViews\TomeasInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\TeamsViews\SkiniInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+  </ItemGroup>
 
-		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Platforms\Android\Resources\drawable\typetlogo.png">
-		  <Color>#512BD4</Color>
-		  <BaseSize>128,128</BaseSize>
-		</MauiSplashScreen>
-		<MauiSplashScreen Include="Resources\drawable\typetlogo.png">
-		  <Color>#512BD4</Color>
-		  <BaseSize>128,128</BaseSize>
-		</MauiSplashScreen>
-		<MauiSplashScreen Include="Resources\Splash\typetlogo.png" Color="#512BD4" BaseSize="128,128" />
-
-		<!-- Images -->
-		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Include="Platforms\Android\Resources\drawable\typetlogo.png" />
-		<MauiImage Update="Resources\Images\typet.png" Resize="True" BaseSize="300,185" />
-
-		<!-- Custom Fonts -->
-		<MauiFont Include="Resources\Fonts\*" />
-
-		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AndroidResource Remove="Platforms\Android\Resources\drawable\splash_screen.xml" />
-	  <AndroidResource Remove="Platforms\Android\Resources\drawable\typetlogo.png" />
-	  <AndroidResource Remove="Platforms\Android\Resources\drawable\white-cross.png" />
-	  <AndroidResource Remove="Platforms\Android\Resources\values\styles.xml" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Platforms\Android\Resources\drawable\typetlogo.png" />
-	  <None Remove="Resources\drawable\typetlogo.png" />
-	  <None Remove="Resources\Images\typet.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<AndroidResource Include="Platforms/Android/AndroidManifest.xml" Condition="Exists('Platforms/Android/AndroidManifest.xml')" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.7" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.82" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.71" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\StelexarasApp.Services\StelexarasApp.Services.csproj" />	  
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Views\PaidiaViews\PaidiaPage.xaml.cs">
-	    <DependentUpon>PaidiaPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\StaffViews\AddStelexosPage.xaml.cs">
-	    <DependentUpon>AddStelexosPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\TeamsViews\SxoliInfoPage.xaml.cs">
-	    <DependentUpon>SxoliInfoPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\StaffViews\StaffPage.xaml.cs">
-	    <DependentUpon>StaffPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\TeamsViews\SkiniInfoPage.xaml.cs">
-	    <DependentUpon>SkiniInfoPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\PaidiaViews\PaidiInfoPage.xaml.cs">
-	    <DependentUpon>PaidiInfoPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\TeamsViews\TomeasInfoPage.xaml.cs">
-	    <DependentUpon>TomeasInfoPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\DutiesPage.xaml.cs">
-	    <DependentUpon>DutiesPage.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Views\PaidiaViews\PaidiaPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\StaffViews\AddStelexosPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\TeamsViews\GeneralTeamsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\TeamsViews\KoinotitaInfoPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\TeamsViews\SxoliInfoPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\StaffViews\StaffPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\StaffViews\StelexosInfoPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\TeamsViews\TomeasInfoPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\TeamsViews\SkiniInfoPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	</ItemGroup>
-
-	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionStelexarasAppUIHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarStelexarasAppUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionStelexarasAppUIHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarStelexarasAppUIHideInfoBar="True" />
+    </VisualStudio>
+  </ProjectExtensions>
 
 </Project>
