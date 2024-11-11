@@ -33,10 +33,6 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        //builder.ConfigureMauiHandlers(handlers =>
-        //{
-        //});
-
         builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 
         var services = new ServiceCollection();
