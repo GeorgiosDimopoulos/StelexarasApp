@@ -13,6 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Restore .NET workloads
+      run: |
+        dotnet workload restore
     - name: Clean Build
       run: |
         rm -rf bin obj
