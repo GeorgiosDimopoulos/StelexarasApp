@@ -39,30 +39,6 @@ public class StaffWebController : Controller
         }
     }
 
-    // GET: StaffWeb/Details/5
-    [HttpGet("Details/{id:int}")]
-    public async Task<IActionResult> Details(int id, [FromQuery] Thesi? thesi)
-    {
-        if (id <= 0)
-            return BadRequest("Invalid staff ID.");
-
-        try
-        {
-            var staffMember = await _staffService.GetStelexosByIdInService(id, thesi);
-            if (staffMember == null)
-            {
-                _logger.LogWarning($"Staff member with ID {id} not found.");
-                return NotFound("Staff member not found.");
-            }
-            return View(staffMember);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"An error occurred while fetching details for staff member with ID {id}.");
-            return View("Error", new { message = $"An error occurred while fetching details for staff member with ID {id}." });
-        }
-    }
-
     // GET: StaffWeb/Create
     [HttpGet("Create")]
     public IActionResult Create()
