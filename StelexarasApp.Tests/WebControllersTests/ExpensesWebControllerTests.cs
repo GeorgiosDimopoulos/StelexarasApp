@@ -66,46 +66,6 @@ public class ExpensesWebControllerTests
     }
 
     [Fact]
-    public async Task Details_ReturnsViewResult_WithExpense()
-    {
-        // Arrange
-        var expense = new Expense { Id = 1, Description = "Test 1", Amount = 100 };
-
-        _mockService.Setup(repo => repo.GetExpenseByIdInService(1)).ReturnsAsync(expense);
-
-        // Act
-        var result = await _controller.Details(1);
-
-        // Assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        var model = Assert.IsType<Expense>(viewResult.ViewData.Model);
-        Assert.Equal(1, model.Id);
-    }
-
-    [Fact]
-    public async Task Details_ReturnsNotFound_WhenNoExpenseAvailable()
-    {
-        // Arrange
-        _mockService.Setup(repo => repo.GetExpenseByIdInService(1)).ReturnsAsync(() => null);
-
-        // Act
-        var result = await _controller.Details(1);
-
-        // Assert
-        var viewResult = Assert.IsType<NotFoundResult>(result);
-    }
-
-    [Fact]
-    public async Task Details_ReturnsNotFound_WhenIdIsNull()
-    {
-        // Act
-        var result = await _controller.Details(null);
-
-        // Assert
-        var viewResult = Assert.IsType<NotFoundResult>(result);
-    }
-
-    [Fact]
     public void Create_ReturnsViewResult()
     {
         // Act

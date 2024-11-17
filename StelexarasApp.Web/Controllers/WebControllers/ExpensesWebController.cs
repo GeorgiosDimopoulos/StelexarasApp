@@ -28,21 +28,6 @@ public class ExpensesWebController(IExpenseService expenseService) : Controller
         }
     }
 
-    // GET: ExpensesWeb/Details/5
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> Details(int? id)
-    {
-        if (id == null)
-            return NotFound();
-
-        var expense = await _expenseService.GetExpenseByIdInService(id.Value);
-
-        if (expense == null)
-            return NotFound();
-
-        return View(expense);
-    }
-
     // GET: ExpensesWeb/Create
     [HttpGet("create")]
     public IActionResult Create()

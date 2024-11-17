@@ -32,22 +32,6 @@ public class DutiesWebController : Controller
         }
     }
 
-    // GET: DutiesWeb/Details/5
-    [HttpGet("{id:int}")] // Explicit GET method with id parameter
-    public async Task<IActionResult> Details(int id)
-    {
-        if (id <= 0)
-        {
-            return NotFound();
-        }
-
-        var duty = await _dutyService.GetDutyByIdInService(id);
-        if (duty == null)
-            return NotFound();
-
-        return View(duty);
-    }
-
     // GET: DutiesWeb/Create
     [HttpGet("create")]
     public IActionResult Create()

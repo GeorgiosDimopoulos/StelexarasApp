@@ -16,14 +16,13 @@
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" placeholder="@Model.Name" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
-            <!-- Updated: Add 'type=date' for date input -->
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" type="date" />
+                <input asp-for="Date" class="form-control" type="date" placeholder="@Model.Date"/>
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
 

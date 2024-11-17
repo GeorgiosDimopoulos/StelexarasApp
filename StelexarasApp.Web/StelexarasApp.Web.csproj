@@ -10,7 +10,6 @@
 
 	<ItemGroup>
 		<Content Remove="Views\SkinesWeb\Create.cshtml" />
-		<Content Remove="Views\SkinesWeb\Details.cshtml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,7 +33,6 @@
 
 	<ItemGroup>
 		<None Include="Views\SkinesWeb\Create.cshtml" />
-		<None Include="Views\SkinesWeb\Details.cshtml" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -43,31 +43,6 @@ public class SkinesWebController(ITeamsService teamsService, ILogger<SkinesWebCo
         return View();
     }
 
-
-    // GET: TeamsWeb/Details/5
-    [HttpPost("Details/{name}")]
-    public async Task<IActionResult> Details(string name)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        try
-        {
-            var skini = await _teamsService.GetSkiniByNameInService(name);
-            if (skini == null)
-            {
-                _logger.LogWarning("Skini not found.");
-                return NotFound("Skini not found.");
-            }
-            return View(skini);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while fetching in Details Teams.");
-            return View("Error");
-        }
-    }
-
     // POST: TeamsWeb/Create
     [ValidateAntiForgeryToken]
     [HttpPost("create")]

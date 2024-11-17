@@ -46,28 +46,6 @@ public class PaidiaWebController : Controller
         }
     }
 
-    // GET: PaidiaWeb/Details/5
-    [HttpGet("Details/{id}")]
-    public async Task<IActionResult> Details(int id)
-    {
-        try
-        {
-            if (id <= 0)
-                return NotFound("");
-
-            var paidi = await _paidiaService.GetPaidiByIdInService(id);
-
-            if (paidi == null)
-                return NotFound();
-            return View(paidi);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while fetching Details of Paidia.");
-            return View("Error");
-        }
-    }
-
     // GET: PaidiaWeb/Create
     [HttpGet("Create")]
     public IActionResult Create()

@@ -31,27 +31,6 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
         }
     }
 
-    // GET: KoinotitaWeb/Details/5
-    [HttpGet("Details/{name}")]
-    public async Task<IActionResult> Details(string name)
-    {
-        try
-        {
-            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
-            if (koinotita == null)
-            {
-                _logger.LogWarning("Koinotita not found.");
-                return NotFound("Koinotita not found.");
-            }
-            return View(koinotita);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while fetching Koinotita details.");
-            return View("Error");
-        }
-    }
-
     // POST: KoinotitaWeb/Create
     [HttpPost("Create")]
     [ValidateAntiForgeryToken]

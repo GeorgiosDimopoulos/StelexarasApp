@@ -70,53 +70,6 @@ public class KoinotitesWebControllerTests
     }
 
     [Fact]
-    public async Task Details_ReturnsViewResult_WithKoinotita()
-    {
-        // Arrange
-        var koinotitaName = "TestKoinotita";
-        var koinotita = new KoinotitaDto { Name = koinotitaName, TomeasName = "TestTomeas", SkinesNumber = 5 };
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ReturnsAsync(koinotita);
-
-        // Act
-        var result = await _controller.Details(koinotitaName);
-
-        // Assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        var model = Assert.IsAssignableFrom<KoinotitaDto>(viewResult.ViewData.Model);
-        Assert.Equal(koinotitaName, model.Name);
-    }
-
-    [Fact]
-    public async Task Details_ReturnsNotFound_WhenKoinotitaNotFound()
-    {
-        // Arrange
-        var koinotitaName = "NonExistentKoinotita";
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ReturnsAsync((KoinotitaDto)null);
-
-        // Act
-        var result = await _controller.Details(koinotitaName);
-
-        // Assert
-        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-        Assert.Equal("Koinotita not found.", notFoundResult.Value);
-    }
-
-    [Fact]
-    public async Task Details_ReturnsErrorView_WhenExceptionThrown()
-    {
-        // Arrange
-        var koinotitaName = "TestKoinotita";
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ThrowsAsync(new Exception("Test exception"));
-
-        // Act
-        var result = await _controller.Details(koinotitaName);
-
-        // Assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        Assert.Equal("Error", viewResult.ViewName);
-    }
-
-    [Fact]
     public async Task Edit_ReturnsViewResult_WithKoinotita()
     {
         // Arrange

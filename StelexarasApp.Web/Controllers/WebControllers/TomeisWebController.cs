@@ -37,27 +37,6 @@ public class TomeisWebController : Controller
         }
     }
 
-    // GET: TomeisWeb/Details/5
-    [HttpGet("Details/{id}")]
-    public async Task<IActionResult> Details(string id)
-    {
-        try
-        {
-            var tomeis = await _tomeisService.GetTomeaByNameInService(id);
-            if (tomeis == null)
-            {
-                _logger.LogWarning("Tomeis not found.");
-                return NotFound("Tomeis not found.");
-            }
-            return View(tomeis);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while fetching Tomeis details.");
-            return View("Error");
-        }
-    }
-
     // POST: TomeisWeb/Create
     [HttpPost("Create")]
     [ValidateAntiForgeryToken]

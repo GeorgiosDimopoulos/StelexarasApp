@@ -2,7 +2,7 @@
 @model IStelexosDto
 
 @{
-    ViewData["Title"] = "Edit Staff";
+    ViewData ["Title"] = "Edit Staff";
 }
 
 <h1>Edit Staff Member</h1>
@@ -11,22 +11,31 @@
     @Html.AntiForgeryToken()
 
     <input type="hidden" asp-for="Id" />
-    
+
     <div class="form-group">
         <label asp-for="FullName" class="control-label">Full Name</label>
-        <input asp-for="FullName" class="form-control" placeholder="Enter full name" />
+        <input asp-for="FullName" class="form-control" placeholder="@Model.FullName" />
         <span asp-validation-for="FullName" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="Position" class="control-label">Position</label>
-        <input asp-for="Position" class="form-control" placeholder="Enter position" />
+        <input asp-for="Position" class="form-control" placeholder="@Model.Thesi" />
         <span asp-validation-for="Position" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="Phone" class="control-label">Phone</label>
-        <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
+        <input asp-for="Phone" class="form-control" placeholder="@Model.Tel" />
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
+    
+    <div class="form-group">
+        <label asp-for="Phone" class="control-label">Age</label>
+        <input asp-for="Phone" class="form-control" placeholder="@Model.Age" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
     <button type="submit" class="btn btn-primary">Save Changes</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
