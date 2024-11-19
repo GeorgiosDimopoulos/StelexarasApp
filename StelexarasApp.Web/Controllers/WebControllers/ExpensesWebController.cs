@@ -105,13 +105,4 @@ public class ExpensesWebController(IExpenseService expenseService) : Controller
 
         return View(expense);
     }
-
-    // POST: ExpensesWeb/Delete/5
-    [HttpPost("delete/{id:int}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        await _expenseService.DeleteExpenseInService(id);
-        return RedirectToAction(nameof(Index));
-    }
 }

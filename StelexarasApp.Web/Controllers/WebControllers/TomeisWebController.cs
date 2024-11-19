@@ -131,26 +131,4 @@ public class TomeisWebController : Controller
             return View("Error");
         }
     }
-
-    // POST: TomeisWeb/Delete/5
-    [HttpPost("DeleteConfirmed/{id}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string id)
-    {
-        try
-        {
-            var result = await _tomeisService.DeleteTomeasInService(id);
-            if (!result)
-            {
-                _logger.LogWarning("Tomeis not deleted.");
-                return NotFound("Tomeis not deleted.");
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while deleting Tomeis.");
-            return View("Error");
-        }
-    }
 }

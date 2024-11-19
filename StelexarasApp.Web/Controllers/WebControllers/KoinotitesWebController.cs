@@ -97,26 +97,4 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
             return View("Error");
         }
     }
-
-    // POST: KoinotitaWeb/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        try
-        {
-            var result = await _koinotitaService.DeleteKoinotitaInService(id);
-            if (!result)
-            {
-                _logger.LogWarning("Koinotita not deleted.");
-                return NotFound("Koinotita not deleted.");
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while deleting Koinotita.");
-            return View("Error");
-        }
-    }
 }

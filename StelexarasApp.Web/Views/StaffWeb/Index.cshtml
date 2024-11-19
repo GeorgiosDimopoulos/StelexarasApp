@@ -27,7 +27,10 @@
                 <td>@staff.Tel</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@staff.Id" asp-route-thesi="@staff.Thesi" class="btn btn-sm btn-danger">Delete</a>
+                    <form asp-action="DeleteConfirmed" asp-route-id="@staff.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
                 </td>
             </tr>
         }

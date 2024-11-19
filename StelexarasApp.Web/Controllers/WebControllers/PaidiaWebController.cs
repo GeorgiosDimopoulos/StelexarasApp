@@ -160,27 +160,4 @@ public class PaidiaWebController : Controller
             return View("Error");
         }
     }
-
-    // POST: PaidiaWeb/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        try
-        {
-            var result = await _paidiaService.DeletePaidiInService(id);
-            if (!result)
-            {
-                ModelState.AddModelError("", "An error occurred while deleting the Paidi.");
-                return View("Error");
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while Delete Paidi.");
-            return View("Error");
-        }
-    }
 }

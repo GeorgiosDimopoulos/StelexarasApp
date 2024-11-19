@@ -222,49 +222,4 @@ public class TomeisWebControllerTests
         var viewResult = Assert.IsType<ViewResult>(result);
         Assert.Equal("Error", viewResult.ViewName);
     }
-
-    [Fact]
-    public async Task DeleteConfirmed_RedirectsToIndex_WhenTomeasDeleted()
-    {
-        // Arrange
-        var tomeasId = "TestTomeas";
-        _mockService.Setup(service => service.DeleteTomeasInService(tomeasId)).ReturnsAsync(true);
-
-        // Act
-        var result = await _controller.DeleteConfirmed(tomeasId);
-
-        // Assert
-        var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal(nameof(TomeisWebController.Index), redirectToActionResult.ActionName);
-    }
-
-    [Fact]
-    public async Task DeleteConfirmed_ReturnsNotFound_WhenTomeasNotDeleted()
-    {
-        // Arrange
-        var tomeasId = "TestTomeas";
-        _mockService.Setup(service => service.DeleteTomeasInService(tomeasId)).ReturnsAsync(false);
-
-        // Act
-        var result = await _controller.DeleteConfirmed(tomeasId);
-
-        // Assert
-        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-        Assert.Equal("Tomeis not deleted.", notFoundResult.Value);
-    }
-
-    [Fact]
-    public async Task DeleteConfirmed_ReturnsErrorView_WhenExceptionThrown()
-    {
-        // Arrange
-        var tomeasId = "TestTomeas";
-        _mockService.Setup(service => service.DeleteTomeasInService(tomeasId)).ThrowsAsync(new Exception("Test exception"));
-
-        // Act
-        var result = await _controller.DeleteConfirmed(tomeasId);
-
-        // Assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        Assert.Equal("Error", viewResult.ViewName);
-    }
 }

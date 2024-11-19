@@ -102,18 +102,6 @@ public class DutiesWebController : Controller
         return View(duty);
     }
 
-    // POST: DutiesWeb/Delete/5
-    [HttpPost("delete/{id:int}"), ActionName("DeleteConfirmed")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var duty = await _dutyService.GetDutyByIdInService(id);
-        if (duty != null)
-            await _dutyService.DeleteDutyInService(id);
-
-        return RedirectToAction(nameof(Index));
-    }
-
     private bool DutyExists(int id)
     {
         return _dutyService.GetDutyByIdInService(id) != null;

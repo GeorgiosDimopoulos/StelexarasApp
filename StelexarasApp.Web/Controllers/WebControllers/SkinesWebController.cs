@@ -115,29 +115,4 @@ public class SkinesWebController(ITeamsService teamsService, ILogger<SkinesWebCo
             return View("Error");
         }
     }
-
-    // POST: TeamsWeb/Delete/5
-    [HttpPost("deleteconfirmed/{id}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        try
-        {
-            var result = await _teamsService.DeleteSkiniInService(id);
-            if (!result)
-            {
-                _logger.LogWarning("Skini not deleted.");
-                return NotFound("Skini not deleted.");
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while deleting Skini.");
-            return View("Error");
-        }
-    }
 }

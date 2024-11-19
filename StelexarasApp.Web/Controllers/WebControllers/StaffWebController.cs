@@ -117,27 +117,4 @@ public class StaffWebController : Controller
             return View("Error", new { message = $"An error occurred while fetching staff member with ID {id} for deletion." });
         }
     }
-
-    // POST: StaffWeb/Delete/5
-    [HttpPost("Delete/{id:int}"), ActionName("DeleteConfirmed")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id, [FromQuery] Thesi thesi)
-    {
-        try
-        {
-            var result = await _staffService.DeleteStelexosByIdInService(id, thesi);
-            if (!result)
-            {
-                ModelState.AddModelError("", "Failed to delete staff member.");
-                return View("Error", new { message = "Failed to delete staff member." });
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"An error occurred while deleting staff member with ID {id}.");
-            return View("Error", new { message = $"An error occurred while deleting staff member with ID {id}." });
-        }
-    }
 }
