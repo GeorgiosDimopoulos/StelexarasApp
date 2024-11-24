@@ -19,8 +19,6 @@ public class KoinotitaWebController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        Console.WriteLine("Starting Index method in KoinotitaWebController!");
-
         try
         {
             var allKoinotites = await _teamsService.GetAllKoinotitesInService();

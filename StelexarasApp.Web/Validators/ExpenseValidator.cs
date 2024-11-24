@@ -12,6 +12,6 @@ public class ExpenseValidator : AbstractValidator<Expense>
             .Length(5, 50).WithMessage("Expense Name must be between 2 and 50 characters");
 
         RuleFor(e => e.Amount)
-            .NotEmpty().WithMessage("Expense Amount is required")
+            .NotEmpty().WithMessage("Expense Amount is required");
     }
 }

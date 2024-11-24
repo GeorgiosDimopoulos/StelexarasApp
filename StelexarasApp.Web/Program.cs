@@ -65,4 +65,6 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddValidatorsFromAssemblyContaining<StelexosValidator>();
     builder.Services.AddValidatorsFromAssemblyContaining<XwrosValidator>();
     builder.Services.AddValidatorsFromAssemblyContaining<PaidiValidator>();
+    builder.Services.AddValidatorsFromAssemblyContaining<ExpenseValidator>();
+    builder.Services.AddValidatorsFromAssemblyContaining<DutyValidator>();
 }

@@ -14,6 +14,8 @@
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="8.0.1" />
 		<PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
+		<PackageReference Include="FluentValidation" Version="11.11.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.10" />
 		<PackageReference Include="Microsoft.OpenApi" Version="1.6.22" />

@@ -7,6 +7,7 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,4 +77,5 @@ void ConfigureServices(WebApplicationBuilder builder)
 
     // Add Health Checks UI
     builder.Services.AddHealthChecksUI().AddInMemoryStorage();
+    builder.Services.AddFluentValidationAutoValidation();
 }
