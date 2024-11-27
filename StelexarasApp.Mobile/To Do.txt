@@ -6,7 +6,7 @@
 - check for unused methods and call them properly (also check for relevant UT)
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
 - Tools to be used:
-  - FluentValidation
-  - IDisposable and IHostedService
-  - ILogger
-  - Docker images via yaml
+  - FluentValidation (IMPLEMENTED, NOT FINISHED)
+  - IDisposable and IHostedService maybe
+  - Docker and Github-actions images via yaml (IMPLEMENTED, NOT FINISHED)
+  - Audit tool and relevant Models fro logging and CRUD tracking
