@@ -1,6 +1,8 @@
 ﻿using StelexarasApp.Library.Models;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Services.IServices;
+using StelexarasApp.DataAccess.Helpers;
+using StelexarasApp.Library.Models.Logs;
 
 namespace StelexarasApp.Services.Services
 {
@@ -16,7 +18,7 @@ namespace StelexarasApp.Services.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
             }
         }
 
@@ -31,7 +33,7 @@ namespace StelexarasApp.Services.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
                 return false;
             }
         }

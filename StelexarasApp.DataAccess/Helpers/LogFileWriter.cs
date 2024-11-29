@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using StelexarasApp.Library.Models.Logs;
+﻿using StelexarasApp.Library.Models.Logs;
 
 namespace StelexarasApp.DataAccess.Helpers;
 
+// ToDo: make it more generic LogWriter" and have also Logger and Console outputs too
 public class LogFileWriter
 {
     private static readonly string LogDirectory = @"C:\Projects\GitHub\StelexarasApp\Logs";

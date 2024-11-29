@@ -5,6 +5,7 @@ using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services.IServices;
+using StelexarasApp.Library.Models.Logs;
 
 namespace StelexarasApp.Web;
 
@@ -42,8 +43,6 @@ public class DtoDataSeeder
             await SeedTomeis();
             await SeedKoinotites();
             await SeedSkines();
-
-            // LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " Completed", TypeOfOutput.DbSuccessMessage);
             return true;
         }
     }
@@ -219,7 +218,7 @@ public class DtoDataSeeder
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
         }
     }
 

@@ -33,7 +33,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog(System.Reflection.MethodBase.GetCurrentMethod()!.Name + " " + ex.Message, ErrorType.DbError);
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
                 _logger.LogError("Attempted to AddDutyInDb, exception: " + ex.Message);
 
                 if (transaction != null)
@@ -65,7 +65,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
                 if (transaction != null)
                     await transaction.RollbackAsync();
                 return false;
@@ -126,7 +126,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError); 
                 if (transaction != null)
                     await transaction.RollbackAsync();
                 return false;

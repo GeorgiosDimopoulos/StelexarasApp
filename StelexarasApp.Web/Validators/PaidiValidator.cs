@@ -23,7 +23,7 @@ public class PaidiValidator : AbstractValidator<PaidiDto>
         {
             RuleFor(paidi => paidi.Age)
                 .GreaterThan(6).WithMessage("Kataskinotis must be older than 6 years old")
-                .LessThan(6).WithMessage("Kataskinotis must be younger than 16 years old");
+                .LessThan(16).WithMessage("Kataskinotis must be younger than 16 years old");
         });
 
         When(paidi => paidi.PaidiType == PaidiType.Ekpaideuomenos, () =>

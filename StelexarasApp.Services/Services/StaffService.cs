@@ -23,7 +23,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
         }
     }
 
@@ -48,7 +48,7 @@ public class StaffService : IStaffService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
             return null!;
         }
     }

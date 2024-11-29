@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Models;
+using StelexarasApp.Library.Models.Logs;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers;
@@ -32,7 +34,7 @@ public class DutiesController : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
             return BadRequest();
         }
     }
