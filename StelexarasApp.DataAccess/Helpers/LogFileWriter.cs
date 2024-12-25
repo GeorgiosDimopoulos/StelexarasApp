@@ -2,31 +2,35 @@
 
 namespace StelexarasApp.DataAccess.Helpers;
 
-// ToDo: make it more generic LogWriter" and have also Logger and Console outputs too
 public class LogFileWriter
 {
     private static readonly string LogDirectory = @"C:\Projects\GitHub\StelexarasApp\Logs";
     private static readonly string LogFilePath = Path.Combine(LogDirectory, "applicationLogs.txt");
-    
-    public static void WriteToLog(string message, Enum logType)
+
+    public static void WriteToLog(string message, string method, Enum logType)
     {
         try
         {
+            // ToDo: make it more generic LogWriter" and have also Logger and Console outputs too
+            //WriteToLogger(message, logType);
+            //WriteToFileLog(message, logType);
+
             if (!Directory.Exists(LogDirectory))
             {
                 Directory.CreateDirectory(LogDirectory);
             }
 
             string logMessage;
+            var dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             if (logType is ErrorType errorType)
             {
                 logMessage = errorType switch
                 {
-                    ErrorType.DbError => $"{ErrorType.DbError}, {message}, {DateTime.Now:HH:mm:ss}\n",
-                    ErrorType.UiWarning => $"{ErrorType.UiWarning}, {message}, {DateTime.Now:HH:mm:ss}\n",
-                    ErrorType.ServiceError => $"{ErrorType.ServiceError}, {message}, {DateTime.Now:HH:mm:ss}\n",
-                    ErrorType.ValidationError => $"{ErrorType.ValidationError}, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    ErrorType.DbError => $"{ErrorType.DbError}, {message}, {dateTime}\n",
+                    ErrorType.UiWarning => $"{ErrorType.UiWarning}, {message}, {dateTime}\n",
+                    ErrorType.ServiceError => $"{ErrorType.ServiceError}, {message}, {dateTime}\n",
+                    ErrorType.ValidationError => $"{ErrorType.ValidationError}, {message}, {dateTime}\n",
                     _ => throw new ArgumentOutOfRangeException(nameof(logType), logType, null)
                 };
             }
@@ -34,10 +38,10 @@ public class LogFileWriter
             {
                 logMessage = crudType switch
                 {
-                    CrudType.Create => $"{CrudType.Create}, {message}, {DateTime.Now:HH:mm:ss}\n",
-                    CrudType.Read => $"{CrudType.Read}, {message}, {DateTime.Now:HH:mm:ss}\n",
-                    CrudType.Update => $"{CrudType.Update}, {message}, {DateTime.Now:HH:mm:ss}\n",
-                    CrudType.Delete => $"{CrudType.Delete}, {message}, {DateTime.Now:HH:mm:ss}\n",
+                    CrudType.Create => $"{CrudType.Create}, {message}, {dateTime}\n",
+                    CrudType.Read => $"{CrudType.Read}, {message}, {dateTime}\n",
+                    CrudType.Update => $"{CrudType.Update}, {message}, {dateTime}\n",
+                    CrudType.Delete => $"{CrudType.Delete}, {message}, {dateTime}\n",
                     _ => throw new ArgumentOutOfRangeException(nameof(logType), logType, null)
                 };
             }

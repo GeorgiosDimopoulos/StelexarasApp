@@ -35,7 +35,7 @@ public class DtoDataSeeder
     {
         if (await _teamsService.HasData())
         {
-            Console.WriteLine("Database has already been seeded.");
+            logger.LogWarning("Database has already been seeded.");
             return false;
         }
         else
@@ -51,7 +51,7 @@ public class DtoDataSeeder
     {
         if (await _teamsService.HasData())
         {
-            Console.WriteLine("Database has already been seeded.");
+            logger.LogWarning("Database has already been seeded.");
             return false;
         }
         else
@@ -69,7 +69,7 @@ public class DtoDataSeeder
     {
         if (await _expenseService.HasData())
         {
-            Console.WriteLine("Database has already been seeded.");
+            logger.LogWarning("Database has already been seeded.");
             return false;
         }
         else
@@ -87,7 +87,7 @@ public class DtoDataSeeder
                 Date = DateTime.Now
             });
 
-            Console.WriteLine("Database of Expenses has been seeded!");
+            logger.LogWarning("Database of Expenses has been seeded!");
             logger.LogInformation("This is an informational message about a successful SeedExpensesData operation.");
             return true;
         }
@@ -97,7 +97,7 @@ public class DtoDataSeeder
     {
         if (await _dutyService.HasData())
         {
-            Console.WriteLine("Database has already been seeded.");
+            logger.LogWarning("Database has already been seeded.");
             return false;
         }
         else
@@ -218,7 +218,7 @@ public class DtoDataSeeder
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
         }
     }
 

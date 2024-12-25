@@ -18,7 +18,7 @@ namespace StelexarasApp.Services.Services
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
             }
         }
 
@@ -33,7 +33,7 @@ namespace StelexarasApp.Services.Services
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
                 return false;
             }
         }

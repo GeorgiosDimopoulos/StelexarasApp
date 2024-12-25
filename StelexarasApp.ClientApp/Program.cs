@@ -12,6 +12,9 @@ using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
 using System.Text.RegularExpressions;
 using StelexarasApp.Library.Dtos.Atoma;
+using Microsoft.Extensions.Logging;
+using StelexarasApp.DataAccess.Helpers;
+using StelexarasApp.Library.Models.Logs;
 
 namespace StelexarasApp.ClientApp;
 
@@ -64,7 +67,7 @@ class Program
                 await CreateStelexos(stelexiService, Thesi.Ekpaideutis);
                 break;
             default:
-                Console.WriteLine("Invalid choice");
+                LogFileWriter.WriteToLog("Invalid choice", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
                 break;
         }
     }

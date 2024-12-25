@@ -66,7 +66,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{ex.Message} + {ex.InnerException} {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
             if (transaction != null)
             {
                 await transaction.RollbackAsync();
@@ -113,7 +113,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (Exception ex)
         {
             _logger.LogError("Attempted to add Paidi, exception: " + ex.Message);
-            LogFileWriter.WriteToLog($"{ex.Message} + {ex.InnerException} {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
 
             if (transaction != null)
                 await transaction.RollbackAsync();
@@ -157,7 +157,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (Exception ex)
         {
             _logger.LogError("Attempted to UpdatePaidiInDb, exception: " + ex.Message);
-            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
 
             if (transaction != null)
                 await transaction.RollbackAsync();
@@ -193,7 +193,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (Exception ex)
         {
             _logger.LogError("Attempted to AddSkinesInDb, exception: " + ex.Message);
-            LogFileWriter.WriteToLog($"{ex.Message} + {ex.InnerException} {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
 
             if (transaction != null)
             {
@@ -234,7 +234,7 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         catch (Exception ex)
         {
             _logger.LogError("Attempted to DeletePaidiInDb, exception: " + ex.Message);
-            LogFileWriter.WriteToLog($"{ex.Message} + {ex.InnerException} {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
             await transaction!.RollbackAsync();
             return false;
         }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Library.Models.Logs;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;
@@ -83,6 +85,7 @@ public class KoinotitaWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while creating Koinotita.");
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
             return View("Error");
         }
     }
@@ -108,6 +111,7 @@ public class KoinotitaWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while fetching Koinotita for editing.");
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
             return View("Error");
         }
     }
@@ -133,6 +137,7 @@ public class KoinotitaWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while fetching Koinotita for deletion.");
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
             return View("Error");
         }
     }

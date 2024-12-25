@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Audit.NET" Version="27.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Audit\" />
+    <Folder Include="Models\Entities\" />
+  </ItemGroup>
+
 </Project>

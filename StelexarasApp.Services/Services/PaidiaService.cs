@@ -21,17 +21,24 @@ namespace StelexarasApp.Services.Services
             ILogger<PaidiaService> logger,
             IValidator<PaidiDto> paidiValidator)
         {
-            _paidiRepository = paidiRepository;
-            _mapper = mapper;
-            _logger = logger;
-            _paidiValidator = paidiValidator;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _paidiValidator = paidiValidator ?? throw new ArgumentNullException(nameof(paidiValidator));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _paidiRepository = paidiRepository ?? throw new ArgumentNullException(nameof(paidiRepository));
         }
 
         public async Task<bool> AddPaidiInService(PaidiDto paidiDto)
         {
+            if (paidiDto == null || _paidiValidator == null || _mapper == null || _paidiRepository == null)
+                return false;
+
             var validationResult = _paidiValidator.Validate(paidiDto);
 
             if (!validationResult.IsValid)
+            {
+                return false;
+            }
+            else
             {
                 if (paidiDto == null || _mapper == null || _paidiRepository is null)
                     return false;
@@ -42,14 +49,8 @@ namespace StelexarasApp.Services.Services
 
                 return await _paidiRepository.AddPaidiInDb(paidi);
             }
-            else
-            {
-                _logger.LogError("Validation failed for PaidiDto");
-                return false;
-            }
         }
 
-        // add paidiValidator everywhere here
         public async Task<bool> DeletePaidiInService(int id)
         {
             if (id <= 0 || _mapper == null || _paidiRepository is null)
@@ -92,6 +93,11 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> UpdatePaidiInService(PaidiDto paidiDto)
         {
+            var validationResult = _paidiValidator.Validate(paidiDto);
+
+            if (!validationResult.IsValid)
+                return false;
+
             if (paidiDto == null || _mapper == null || _paidiRepository is null)
                 return false;
 

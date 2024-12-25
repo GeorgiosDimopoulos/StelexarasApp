@@ -30,7 +30,7 @@ public class DataSeeder(
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Database has already been seeded." + ex.InnerException);
+            logger.LogWarning("Database has already been seeded." + ex.InnerException);
             return false;
         }
     }
@@ -39,7 +39,7 @@ public class DataSeeder(
     {
         if (await _expenseRepository.HasData())
         {
-            Console.WriteLine("Database has already been seeded.");
+            logger.LogWarning("Database has already been seeded.");
             return false;
         }
         else
@@ -57,7 +57,7 @@ public class DataSeeder(
                 Date = DateTime.Now
             });
 
-            Console.WriteLine("Database of Expenses has been seeded!");
+            logger.LogWarning("Database of Expenses has been seeded!");
             return true;
         }
     }
@@ -66,7 +66,7 @@ public class DataSeeder(
     {
         if (await _dutyRepository.HasData())
         {
-            Console.WriteLine("Database has already been seeded.");
+            logger.LogWarning("Database has already been seeded.");
             return false;
         }
         else
@@ -91,7 +91,7 @@ public class DataSeeder(
     {
         //if (await _teamsRepository.HasData())
         //{
-        //    Console.WriteLine("Database has already been seeded.");
+        //    logger.LogWarning("Database has already been seeded.");
         //    return false;
         //}
 

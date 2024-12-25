@@ -7,6 +7,8 @@ using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services;
+using FluentValidation;
+using StelexarasApp.Web.Validators;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
@@ -16,6 +18,7 @@ public class StaffServiceTests
     private readonly StaffService _stelexiService;
     private readonly Mock<IMapper> _mockMapper;
     private readonly IMapper _mapper;
+    private readonly IValidator<IStelexosDto> stelexosValidator;
 
     public StaffServiceTests()
     {
@@ -28,7 +31,8 @@ public class StaffServiceTests
 
         _mockStelexiRepository = new Mock<IStaffRepository>();
         _mockMapper = new Mock<IMapper>();
-        _stelexiService = new StaffService(_mockMapper.Object, _mockStelexiRepository.Object);
+        stelexosValidator = new StelexosValidator();
+        _stelexiService = new StaffService(_mockMapper.Object, _mockStelexiRepository.Object, stelexosValidator);
     }
 
     [Fact]

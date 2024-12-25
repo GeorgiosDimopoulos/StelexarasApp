@@ -16,6 +16,7 @@ using StelexarasApp.Mobile.Views.TeamsViews;
 using StelexarasApp.Mobile.Views;
 using StelexarasApp.Mobile.Views.PaidiaViews;
 using StelexarasApp.Mobile.ViewModels;
+using AutoMapper;
 
 namespace StelexarasApp.Mobile;
 
@@ -42,6 +43,8 @@ public static class MauiProgram
         RegisterRepositories(services);
         RegisterPages(services);
         RegisterLogging(services);
+
+        services.AddScoped<IMapper, Mapper>();
 
 #if DEBUG
         builder.Logging.AddDebug();

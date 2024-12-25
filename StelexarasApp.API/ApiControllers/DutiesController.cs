@@ -34,7 +34,7 @@ public class DutiesController : ControllerBase
         }
         catch (Exception ex)
         {
-            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}, {System.Reflection.MethodBase.GetCurrentMethod()!.Name}", ErrorType.DbError);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
             return BadRequest();
         }
     }

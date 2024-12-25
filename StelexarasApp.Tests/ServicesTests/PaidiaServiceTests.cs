@@ -47,11 +47,12 @@ public class PaidiaServiceTests
     public async Task AddEkpaideuomenos_ShouldReturnTrue_WhenSuccessful()
     {
         // Arrange
-        var paidiDto = new PaidiDto { Id = 1, FullName = "John Doe", Age = 30, PaidiType = PaidiType.Ekpaideuomenos };
-        var paidi = new Paidi { Id = 1, FullName = "John Doe", Age = 30, PaidiType = PaidiType.Ekpaideuomenos };
+        var paidiDto = new PaidiDto { Id = 1, FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1" };
+        var paidi = new Paidi { Id = 1, FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos};
 
         _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
         _mockPaidiRepository.Setup(repo => repo.AddPaidiInDb(paidi)).ReturnsAsync(true);
+        _paidiValidatorMock.Setup(v => v.Validate(paidiDto)).Returns(new FluentValidation.Results.ValidationResult());
 
         // Act
         var result = await _paidiaService.AddPaidiInService(paidiDto);

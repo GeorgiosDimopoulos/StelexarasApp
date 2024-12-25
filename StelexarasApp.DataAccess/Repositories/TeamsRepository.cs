@@ -24,7 +24,7 @@ namespace StelexarasApp.DataAccess.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: {ex.Message} {ex.InnerException}", ErrorType.DbError);
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
                 return null!;
             }
         }
