@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Library.Models.Logs;
@@ -9,6 +10,7 @@ namespace StelexarasApp.API.ApiControllers;
 [ApiController]
 [Route("[controller]")]
 [ApiExplorerSettings(IgnoreApi = false)]
+[Authorize]
 public class DutiesController : ControllerBase
 {
     private readonly IDutyService _dutyService;

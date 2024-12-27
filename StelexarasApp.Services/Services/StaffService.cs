@@ -7,7 +7,6 @@ using StelexarasApp.Library.Models.Logs;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 using FluentValidation;
-using System.Runtime.Intrinsics.X86;
 
 namespace StelexarasApp.Services.Services;
 

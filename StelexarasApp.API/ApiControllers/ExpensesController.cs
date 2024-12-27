@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
@@ -8,6 +9,7 @@ namespace StelexarasApp.API.ApiControllers;
 [ApiController]
 [Route("[controller]")]
 [ApiExplorerSettings(IgnoreApi = false)]
+[Authorize]
 public class ExpensesController : ControllerBase
 {
     private readonly IExpenseService _expenseService;

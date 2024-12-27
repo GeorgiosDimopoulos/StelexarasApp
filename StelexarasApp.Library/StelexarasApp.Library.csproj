@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Audit\" />
-    <Folder Include="Models\Entities\" />
   </ItemGroup>
 
 </Project>

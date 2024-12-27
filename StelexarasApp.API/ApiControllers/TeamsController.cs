@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers;
+
+[Authorize]
+[ApiExplorerSettings(IgnoreApi = false)]
 public class TeamsController(ITeamsService teamsService) : ControllerBase
 {
     private readonly ITeamsService _teamsService = teamsService;

@@ -8,14 +8,37 @@ using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
 using FluentValidation.AspNetCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services for API layer
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(options =>
 {
-    c.EnableAnnotations();
+    options.EnableAnnotations();
+    options.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        In = ParameterLocation.Header
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 // Configure dependencies
@@ -41,6 +64,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Map endpoints
@@ -78,4 +102,5 @@ void ConfigureServices(WebApplicationBuilder builder)
     // Add Health Checks UI
     builder.Services.AddHealthChecksUI().AddInMemoryStorage();
     builder.Services.AddFluentValidationAutoValidation();
+    builder.Services.AddAuthentication().AddJwtBearer();
 }

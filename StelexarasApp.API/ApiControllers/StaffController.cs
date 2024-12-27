@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.API.QueryParameters;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
@@ -9,6 +10,7 @@ namespace StelexarasApp.API.ApiControllers;
 [ApiController]
 [Route("[controller]")]
 [ApiExplorerSettings(IgnoreApi = false)]
+[Authorize]
 public class StaffController(IStaffService stelexiService) : ControllerBase
 {
     private readonly IStaffService _stelexiService = stelexiService;
