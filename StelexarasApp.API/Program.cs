@@ -9,6 +9,9 @@ using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,8 +65,11 @@ else
     app.UseHsts();
 }
 
+// Use Middleware
 app.UseHttpsRedirection();
 app.UseRouting();
+
+// Use Authentication and Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -75,9 +81,10 @@ app.Run();
 
 void ConfigureServices(WebApplicationBuilder builder)
 {
+    // Configure Health Checks
     builder.Services.ConfigureHealthChecks(builder.Configuration);
-    builder.Services.AddHealthChecks()
-        .AddCheck<DbHealthCheck>("Database");
+    builder.Services.AddHealthChecks().AddCheck<DbHealthCheck>("Database");
+    builder.Services.AddHealthChecksUI().AddInMemoryStorage();
 
     // Register Repositories and Services used by API
     builder.Services.AddScoped<IPaidiRepository, PaidiRepository>();
@@ -99,8 +106,28 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-    // Add Health Checks UI
-    builder.Services.AddHealthChecksUI().AddInMemoryStorage();
+    // Add FluentValidation Checks
     builder.Services.AddFluentValidationAutoValidation();
-    builder.Services.AddAuthentication().AddJwtBearer();
+
+    // Add JWt Authentication
+    var jwtSettings = builder.Configuration.GetSection("Jwt") ?? throw new Exception("Jwt section is missing in appsettings.json");
+    var key = Encoding.ASCII.GetBytes(jwtSettings ["Key"]!);
+    builder.Services.AddAuthentication(options => // builder.Services.AddAuthentication().AddJwtBearer();
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // or "JwtBearer"
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // or "JwtBearer"
+    }).AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = jwtSettings ["Issuer"] == null ? false : true,
+            ValidateAudience = jwtSettings ["Audience"] == null ? false : true,
+            ValidateLifetime = true
+        };
+    });
+
+    // Add Authorization
+    builder.Services.AddAuthorization();
 }
