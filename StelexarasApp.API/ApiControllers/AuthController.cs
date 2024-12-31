@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using StelexarasApp.API.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -19,7 +18,7 @@ public class AuthController : ControllerBase
     [Route("api/auth/token")]
     public async Task<string> GetAuthToken()
     {
-        var token = await _authTokenProvider.GenerateJwtToken();
+        var token = await _authTokenProvider.GetJwtToken();
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenString = tokenHandler.WriteToken(token);
         return tokenString;

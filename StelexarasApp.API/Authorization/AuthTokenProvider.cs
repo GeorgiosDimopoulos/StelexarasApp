@@ -1,10 +1,7 @@
-﻿using k8s.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using YamlDotNet.Core.Tokens;
 
 namespace StelexarasApp.API.Authorization;
 
@@ -18,13 +15,13 @@ public class AuthTokenProvider : IAuthTokenProvider
         _configuration = configuration;
     }
 
-    public async Task<string> GetJwtToken(IdentityUser user)
+    public Task<SecurityToken> GetJwtToken() // IdentityUser user
     {
-        // var jwtToken = new JwtSecurityTokenHandler
-        return user.UserName;
+        var jwtToken = GenerateJwtToken();
+        return jwtToken;
     }
 
-    public Task<SecurityToken> GenerateJwtToken()
+    private Task<SecurityToken> GenerateJwtToken()
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
 

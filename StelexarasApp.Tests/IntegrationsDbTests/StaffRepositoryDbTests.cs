@@ -146,7 +146,7 @@ public class StaffRepositoryDbTests
         // Arrange
         var stelexos = new Omadarxis
         {
-            Id = 1,
+            Id = 12,
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
             Tel = "123-456-7890"

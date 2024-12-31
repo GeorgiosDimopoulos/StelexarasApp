@@ -103,7 +103,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         }
 
         [Theory]
-        [InlineData(1, "TestTeam1", "TestTeam2", true)]
+        [InlineData(81, "TestTeam1", "TestTeam2", true)]
         public async Task UpdateSkiniInDbAsync_ShouldReturnExpectedResult(int id, string name, string newName, bool expectedResult)
         {
             // Arrange
@@ -138,10 +138,10 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             var teams = new List<Skini>
             {
                 new() {
-                    Id = 1, Name = "TestTeam1", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName" }
+                    Id = 14, Name = "TestTeam1", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName" }
                 },
                 new() {
-                    Id = 2, Name = "TestTeam2", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName2" }
+                    Id = 22, Name = "TestTeam2", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName2" }
                 }
             };
             await _dbContext.Skines!.AddRangeAsync(teams);
@@ -159,7 +159,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetSkiniById_ShouldReturnTeam()
         {
             // Arrange
-            var team = new Skini { Id = 1, Name = "TestTeam" };
+            var team = new Skini { Id = 31, Name = "TestTeam" };
             await _dbContext.Skines!.AddAsync(team);
             await _dbContext.SaveChangesAsync();
 

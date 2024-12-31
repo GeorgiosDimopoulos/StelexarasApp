@@ -79,8 +79,8 @@ public class PaidiaRepositoryDbTests
     }
 
     [Theory]
-    [InlineData(1, 2, true)]
-    [InlineData(2, 9999, false)]
+    [InlineData(7, 2, true)]
+    [InlineData(3, 9999, false)]
     [InlineData(9999, -2, false)]
     public async Task MovePaidiToNewSkini_ShouldReturnExpectedResult(int paidiId, int newSkiniId, bool expectedResult)
     {
