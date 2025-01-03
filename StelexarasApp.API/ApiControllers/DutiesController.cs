@@ -20,6 +20,7 @@ public class DutiesController : ControllerBase
         _dutyService = dutyService;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Duty>>> GetDuties()
     {
@@ -41,6 +42,7 @@ public class DutiesController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("Duty/{id}")]
     public async Task<ActionResult<Duty>> GetDutyById(int id)
     {

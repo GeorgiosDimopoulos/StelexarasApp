@@ -19,6 +19,7 @@ public class ExpensesController : ControllerBase
         _expenseService = expenseService;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
     {
@@ -31,6 +32,7 @@ public class ExpensesController : ControllerBase
         return Ok(expenses);
     }
 
+    [AllowAnonymous]
     [HttpGet("Expense/{id}")]
     public async Task<ActionResult<Expense>> GetExpense(int id)
     {

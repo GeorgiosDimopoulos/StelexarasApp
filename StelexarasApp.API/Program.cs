@@ -112,9 +112,9 @@ void ConfigureServices(WebApplicationBuilder builder)
     // Add JWt Authentication
     var jwtSettings = builder.Configuration.GetSection("Jwt") ?? throw new Exception("Jwt section is missing in appsettings.json");
     var key = Encoding.ASCII.GetBytes(jwtSettings ["Key"]!);
-    builder.Services.AddAuthentication(options => // builder.Services.AddAuthentication().AddJwtBearer();
+    builder.Services.AddAuthentication(options =>
     {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // or "JwtBearer"
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // or "JwtBearer"
     }).AddJwtBearer(options =>
     {
