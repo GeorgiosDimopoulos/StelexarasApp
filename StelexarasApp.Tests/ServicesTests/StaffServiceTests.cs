@@ -8,7 +8,7 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services;
 using FluentValidation;
-using StelexarasApp.Web.Validators;
+using StelexarasApp.Services.Validators;
 
 namespace StelexarasApp.Tests.ServicesTests;
 

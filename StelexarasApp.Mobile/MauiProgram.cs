@@ -17,6 +17,12 @@ using StelexarasApp.Mobile.Views;
 using StelexarasApp.Mobile.Views.PaidiaViews;
 using StelexarasApp.Mobile.ViewModels;
 using AutoMapper;
+using FluentValidation;
+using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Services.Validators;
+using StelexarasApp.Library.Models;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace StelexarasApp.Mobile;
 
@@ -37,7 +43,9 @@ public static class MauiProgram
         builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 
         var services = new ServiceCollection();
+
         RegisterDatabase(services);
+        RegisterModels(services);
         RegisterServices(services);
         RegisterViewModels(services);
         RegisterRepositories(services);
@@ -54,6 +62,22 @@ public static class MauiProgram
         App.ServiceProvider = serviceProvider;
 
         return builder.Build();
+    }
+
+    private static void CheckDbConnection(IServiceCollection services)
+    {
+        var serviceProvider = services.BuildServiceProvider();
+        var dbContext = serviceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            dbContext.Database.OpenConnection();
+            dbContext.Database.CloseConnection();
+            Console.WriteLine("Database connection successful.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Database connection failed: {ex.Message}");
+        }
     }
 
     private static void RegisterLogging(ServiceCollection services)
@@ -91,6 +115,14 @@ public static class MauiProgram
         services.AddScoped<ITeamsRepository, TeamsRepository>();
         services.AddScoped<IExpenseRepository, ExpenseRepository>();
         services.AddScoped<IDutyRepository, DutyRepository>();
+    }
+
+    private static void RegisterModels(ServiceCollection services)
+    {
+        services.AddTransient<IValidator<IStelexosDto>, StelexosValidator>();
+        services.AddTransient<IValidator<PaidiDto>, PaidiValidator>();
+        services.AddTransient<IValidator<Duty>, DutyValidator>();
+        services.AddTransient<IValidator<Expense>, ExpenseValidator>();
     }
 
     private static void RegisterViewModels(ServiceCollection services)
@@ -132,5 +164,7 @@ public static class MauiProgram
         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
     });
 #endif
+
+        CheckDbConnection(services);
     }
 }

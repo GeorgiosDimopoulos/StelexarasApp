@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using StelexarasApp.Library.Dtos.Atoma;
 
-namespace StelexarasApp.Web.Validators;
+namespace StelexarasApp.Services.Validators;
 
 public class StelexosValidator : AbstractValidator<IStelexosDto>
 {

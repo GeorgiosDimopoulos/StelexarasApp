@@ -127,11 +127,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IEnumerable<Omadarxis>> GetAllOmadarxesInDb()
-    {
-        return await _dbContext.Omadarxes!.ToListAsync();
-    }
-
     public async Task<bool> DeleteStelexosInDb(int id, Thesi thesi)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
@@ -353,7 +348,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
     private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string xwrosName)
     {
         if (string.IsNullOrEmpty(xwrosName))
-            return await GetAllOmadarxes();
+            return await _dbContext.Omadarxes.ToListAsync();
 
         var isXwrosAnKoinotita = await _dbContext.Koinotites!.AnyAsync(k => k.Name.Equals(xwrosName));
         if (isXwrosAnKoinotita)
@@ -365,13 +360,18 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                 return await GetOmadarxesAnaTomea(xwrosName);
         }
 
-        return await GetAllOmadarxes();
+        return await _dbContext.Omadarxes.ToListAsync();
     }
 
     private async Task<IEnumerable<Koinotarxis>> GetKoinotarxesAnaXwro(string xwrosName)
     {
+        if (_dbContext.Koinotarxes == null | !_dbContext.Koinotarxes!.Any())
+            return null!;
         if (string.IsNullOrEmpty(xwrosName))
-            return await _dbContext.Koinotarxes!.ToListAsync();
+        {
+            var allKoinotarxes = await _dbContext.Koinotarxes!.ToListAsync();
+            return allKoinotarxes;
+        }            
 
         var isXwrosAnTomeas = _dbContext.Tomeis!.Any(k => k.Name.Equals(xwrosName));
         if (isXwrosAnTomeas)
@@ -392,11 +392,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         if (string.IsNullOrEmpty(name))
             return await _dbContext.Omadarxes!.ToListAsync();
         return await _dbContext.Skines!.Where(sk => sk.Koinotita.Tomeas.Name == name).Select(k => k.Omadarxis!).ToListAsync();
-    }
-
-    private async Task<List<Omadarxis>> GetAllOmadarxes()
-    {
-        return await _dbContext.Omadarxes.ToListAsync();
     }
 
     private async Task<List<Koinotarxis>> GetKoinotarxesAnaTomea(string? tomeasName)

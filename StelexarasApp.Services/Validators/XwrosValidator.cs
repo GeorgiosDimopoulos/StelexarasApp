@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using StelexarasApp.Library.Models.Domi;
 
-namespace StelexarasApp.Web.Validators;
+namespace StelexarasApp.Services.Validators;
 
 public class XwrosValidator : AbstractValidator<Xwros>
 {

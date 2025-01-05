@@ -6,7 +6,7 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
-using StelexarasApp.Web.Validators;
+using StelexarasApp.Services.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 

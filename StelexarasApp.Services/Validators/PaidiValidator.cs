@@ -2,7 +2,7 @@
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Models.Atoma;
 
-namespace StelexarasApp.Web.Validators;
+namespace StelexarasApp.Services.Validators;
 
 public class PaidiValidator : AbstractValidator<PaidiDto>
 {

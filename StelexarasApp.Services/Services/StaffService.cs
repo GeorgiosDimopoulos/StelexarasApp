@@ -34,7 +34,7 @@ public class StaffService : IStaffService
             var tomearxesInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Tomearxis, string.Empty);
             var ekpaiduetesInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Ekpaideutis, string.Empty);
 
-            var allStelexoiInDb = omadarxesInDb.Concat(koinotarxesInDb).Concat(tomearxesInDb).Concat(ekpaiduetesInDb);
+            var allStelexoiInDb = omadarxesInDb.Concat(koinotarxesInDb ?? []).Concat(tomearxesInDb ?? []).Concat(ekpaiduetesInDb ?? []);
             var stelexoiInService = _mapper.Map<IEnumerable<IStelexosDto>>(allStelexoiInDb);
 
             if (stelexoiInService is null || !stelexoiInService.Any())
@@ -59,7 +59,7 @@ public class StaffService : IStaffService
                 throw new InvalidOperationException("Mapper or repository cannot be null");
 
             var stelexosResult = await _stelexosValidator.ValidateAsync(stelexosDto);
-            
+
             if (!stelexosResult.IsValid)
             {
                 LogFileWriter.WriteToLog("StelexosDto is not valid to be added", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);

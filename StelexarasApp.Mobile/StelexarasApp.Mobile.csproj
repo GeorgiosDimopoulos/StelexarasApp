@@ -127,9 +127,7 @@
 	</ItemGroup>
 
 	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties XamarinHotReloadDebuggerTimeoutExceptionStelexarasAppUIHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarStelexarasAppUIHideInfoBar="True" />
-		</VisualStudio>
+		<VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionStelexarasAppMobileHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionStelexarasAppUIHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarStelexarasAppUIHideInfoBar="True" /></VisualStudio>
 	</ProjectExtensions>
 
 </Project>
