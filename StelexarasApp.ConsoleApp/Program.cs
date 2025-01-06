@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
@@ -67,14 +68,6 @@ void LoadStaffDbEntities(IServiceCollection services)
 
 static void ConfigureDbService(IServiceCollection services)
 {
-    var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "StelexarasApp.db3");
-    Console.WriteLine($"Database path: {dbPath}");
-    if (!File.Exists(dbPath))
-    {
-        Console.WriteLine("Database file does not exist.");
-        return;
-    }
-
     var configuration = new ConfigurationBuilder()
        .SetBasePath(AppContext.BaseDirectory)
        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -87,7 +80,7 @@ static void ConfigureDbService(IServiceCollection services)
 
     var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-    using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+    using (var connection = new SqlConnection(connectionString))
     {
         connection.Open();
         DataTable schema = connection.GetSchema("Tables");

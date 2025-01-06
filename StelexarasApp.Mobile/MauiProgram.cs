@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
@@ -21,8 +22,9 @@ using FluentValidation;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Library.Models;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Reflection;
 
 namespace StelexarasApp.Mobile;
 
@@ -31,10 +33,16 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        builder
-            .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
-            .ConfigureFonts(fonts =>
+
+        // TEST
+        var a = Assembly.GetExecutingAssembly();
+        using var stream = a.GetManifestResourceStream("MauiApp27.appsettings.json");
+        var config = new ConfigurationBuilder()
+            .AddJsonStream(stream)
+            .Build();
+        builder.Configuration.AddConfiguration(config);
+                
+        builder.UseMauiApp<App>().UseMauiCommunityToolkit().ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
@@ -44,7 +52,10 @@ public static class MauiProgram
 
         var services = new ServiceCollection();
 
-        RegisterDatabase(services);
+        var serviceProvider = services.BuildServiceProvider();
+        App.ServiceProvider = serviceProvider;
+
+        RegisterDatabase(services, builder);
         RegisterModels(services);
         RegisterServices(services);
         RegisterViewModels(services);
@@ -58,26 +69,7 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        var serviceProvider = services.BuildServiceProvider();
-        App.ServiceProvider = serviceProvider;
-
         return builder.Build();
-    }
-
-    private static void CheckDbConnection(IServiceCollection services)
-    {
-        var serviceProvider = services.BuildServiceProvider();
-        var dbContext = serviceProvider.GetRequiredService<AppDbContext>();
-        try
-        {
-            dbContext.Database.OpenConnection();
-            dbContext.Database.CloseConnection();
-            Console.WriteLine("Database connection successful.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Database connection failed: {ex.Message}");
-        }
     }
 
     private static void RegisterLogging(ServiceCollection services)
@@ -145,26 +137,76 @@ public static class MauiProgram
         services.AddScoped<SignalrService>();
     }
 
-    private static void RegisterDatabase(IServiceCollection services)
+    private static void RegisterDatabase(IServiceCollection services, MauiAppBuilder builder)
     {
+        string filePath;
+#if ANDROID
+        var assembly = typeof(MauiProgram).Assembly;
+        using (var stream = assembly.GetManifestResourceStream("com.companyname.stelexarasapp.Resources.appsettings.json"))
+        {
+            if (stream == null)
+            {
+                Console.WriteLine("appsettings.json not found as embedded resource.");
+            }
+            else
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonStream(stream)
+                    .Build();
+
+                builder.Configuration.AddConfiguration(configuration);
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                services.AddDbContext<AppDbContext>(options =>
+                {
+                    options.UseSqlServer(connectionString);
+                });
+            }
+        }
+        filePath = Path.Combine(FileSystem.AppDataDirectory, "appsettings.json");
+#else
+        filePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+#endif
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine($"Configuration file not found: {filePath}");
+        }
+        else
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Path.GetDirectoryName(filePath))
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+            builder.Configuration.AddConfiguration(configuration);
+
+            //var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TYPET;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                DataTable schema = connection.GetSchema("Tables");
+
+                Console.WriteLine("\nTables in the database:");
+                foreach (DataRow row in schema.Rows)
+                {
+                    Console.WriteLine(row ["TABLE_NAME"]);
+                }
+            }
+        }
+
+        // Register services and dependencies
         services.AddSingleton<IDatabasePathProvider, DatabasePathProvider>();
         services.AddAutoMapper(typeof(MappingProfile));
 
-#if DEBUG
-        // Use SQLite in Debug mode
-        var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "app.db");
-        services.AddDbContext<AppDbContext>(options =>
+        using (var dbContext = App.ServiceProvider.GetRequiredService<AppDbContext>())
         {
-            options.UseSqlite($"Data Source={dbPath}");
-        });
-#else
-    // Use SQL Server in Release mode
-    services.AddDbContext<AppDbContext>(options =>
-    {
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-    });
-#endif
-
-        CheckDbConnection(services);
+            dbContext.Database.OpenConnection();
+            dbContext.Database.CloseConnection();
+            Console.WriteLine("Database connection successful.");
+        }
     }
 }

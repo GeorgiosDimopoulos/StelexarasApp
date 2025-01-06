@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -130,4 +131,22 @@ void ConfigureServices(WebApplicationBuilder builder)
 
     // Add Authorization
     builder.Services.AddAuthorization();
+
+    CheckDatabaseConnection().Wait();
+}
+
+static async Task CheckDatabaseConnection()
+{
+    try
+    {
+        var connectionString = "Server=your_server;Database=your_database;User Id=your_user;Password=your_password;";
+
+        await using var connection = new SqlConnection(connectionString);
+        await connection.OpenAsync();
+        Console.WriteLine("Connection succeeded.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Connection failed: {ex.Message}");
+    }
 }

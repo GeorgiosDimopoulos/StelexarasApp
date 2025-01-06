@@ -6,7 +6,7 @@ namespace StelexarasApp.Mobile;
 
 public partial class App : Application
 {
-    public static IServiceProvider ServiceProvider { get; set; } = null!;
+    public static IServiceProvider ServiceProvider { get; set; } = default!;
 
     public App()
     {
