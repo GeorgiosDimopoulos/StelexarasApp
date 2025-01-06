@@ -120,7 +120,13 @@ namespace StelexarasApp.DataAccess
                .WithMany(k=> k.Skines)
                .OnDelete(DeleteBehavior.Restrict);
 
-            // modelBuilder.Entity<Skini>().ToTable("Skines");
+            // To-Do: do i need these below?
+            //modelBuilder.Entity<Skini>().ToTable("Skines");
+            //modelBuilder.Entity<Koinotita>().ToTable("Koinoties");
+            //modelBuilder.Entity<Tomeas>().ToTable("Tomeis"); 
+            //modelBuilder.Entity<Omadarxis>().ToTable("Omadarxes");
+            //modelBuilder.Entity<Koinotarxis>().ToTable("Koinotarxes");
+            //modelBuilder.Entity<Tomearxis>().ToTable("Tomearxes");
         }
 
         private static void OnModelsRulesCreating(ModelBuilder modelBuilder)

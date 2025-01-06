@@ -106,27 +106,6 @@ public class StaffRepositoryTests
     }
 
     [Fact(Skip = "Temporarily ignoring this test")]
-    public async Task GetAllOmadarxesInDb_ShouldReturnAllStelexos()
-    {
-        // Arrange
-        var omadarxisList = new List<Omadarxis>
-        {
-            new Omadarxis { Id = 1, FullName = "Test Name 1", Age = 30, Tel = "1234567890", Thesi = Thesi.Omadarxis},
-            new Omadarxis { Id = 2, FullName = "Test Name 2", Age = 25, Tel = "0987654321", Thesi = Thesi.Omadarxis}
-        };
-
-        var mockOmadarxisDbSet = SetupMockOmadarxisDbSet(omadarxisList);
-        _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
-
-        // Act
-        // var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, "");
-        var result = await _stelexiRepository.GetAllOmadarxesInDb();
-
-        // Assert
-        Assert.NotNull(result);
-    }
-
-    [Fact(Skip = "Temporarily ignoring this test")]
     public async Task GetAllKoinotarxesInDb_ShouldReturnAllStelexos()
     {
         // Arrange

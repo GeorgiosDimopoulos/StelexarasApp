@@ -4,7 +4,7 @@ namespace StelexarasApp.DataAccess.Helpers;
 
 public class LogFileWriter
 {
-    private static readonly string LogDirectory = @"C:\Projects\GitHub\StelexarasApp\Logs";
+    private static readonly string LogDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "StelexarasApp", "Logs");
     private static readonly string LogFilePath = Path.Combine(LogDirectory, "applicationLogs.txt");
 
     public static void WriteToLog(string message, string method, Enum logType)

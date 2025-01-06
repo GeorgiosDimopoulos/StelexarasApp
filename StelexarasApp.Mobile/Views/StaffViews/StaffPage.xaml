@@ -8,10 +8,10 @@
 	<ContentPage.Content>
 		<CollectionView ItemsSource="{Binding AllStaff}" SelectionMode="Single" SelectionChanged="OnStelexosSelected">
 			<CollectionView.Header>
-				<Grid Padding="10" ColumnDefinitions="*, *">
+				<Grid Padding="10" ColumnDefinitions="*, *, *">
 					<Label Grid.Column="0" Text="Όνομα" FontAttributes="Bold" />
 					<Label Grid.Column="1" Text="Χώρος" FontAttributes="Bold" />
-					<Label Grid.Column="1" Text="Τηλέφωνο" FontAttributes="Bold" />
+					<Label Grid.Column="2" Text="Τηλέφωνο" FontAttributes="Bold" />
 				</Grid>
 			</CollectionView.Header>
 			<CollectionView.ItemTemplate>
