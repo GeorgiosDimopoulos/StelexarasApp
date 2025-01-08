@@ -7,7 +7,7 @@
         android:supportsRtl="true"
         android:theme="@style/MainTheme">
 		<activity
-            android:name="crc64a0e0a82d0db9a07d.MainActivity"
+            android:name="com.companyname.stelexarasapp.MainActivity"
             android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

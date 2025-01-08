@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.LogsDashboard
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StelexarasApp.Library", "StelexarasApp.Library\StelexarasApp.Library.csproj", "{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StelexarasApp.ConsoleApp", "StelexarasApp.ConsoleApp\StelexarasApp.ConsoleApp.csproj", "{BFD4F7C1-7B56-4BAB-9659-E2E5E9FBFEEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECA64D14-0F05-4A7D-AEEF-2573F8F69673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFD4F7C1-7B56-4BAB-9659-E2E5E9FBFEEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFD4F7C1-7B56-4BAB-9659-E2E5E9FBFEEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFD4F7C1-7B56-4BAB-9659-E2E5E9FBFEEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFD4F7C1-7B56-4BAB-9659-E2E5E9FBFEEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
