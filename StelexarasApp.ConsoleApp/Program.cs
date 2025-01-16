@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.DataProvider;
@@ -8,13 +9,12 @@ Console.WriteLine("Hello, let's quickly see the staff from the DB!");
 
 var serviceProvider = ConfigureServices();
 
-// var dataProvider = new DataProvider();
 var dataProvider = serviceProvider.GetRequiredService<DataProvider>();
 
 var dbOk = dataProvider.ConfigureDatabaseForWindows();
 
 if (dbOk)
-    dataProvider.LoadDbEntities();
+    dataProvider.LoadSqlServerDbEntities();
 else
 {
     Console.WriteLine("Database not found. Exiting...");
@@ -29,7 +29,7 @@ static IServiceProvider ConfigureServices()
             .SetBasePath(AppContext.BaseDirectory)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
-    
+
     services.AddSingleton<IConfiguration>(configuration);
     services.AddDbContext<AppDbContext>(options =>
     {
@@ -37,7 +37,7 @@ static IServiceProvider ConfigureServices()
         options.UseSqlServer(connectionString);
     });
 
-    services.AddLogging(); // configure => configure.AddConsole()
+    services.AddLogging(configure => configure.AddConsole());
     services.AddTransient<DataProvider>();
     return services.BuildServiceProvider();
 }
