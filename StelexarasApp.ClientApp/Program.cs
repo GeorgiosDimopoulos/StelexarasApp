@@ -11,10 +11,12 @@ using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Services.IServices;
 using System.Text.RegularExpressions;
-using StelexarasApp.Library.Dtos.Atoma;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Models.Logs;
+using FluentValidation;
+using StelexarasApp.Services.Validators;
+using StelexarasApp.Library.Models;
 
 namespace StelexarasApp.ClientApp;
 
@@ -143,13 +145,20 @@ class Program
 
     private static ServiceProvider ConfigureServices() => new ServiceCollection()
         .AddDbContext<AppDbContext>()
+        .AddLogging()
+        .AddAutoMapper(typeof(Program))
+        .AddTransient<IValidator<PaidiDto>, PaidiValidator>()
+        .AddTransient<IValidator<Duty>, DutyValidator>()
+        .AddTransient<IValidator<IStelexosDto>, StelexosValidator>()
         .AddScoped<IPaidiaService, PaidiaService>()
+        .AddScoped<IStaffRepository, StaffRepository>()
+        .AddTransient<IStaffService, StaffService>()
         .AddScoped<IPaidiRepository, PaidiRepository>()
         .BuildServiceProvider();
 
     private static void ConfigureSignalRConnection()
     {
-        var connection = new HubConnectionBuilder()
+        connection = new HubConnectionBuilder()
             .WithUrl("http://localhost:5000/myhub")
             .WithAutomaticReconnect()
             .Build();
