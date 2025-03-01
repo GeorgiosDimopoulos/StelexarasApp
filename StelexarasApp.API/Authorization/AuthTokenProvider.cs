@@ -15,25 +15,29 @@ public class AuthTokenProvider : IAuthTokenProvider
         _configuration = configuration;
     }
 
-    public Task<SecurityToken> GetJwtToken() // IdentityUser user
+    public Task<SecurityToken> GetJwtToken(string username)
     {
-        var jwtToken = GenerateJwtToken();
+        var jwtToken = GenerateJwtToken(username);
         return jwtToken;
     }
 
-    private Task<SecurityToken> GenerateJwtToken()
+    private Task<SecurityToken> GenerateJwtToken(string name)
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
 
         var jwtSettings = _configuration.GetSection("Jwt") ?? throw new Exception("Jwt section is missing in appsettings.json");
-        var userName = jwtSettings ["UserName"]!;
         var userKey = jwtSettings ["Key"] ?? string.Empty;
+        if (userKey.Length < 16)
+        {
+            userKey = userKey.PadRight(16);
+        }
+
         var userKeyBytes = Encoding.UTF8.GetBytes(userKey);
         var securityKey = new SymmetricSecurityKey(userKeyBytes);
 
         var claims = new []
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userName),
+            new Claim(JwtRegisteredClaimNames.Sub, userKey),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 

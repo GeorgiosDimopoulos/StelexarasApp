@@ -15,37 +15,14 @@ using Microsoft.IdentityModel.Tokens;
 using FluentValidation;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Services.Validators;
+using StelexarasApp.API.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ConfigureJwtAuthenticationAndSwagger(builder);
+
 // Add services for API layer
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.EnableAnnotations();
-    options.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        In = ParameterLocation.Header
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
 
 // Configure dependencies
 ConfigureServices(builder);
@@ -57,7 +34,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "General V1");
+        c.SwaggerEndpoint("/swagger/admin/swagger.json", "Admin API");
         c.RoutePrefix = "swagger";
     });
     app.UseDeveloperExceptionPage();
@@ -102,6 +80,8 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddScoped<ITeamsService, TeamsService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
 
+    builder.Services.AddScoped<IAuthTokenProvider, AuthTokenProvider>();
+
     // Add AutoMapper
     builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
@@ -116,27 +96,55 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddTransient<IValidator<IStelexosDto>, StelexosValidator>();
     builder.Services.AddTransient<IValidator<PaidiDto>, PaidiValidator>();
 
-    // Add JWt Authentication
-    var jwtSettings = builder.Configuration.GetSection("Jwt") ?? throw new Exception("Jwt section is missing in appsettings.json");
-    var key = Encoding.ASCII.GetBytes(jwtSettings ["Key"]!);
-    builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // or "JwtBearer"
-    }).AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = jwtSettings ["Issuer"] == null ? false : true,
-            ValidateAudience = jwtSettings ["Audience"] == null ? false : true,
-            ValidateLifetime = true
-        };
-    });
-
-    builder.Services.AddAuthorization();
-
     // Add Controllers
     builder.Services.AddControllers();
+}
+
+void ConfigureJwtAuthenticationAndSwagger(WebApplicationBuilder builder)
+{
+    var jwtSettings = builder.Configuration.GetSection("Jwt") ?? throw new Exception("Jwt section is missing in appsettings.json");
+    var key = jwtSettings ["Key"] ?? throw new Exception("JWT Key is missing in appsettings.json");
+    var keyBytes = Encoding.ASCII.GetBytes(key);
+
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.EnableAnnotations();
+        options.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
+        options.SwaggerDoc("admin", new() { Title = "Admin API", Version = "admin" });
+
+        var securityScheme = new OpenApiSecurityScheme
+        {
+            Name = "Authorizatio",
+            Type = SecuritySchemeType.ApiKey,
+            In = ParameterLocation.Header,
+            Scheme = "Bearer",
+            Description = "JWT Authorization header using the Bearer scheme.",
+        };
+        options.AddSecurityDefinition("Bearer", securityScheme);
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            { securityScheme, Array.Empty<string>() }
+        });
+    });
+
+    // Configure Authentication
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+                ValidIssuer = jwtSettings ["Issuer"],
+                ValidateIssuer = !string.IsNullOrEmpty(jwtSettings ["Issuer"]),
+                ValidAudience = jwtSettings ["Audience"],
+                ValidateAudience = !string.IsNullOrEmpty(jwtSettings ["Audience"]),
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+
+    // Add Authorization
+    builder.Services.AddAuthorization();
 }

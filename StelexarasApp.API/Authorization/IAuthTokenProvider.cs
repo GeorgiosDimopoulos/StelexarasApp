@@ -4,6 +4,6 @@ namespace StelexarasApp.API.Authorization
 {
     public interface IAuthTokenProvider
     {
-        Task<SecurityToken> GetJwtToken();
+        Task<SecurityToken> GetJwtToken(string n);
     }
 }
