@@ -1,4 +1,5 @@
 ﻿using StelexarasApp.Library.Models.Domi;
+using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
@@ -10,7 +11,7 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
         Task<bool> AddKoinotitaInDb(Koinotita koinotita);
         Task<bool> AddTomeasInDb(Tomeas koinotita); 
 
-        Task<IEnumerable<Skini>> GetSkinesInDb();
+        Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters skiniQueryParameters);
         Task<IEnumerable<Koinotita>> GetKoinotitesInDb();
         Task<IEnumerable<Tomeas>> GetTomeisInDb();
 

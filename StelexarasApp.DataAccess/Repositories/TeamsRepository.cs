@@ -4,6 +4,7 @@ using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Library.Models.Logs;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
@@ -42,14 +43,16 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<IEnumerable<Skini>> GetSkinesInDb()
+        public async Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters skiniQueryParameters)
         {
             try
             {
-                return await _dbContext.Skines!
-                    .Include(s => s.Paidia)
-                    .Include(s => s.Koinotita)
-                    .ToListAsync();
+                var query = _dbContext.Skines!.AsQueryable();
+                if (skiniQueryParameters.IncludePaidia)
+                {
+                    query = query.Include(s => s.Paidia);
+                }
+                return await query.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -403,7 +406,7 @@ namespace StelexarasApp.DataAccess.Repositories
             if (_dbContext is null)
                 return Task.FromResult(false);
 
-            if (!GetSkinesInDb().Result.Any() &&
+            if (!GetSkinesInDb(new()).Result.Any() &&
                     !GetKoinotitesAnaTomeaInDb(2).Result.Any() &&
                     !GetKoinotitesAnaTomeaInDb(1).Result.Any())
                 return Task.FromResult(false);

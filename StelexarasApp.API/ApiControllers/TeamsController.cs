@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers;
@@ -12,9 +13,9 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     private readonly ITeamsService _teamsService = teamsService;
 
     [HttpGet("Skines")]
-    public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkines()
+    public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkines(SkiniQueryParameters skinQueryParameters)
     {
-        var result = await _teamsService.GetAllSkinesInService();
+        var result = await _teamsService.GetAllSkinesInService(skinQueryParameters);
 
         if (result is null)
             return NotFound();
@@ -23,9 +24,9 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpGet("Skini/{name}")]
-    public async Task<ActionResult<SkiniDto>> GetSkini(string name)
+    public async Task<ActionResult<SkiniDto>> GetSkini(SkiniQueryParameters parameters, string name)
     {
-        var result = await _teamsService.GetSkiniByNameInService(name);
+        var result = await _teamsService.GetSkiniByNameInService(parameters, name);
 
         if (result is null)
             return NotFound();

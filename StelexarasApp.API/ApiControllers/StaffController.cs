@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.API.QueryParameters;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers;
@@ -38,31 +38,21 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPost("Omadarxi")]
-    public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] OmadarxisQueryParameters omadarxisParams)
+    public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] IStelexosDto omadarxis)
     {
-        if (omadarxisParams == null)
+        if (omadarxis == null)
         {
             return BadRequest("Omadarxis parameters cannot be null");
         }
 
-        var omadarxisDto = new OmadarxisDto
-        {
-            // Id = omadarxisParams.Id,
-            Age = omadarxisParams.Age,
-            Sex = omadarxisParams.Sex,
-            Thesi = omadarxisParams.Thesi ?? Thesi.Omadarxis,
-            DtoXwrosName = omadarxisParams.DtoXwrosName,
-            Tel = omadarxisParams.Tel
-        };
-
-        var result = await _stelexiService.AddStelexosInService(omadarxisDto);
+        var result = await _stelexiService.AddStelexosInService(omadarxis);
 
         if (!result)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, "Error creating new Omadarxis record");
         }
 
-        return CreatedAtAction(nameof(GetOmadarxis), new { id = omadarxisDto.Id }, omadarxisDto);
+        return CreatedAtAction(nameof(GetOmadarxis), new { id = omadarxis.Id }, omadarxis);
     }
 
 
@@ -139,24 +129,15 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPost("Koinotarxi")]
-    public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] KoinotarxisQueryParameters koinotarxisQueryParameters)
+    public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] IStelexosDto koinotarxis)
     {
-        if (koinotarxisQueryParameters == null)
+        if (koinotarxis == null)
         {
             return BadRequest("Koinotarxis parameters cannot be null");
         }
 
-        var koinotarxisDto = new KoinotarxisDto
-        {
-            Age = koinotarxisQueryParameters.Age,
-            Sex = koinotarxisQueryParameters.Sex,
-            // Id = koinotarxisQueryParameters.Id,
-            Thesi = koinotarxisQueryParameters.Thesi ?? Thesi.Omadarxis,
-            DtoXwrosName = koinotarxisQueryParameters.DtoXwrosName,
-            Tel = koinotarxisQueryParameters.Tel
-        };
-
-        var result = await _stelexiService.AddStelexosInService(koinotarxisDto);
+        koinotarxis.Thesi = Thesi.Koinotarxis;
+        var result = await _stelexiService.AddStelexosInService(koinotarxis);
 
         if (!result)
             return NotFound();
@@ -165,23 +146,12 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPut("Koinotarxi/{id}")]
-    public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisQueryParameters koinotarxisQueryParameters, int id)
+    public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisDto koinotarxisDto, int id)
     {
-        if (koinotarxisQueryParameters == null)
+        if (koinotarxisDto == null)
         {
-            return BadRequest("Koinotarxis parameters cannot be null");
+            return BadRequest("Koinotarxis cannot be null");
         }
-
-        var koinotarxisDto = new KoinotarxisDto
-        {
-            Age = koinotarxisQueryParameters.Age,
-            Sex = koinotarxisQueryParameters.Sex,
-            Id = id,
-            Thesi = Thesi.Omadarxis,
-            DtoXwrosName = koinotarxisQueryParameters.DtoXwrosName,
-            Tel = koinotarxisQueryParameters.Tel,
-            FullName = koinotarxisQueryParameters.FullName,
-        };
 
         var result = await _stelexiService.UpdateStelexosInService(koinotarxisDto);
 
@@ -246,24 +216,12 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPost("Tomearxi")]
-    public async Task<ActionResult<Tomearxis>> PostTomearxi([FromBody] TomearxisQueryParameters tomearxisQueryParameters)
+    public async Task<ActionResult<Tomearxis>> PostTomearxi([FromBody] TomearxisDto tomearxisDto)
     {
-        if (tomearxisQueryParameters == null)
+        if (tomearxisDto == null)
         {
-            return BadRequest("Tomearxis parameters cannot be null");
+            return BadRequest("Tomearxis input cannot be null");
         }
-
-        var tomearxisDto = new TomearxisDto
-        {
-            // Id = tomearxisQueryParameters.Id,
-            Age = tomearxisQueryParameters.Age,
-            Thesi = tomearxisQueryParameters.Thesi ?? Thesi.Tomearxis,
-            DtoXwrosName = tomearxisQueryParameters.DtoXwrosName,
-            Tel = tomearxisQueryParameters.Tel,
-            FullName = tomearxisQueryParameters.FullName,
-            Sex = tomearxisQueryParameters.Sex
-        };
-
 
         var result = await _stelexiService.AddStelexosInService(tomearxisDto);
 
@@ -274,23 +232,12 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPut("Tomearxi/{id}")]
-    public async Task<IActionResult> PutTomearxi([FromBody] TomearxisQueryParameters tomearxisQueryParameters)
+    public async Task<IActionResult> PutTomearxi([FromBody] TomearxisDto tomearxisDto)
     {
-        if (tomearxisQueryParameters == null)
+        if (tomearxisDto == null)
         {
-            return BadRequest("Tomearxis parameters cannot be null");
+            return BadRequest("Tomearxis cannot be null");
         }
-
-        var tomearxisDto = new TomearxisDto
-        {
-            // Id = tomearxisQueryParameters.Id,
-            Age = tomearxisQueryParameters.Age,
-            Sex = tomearxisQueryParameters.Sex,
-            Thesi = tomearxisQueryParameters.Thesi ?? Thesi.Tomearxis,
-            DtoXwrosName = tomearxisQueryParameters.DtoXwrosName,
-            Tel = tomearxisQueryParameters.Tel,            
-            FullName = tomearxisQueryParameters.FullName
-        };
 
         var result = await _stelexiService.UpdateStelexosInService(tomearxisDto);
 
