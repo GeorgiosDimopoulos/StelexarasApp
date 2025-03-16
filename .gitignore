@@ -93,3 +93,4 @@ TestResults/
 *.trx
 *.coverage
 /venv
+/Logs/applicationLogs.txt

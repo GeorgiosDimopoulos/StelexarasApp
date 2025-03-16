@@ -1,2 +1,0 @@
-DB ERROR, AddSeeding(), Unable to connect to database, 14:21:05
-UI WARNING, GetUsers(), Button click took too long, 14:21:15
