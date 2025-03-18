@@ -107,22 +107,22 @@ namespace StelexarasApp.Services.Services
             return _mapper.Map<KoinotitaDto>(skini);
         }
 
-        public Task<bool> UpdateKoinotitaInService(KoinotitaDto koinotitaDto)
+        public Task<bool> UpdateKoinotitaInService(int id, KoinotitaDto koinotitaDto)
         {
             var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
-            return _teamsRepository.UpdateKoinotitaInDb(koinotita);
+            return _teamsRepository.UpdateKoinotitaInDb(id, koinotita);
         }
 
-        public Task<bool> UpdateSkiniInService(SkiniDto skiniDto)
+        public Task<bool> UpdateSkiniInService(int id, SkiniDto skiniDto)
         {
             var skini = _mapper.Map<Skini>(skiniDto);
-            return _teamsRepository.UpdateSkiniInDb(skini);
+            return _teamsRepository.UpdateSkiniInDb(id, skini);
         }
 
-        public Task<bool> UpdateTomeasInService(TomeasDto tomeasDto)
+        public Task<bool> UpdateTomeaInService(int id, TomeasDto tomeasDto)
         {
             var tomeas = _mapper.Map<Tomeas>(tomeasDto);
-            return _teamsRepository.UpdateTomeasInDb(tomeas);
+            return _teamsRepository.UpdateTomeasInDb(id, tomeas);
         }
 
         public Task<bool> DeleteSkiniInService(int skiniId)
@@ -144,22 +144,6 @@ namespace StelexarasApp.Services.Services
         {
             var tomeasInDb = await _teamsRepository.GetTomeaByNameInDb(tomeasQueryParameters, name);
             return _mapper.Map<TomeasDto>(tomeasInDb);
-        }
-
-        public async Task<bool> UpdateTomeaInService(TomeasDto tomeas)
-        {
-            try
-            {
-                var tomea = _mapper.Map<Tomeas>(tomeas);
-                var array = new Koinotita [tomeas.KoinotitesNumber];
-                tomea.Koinotites = [.. array];
-                return await _teamsRepository.UpdateTomeasInDb(tomea);
-            }
-            catch (Exception ex)
-            {
-                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
-                return false;
-            }
         }
 
         public async Task<bool> AddTomeasInService(TomeasDto tomeasDto)

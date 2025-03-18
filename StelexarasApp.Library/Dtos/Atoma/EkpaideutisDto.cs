@@ -8,7 +8,6 @@ namespace StelexarasApp.Library.Dtos.Atoma
         public string? FullName { get; set; }
         public Thesi Thesi { get; set; } = Thesi.Ekpaideutis;
         public int Age { get; set; }
-        public int? Id { get; set; }
         public Sex Sex { get; set; }
         public string? XwrosName { get; set; }
         public string? Tel { get; set; }

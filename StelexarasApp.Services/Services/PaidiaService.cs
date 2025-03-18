@@ -29,7 +29,7 @@ namespace StelexarasApp.Services.Services
 
         public async Task<bool> AddPaidiInService(PaidiDto paidiDto)
         {
-            if (paidiDto == null || _paidiValidator == null || _mapper == null || _paidiRepository == null)
+            if (_paidiValidator == null || _mapper == null || _paidiRepository == null)
                 return false;
 
             var validationResult = _paidiValidator.Validate(paidiDto);

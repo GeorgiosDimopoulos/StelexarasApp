@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace StelexarasApp.Services;
 
-public class ApiService
+public class ApiService : IApiService
 {
     private readonly HttpClient _httpClient;
 
@@ -25,5 +25,15 @@ public class ApiService
         response.EnsureSuccessStatusCode();
     }
 
-    // Add more methods for CRUD operations as needed
+    public async Task DeleteStelexos(int id)
+    {
+        var response = await _httpClient.DeleteAsync($"https://localhost:5001/api/stelexi/{id}");
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task UpdateStelexos(IStelexos stelexos)
+    {
+        var response = await _httpClient.PutAsJsonAsync($"https://localhost:5001/api/stelexi/{stelexos.Id}", stelexos);
+        response.EnsureSuccessStatusCode();
+    }
 }

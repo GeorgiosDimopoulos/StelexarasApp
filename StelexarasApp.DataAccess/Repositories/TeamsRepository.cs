@@ -182,7 +182,7 @@ namespace StelexarasApp.DataAccess.Repositories
             return await query.FirstOrDefaultAsync(t => t.Name == name) ?? new Tomeas();
         }
 
-        public async Task<bool> UpdateKoinotitaInDb(Koinotita koinotita)
+        public async Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -191,7 +191,16 @@ namespace StelexarasApp.DataAccess.Repositories
                 return false;
             try
             {
-                _dbContext.Koinotites.Update(koinotita);
+                var existingKoinotita = await _dbContext.Koinotites.FindAsync(id);
+                if (existingKoinotita == null)
+                    return false;
+
+                existingKoinotita.Name = koinotita.Name;
+                existingKoinotita.Tomeas = koinotita.Tomeas;
+                existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
+                existingKoinotita.Skines = koinotita.Skines;
+                
+                _dbContext.Koinotites.Update(existingKoinotita);
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
                 {
@@ -208,7 +217,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> UpdateSkiniInDb(Skini skini)
+        public async Task<bool> UpdateSkiniInDb(int id, Skini skini)
         {
 
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
@@ -219,7 +228,16 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                _dbContext.Skines.Update(skini);
+                var existingSkini = await _dbContext.Skines.FindAsync(id);
+                if (existingSkini == null)
+                    return false;
+
+                existingSkini.Name = skini.Name;
+                existingSkini.Koinotita = skini.Koinotita;
+                existingSkini.Omadarxis = skini.Omadarxis;
+                existingSkini.Paidia = skini.Paidia;
+                
+                _dbContext.Skines.Update(existingSkini);
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
                 {
@@ -237,7 +255,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> UpdateTomeasInDb(Tomeas tomeas)
+        public async Task<bool> UpdateTomeasInDb(int id, Tomeas tomeas)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -247,7 +265,15 @@ namespace StelexarasApp.DataAccess.Repositories
 
             try
             {
-                _dbContext.Tomeis.Update(tomeas);
+                var existingTomeas = await _dbContext.Tomeis.FindAsync(id);
+                if (existingTomeas == null)
+                    return false;
+
+                existingTomeas.Name = tomeas.Name;
+                existingTomeas.Koinotites = tomeas.Koinotites;
+                existingTomeas.Tomearxis= tomeas.Tomearxis;
+                
+                _dbContext.Tomeis.Update(existingTomeas);
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
                 {

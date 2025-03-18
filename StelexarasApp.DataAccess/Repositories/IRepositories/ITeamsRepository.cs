@@ -9,7 +9,7 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 
         Task<bool> AddSkiniInDb(Skini skini);
         Task<bool> AddKoinotitaInDb(Koinotita koinotita);
-        Task<bool> AddTomeasInDb(Tomeas koinotita); 
+        Task<bool> AddTomeasInDb(Tomeas koinotita);
 
         Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters? parameters);
         Task<IEnumerable<Koinotita>> GetKoinotitesInDb(KoinotitaQueryParameters? parameters);
@@ -23,9 +23,9 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
         Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(KoinotitaQueryParameters? parameters, int tomeaId);
         Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb(SkiniQueryParameters? parameters);
 
-        Task<bool> UpdateKoinotitaInDb(Koinotita koinotita);
-        Task<bool> UpdateSkiniInDb(Skini skini);
-        Task<bool> UpdateTomeasInDb(Tomeas tomeas);
+        Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita);
+        Task<bool> UpdateSkiniInDb(int id, Skini skini);
+        Task<bool> UpdateTomeasInDb(int id, Tomeas tomeas);
 
         Task<bool> DeleteSkiniInDb(int id);
         Task<bool> DeleteKoinotitaInDb(int id);

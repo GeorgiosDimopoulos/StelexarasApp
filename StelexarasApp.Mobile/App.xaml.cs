@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using StelexarasApp.DataAccess;
+using StelexarasApp.DataAccess.DataProvider;
 using StelexarasApp.Mobile.Views;
 
 namespace StelexarasApp.Mobile;
@@ -12,36 +14,32 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        // Just for local/Development phase testing purposes (temporarily)
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
-        
-        InitializeDatabaseAsync(ServiceProvider).Wait();
-        ListTablesAsync().Wait();
 
         MainPage = new NavigationPage(ServiceProvider.GetRequiredService<MainPage>());
     }
 
-    private static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider)
-    {
-        try
-        {
-            using var scope = serviceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+    //private static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider)
+    //{
+    //    try
+    //    {
+    //        using var scope = serviceProvider.CreateScope();
+    //        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    //        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-            if (environment == "Development")
-            {
-                await dbContext.Database.EnsureDeletedAsync();
-                await dbContext.Database.EnsureCreatedAsync();
-            }
-            else
-                await dbContext.Database.MigrateAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("An error occurred while initializing the database: " + ex.InnerException + ex.Message);
-        }
-    }
+    //        if (environment == "Development")
+    //        {
+    //            await dbContext.Database.EnsureDeletedAsync();
+    //            await dbContext.Database.EnsureCreatedAsync();
+    //        }
+    //        else
+    //            await dbContext.Database.MigrateAsync();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new Exception("An error occurred while initializing the database: " + ex.InnerException + ex.Message);
+    //    }
+    //}
 
     public async Task ListTablesAsync()
     {

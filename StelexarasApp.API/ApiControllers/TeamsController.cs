@@ -6,7 +6,7 @@ using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers;
 
-[Authorize]
+//[Authorize]
 [ApiExplorerSettings(IgnoreApi = false)]
 public class TeamsController(ITeamsService teamsService) : ControllerBase
 {
@@ -46,9 +46,9 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpPut("Skini/{id}")]
-    public async Task<IActionResult> PutSkini([FromBody] SkiniDto skiniDto)
+    public async Task<IActionResult> PutSkini(int id, [FromBody] SkiniDto skiniDto)
     {
-        var result = await _teamsService.UpdateSkiniInService(skiniDto);
+        var result = await _teamsService.UpdateSkiniInService(id, skiniDto);
 
         if (!result)
             return NotFound();
@@ -140,9 +140,9 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpPut("Koinotita/{id}")]
-    public async Task<IActionResult> PutKoinotita([FromBody] KoinotitaDto koinotitaDto)
+    public async Task<IActionResult> PutKoinotita(int id, [FromBody] KoinotitaDto koinotitaDto)
     {
-        var result = await _teamsService.UpdateKoinotitaInService(koinotitaDto);
+        var result = await _teamsService.UpdateKoinotitaInService(id, koinotitaDto);
 
         if (!result)
             return NotFound();
@@ -195,16 +195,9 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpPut("Tomea/{name}")]
-    public async Task<IActionResult> PutTomea(string name, [FromBody] TomeasDto tomeasDto)
+    public async Task<IActionResult> PutTomea(int id, [FromBody] TomeasDto tomeasDto)
     {
-        var tomea = await _teamsService.GetTomeaByNameInService(new(), name);
-        if (tomea == null)
-            return NotFound($"Tomea with name '{name}' not found.");
-
-        tomea.Name = tomeasDto.Name;
-        tomea.KoinotitesNumber = tomeasDto.KoinotitesNumber;
-
-        var result = await _teamsService.UpdateTomeaInService(tomeasDto);
+        var result = await _teamsService.UpdateTomeaInService(id, tomeasDto);
 
         if (!result)
             return StatusCode(500, "An error occurred while updating the Tomea.");

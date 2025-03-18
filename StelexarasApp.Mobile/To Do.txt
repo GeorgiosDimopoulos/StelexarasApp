@@ -10,4 +10,3 @@
   - IDisposable and IHostedService maybe
   - Docker and Github-actions images via yaml (IMPLEMENTED, NOT FINISHED)
   - Audit tool and relevant Models fro logging and CRUD tracking
-- add a 3 digit ExternalId for the Places: Skines, Koinotites etc (also for People)?
