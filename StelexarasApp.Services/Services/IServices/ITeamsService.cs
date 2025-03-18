@@ -1,4 +1,5 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
+﻿using StelexarasApp.Library.QueryParameters;
+using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 
 namespace StelexarasApp.Services.Services.IServices;
@@ -19,16 +20,14 @@ public interface ITeamsService
     Task<bool> UpdateKoinotitaInService(KoinotitaDto koinotita);
     Task<bool> UpdateTomeaInService(TomeasDto tomeas);
 
-    Task<IEnumerable<SkiniDto>> GetAllSkinesInService();
-    Task<IEnumerable<KoinotitaDto>> GetAllKoinotitesInService();
-    Task<IEnumerable<TomeasDto>> GetAllTomeisInService();
+    Task<IEnumerable<SkiniDto>> GetAllSkinesInService(SkiniQueryParameters? skiniQueryParameters);
+    Task<IEnumerable<KoinotitaDto>> GetAllKoinotitesInService(KoinotitaQueryParameters? koinotitaQueryParameters);
+    Task<IEnumerable<TomeasDto>> GetAllTomeisInService(TomeasQueryParameters tomeasQueryParameters);
+    Task<IEnumerable<SkiniDto>> GetSkinesAnaKoinotitaInService(SkiniQueryParameters? skiniQueryParameters, string name);
+    Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomeaInService(KoinotitaQueryParameters? koinotitaQueryParameters, int name);
+    Task<SkiniDto> GetSkiniByNameInService(SkiniQueryParameters? skiniQueryParameters, string name);
+    Task<KoinotitaDto> GetKoinotitaByNameInService(KoinotitaQueryParameters? koinotitaQueryParameters, string name);
+    Task<TomeasDto> GetTomeaByNameInService(TomeasQueryParameters? tomeasQueryParameters, string name);
 
-    Task<IEnumerable<SkiniDto>> GetSkinesAnaKoinotitaInService(string name);
-    Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomeaInService(int name);
-
-    Task<SkiniDto> GetSkiniByNameInService(string name);
-    Task<KoinotitaDto> GetKoinotitaByNameInService(string name);
-    Task<TomeasDto> GetTomeaByNameInService(string name);
-
-    Task<IEnumerable<SkiniDto>> GetSkinesEkpaideuomenonInService();
+    Task<IEnumerable<SkiniDto>> GetSkinesEkpaideuomenonInService(SkiniQueryParameters? skiniQueryParameters);
 }

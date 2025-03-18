@@ -52,7 +52,7 @@ public class PaidiaWebController : Controller
     {
         try
         {
-            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name");
+            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name");
             return View();
         }
         catch (Exception ex)
@@ -78,7 +78,7 @@ public class PaidiaWebController : Controller
                 ModelState.AddModelError("", "An error occurred while adding the Paidi.");
             }
 
-            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.SkiniId);
+            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
             return View(paidi);
         }
         catch (Exception ex)
@@ -101,7 +101,7 @@ public class PaidiaWebController : Controller
             if (paidi == null)
                 return NotFound();
 
-            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.SkiniId);
+            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
             return View(paidi);
         }
         catch (Exception ex)
@@ -135,7 +135,7 @@ public class PaidiaWebController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(), "Id", "Name", paidi.SkiniId);
+        ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
         return View(paidi);
     }
 

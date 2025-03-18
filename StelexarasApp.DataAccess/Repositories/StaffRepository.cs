@@ -12,7 +12,6 @@ namespace StelexarasApp.DataAccess.Repositories;
 public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactory) : IStaffRepository
 {
     private readonly AppDbContext _dbContext = dbContext;
-    private readonly ILoggerFactory _loggerFactory = loggerFactory;
     private readonly ILogger<StaffRepository> _logger = loggerFactory.CreateLogger<StaffRepository>();
 
     public async Task<bool> AddOmadarxiInDb(Omadarxis omadarxis)
@@ -195,32 +194,45 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IStelexos> GetStelexosByIdInDb(int id, Thesi? thesi)
+    public async Task<IStelexos> GetStelexosByIdInDb(int id)
     {
-        if (thesi == Thesi.None || id <= 0 || _dbContext is null)
+        if (_dbContext is null)
             return null!;
 
-        switch (thesi)
-        {
-            case Thesi.None:
-                break;
-            case Thesi.Omadarxis:
-                if (_dbContext.Omadarxes == null)
-                    return null!;
-                return await _dbContext.Omadarxes!.FirstOrDefaultAsync(om => om.Id == id) ?? null!;
-            case Thesi.Koinotarxis:
-                if (_dbContext.Koinotarxes == null)
-                    return null!;
-                return await _dbContext.Koinotarxes.FirstOrDefaultAsync(ko => ko.Id == id) ?? null!;
-            case Thesi.Tomearxis:
-                if (_dbContext.Tomearxes == null)
-                    return null!;
-                return await _dbContext.Tomearxes.FirstOrDefaultAsync(to => to.Id == id) ?? null!;
-            case Thesi.Ekpaideutis:
-                throw new NotImplementedException();
-            default:
-                break;
-        }
+        var omadarxis = await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.Id == id);
+        if (omadarxis != null)
+            return omadarxis;
+        var koinotarxis = await _dbContext.Koinotarxes!.FirstOrDefaultAsync(k => k.Id == id);
+        if (koinotarxis != null)
+            return koinotarxis;
+        var tomearxis = await _dbContext.Tomearxes!.FirstOrDefaultAsync(t => t.Id == id);
+        if (tomearxis != null)
+            return tomearxis;
+        var ekpaideutis = await _dbContext.Ekpaideutes!.FirstOrDefaultAsync(e => e.Id == id);
+        if (ekpaideutis != null)
+            return ekpaideutis;
+
+        //switch (thesi)
+        //{
+        //    case Thesi.None:
+        //        break;
+        //    case Thesi.Omadarxis:
+        //        if (_dbContext.Omadarxes == null)
+        //            return null!;
+        //        return await _dbContext.Omadarxes!.FirstOrDefaultAsync(om => om.Id == id) ?? null!;
+        //    case Thesi.Koinotarxis:
+        //        if (_dbContext.Koinotarxes == null)
+        //            return null!;
+        //        return await _dbContext.Koinotarxes.FirstOrDefaultAsync(ko => ko.Id == id) ?? null!;
+        //    case Thesi.Tomearxis:
+        //        if (_dbContext.Tomearxes == null)
+        //            return null!;
+        //        return await _dbContext.Tomearxes.FirstOrDefaultAsync(to => to.Id == id) ?? null!;
+        //    case Thesi.Ekpaideutis:
+        //        throw new NotImplementedException();
+        //    default:
+        //        break;
+        //}
         return null!;
     }
 
@@ -371,7 +383,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         {
             var allKoinotarxes = await _dbContext.Koinotarxes!.ToListAsync();
             return allKoinotarxes;
-        }            
+        }
 
         var isXwrosAnTomeas = _dbContext.Tomeis!.Any(k => k.Name.Equals(xwrosName));
         if (isXwrosAnTomeas)
@@ -400,5 +412,32 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             return await _dbContext.Koinotarxes!.ToListAsync();
 
         return await _dbContext.Koinotites!.Where(k => k.Tomeas!.Name == tomeasName).Select(k => k.Koinotarxis!).ToListAsync();
+    }
+
+    public async Task<bool> AddStelexosInDb(IStelexos stelexos)
+    {
+        switch (stelexos.Thesi)
+        {
+            case Thesi.None:
+                break;
+            case Thesi.Omadarxis:
+                await _dbContext.Omadarxes.AddAsync((Omadarxis)stelexos);
+                break;
+            case Thesi.Koinotarxis:
+                await _dbContext.Koinotarxes.AddAsync((Koinotarxis)stelexos);
+                break;
+            case Thesi.Tomearxis:
+                await _dbContext.Tomearxes.AddAsync((Tomearxis)stelexos);
+                break;
+            case Thesi.Ekpaideutis:
+                await _dbContext.Ekpaideutes.AddAsync((Ekpaideutis)stelexos);
+                break;
+            default:
+                break;
+        }
+
+        await _dbContext.SaveChangesAsync();
+
+        return true;
     }
 }

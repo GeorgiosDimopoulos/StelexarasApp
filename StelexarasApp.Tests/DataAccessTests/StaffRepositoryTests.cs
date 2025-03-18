@@ -44,7 +44,7 @@ public class StaffRepositoryTests
         _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
-        var result = await _stelexiRepository.GetStelexosByIdInDb(existingOmadarxis.Id, existingOmadarxis.Thesi);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(existingOmadarxis.Id);
 
         // Assert
         Assert.NotNull(result);
@@ -60,7 +60,7 @@ public class StaffRepositoryTests
         _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
-        var result = await _stelexiRepository.GetStelexosByIdInDb(nonExistentId, Thesi.Omadarxis);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(nonExistentId);
 
         // Assert
         Assert.Null(result);

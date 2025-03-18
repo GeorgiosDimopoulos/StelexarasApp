@@ -23,7 +23,7 @@ public class KoinotitaWebController : Controller
     {
         try
         {
-            var allKoinotites = await _teamsService.GetAllKoinotitesInService();
+            var allKoinotites = await _teamsService.GetAllKoinotitesInService(new());
             if (allKoinotites == null || !allKoinotites.Any())
             {
                 _logger.LogWarning("No Koinotites found.");
@@ -48,7 +48,7 @@ public class KoinotitaWebController : Controller
 
         try
         {
-            var koinotita = await _teamsService.GetKoinotitaByNameInService(name);
+            var koinotita = await _teamsService.GetKoinotitaByNameInService(new(), name);
             if (koinotita == null)
             {
                 _logger.LogWarning("Koinotita not found.");
@@ -99,7 +99,7 @@ public class KoinotitaWebController : Controller
 
         try
         {
-            var koinotita = await _teamsService.GetKoinotitaByNameInService(name);
+            var koinotita = await _teamsService.GetKoinotitaByNameInService(new(), name);
             if (koinotita == null)
             {
                 _logger.LogWarning("Koinotita not found.");
@@ -125,7 +125,7 @@ public class KoinotitaWebController : Controller
 
         try
         {
-            var koinotita = await _teamsService.GetKoinotitaByNameInService(id.ToString());
+            var koinotita = await _teamsService.GetKoinotitaByNameInService(new(), id.ToString());
             if (koinotita == null)
             {
                 _logger.LogWarning("Koinotita not found.");

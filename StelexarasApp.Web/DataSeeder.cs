@@ -2,55 +2,85 @@
 using StelexarasApp.Library.Models;
 using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Services.Services.IServices;
+using StelexarasApp.Library.Models.Logs;
 
 namespace StelexarasApp.Web;
 
-public class DataSeeder(
-    IStaffRepository staffRepository,
-    IExpenseRepository expenseRepository,
-    IDutyRepository dutyRepository,
-    ILogger<DataSeeder> logger,
-    ITeamsRepository teamsRepository)
+public class DataSeeder
 {
-    private readonly IStaffRepository _staffRepository = staffRepository;
-    private readonly ITeamsRepository _teamsRepository = teamsRepository;
-    private readonly IExpenseRepository _expenseRepository = expenseRepository;
-    private readonly IDutyRepository _dutyRepository = dutyRepository;
-    private readonly ILogger<DataSeeder> logger = logger;
+    private readonly IStaffService _staffService;
+    private readonly ITeamsService _teamsService;
+    private readonly IExpenseService _expenseService;
+    private readonly IDutyService _dutyService;
+    private readonly ILogger<DataSeeder> logger;
 
-    public async Task<bool> SeedTeamsAndStaffData()
+    public DataSeeder(
+        IStaffService staffService,
+        IExpenseService expenseService,
+        IDutyService dutyService,
+        ITeamsService teamsService,
+        ILogger<DataSeeder> logger)
     {
-        try
-        {
-            await SeedAllTeams();
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            logger.LogWarning("Database has already been seeded." + ex.InnerException);
-            return false;
-        }
+        _staffService = staffService;
+        _expenseService = expenseService;
+        _dutyService = dutyService;
+        _teamsService = teamsService;
+        this.logger = logger;
     }
 
-    public async Task<bool> SeedExpensesData()
+    public async Task<bool> SeedTeamsData()
     {
-        if (await _expenseRepository.HasData())
+        if (await _teamsService.HasData())
         {
             logger.LogWarning("Database has already been seeded.");
             return false;
         }
         else
         {
-            await _expenseRepository.AddExpenseInDb(new Expense
+            await SeedTomeis();
+            await SeedKoinotites();
+            await SeedSkines();
+            return true;
+        }
+    }
+
+    public async Task<bool> SeedStelexiData()
+    {
+        if (await _teamsService.HasData())
+        {
+            logger.LogWarning("Database has already been seeded.");
+            return false;
+        }
+        else
+        {
+            await SeedOmadarxes();
+            await SeedKoinotarxes();
+            await SeedTomearxes();
+            await SeedEkpaideutes();
+
+            logger.LogInformation("This is an informational message about a successful SeedStelexiData operation.");
+            return true;
+        }
+    }
+    public async Task<bool> SeedExpensesData()
+    {
+        if (await _expenseService.HasData())
+        {
+            logger.LogWarning("Database has already been seeded.");
+            return false;
+        }
+        else
+        {
+            await _expenseService.AddExpenseInService(new Expense
             {
                 Description = "Εξόδα Τομέα 1",
                 Amount = 1000,
                 Date = DateTime.Now
             });
-            await _expenseRepository.AddExpenseInDb(new Expense
+            await _expenseService.AddExpenseInService(new Expense
             {
                 Description = "Εξόδα Τομέα 2",
                 Amount = 2000,
@@ -58,252 +88,273 @@ public class DataSeeder(
             });
 
             logger.LogWarning("Database of Expenses has been seeded!");
+            logger.LogInformation("This is an informational message about a successful SeedExpensesData operation.");
             return true;
         }
     }
 
     public async Task<bool> SeedDutiesData()
     {
-        if (await _dutyRepository.HasData())
+        if (await _dutyService.HasData())
         {
             logger.LogWarning("Database has already been seeded.");
             return false;
         }
         else
         {
-            await _dutyRepository.AddDutyInDb(new Duty
+            await _dutyService.AddDutyInService(new Duty
             {
                 Name = "Καθαρισμός1",
                 Date = DateTime.Now,
             });
-            await _dutyRepository.AddDutyInDb(new Duty
+            await _dutyService.AddDutyInService(new Duty
             {
                 Name = "Καθαρισμός2",
                 Date = DateTime.Now,
             });
-            
-            logger.LogInformation("This is an informational message about a successful operation.");
+
+            logger.LogInformation("This is an informational message about a successful SeedDutiesData operation.");
             return true;
         }
     }
 
-    private async Task<bool> SeedAllTeams()
+    private async Task SeedEkpaideutes()
     {
-        //if (await _teamsRepository.HasData())
-        //{
-        //    logger.LogWarning("Database has already been seeded.");
-        //    return false;
-        //}
-
-        var tomeas1 = new Tomeas
+        await _staffService.AddStelexosInService(new EkpaideutisDto
         {
-            Name = "Τομέας 1"
-        };
-        var tomeas2 = new Tomeas
-        {
-            Name = "Τομέας 2"
-        };
-
-        await _teamsRepository.AddTomeasInDb(tomeas1);
-        await _teamsRepository.AddTomeasInDb(tomeas2);
-
-        await _staffRepository.AddTomearxiInDb(new Tomearxis
-        {
-            FullName = "Κωστας Τατσης",
-            Sex = Sex.Male,
-            Tomeas = tomeas2,
-            Age = 31,
-            Tel = "6981456321",
-            Thesi = Thesi.Tomearxis,
-            XwrosName = tomeas2.Name,
-            Koinotarxes = []
+            FullName = "Κωνσταντίνος Αλιμπέρτης",
+            Age = 32,
+            Tel = "6987456325",
+            Thesi = Thesi.Ekpaideutis,
+            XwrosName = "",
         });
-
-        await _staffRepository.AddTomearxiInDb(new Tomearxis
+        await _staffService.AddStelexosInService(new EkpaideutisDto
         {
-            FullName = "Παυλος Ισαρης",
-            Sex = Sex.Male,
-            Tomeas = tomeas1,
+            FullName = "Γιωργος Δημοππουλος",
+            Age = 32,
+            Tel = "6987456322",
+            Thesi = Thesi.Ekpaideutis,
+            XwrosName = "",
+        });
+    }
+
+    private async Task SeedTomearxes()
+    {
+        await _staffService.AddStelexosInService(new TomearxisDto
+        {
+            FullName = "Πάυλος Ισαρης",
             Age = 33,
-            Tel = "6911456321",
-            Thesi = Thesi.Tomearxis,
-            XwrosName = tomeas1.Name,
-            Koinotarxes = []
-        });
-
-        var koinotitaEvia = new Koinotita
-        {
-            Name = "Εύβοια",
-            Tomeas = tomeas1,
-        };
-
-        var koinotitaKriti = new Koinotita
-        {
-            Name = "Κρήτη",
-            Tomeas = tomeas1,
-        };
-        var koinotitaKiklades = new Koinotita
-        {
-            Name = "Κυκλάδες",
-            Tomeas = tomeas2,
-        };
-        var koinotitaSterea = new Koinotita
-        {
-            Name = "Στερεα",
-            Tomeas = tomeas2,
-        };
-
-        await _teamsRepository.AddKoinotitaInDb(koinotitaSterea);
-        await _teamsRepository.AddKoinotitaInDb(koinotitaKiklades);
-        await _teamsRepository.AddKoinotitaInDb(koinotitaEvia);
-        await _teamsRepository.AddKoinotitaInDb(koinotitaKriti);
-
-        await _staffRepository.AddKoinotarxiInDb(new Koinotarxis
-        {
-            FullName = "Νικος Βελλας",
-            Age = 28,
             Sex = Sex.Male,
-            Tel = "6987415322",
-            Thesi = Thesi.Koinotarxis,
-            XwrosName = koinotitaSterea.Name,
-            Koinotita = koinotitaSterea,
-            Omadarxes = [],
+            Tel = "6987453321",
+            Thesi = Thesi.Tomearxis,
+            XwrosName = "Τομέας 1",
         });
+        await _staffService.AddStelexosInService(new TomearxisDto
+        {
+            FullName = "Κώστας Τάτσης",
+            Age = 32,
+            Sex = Sex.Male,
+            Tel = "6987453321",
+            Thesi = Thesi.Tomearxis,
+            XwrosName = "Τομέας 2",
+        });
+    }
 
-        await _staffRepository.AddKoinotarxiInDb(new Koinotarxis
+    private async Task SeedKoinotarxes()
+    {
+        await _staffService.AddStelexosInService(new KoinotarxisDto
         {
             FullName = "Λυδία Βακρα",
             Age = 25,
             Sex = Sex.Female,
-            Thesi = Thesi.Koinotarxis,
-            XwrosName = koinotitaKriti.Name,
             Tel = "6987456329",
-            Koinotita = koinotitaKriti,
+            Thesi = Thesi.Koinotarxis,
+            XwrosName = "Κρητη",
         });
-
-        await _staffRepository.AddKoinotarxiInDb(new Koinotarxis
+        await _staffService.AddStelexosInService(new KoinotarxisDto
         {
             FullName = "Μάρω Γκουντα",
             Age = 20,
-            Koinotita = koinotitaEvia,
-            Tel = "6987456327",
-            Omadarxes = [],
             Sex = Sex.Female,
+            Tel = "6987456327",
             Thesi = Thesi.Koinotarxis,
-            XwrosName = koinotitaEvia.Name,
+            XwrosName = "Στερεα",
         });
-
-        await _staffRepository.AddKoinotarxiInDb(new Koinotarxis
+        await _staffService.AddStelexosInService(new KoinotarxisDto
         {
             FullName = "Αργυρακης Γιωργος",
             Age = 26,
             Sex = Sex.Male,
             Tel = "6987456324",
             Thesi = Thesi.Koinotarxis,
-            Koinotita = koinotitaKiklades,
-            XwrosName = koinotitaKiklades.Name,
-            Omadarxes = [],
+            XwrosName = "Κυκλαδες",
         });
-
-        var skiniIos = new Skini
+        await _staffService.AddStelexosInService(new KoinotarxisDto
         {
-            Name = "Ιος",
-            Koinotita = koinotitaKiklades
-        };
-        var skiniAthina = new Skini
-        {
-            Name = "Αθηνα",
-            Koinotita = koinotitaSterea
-        };
-        var skiniMesologgi = new Skini
-        {
-            Name = "Μεσολογγι",
-            Koinotita = koinotitaSterea
-        };
-        var skiniXania = new Skini
-        {
-            Name = "Χανια",
-            Koinotita = koinotitaKriti
-        };
-
-        var skiniMilos = new Skini
-        {
-            Name = "Μηλος",
-            Koinotita = koinotitaKiklades
-        };
-
-        var skiniXalkida = new Skini
-        {
-            Name = "Χαλκιδα",
-            Koinotita = koinotitaEvia
-        };
-
-        var skiniLevadiakou = new Skini
-        {
-            Name = "Λεβαδειακος",
-            Koinotita = koinotitaEvia
-        };
-
-        await _teamsRepository.AddSkiniInDb(skiniIos);
-        await _teamsRepository.AddSkiniInDb(skiniAthina);
-        await _teamsRepository.AddSkiniInDb(skiniXania);
-        await _teamsRepository.AddSkiniInDb(skiniXalkida);
-        await _teamsRepository.AddSkiniInDb(skiniLevadiakou);
-
-        await _staffRepository.AddOmadarxiInDb(new Omadarxis
-        {
-            FullName = "Γιάννης Παπαδόπουλος",
-            Age = 25,
+            FullName = "Εντζι Κουρτη",
+            Age = 29,
+            Sex = Sex.Female,
             Tel = "6987456322",
-            Sex = Sex.Male,
-            Skini = skiniXania,
-            Thesi = Thesi.Omadarxis,
-            XwrosName = skiniXania.Name,
+            Thesi = Thesi.Koinotarxis,
+            XwrosName = "Ευβοια",
         });
-
-        await _staffRepository.AddOmadarxiInDb(new Omadarxis
+        await _staffService.AddStelexosInService(new KoinotarxisDto
         {
             FullName = "Νικος Βελλας",
             Age = 28,
             Sex = Sex.Male,
-            Tel = "6987215322",
-            Thesi = Thesi.Omadarxis,
-            XwrosName = skiniAthina.Name,
-            Skini = skiniAthina
-        });
-
-        await _staffRepository.AddOmadarxiInDb(new Omadarxis
-        {
-            FullName = "Γιάννης Μαρκου",
-            Age = 27,
-            Tel = "698733331",
-            Sex = Sex.Male,
-            Skini = skiniXalkida,
-            Thesi = Thesi.Omadarxis,
-            XwrosName = skiniXalkida.Name,
-        });
-        await _staffRepository.AddOmadarxiInDb(new Omadarxis
-        {
-            FullName = "Αννα Ψηλα",
-            Age = 22,
-            Tel = "698881888",
-            Sex = Sex.Female,
-            Skini = skiniLevadiakou,
-            Thesi = Thesi.Omadarxis,
-            XwrosName = skiniLevadiakou.Name,
-        });
-
-        await _staffRepository.AddOmadarxiInDb(new Omadarxis
-        {
-            FullName = "Ιωαννα Μηρτου",
-            Age = 20,
-            Tel = "6987412111",
+            Tel = "6987416322",
             Thesi = Thesi.Koinotarxis,
-            Sex = Sex.Female,
-            Skini = skiniIos,
-            XwrosName = skiniIos.Name,
+            XwrosName = "Μακεδονια",
         });
+    }
 
-        return true;
+    private async Task SeedOmadarxes()
+    {
+        try
+        {
+            await _staffService.AddStelexosInService(new OmadarxisDto
+            {
+                FullName = "Γιάννης Παπαδόπουλος",
+                Age = 25,
+                Sex = Sex.Male,
+                Tel = "6982456321",
+                Thesi = Thesi.Omadarxis,
+                XwrosName = "Ξάνθη",
+            });
+        }
+        catch (Exception ex)
+        {
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+        }
+    }
+
+    private async Task SeedTomeis()
+    {
+        await _teamsService.AddTomeasInService(new TomeasDto
+        {
+            Name = "Τομέας 1",
+            KoinotitesNumber = 5,
+        });
+        await _teamsService.AddTomeasInService(new TomeasDto
+        {
+            Name = "Τομέας 2",
+            KoinotitesNumber = 4,
+        });
+        await _teamsService.AddTomeasInService(new TomeasDto
+        {
+            Name = "Σχολή",
+            KoinotitesNumber = 1,
+        });
+    }
+
+    private async Task SeedKoinotites()
+    {
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Ήπειρος",
+            TomeasName = "Σχολή",
+            SkinesNumber = 6
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Κυκλάδες",
+            TomeasName = "Τομέας 1",
+            SkinesNumber = 6
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Κύπρος",
+            TomeasName = "Τομέας 1",
+            SkinesNumber = 8
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Έύβοια",
+            TomeasName = "Τομέας 1",
+            SkinesNumber = 8
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Νησιά",
+            TomeasName = "Τομέας 1",
+            SkinesNumber = 8
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Θεσσαλία",
+            TomeasName = "Τομέας 1",
+            SkinesNumber = 4
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "ΚρήτηΔωδεκάνησα",
+            TomeasName = "Τομέας ",
+            SkinesNumber = 9
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Θράκη",
+            TomeasName = "Τομέας 2",
+            SkinesNumber = 6
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Μακεδονία",
+            TomeasName = "Τομέας 2",
+            SkinesNumber = 6
+        });
+        await _teamsService.AddKoinotitaInService(new KoinotitaDto
+        {
+            Name = "Στερεά",
+            TomeasName = "Τομέας 2",
+            SkinesNumber = 5,
+        });
+    }
+
+    private async Task SeedSkines()
+    {
+        await _teamsService.AddSkiniInService(new SkiniDto
+        {
+            Name = "Ιωάννινα",
+            KoinotitaName = "Ήπειρος",
+            PaidiaNumber = 10,
+            Sex = Sex.Female
+        });
+        await _teamsService.AddSkiniInService(new SkiniDto
+        {
+            Name = "Σούλι",
+            KoinotitaName = "Ήπειρος",
+            PaidiaNumber = 11,
+            Sex = Sex.Female
+        });
+        await _teamsService.AddSkiniInService(new SkiniDto
+        {
+            Name = "Άρτα",
+            KoinotitaName = "Ήπειρος",
+            PaidiaNumber = 11,
+            Sex = Sex.Female
+        });
+        await _teamsService.AddSkiniInService(new SkiniDto
+        {
+            Name = "Ζάλογγο",
+            KoinotitaName = "Ήπειρος",
+            PaidiaNumber = 11,
+            Sex = Sex.Male
+        });
+        await _teamsService.AddSkiniInService(new SkiniDto
+        {
+            Name = "Κορυτσά",
+            KoinotitaName = "Ήπειρος",
+            PaidiaNumber = 11,
+            Sex = Sex.Male
+        });
+        await _teamsService.AddSkiniInService(new SkiniDto
+        {
+            Name = "Πίνδος",
+            KoinotitaName = "Ήπειρος",
+            PaidiaNumber = 10,
+            Sex = Sex.Male,
+        });
     }
 }

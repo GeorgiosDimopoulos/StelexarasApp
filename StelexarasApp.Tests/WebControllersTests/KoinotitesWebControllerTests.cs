@@ -30,7 +30,7 @@ public class KoinotitesWebControllerTests
             new KoinotitaDto { Id = 2, Name = "Koinotita2" , TomeasName ="TomeasName1" },
         };
 
-        _mockService.Setup(service => service.GetAllKoinotitesInService()).ReturnsAsync(koinotites);
+        _mockService.Setup(service => service.GetAllKoinotitesInService(new())).ReturnsAsync(koinotites);
 
         // Act
         var result = await _controller.Index();
@@ -45,7 +45,7 @@ public class KoinotitesWebControllerTests
     public async Task Index_ReturnsNotFound_WhenNoTeamsAvailable()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllKoinotitesInService()).ReturnsAsync(() => null);
+        _mockService.Setup(service => service.GetAllKoinotitesInService(new())).ReturnsAsync(() => null);
 
         // Act
         var result = await _controller.Index();
@@ -59,7 +59,7 @@ public class KoinotitesWebControllerTests
     public async Task Index_ReturnsErrorView_WhenExceptionThrown()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllKoinotitesInService()).ThrowsAsync(new Exception());
+        _mockService.Setup(service => service.GetAllKoinotitesInService(new())).ThrowsAsync(new Exception());
 
         // Act
         var result = await _controller.Index();
@@ -75,7 +75,7 @@ public class KoinotitesWebControllerTests
         // Arrange
         var koinotitaName = "TestKoinotita";
         var koinotita = new KoinotitaDto { Name = koinotitaName, TomeasName = "TestTomeas", SkinesNumber = 5 };
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ReturnsAsync(koinotita);
+        _mockService.Setup(service => service.GetKoinotitaByNameInService(null, koinotitaName)).ReturnsAsync(koinotita);
 
         // Act
         var result = await _controller.Edit(koinotitaName);
@@ -91,7 +91,7 @@ public class KoinotitesWebControllerTests
     {
         // Arrange
         var koinotitaName = "NonExistentKoinotita";
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ReturnsAsync((KoinotitaDto)null);
+        _mockService.Setup(service => service.GetKoinotitaByNameInService(null, koinotitaName)).ReturnsAsync((KoinotitaDto)null);
 
         // Act
         var result = await _controller.Edit(koinotitaName);
@@ -106,7 +106,7 @@ public class KoinotitesWebControllerTests
     {
         // Arrange
         var koinotitaName = "TestKoinotita";
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ThrowsAsync(new Exception("Test exception"));
+        _mockService.Setup(service => service.GetKoinotitaByNameInService(null, koinotitaName)).ThrowsAsync(new Exception("Test exception"));
 
         // Act
         var result = await _controller.Edit(koinotitaName);
@@ -122,7 +122,7 @@ public class KoinotitesWebControllerTests
         // Arrange
         var koinotitaName = "TestKoinotita";
         var koinotita = new KoinotitaDto { Name = koinotitaName, TomeasName = "TestTomeas", SkinesNumber = 5 };
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ReturnsAsync(koinotita);
+        _mockService.Setup(service => service.GetKoinotitaByNameInService(null, koinotitaName)).ReturnsAsync(koinotita);
 
         // Act
         var result = await _controller.Delete(koinotitaName);
@@ -138,7 +138,7 @@ public class KoinotitesWebControllerTests
     {
         // Arrange
         var koinotitaName = "NonExistentKoinotita";
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ReturnsAsync((KoinotitaDto)null);
+        _mockService.Setup(service => service.GetKoinotitaByNameInService(null, koinotitaName)).ReturnsAsync((KoinotitaDto)null);
 
         // Act
         var result = await _controller.Delete(koinotitaName);
@@ -153,7 +153,7 @@ public class KoinotitesWebControllerTests
     {
         // Arrange
         var koinotitaName = "TestKoinotita";
-        _mockService.Setup(service => service.GetKoinotitaByNameInService(koinotitaName)).ThrowsAsync(new Exception("Test exception"));
+        _mockService.Setup(service => service.GetKoinotitaByNameInService(null, koinotitaName)).ThrowsAsync(new Exception("Test exception"));
 
         // Act
         var result = await _controller.Delete(koinotitaName);

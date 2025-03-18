@@ -11,7 +11,7 @@ public class StelexosValidator : AbstractValidator<IStelexosDto>
             .NotEmpty().WithMessage("StelexosName is required")
             .Length(2, 50).WithMessage("Stelexos Name must be between 2 and 50 characters");
         
-        RuleFor(user => user.DtoXwrosName)
+        RuleFor(user => user.XwrosName)
             .NotEmpty().WithMessage("Stelexos XwrosName is required")
             .Length(2, 50).WithMessage("Stelexos XwrosName must be between 2 and 50 characters");
         

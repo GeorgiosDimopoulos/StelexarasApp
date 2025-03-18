@@ -27,7 +27,7 @@ public partial class GeneralTeamsPage : ContentPage
 
     private async Task<TomeasDto> GetTomea(int num)
     {
-         return await _teamsService.GetTomeaByNameInService(num.ToString());
+         return await _teamsService.GetTomeaByNameInService(new(),num.ToString());
     }
 
     private async void TomeasA_Clicked(object sender, EventArgs e)

@@ -13,14 +13,21 @@ namespace StelexarasApp.DataAccess.Repositories
         private readonly AppDbContext _dbContext = appDbContext;
         private readonly ILogger<TeamsRepository> _logger = loggerFactory.CreateLogger<TeamsRepository>();
 
-        public async Task<IEnumerable<Koinotita>> GetKoinotitesInDb()
+        public async Task<IEnumerable<Koinotita>> GetKoinotitesInDb(KoinotitaQueryParameters? koinotitaQueryParameters)
         {
             try
             {
-                if (await _dbContext.Koinotites!.ToListAsync() != null)
-                    return await _dbContext.Koinotites!.ToListAsync();
+                var query = _dbContext.Koinotites!.AsQueryable();
+                if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
+                {
+                    query = query.Include(k => k.Skines);
+                }
+                if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes)
+                {
+                    query = query.Include(k => k.Skines)!.ThenInclude(s => s.Omadarxis);
+                }
 
-                return null!;
+                return await query.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -30,10 +37,19 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(int tomeaId)
+        public async Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(KoinotitaQueryParameters? koinotitaQueryParameters, int tomeaId)
         {
             try
             {
+                var query = _dbContext.Koinotites!.AsQueryable();
+                if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
+                {
+                    query = query.Include(k => k.Skines);
+                }
+                if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes)
+                {
+                    query = query.Include(k => k.Skines)!.ThenInclude(s => s.Omadarxis);
+                }
                 return await _dbContext.Koinotites!.Include(k => k.Tomeas).Where(k => k.Tomeas.Id == tomeaId).ToListAsync();
             }
             catch (Exception ex)
@@ -43,12 +59,12 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters skiniQueryParameters)
+        public async Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters? skiniQueryParameters)
         {
             try
             {
                 var query = _dbContext.Skines!.AsQueryable();
-                if (skiniQueryParameters.IncludePaidia)
+                if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
                 {
                     query = query.Include(s => s.Paidia);
                 }
@@ -61,11 +77,16 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInDb(string KoinotitaName)
+        public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInDb(SkiniQueryParameters? skiniQueryParameters, string koinotitaName)
         {
             try
             {
-                return await _dbContext.Skines!.Include(s => s.Koinotita).Where(s => s.Koinotita.Name == KoinotitaName).ToListAsync();
+                var query = _dbContext.Skines!.Where(sk => sk.Koinotita.Name.Equals(koinotitaName)).AsQueryable();
+                if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+                {
+                    query = query.Include(s => s.Paidia);
+                }
+                return await query.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -74,11 +95,16 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb()
+        public async Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb(SkiniQueryParameters? skiniQueryParameters)
         {
             try
             {
-                return await _dbContext.Skines!.Where(s => s.Koinotita.Name == "Ipiros").ToListAsync();
+                var query = _dbContext.Skines.Where(s => s.Koinotita.Name == "Ipiros").AsQueryable();
+                if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+                {
+                    query = query.Include(s => s.Paidia);
+                }
+                return await query.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -87,25 +113,36 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<Skini> GetSkiniByNameInDb(string name)
+        public async Task<Skini> GetSkiniByNameInDb(SkiniQueryParameters? skiniQueryParameters, string name)
         {
-            if (string.IsNullOrEmpty(name))
+            var query = _dbContext.Skines.AsQueryable();
+
+            if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
             {
-                throw new ArgumentException("Name cannot be null or empty.", nameof(name));
-            }
-            if (_dbContext?.Skines == null)
-            {
-                throw new InvalidOperationException("The DbSet<Skini> is not initialized.");
+                query = query.Include(s => s.Paidia);
             }
 
-            return await _dbContext.Skines.FirstAsync(s => s.Name.Equals(name));
+            return query.FirstOrDefault(s => s.Name == name) ?? new Skini();
         }
 
-        public async Task<IEnumerable<Tomeas>> GetTomeisInDb()
+        public async Task<IEnumerable<Tomeas>> GetTomeisInDb(TomeasQueryParameters? tomeasQueryParameters)
         {
             try
             {
-                return await _dbContext.Tomeis!.ToListAsync();
+                var query = _dbContext.Tomeis!.AsQueryable();
+                if (tomeasQueryParameters is not null && tomeasQueryParameters.IncludeKoinotites)
+                {
+                    query = query.Include(t => t.Koinotites);
+                }
+                if (tomeasQueryParameters.IncludeOmadarxes)
+                {
+                    query = query.Include(t => t.Koinotites).ThenInclude(k => k.Skines)!.ThenInclude(sk => sk.Omadarxis);
+                }
+                if (tomeasQueryParameters.IncludeKoinotarxes)
+                {
+                    query = query.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
+                }
+                return query.ToList();
             }
             catch (Exception ex)
             {
@@ -114,20 +151,35 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<Koinotita> GetKoinotitaByNameInDb(string name)
+        public async Task<Koinotita> GetKoinotitaByNameInDb(KoinotitaQueryParameters? koinotitaQueryParameters, string name)
         {
-            if (string.IsNullOrEmpty(name))
-                return null!;
-
-            return await _dbContext.Koinotites!.FirstOrDefaultAsync(k => k.Name.Equals(name)) ?? new Koinotita();
+            var query = _dbContext.Koinotites!.AsQueryable();
+            if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
+            {
+                query = query.Include(k => k.Skines);
+            }
+            return await query.FirstOrDefaultAsync(k => k.Name == name) ?? new Koinotita();
         }
 
-        public async Task<Tomeas> GetTomeaByNameInDb(string name)
+        public async Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? tomeasQueryParameters, string name)
         {
+            var query = _dbContext.Tomeis!.AsQueryable();
+            if (tomeasQueryParameters.IncludeKoinotites)
+            {
+                query = query.Include(t => t.Koinotites);
+            }
+            if (tomeasQueryParameters.IncludeKoinotarxes)
+            {
+                query = query.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
+            }
+            if (tomeasQueryParameters.IncludeOmadarxes)
+            {
+                query = query.Include(t => t.Koinotites).ThenInclude(k => k.Skines)!.ThenInclude(sk => sk.Omadarxis);
+            }
             if (string.IsNullOrEmpty(name) || _dbContext.Tomeis is null)
                 return null!;
 
-            return await _dbContext.Tomeis!.FirstOrDefaultAsync(t => t.Name == name) ?? new Tomeas { Name = "DefaultName" };
+            return await query.FirstOrDefaultAsync(t => t.Name == name) ?? new Tomeas();
         }
 
         public async Task<bool> UpdateKoinotitaInDb(Koinotita koinotita)
@@ -407,8 +459,8 @@ namespace StelexarasApp.DataAccess.Repositories
                 return Task.FromResult(false);
 
             if (!GetSkinesInDb(new()).Result.Any() &&
-                    !GetKoinotitesAnaTomeaInDb(2).Result.Any() &&
-                    !GetKoinotitesAnaTomeaInDb(1).Result.Any())
+                    !GetKoinotitesAnaTomeaInDb(new(), 2).Result.Any() &&
+                    !GetKoinotitesAnaTomeaInDb(new(), 1).Result.Any())
                 return Task.FromResult(false);
             return Task.FromResult(true);
         }

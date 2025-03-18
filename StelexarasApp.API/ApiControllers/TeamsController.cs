@@ -70,7 +70,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpGet("Skines/{koinotitaName}")]
     public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkinesByKoinotita(string koinotitaName)
     {
-        var result = await _teamsService.GetSkinesAnaKoinotitaInService(koinotitaName);
+        var result = await _teamsService.GetSkinesAnaKoinotitaInService(new(), koinotitaName);
 
         if (result is null)
             return NotFound();
@@ -80,7 +80,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpGet("Koinotites")]
     public async Task<ActionResult<IEnumerable<KoinotitaDto>>> GetKoinotites()
     {
-        var result = await _teamsService.GetAllKoinotitesInService();
+        var result = await _teamsService.GetAllKoinotitesInService(new());
 
         if (result is null)
             return NotFound();
@@ -90,7 +90,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpGet("Koinotites/{tomeaId}")]
     public async Task<ActionResult<IEnumerable<KoinotitaDto>>> GetKoinotitesByTomea(int tomeaId)
     {
-        var result = await _teamsService.GetKoinotitesAnaTomeaInService(tomeaId);
+        var result = await _teamsService.GetKoinotitesAnaTomeaInService(new(), tomeaId);
 
         if (result is null)
             return NotFound();
@@ -100,7 +100,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpGet("Tomeis")]
     public async Task<ActionResult<IEnumerable<TomeasDto>>> GetTomeis()
     {
-        var result = await _teamsService.GetAllTomeisInService();
+        var result = await _teamsService.GetAllTomeisInService(new());
 
         if (result is null)
             return NotFound();
@@ -110,7 +110,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpGet("Tomea/{name}")]
     public async Task<ActionResult<TomeasDto>> GetTomea(string name)
     {
-        var result = await _teamsService.GetTomeaByNameInService(name);
+        var result = await _teamsService.GetTomeaByNameInService(new(), name);
 
         if (result is null)
             return NotFound();
@@ -153,7 +153,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpGet("Koinotita/{name}")]
     public async Task<ActionResult<KoinotitaDto>> GetKoinotita(string name)
     {
-        var result = await _teamsService.GetKoinotitaByNameInService(name);
+        var result = await _teamsService.GetKoinotitaByNameInService(new(), name);
 
         if (result is null)
             return NotFound();
@@ -164,7 +164,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpGet("SkinesEkpaideuomenon")]
     public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkinesEkpaideuomenon()
     {
-        var result = await _teamsService.GetSkinesEkpaideuomenonInService();
+        var result = await _teamsService.GetSkinesEkpaideuomenonInService(new());
 
         if (result is null)
             return NotFound();
@@ -197,7 +197,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
     [HttpPut("Tomea/{name}")]
     public async Task<IActionResult> PutTomea(string name, [FromBody] TomeasDto tomeasDto)
     {
-        var tomea = await _teamsService.GetTomeaByNameInService(name);
+        var tomea = await _teamsService.GetTomeaByNameInService(new(), name);
         if (tomea == null)
             return NotFound($"Tomea with name '{name}' not found.");
 

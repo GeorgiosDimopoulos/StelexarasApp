@@ -66,18 +66,6 @@ public class StaffService : IStaffService
                 return false;
             }
 
-            //IStelexos stelexosEntity = stelexosDto.Thesi switch
-            //{
-            //    Thesi.Omadarxis => _mapper.Map<Omadarxis>(stelexosDto as OmadarxisDto),
-            //    Thesi.Koinotarxis => _mapper.Map<Koinotarxis>(stelexosDto as KoinotarxisDto),
-            //    Thesi.Tomearxis => _mapper.Map<Tomearxis>(stelexosDto as TomearxisDto),
-            //    Thesi.Ekpaideutis => throw new NotSupportedException("Thesi Ekpaideutis is not supported."),
-            //    Thesi.None => throw new ArgumentException("Thesi cannot be None!", nameof(stelexosDto.Thesi)),
-            //    _ => throw new ArgumentOutOfRangeException(nameof(stelexosDto.Thesi), "Invalid Thesi value.")
-            //};
-
-            Console.WriteLine(stelexosDto.Thesi);
-
             IStelexos stelexosEntity;
             switch (stelexosDto.Thesi)
             {
@@ -91,11 +79,13 @@ public class StaffService : IStaffService
                     stelexosEntity = _mapper.Map<Tomearxis>(stelexosDto as TomearxisDto);
                     break;
                 case Thesi.Ekpaideutis:
-                    throw new NotSupportedException("Thesi Ekpaideutis is not supported.");
+                    stelexosEntity = _mapper.Map<Ekpaideutis>(stelexosDto as EkpaideutisDto);
+                    break;
                 case Thesi.None:
                     throw new ArgumentException("Thesi cannot be None!", nameof(stelexosDto.Thesi));
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(stelexosDto.Thesi), "Invalid Thesi value.");
+                    stelexosEntity = _mapper.Map<IStelexos>(stelexosDto);
+                    break;
             }
 
             if (stelexosEntity == null)
@@ -104,13 +94,7 @@ public class StaffService : IStaffService
                 throw new ArgumentNullException(nameof(stelexosEntity), "Mapping failed");
             }
 
-            return stelexosDto.Thesi switch
-            {
-                Thesi.Omadarxis => await _stelexiRepository.AddOmadarxiInDb(stelexosEntity as Omadarxis ?? throw new ArgumentNullException(nameof(stelexosEntity))),
-                Thesi.Koinotarxis => await _stelexiRepository.AddKoinotarxiInDb(stelexosEntity as Koinotarxis ?? throw new ArgumentNullException(nameof(stelexosEntity))),
-                Thesi.Tomearxis => await _stelexiRepository.AddTomearxiInDb(stelexosEntity as Tomearxis ?? throw new ArgumentNullException(nameof(stelexosEntity))),
-                _ => false
-            };
+            return await _stelexiRepository.AddStelexosInDb(stelexosEntity);
         }
         catch (Exception ex)
         {
@@ -261,14 +245,14 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<IStelexosDto> GetStelexosByIdInService(int id, Thesi? thesi)
+    public async Task<IStelexosDto> GetStelexosByIdInService(int id)
     {
         try
         {
-            if (_stelexiRepository is null || _mapper is null || thesi is null)
-                throw new ArgumentException("StaffRepository or _mapper cannot be null");
+            if (_stelexiRepository is null || _mapper is null)
+                throw new ArgumentException("StaffRepository or mapper cannot be null");
 
-            var stelexosInDb = await _stelexiRepository.GetStelexosByIdInDb(id, thesi);
+            var stelexosInDb = await _stelexiRepository.GetStelexosByIdInDb(id);
             if (stelexosInDb is null)
                 return null!;
 
@@ -289,7 +273,7 @@ public class StaffService : IStaffService
             if (_stelexiRepository is null || _mapper is null || Id is <= 0 || string.IsNullOrEmpty(newSkiniName))
                 throw new ArgumentException("StaffRepository, Ids or _mapper cannot be null");
 
-            var omadarxis = await _stelexiRepository.GetStelexosByIdInDb(Id, Thesi.Omadarxis);
+            var omadarxis = await _stelexiRepository.GetStelexosByIdInDb(Id);
             if (omadarxis == null)
                 return false;
 

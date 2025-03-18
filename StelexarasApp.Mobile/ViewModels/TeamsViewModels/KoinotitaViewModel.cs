@@ -15,7 +15,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
         private readonly ITeamsService _teamsService;
         public ObservableCollection<string> Skines { get; set; }
         public Koinotita? Koinotita { get; set; }
-        
+
         public KoinotitaViewModel(IPaidiaService paidiaService, ITeamsService teamsService)
         {
             _paidiaService = paidiaService;
@@ -73,7 +73,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 
         private async void LoadSkinesKoinotitas()
         {
-            var skines = await _teamsService.GetSkinesAnaKoinotitaInService(Koinotita.Name);
+            var skines = await _teamsService.GetSkinesAnaKoinotitaInService(null, Koinotita!.Name);
             foreach (var skini in skines)
                 Skines.Add(skini.Name);
         }

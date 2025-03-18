@@ -61,10 +61,10 @@ public class TeamsServiceTests
             new Skini { Id = 1, Name = "TestTeam1"},
             new Skini { Id = 2, Name = "TestTeam2" }
         };
-        _mockdteamsRepository.Setup(m => m.GetSkinesInDb()).ReturnsAsync(teams);
+        _mockdteamsRepository.Setup(m => m.GetSkinesInDb(new())).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetAllSkinesInService();
+        var result = await _teamsService.GetAllSkinesInService(new());
 
         // Assert
         Assert.NotNull(result);
@@ -79,10 +79,10 @@ public class TeamsServiceTests
             new Tomeas { Id = 1, Name = "TestTomeas1" },
             new Tomeas { Id = 2, Name = "TestTomeas2" }
         };
-        _mockdteamsRepository.Setup(m => m.GetTomeisInDb()).ReturnsAsync(teams);
+        _mockdteamsRepository.Setup(m => m.GetTomeisInDb(new())).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetAllTomeisInService();
+        var result = await _teamsService.GetAllTomeisInService(new());
 
         // Assert
         Assert.NotNull(result);
@@ -108,10 +108,10 @@ public class TeamsServiceTests
             }
             }
         };
-        _mockdteamsRepository.Setup(m => m.GetKoinotitesInDb()).ReturnsAsync(teams);
+        _mockdteamsRepository.Setup(m => m.GetKoinotitesInDb(new())).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetAllKoinotitesInService();
+        var result = await _teamsService.GetAllKoinotitesInService(new());
 
         // Assert
         Assert.NotNull(result);
@@ -142,10 +142,10 @@ public class TeamsServiceTests
         var tomeas = new Tomeas { Id = 1, Name = "TestTomeas", Koinotites = new List<Koinotita>() };
         tomeas.Koinotites = teams;
 
-        _mockdteamsRepository.Setup(m => m.GetKoinotitesAnaTomeaInDb(tomeasId)).ReturnsAsync(teams);
+        _mockdteamsRepository.Setup(m => m.GetKoinotitesAnaTomeaInDb(new(),tomeasId)).ReturnsAsync(teams);
 
         // Act
-        var result = await _teamsService.GetAllKoinotitesInService();
+        var result = await _teamsService.GetAllKoinotitesInService(new());
 
         // Assert
         Assert.NotNull(result);

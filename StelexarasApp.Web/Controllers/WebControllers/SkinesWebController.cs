@@ -16,9 +16,9 @@ public class SkinesWebController(ITeamsService teamsService, ILogger<SkinesWebCo
     {
         try
         {
-            var allSkines = await _teamsService.GetAllSkinesInService();
-            var allKoinotites = await _teamsService.GetAllKoinotitesInService();
-            var allTomeis = await _teamsService.GetAllTomeisInService();
+            var allSkines = await _teamsService.GetAllSkinesInService(new() { IncludePaidia = true });
+            var allKoinotites = await _teamsService.GetAllKoinotitesInService(new() { IncludeSkines = true });
+            var allTomeis = await _teamsService.GetAllTomeisInService(new() { IncludeKoinotites = true });
 
             if ((allSkines == null || !allSkines.Any()) && (allKoinotites == null || !allKoinotites.Any()) && (allTomeis == null || !allTomeis.Any()))
             {
@@ -77,7 +77,7 @@ public class SkinesWebController(ITeamsService teamsService, ILogger<SkinesWebCo
 
         try
         {
-            var skini = await _teamsService.GetSkiniByNameInService(name);
+            var skini = await _teamsService.GetSkiniByNameInService(new() { IncludePaidia = true }, name);
             if (skini == null)
             {
                 _logger.LogWarning("Skini not found.");
@@ -101,7 +101,7 @@ public class SkinesWebController(ITeamsService teamsService, ILogger<SkinesWebCo
 
         try
         {
-            var skini = await _teamsService.GetSkiniByNameInService(name);
+            var skini = await _teamsService.GetSkiniByNameInService(new() { IncludePaidia = true }, name);
             if (skini == null)
             {
                 _logger.LogWarning("Skini not found.");

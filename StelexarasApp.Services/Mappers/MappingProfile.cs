@@ -21,13 +21,13 @@ public class MappingProfile : Profile
 
         CreateMap<OmadarxisDto, Omadarxis>()
             .IncludeBase<IStelexosDto, IStelexos>()
-            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.DtoXwrosName))
-            .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Name = src.DtoXwrosName ?? string.Empty }))
+            .ForMember(dest => dest.XwrosName, opt => opt.MapFrom(src => src.XwrosName))
+            .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Name = src.XwrosName ?? string.Empty }))
             .ReverseMap();
 
         CreateMap<KoinotarxisDto, Koinotarxis>()
             .IncludeBase<IStelexosDto, IStelexos>()
-            .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Name = src.DtoXwrosName ?? string.Empty }))
+            .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Name = src.XwrosName ?? string.Empty }))
             .ReverseMap();
 
         CreateMap<EkpaideutisDto, Ekpaideutis>()

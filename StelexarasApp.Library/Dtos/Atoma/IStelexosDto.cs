@@ -10,7 +10,7 @@ namespace StelexarasApp.Library.Dtos.Atoma
         public string FullName { get; set; }
         public int Age { get; set; }
         public int Id { get; set; }
-        public string? DtoXwrosName { get; set; }
+        public string? XwrosName { get; set; }
         [Phone]
         public string? Tel { get; set; }
 

@@ -27,9 +27,9 @@ public class SkinesWebControllerTests
         var skines = new List<SkiniDto> { new SkiniDto { Name = "Skini1" } };
         var koinotites = new List<KoinotitaDto> { new KoinotitaDto { Name = "Koinotita1", TomeasName = "TomeasName" } };
         var tomeis = new List<TomeasDto> { new TomeasDto { Name = "Tomeas1" } };
-        _mockService.Setup(service => service.GetAllSkinesInService()).ReturnsAsync(skines);
-        _mockService.Setup(service => service.GetAllKoinotitesInService()).ReturnsAsync(koinotites);
-        _mockService.Setup(service => service.GetAllTomeisInService()).ReturnsAsync(tomeis);
+        _mockService.Setup(service => service.GetAllSkinesInService(new())).ReturnsAsync(skines);
+        _mockService.Setup(service => service.GetAllKoinotitesInService(new())).ReturnsAsync(koinotites);
+        _mockService.Setup(service => service.GetAllTomeisInService(new())).ReturnsAsync(tomeis);
 
         // Act
         var result = await _controller.Index();
@@ -44,9 +44,9 @@ public class SkinesWebControllerTests
     public async Task Index_ReturnsNotFound_WhenNoTeamsFound()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllSkinesInService()).ReturnsAsync((IEnumerable<SkiniDto>)null);
-        _mockService.Setup(service => service.GetAllKoinotitesInService()).ReturnsAsync((IEnumerable<KoinotitaDto>)null);
-        _mockService.Setup(service => service.GetAllTomeisInService()).ReturnsAsync((IEnumerable<TomeasDto>)null);
+        _mockService.Setup(service => service.GetAllSkinesInService(new())).ReturnsAsync((IEnumerable<SkiniDto>)null);
+        _mockService.Setup(service => service.GetAllKoinotitesInService(new())).ReturnsAsync((IEnumerable<KoinotitaDto>)null);
+        _mockService.Setup(service => service.GetAllTomeisInService(new())).ReturnsAsync((IEnumerable<TomeasDto>)null);
 
         // Act
         var result = await _controller.Index();
@@ -60,7 +60,7 @@ public class SkinesWebControllerTests
     public async Task Index_ReturnsNothing_WhenExceptionThrown()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllSkinesInService()).Returns(() => throw new Exception());
+        _mockService.Setup(service => service.GetAllSkinesInService(new())).Returns(() => throw new Exception());
 
         // Act
         var result = await _controller.Index();
@@ -135,7 +135,7 @@ public class SkinesWebControllerTests
         // Arrange
         var skiniName = "TestSkini";
         var skini = new SkiniDto { Name = skiniName };
-        _mockService.Setup(service => service.GetSkiniByNameInService(skiniName)).ReturnsAsync(skini);
+        _mockService.Setup(service => service.GetSkiniByNameInService(new(), skiniName)).ReturnsAsync(skini);
 
         // Act
         var result = await _controller.Delete(skiniName);
@@ -151,7 +151,7 @@ public class SkinesWebControllerTests
     {
         // Arrange
         var skiniName = "NonExistentSkini";
-        _mockService.Setup(service => service.GetSkiniByNameInService(skiniName)).ReturnsAsync((SkiniDto)null);
+        _mockService.Setup(service => service.GetSkiniByNameInService(new(), skiniName)).ReturnsAsync((SkiniDto)null);
 
         // Act
         var result = await _controller.Delete(skiniName);
@@ -166,7 +166,7 @@ public class SkinesWebControllerTests
     {
         // Arrange
         var skiniName = "TestSkini";
-        _mockService.Setup(service => service.GetSkiniByNameInService(skiniName)).ThrowsAsync(new Exception("Test exception"));
+        _mockService.Setup(service => service.GetSkiniByNameInService(new(), skiniName)).ThrowsAsync(new Exception("Test exception"));
 
         // Act
         var result = await _controller.Delete(skiniName);
@@ -182,7 +182,7 @@ public class SkinesWebControllerTests
         // Arrange
         var skiniName = "TestSkini";
         var skini = new SkiniDto { Name = skiniName };
-        _mockService.Setup(service => service.GetSkiniByNameInService(skiniName)).ReturnsAsync(skini);
+        _mockService.Setup(service => service.GetSkiniByNameInService(new(), skiniName)).ReturnsAsync(skini);
 
         // Act
         var result = await _controller.Edit(skiniName);
@@ -198,7 +198,7 @@ public class SkinesWebControllerTests
     {
         // Arrange
         var skiniName = "NonExistentSkini";
-        _mockService.Setup(service => service.GetSkiniByNameInService(skiniName)).ReturnsAsync((SkiniDto)null);
+        _mockService.Setup(service => service.GetSkiniByNameInService(new(), skiniName)).ReturnsAsync((SkiniDto)null);
 
         // Act
         var result = await _controller.Edit(skiniName);
@@ -213,7 +213,7 @@ public class SkinesWebControllerTests
     {
         // Arrange
         var skiniName = "TestSkini";
-        _mockService.Setup(service => service.GetSkiniByNameInService(skiniName)).ThrowsAsync(new Exception("Test exception"));
+        _mockService.Setup(service => service.GetSkiniByNameInService(new(), skiniName)).ThrowsAsync(new Exception("Test exception"));
 
         // Act
         var result = await _controller.Edit(skiniName);

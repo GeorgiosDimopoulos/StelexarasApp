@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers;
+
 [ApiController]
 [Route("[controller]")]
-[ApiExplorerSettings(IgnoreApi = false)]
-[Authorize]
 public class StaffController(IStaffService stelexiService) : ControllerBase
 {
     private readonly IStaffService _stelexiService = stelexiService;
@@ -29,7 +27,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     [HttpGet("Omadarxi/{id}")]
     public async Task<ActionResult<Omadarxis>> GetOmadarxis(int id)
     {
-        var result = await _stelexiService.GetStelexosByIdInService(id, Thesi.Omadarxis);
+        var result = await _stelexiService.GetStelexosByIdInService(id);
 
         if (result is null)
             return NotFound();
@@ -38,6 +36,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPost("Omadarxi")]
+    [Authorize]
     public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] IStelexosDto omadarxis)
     {
         if (omadarxis == null)
@@ -57,7 +56,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
 
 
     [HttpPut("Omadarxi/{id}")]
-    public async Task<IActionResult> PutOmadarxi([FromBody] OmadarxisDto omadarxisDto)
+    public async Task<IActionResult> PutOmadarxi(string id, [FromBody] OmadarxisDto omadarxisDto)
     {
         var result = await _stelexiService.UpdateStelexosInService(omadarxisDto);
 
@@ -91,7 +90,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     [HttpGet("Koinotarxi/{id}")]
     public async Task<ActionResult<Koinotarxis>> GetKoinotarxis(int id)
     {
-        var result = await _stelexiService.GetStelexosByIdInService(id, Thesi.Koinotarxis);
+        var result = await _stelexiService.GetStelexosByIdInService(id);
         if (result is null)
             return NotFound();
 
@@ -207,7 +206,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     [HttpGet("Tomearxi/{id}")]
     public async Task<ActionResult<Tomearxis>> GetTomearxis(int id)
     {
-        var result = await _stelexiService.GetStelexosByIdInService(id, Thesi.Tomearxis);
+        var result = await _stelexiService.GetStelexosByIdInService(id);
 
         if (result is null)
             return NotFound();
@@ -261,7 +260,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     [HttpGet("Ekpaideutis/{id}")]
     public async Task<ActionResult<Ekpaideutis>> GetEkpaideutis(int id)
     {
-        var result = await _stelexiService.GetStelexosByIdInService(id, Thesi.Ekpaideutis);
+        var result = await _stelexiService.GetStelexosByIdInService(id);
 
         if (result is null)
             return NotFound();

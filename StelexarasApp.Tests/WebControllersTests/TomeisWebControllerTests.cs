@@ -31,7 +31,7 @@ public class TomeisWebControllerTests
             new (){ KoinotitesNumber = 2, Name = "Tomeas 2" }
         };
 
-        _mockService.Setup(service => service.GetAllTomeisInService()).ReturnsAsync(tomeisList);
+        _mockService.Setup(service => service.GetAllTomeisInService(new())).ReturnsAsync(tomeisList);
 
         // Act
         var result = await _controller.Index();
@@ -46,7 +46,7 @@ public class TomeisWebControllerTests
     public async Task Index_ReturnsNotFound_WhenNoTeamsAvailable()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllTomeisInService()).ReturnsAsync((List<TomeasDto>)null);
+        _mockService.Setup(service => service.GetAllTomeisInService(new())).ReturnsAsync((List<TomeasDto>)null);
 
         // Act
         var result = await _controller.Index();
@@ -119,7 +119,7 @@ public class TomeisWebControllerTests
     public async Task Index_ReturnsErrorView_WhenExceptionThrown()
     {
         // Arrange
-        _mockService.Setup(service => service.GetAllTomeisInService()).ThrowsAsync(new Exception());
+        _mockService.Setup(service => service.GetAllTomeisInService(new())).ThrowsAsync(new Exception());
 
         // Act
         var result = await _controller.Index();
@@ -135,7 +135,7 @@ public class TomeisWebControllerTests
         // Arrange
         var tomeasId = "TestTomeas";
         var tomeas = new TomeasDto { Name = tomeasId, KoinotitesNumber = 5 };
-        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync(tomeas);
+        _mockService.Setup(service => service.GetTomeaByNameInService(new(), tomeasId)).ReturnsAsync(tomeas);
 
         // Act
         var result = await _controller.Edit(tomeasId);
@@ -151,7 +151,7 @@ public class TomeisWebControllerTests
     {
         // Arrange
         var tomeasId = "NonExistentTomeas";
-        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync((TomeasDto)null);
+        _mockService.Setup(service => service.GetTomeaByNameInService(new(),tomeasId)).ReturnsAsync((TomeasDto)null);
 
         // Act
         var result = await _controller.Edit(tomeasId);
@@ -166,7 +166,7 @@ public class TomeisWebControllerTests
     {
         // Arrange
         var tomeasId = "TestTomeas";
-        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ThrowsAsync(new Exception("Test exception"));
+        _mockService.Setup(service => service.GetTomeaByNameInService(new(), tomeasId)).ThrowsAsync(new Exception("Test exception"));
 
         // Act
         var result = await _controller.Edit(tomeasId);
@@ -182,7 +182,7 @@ public class TomeisWebControllerTests
         // Arrange
         var tomeasId = "TestTomeas";
         var tomeas = new TomeasDto { Name = tomeasId, KoinotitesNumber = 5 };
-        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync(tomeas);
+        _mockService.Setup(service => service.GetTomeaByNameInService(new(), tomeasId)).ReturnsAsync(tomeas);
 
         // Act
         var result = await _controller.Delete(tomeasId);
@@ -198,7 +198,7 @@ public class TomeisWebControllerTests
     {
         // Arrange
         var tomeasId = "NonExistentTomeas";
-        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ReturnsAsync((TomeasDto)null);
+        _mockService.Setup(service => service.GetTomeaByNameInService(new(),tomeasId)).ReturnsAsync((TomeasDto)null);
 
         // Act
         var result = await _controller.Delete(tomeasId);
@@ -213,7 +213,7 @@ public class TomeisWebControllerTests
     {
         // Arrange
         var tomeasId = "TestTomeas";
-        _mockService.Setup(service => service.GetTomeaByNameInService(tomeasId)).ThrowsAsync(new Exception("Test exception"));
+        _mockService.Setup(service => service.GetTomeaByNameInService(new(), tomeasId)).ThrowsAsync(new Exception("Test exception"));
 
         // Act
         var result = await _controller.Delete(tomeasId);

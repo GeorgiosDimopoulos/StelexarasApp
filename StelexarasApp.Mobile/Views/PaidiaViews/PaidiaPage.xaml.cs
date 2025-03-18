@@ -24,5 +24,10 @@ namespace StelexarasApp.Mobile.Views.PaidiaViews
                 // ToDo: Handle the selection, e.g., navigate to a detail page
             }
         }
+
+        private void AddChild_Clicked(object sender, EventArgs e)
+        {
+            // ToDo: Handle the add button click
+        }
     }
 }

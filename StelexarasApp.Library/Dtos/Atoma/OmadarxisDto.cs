@@ -10,6 +10,6 @@ public class OmadarxisDto : IStelexosDto
     public Sex Sex { get; set; } = default!;
     public int Id { get; set; } = default!;
     public Thesi Thesi { get; set; } = default!;
-    public string? DtoXwrosName { get; set; }
+    public string? XwrosName { get; set; }
     public string? Tel { get; set; }
 }

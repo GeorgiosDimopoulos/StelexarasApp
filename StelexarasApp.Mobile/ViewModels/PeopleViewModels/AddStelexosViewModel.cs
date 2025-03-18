@@ -36,7 +36,7 @@ public class AddStelexosViewModel
             Thesi.Omadarxis => new OmadarxisDto
             {
                 FullName = FullName,
-                DtoXwrosName = XwrosName,
+                XwrosName = XwrosName,
                 Tel = PhoneNumber,
                 Age = Age,
                 Thesi = Thesi.Omadarxis,
@@ -45,7 +45,7 @@ public class AddStelexosViewModel
             Thesi.Koinotarxis => new KoinotarxisDto
             {
                 FullName = FullName,
-                DtoXwrosName = XwrosName,
+                XwrosName = XwrosName,
                 Tel = PhoneNumber,
                 Age = Age,
                 Thesi = Thesi.Koinotarxis,
@@ -54,7 +54,7 @@ public class AddStelexosViewModel
             Thesi.Tomearxis => new TomearxisDto
             {
                 FullName = FullName,
-                DtoXwrosName = XwrosName,
+                XwrosName = XwrosName,
                 Tel = PhoneNumber,
                 Age = Age,
                 Thesi = Thesi.Tomearxis,

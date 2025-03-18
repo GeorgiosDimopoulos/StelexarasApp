@@ -7,6 +7,7 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Models.Logs;
+using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.Services.Services
 {
@@ -41,7 +42,7 @@ namespace StelexarasApp.Services.Services
 
                 var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
 
-                koinotita.Tomeas = await _teamsRepository.GetTomeaByNameInDb(koinotitaDto.TomeasName);
+                koinotita.Tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), koinotitaDto.TomeasName);
                 return await _teamsRepository.AddKoinotitaInDb(koinotita);
             }
             catch (Exception ex)
@@ -51,54 +52,59 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        public async Task<IEnumerable<SkiniDto>> GetAllSkinesInService()
+        public async Task<IEnumerable<SkiniDto>> GetAllSkinesInService(SkiniQueryParameters? skiniQueryParameters)
         {
             try
             {
-                var skini = await _teamsRepository.GetSkinesInDb();
+                var skini = await _teamsRepository.GetSkinesInDb(skiniQueryParameters);
                 return _mapper.Map<IEnumerable<SkiniDto>>(skini);
             }
-            catch (Exception ex)
+            catch
             {
                 return new List<SkiniDto>();
             }
         }
 
-        public async Task<SkiniDto> GetSkiniByNameInService
-            (string name)
+        public async Task<SkiniDto> GetSkiniByNameInService(SkiniQueryParameters skiniQueryParameters, string name)
         {
-            var skini = await _teamsRepository.GetSkiniByNameInDb(name);
+            var skini = await _teamsRepository.GetSkiniByNameInDb(skiniQueryParameters, name);
             return _mapper.Map<SkiniDto>(skini);
         }
 
-        public async Task<IEnumerable<SkiniDto>> GetSkinesAnaKoinotitaInService(string koinotitaName)
+        public async Task<IEnumerable<SkiniDto>> GetSkinesAnaKoinotitaInService(SkiniQueryParameters? skiniQueryParameters, string koinotitaName)
         {
-            var skines = await _teamsRepository.GetSkinesAnaKoinotitaInDb(koinotitaName);
+            var skines = await _teamsRepository.GetSkinesAnaKoinotitaInDb(skiniQueryParameters, koinotitaName);
             return _mapper.Map<IEnumerable<SkiniDto>>(skines);
         }
 
-        public async Task<IEnumerable<SkiniDto>> GetSkinesEkpaideuomenonInService()
+        public async Task<IEnumerable<SkiniDto>> GetSkinesEkpaideuomenonInService(SkiniQueryParameters skiniQueryParameters)
         {
-            var skines = await _teamsRepository.GetSkinesEkpaideuomenonInDb();
+            var skines = await _teamsRepository.GetSkinesEkpaideuomenonInDb(skiniQueryParameters);
             return _mapper.Map<IEnumerable<SkiniDto>>(skines);
         }
 
-        public async Task<IEnumerable<KoinotitaDto>> GetAllKoinotitesInService()
+        public async Task<IEnumerable<KoinotitaDto>> GetAllKoinotitesInService(KoinotitaQueryParameters koinotitaQueryParameters)
         {
-            var koinotitaInDb = await _teamsRepository.GetKoinotitesInDb();
+            var koinotitaInDb = await _teamsRepository.GetKoinotitesInDb(koinotitaQueryParameters);
             return _mapper.Map<IEnumerable<KoinotitaDto>>(koinotitaInDb);
         }
 
-        public async Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomeaInService(int tomeaId)
+        public async Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomeaInService(KoinotitaQueryParameters koinotitaQueryParameters, int tomeaId)
         {
-            var koinotitaInDb = await _teamsRepository.GetKoinotitesAnaTomeaInDb(tomeaId);
+            var koinotitaInDb = await _teamsRepository.GetKoinotitesAnaTomeaInDb(koinotitaQueryParameters, tomeaId);
             return _mapper.Map<IEnumerable<KoinotitaDto>>(koinotitaInDb);
         }
 
-        public async Task<IEnumerable<TomeasDto>> GetAllTomeisInService()
+        public async Task<IEnumerable<TomeasDto>> GetAllTomeisInService(TomeasQueryParameters tomeasQueryParameters)
         {
-            var tomeisInDb = await _teamsRepository.GetTomeisInDb();
+            var tomeisInDb = await _teamsRepository.GetTomeisInDb(tomeasQueryParameters);
             return _mapper.Map<IEnumerable<TomeasDto>>(tomeisInDb);
+        }
+
+        public async Task<KoinotitaDto> GetKoinotitaByNameInService(KoinotitaQueryParameters koinotitaQueryParameters, string name)
+        {
+            var skini = await _teamsRepository.GetKoinotitaByNameInDb(koinotitaQueryParameters, name);
+            return _mapper.Map<KoinotitaDto>(skini);
         }
 
         public Task<bool> UpdateKoinotitaInService(KoinotitaDto koinotitaDto)
@@ -134,9 +140,9 @@ namespace StelexarasApp.Services.Services
             return _teamsRepository.DeleteTomeasInDb(n);
         }
 
-        public async Task<TomeasDto> GetTomeaByNameInService(string name)
+        public async Task<TomeasDto> GetTomeaByNameInService(TomeasQueryParameters tomeasQueryParameters, string name)
         {
-            var tomeasInDb = await _teamsRepository.GetTomeaByNameInDb(name);
+            var tomeasInDb = await _teamsRepository.GetTomeaByNameInDb(tomeasQueryParameters, name);
             return _mapper.Map<TomeasDto>(tomeasInDb);
         }
 
@@ -154,12 +160,6 @@ namespace StelexarasApp.Services.Services
                 LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
                 return false;
             }
-        }
-
-        public async Task<KoinotitaDto> GetKoinotitaByNameInService(string name)
-        {
-            var skini = await _teamsRepository.GetKoinotitaByNameInDb(name);
-            return _mapper.Map<KoinotitaDto>(skini);
         }
 
         public async Task<bool> AddTomeasInService(TomeasDto tomeasDto)
@@ -180,9 +180,9 @@ namespace StelexarasApp.Services.Services
 
         public Task<bool> HasData()
         {
-            if (!_teamsRepository.GetSkinesInDb().Result.Any() &&
-                !_teamsRepository.GetKoinotitesAnaTomeaInDb(2).Result.Any() &&
-                !_teamsRepository.GetKoinotitesAnaTomeaInDb(1).Result.Any())
+            if (!_teamsRepository.GetSkinesInDb(new()).Result.Any() &&
+                !_teamsRepository.GetKoinotitesAnaTomeaInDb(new(), 2).Result.Any() &&
+                !_teamsRepository.GetKoinotitesAnaTomeaInDb(new(), 1).Result.Any())
                 return Task.FromResult(false);
             return Task.FromResult(true);
         }
@@ -192,7 +192,7 @@ namespace StelexarasApp.Services.Services
             switch (stelexosDto.Thesi)
             {
                 case Thesi.Omadarxis:
-                    var skini = await _teamsRepository.GetSkiniByNameInDb(xwrosName);
+                    var skini = await _teamsRepository.GetSkiniByNameInDb(new(), xwrosName);
                     if (skini == null)
                     {
                         Console.WriteLine($"Skini {xwrosName} doesnt exist in DB!");
@@ -205,7 +205,7 @@ namespace StelexarasApp.Services.Services
                     }
                     return true;
                 case Thesi.Koinotarxis:
-                    var koinotita = await _teamsRepository.GetKoinotitaByNameInDb(xwrosName);
+                    var koinotita = await _teamsRepository.GetKoinotitaByNameInDb(new(), xwrosName);
                     if (koinotita == null)
                     {
                         Console.WriteLine($"Koinotita {xwrosName} doesnt exist in DB!");
@@ -218,7 +218,7 @@ namespace StelexarasApp.Services.Services
                     }
                     return true;
                 case Thesi.Tomearxis:
-                    var tomeas = await _teamsRepository.GetTomeaByNameInDb(xwrosName);
+                    var tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), xwrosName);
                     if (tomeas == null)
                     {
                         Console.WriteLine($"Tomeas {xwrosName} doesnt exist in DB!");

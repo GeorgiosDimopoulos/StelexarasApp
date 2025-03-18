@@ -79,7 +79,7 @@ public class StaffWebController : Controller
 
         try
         {
-            var staffMember = await _staffService.GetStelexosByIdInService(id, thesi);
+            var staffMember = await _staffService.GetStelexosByIdInService(id);
             if (staffMember == null)
             {
                 _logger.LogWarning($"Staff member with ID {id} not found.");
@@ -103,7 +103,7 @@ public class StaffWebController : Controller
 
         try
         {
-            var staffMember = await _staffService.GetStelexosByIdInService(id, thesi);
+            var staffMember = await _staffService.GetStelexosByIdInService(id);
             if (staffMember == null)
             {
                 _logger.LogWarning($"Staff member with ID {id} not found.");

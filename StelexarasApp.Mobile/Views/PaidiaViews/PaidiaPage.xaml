@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StelexarasApp.Mobile.Views.PaidiaViews.PaidiaPage"
              Title="Παιδιά">
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="+" Order="Primary" Priority="0" Clicked="AddChild_Clicked"/>
+	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
 		<CollectionView ItemsSource="{Binding PaidiaList}" SelectionMode="Single" SelectionChanged="OnPaidiSelected">
 			<CollectionView.Header>

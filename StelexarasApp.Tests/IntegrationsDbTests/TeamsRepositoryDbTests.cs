@@ -55,7 +55,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             Assert.Equal(result, expectedResult);
             if (expectedResult)
             {
-                var addedTeam = await _teamsRepository.GetSkiniByNameInDb(team.Name);
+                var addedTeam = await _teamsRepository.GetSkiniByNameInDb(new(), team.Name);
                 Assert.NotNull(addedTeam);
                 Assert.Equal(team.Name, addedTeam.Name);
             }
@@ -148,7 +148,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.GetSkinesInDb();
+            var result = await _teamsRepository.GetSkinesInDb(new());
 
             // Assert
             Assert.NotNull(result);
@@ -164,7 +164,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.GetSkiniByNameInDb(team.Name);
+            var result = await _teamsRepository.GetSkiniByNameInDb(new(), team.Name);
 
             // Assert
             Assert.NotNull(result);
@@ -180,7 +180,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.GetKoinotitaByNameInDb(koinotita.Name);
+            var result = await _teamsRepository.GetKoinotitaByNameInDb(new(), koinotita.Name);
 
             // Assert
             Assert.NotNull(result);
@@ -225,7 +225,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.GetTomeaByNameInDb(tomeasName);
+            var result = await _teamsRepository.GetTomeaByNameInDb(new(), tomeasName);
 
             // Assert
             Assert.NotNull(result);
@@ -237,7 +237,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetTomeaByNameInDb_ShouldThrowArgumentException_WhenNameIsNullOrEmpty()
         {
             // Act & Assert
-            var res = await _teamsRepository.GetTomeaByNameInDb(string.Empty);
+            var res = await _teamsRepository.GetTomeaByNameInDb(new(), string.Empty);
             Assert.Null(res);
         }
 
@@ -312,7 +312,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.GetTomeaByNameInDb(tomeas.Name);
+            var result = await _teamsRepository.GetTomeaByNameInDb(new(), tomeas.Name);
 
             // Assert
             Assert.NotNull(result);

@@ -36,7 +36,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexosByIdInDb(stelexos.Id, stelexos.Thesi);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(stelexos.Id);
 
         // Assert
         Assert.Equal(stelexos, result);
@@ -59,7 +59,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexosByIdInDb(2, stelexos.Thesi);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(2);
 
         // Assert
         Assert.Null(result);
@@ -96,7 +96,7 @@ public class StaffRepositoryDbTests
         };
 
         // Act
-        var result = await _stelexiRepository.AddOmadarxiInDb(stelexos);
+        var result = await _stelexiRepository.AddStelexosInDb(stelexos);
 
         // Assert
         Assert.True(result);
@@ -117,7 +117,7 @@ public class StaffRepositoryDbTests
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(async () =>
         {
-            await _stelexiRepository.AddOmadarxiInDb(stelexos);
+            await _stelexiRepository.AddStelexosInDb(stelexos);
         });
     }
 
@@ -136,7 +136,7 @@ public class StaffRepositoryDbTests
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(async () =>
         {
-            await _stelexiRepository.AddOmadarxiInDb(stelexos);
+            await _stelexiRepository.AddStelexosInDb(stelexos);
         });
     }
 

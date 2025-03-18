@@ -1,5 +1,6 @@
 ﻿using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Services;
 using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,10 +11,13 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 public class StaffViewModel : INotifyPropertyChanged
 {
     private readonly IStaffService _staffService;
+    private readonly IApiService _apiService;
+
     public ObservableCollection<IStelexosDto> AllStaff { get; set; }
 
-    public StaffViewModel(IStaffService staffService)
+    public StaffViewModel(IStaffService staffService, IApiService apiService)
     {
+        _apiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
         _staffService = staffService ?? throw new ArgumentNullException(nameof(staffService));
         AllStaff = new ObservableCollection<IStelexosDto>();
         _ = LoadAllStaffAsync();
@@ -23,15 +27,29 @@ public class StaffViewModel : INotifyPropertyChanged
     {
         try
         {
-            var allStaff = await _staffService.GetAllStaffInService();
+            AllStaff.Clear();
 
+            var allStaff = await _staffService.GetAllStaffInService();
+            
             if (allStaff == null)
                 return;
 
-            AllStaff.Clear();
+            AllStaff = allStaff as ObservableCollection<IStelexosDto> ?? new ObservableCollection<IStelexosDto>(allStaff);
 
-            foreach (var staff in allStaff)
-                AllStaff.Add(staff);
+            // var allStaff = await _apiService.GetStelexi();
+            //foreach (var stelexos in allStaff)
+            //{
+            //    var stelexosDto = new StelexosDto
+            //    {
+            //        FullName = stelexos.FullName,
+            //        Age = stelexos.Age,
+            //        Id = stelexos.Id,
+            //        DtoXwrosName = stelexos.XwrosName,
+            //        Tel = stelexos.Tel,
+            //        Thesi = stelexos.Thesi,
+            //    };
+            //    AllStaff.Add(stelexosDto);
+            //}
 
             OnPropertyChanged(nameof(AllStaff));
         }

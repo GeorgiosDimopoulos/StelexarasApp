@@ -21,7 +21,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 
         private async void LoadSkinesKoinotitas()
         {
-            var skines = await _teamsService.GetSkinesAnaKoinotitaInService("Sxoli");
+            var skines = await _teamsService.GetSkinesAnaKoinotitaInService(new(),"Sxoli");
             foreach (var skini in skines)
                 SkinesNames.Add(skini.Name);
         }

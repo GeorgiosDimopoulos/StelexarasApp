@@ -22,7 +22,7 @@ public class TomeisWebController : Controller
     {
         try
         {
-            var allTomeis = await _tomeisService.GetAllTomeisInService();
+            var allTomeis = await _tomeisService.GetAllTomeisInService(new());
             if (allTomeis == null || !allTomeis.Any())
             {
                 _logger.LogWarning("No Tomeis found.");
@@ -68,7 +68,7 @@ public class TomeisWebController : Controller
     {
         try
         {
-            var tomeis = await _tomeisService.GetTomeaByNameInService(id);
+            var tomeis = await _tomeisService.GetTomeaByNameInService(new(), id);
             if (tomeis == null)
             {
                 _logger.LogWarning("Tomeis not found.");
@@ -117,7 +117,7 @@ public class TomeisWebController : Controller
     {
         try
         {
-            var tomeis = await _tomeisService.GetTomeaByNameInService(id);
+            var tomeis = await _tomeisService.GetTomeaByNameInService(new(), id);
             if (tomeis == null)
             {
                 _logger.LogWarning("Tomeis not found.");

@@ -16,7 +16,7 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     {
         try
         {
-            var allKoinotites = await _koinotitaService.GetAllKoinotitesInService();
+            var allKoinotites = await _koinotitaService.GetAllKoinotitesInService(new());
             if (allKoinotites == null || !allKoinotites.Any())
             {
                 _logger.LogWarning("No Koinotites found.");
@@ -62,7 +62,7 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     {
         try
         {
-            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
+            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(new(),name);
             if (koinotita == null)
             {
                 _logger.LogWarning("Koinotita not found.");
@@ -83,7 +83,7 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     {
         try
         {
-            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(name);
+            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(new(), name);
             if (koinotita == null)
             {
                 _logger.LogWarning("Koinotita not found.");
