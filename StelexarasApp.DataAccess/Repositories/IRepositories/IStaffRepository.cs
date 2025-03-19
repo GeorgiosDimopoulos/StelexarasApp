@@ -14,7 +14,7 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
         Task<bool> AddStelexosInDb(IStelexos stelexos);
 
         Task<bool> UpdateStelexosInDb(IStelexos stelexos);
-        Task<bool> DeleteStelexosInDb(int id, Thesi thesi);
+        Task<bool> DeleteStelexosInDb(int id);
 
         Task<bool> MoveOmadarxisToAnotherSkiniInDb(int id, string newSkiniName);
     }

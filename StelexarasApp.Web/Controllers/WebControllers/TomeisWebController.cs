@@ -86,17 +86,14 @@ public class TomeisWebController : Controller
     // POST: TomeisWeb/Edit/5
     [HttpPost("Edit/{id}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, TomeasDto tomeis)
+    public async Task<IActionResult> Edit(int id, TomeasDto tomeis)
     {
-        if (id != tomeis.Name)
-            return BadRequest("Tomeis ID mismatch.");
-
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         try
         {
-            var result = await _tomeisService.UpdateTomeaInService(tomeis);
+            var result = await _tomeisService.UpdateTomeaInService(id, tomeis);
             if (!result)
             {
                 _logger.LogWarning("Tomeis not updated.");

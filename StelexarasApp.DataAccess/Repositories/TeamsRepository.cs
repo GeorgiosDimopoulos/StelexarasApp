@@ -357,17 +357,17 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteTomeasInDb(string name)
+        public async Task<bool> DeleteTomeasInDb(int id)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
-                if (string.IsNullOrEmpty(name) || _dbContext.Tomeis is null)
+                if (_dbContext.Tomeis is null)
                     return false;
 
-                var tomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name.Equals(name));
+                var tomeas = await _dbContext.Tomeis.FindAsync(id);
                 if (tomeas == null)
                     return false;
 

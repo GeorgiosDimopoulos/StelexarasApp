@@ -183,10 +183,10 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("Tomea/{name}")]
-    public async Task<IActionResult> DeleteTomea(string name)
+    [HttpDelete("Tomea/{id}")]
+    public async Task<IActionResult> DeleteTomea(int id)
     {
-        var result = await _teamsService.DeleteTomeasInService(name);
+        var result = await _teamsService.DeleteTomeasInService(id);
 
         if (!result)
             return NotFound();
@@ -194,7 +194,7 @@ public class TeamsController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("Tomea/{name}")]
+    [HttpPut("Tomea/{id}")]
     public async Task<IActionResult> PutTomea(int id, [FromBody] TomeasDto tomeasDto)
     {
         var result = await _teamsService.UpdateTomeaInService(id, tomeasDto);

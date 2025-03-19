@@ -113,7 +113,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
 
             // Act
             team.Name = newName;
-            var result = await _teamsRepository.UpdateSkiniInDb(team);
+            var result = await _teamsRepository.UpdateSkiniInDb(id, team);
 
             // Assert
             Assert.Equal(result, expectedResult);
@@ -203,7 +203,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
                 koinotita = null;
 
             // Act
-            var result = await _teamsRepository.UpdateKoinotitaInDb(koinotita!);
+            var result = await _teamsRepository.UpdateKoinotitaInDb(id, koinotita!);
 
             // Assert
             Assert.Equal(result, expectedResult);
@@ -257,7 +257,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
                 tomeas = null;
 
             // Act
-            var result = await _teamsRepository.UpdateTomeasInDb(tomeas!);
+            var result = await _teamsRepository.UpdateTomeasInDb(id, tomeas!);
 
             // Assert
             Assert.Equal(expectedResult, result);
@@ -295,7 +295,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await _teamsRepository.DeleteTomeasInDb(tomeas.Name);
+            var result = await _teamsRepository.DeleteTomeasInDb(tomeas.Id);
 
             // Assert
             Assert.True(result);

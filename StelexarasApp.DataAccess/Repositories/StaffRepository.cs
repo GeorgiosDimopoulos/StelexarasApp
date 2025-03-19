@@ -126,33 +126,22 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<bool> DeleteStelexosInDb(int id, Thesi thesi)
+    public async Task<bool> DeleteStelexosInDb(int id)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
         try
         {
-            switch (thesi)
-            {
-                case Thesi.Omadarxis:
-                    var omadarxis = await _dbContext.Omadarxes.FindAsync(id);
-                    if (omadarxis != null)
-                        _dbContext.Omadarxes.Remove(omadarxis);
-                    break;
-                case Thesi.Koinotarxis:
-                    var koinotarxis = await _dbContext.Koinotarxes.FindAsync(id);
-                    if (koinotarxis != null)
-                        _dbContext.Koinotarxes.Remove(koinotarxis);
-                    break;
-                case Thesi.Tomearxis:
-                    var tomearxis = await _dbContext.Tomearxes.FindAsync(id);
-                    if (tomearxis != null)
-                        _dbContext.Tomearxes.Remove(tomearxis);
-                    break;
-                default:
-                    throw new ArgumentException("Invalid Thesi value", nameof(thesi));
-            }
+            var omadarxis = await _dbContext.Omadarxes.FindAsync(id);
+            if (omadarxis != null)
+                _dbContext.Omadarxes.Remove(omadarxis);
+            var koinotarxis = await _dbContext.Koinotarxes.FindAsync(id);
+            if (koinotarxis != null)
+                _dbContext.Koinotarxes.Remove(koinotarxis);
+            var tomearxis = await _dbContext.Tomearxes.FindAsync(id);
+            if (tomearxis != null)
+                _dbContext.Tomearxes.Remove(tomearxis);
 
             var changes = await _dbContext.SaveChangesAsync();
             if (transaction != null)

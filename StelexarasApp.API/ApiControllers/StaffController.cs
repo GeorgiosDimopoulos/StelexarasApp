@@ -51,7 +51,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, "Error creating new Omadarxis record");
         }
 
-        return CreatedAtAction(nameof(GetOmadarxis), new { id = omadarxis.Id }, omadarxis);
+        return CreatedAtAction(nameof(GetOmadarxis), new { Name = omadarxis.FullName }, omadarxis);
     }
 
 
@@ -69,7 +69,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     [HttpDelete("Omadarxi/{id}")]
     public async Task<IActionResult> DeleteOmadarxi(int id)
     {
-        var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Omadarxis);
+        var result = await _stelexiService.DeleteStelexosByIdInService(id);
 
         if (!result)
             return NotFound();
@@ -163,7 +163,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     [HttpDelete("Koinotarxi/{id}")]
     public async Task<IActionResult> DeleteKoinotarxi(int id)
     {
-        var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Koinotarxis);
+        var result = await _stelexiService.DeleteStelexosByIdInService(id);
 
         if (!result)
             return NotFound();
@@ -249,7 +249,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     [HttpDelete("Tomearxi/{id}")]
     public async Task<IActionResult> DeleteTomearxi(int id)
     {
-        var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Tomearxis);
+        var result = await _stelexiService.DeleteStelexosByIdInService(id);
 
         if (!result)
             return NotFound();
@@ -293,7 +293,7 @@ public class StaffController(IStaffService stelexiService) : ControllerBase
     [HttpDelete("Ekpaideutis/{id}")]
     public async Task<IActionResult> DeleteEkpaideutis(int id)
     {
-        var result = await _stelexiService.DeleteStelexosByIdInService(id, Thesi.Ekpaideutis);
+        var result = await _stelexiService.DeleteStelexosByIdInService(id);
 
         if (!result)
             return NotFound();

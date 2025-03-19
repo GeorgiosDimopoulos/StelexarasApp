@@ -135,9 +135,9 @@ namespace StelexarasApp.Services.Services
             return _teamsRepository.DeleteKoinotitaInDb(koinotitaId);
         }
 
-        public Task<bool> DeleteTomeasInService(string n)
+        public Task<bool> DeleteTomeasInService(int id)
         {
-            return _teamsRepository.DeleteTomeasInDb(n);
+            return _teamsRepository.DeleteTomeasInDb(id);
         }
 
         public async Task<TomeasDto> GetTomeaByNameInService(TomeasQueryParameters tomeasQueryParameters, string name)
@@ -182,11 +182,6 @@ namespace StelexarasApp.Services.Services
                         Console.WriteLine($"Skini {xwrosName} doesnt exist in DB!");
                         return false;
                     }
-                    if (stelexosDto.Id == skini.OmadarxisId)
-                    {
-                        Console.WriteLine($"Skini {xwrosName} already has another Omadarxis!");
-                        return false;
-                    }
                     return true;
                 case Thesi.Koinotarxis:
                     var koinotita = await _teamsRepository.GetKoinotitaByNameInDb(new(), xwrosName);
@@ -195,22 +190,12 @@ namespace StelexarasApp.Services.Services
                         Console.WriteLine($"Koinotita {xwrosName} doesnt exist in DB!");
                         return false;
                     }
-                    if (stelexosDto.Id == koinotita.KoinotarxisId)
-                    {
-                        Console.WriteLine($"Koinotita {xwrosName} already has another Koinotarxi!");
-                        return false;
-                    }
                     return true;
                 case Thesi.Tomearxis:
                     var tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), xwrosName);
                     if (tomeas == null)
                     {
                         Console.WriteLine($"Tomeas {xwrosName} doesnt exist in DB!");
-                        return false;
-                    }
-                    if (stelexosDto.Id == tomeas.TomearxisId)
-                    {
-                        Console.WriteLine($"Tomeas {xwrosName} already has another Tomearxi!");
                         return false;
                     }
                     return true;

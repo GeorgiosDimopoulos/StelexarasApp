@@ -28,8 +28,8 @@ public class StaffWebControllerTests
         // Arrange
         var staffList = new List<IStelexosDto>
         {
-            new OmadarxisDto { Id = 1, FullName = "John Doe", Thesi = Thesi.Omadarxis },
-            new KoinotarxisDto { Id = 2, FullName = "Jane Doe", Thesi = Thesi.Koinotarxis }
+            new OmadarxisDto {FullName = "John Doe", Thesi = Thesi.Omadarxis },
+            new KoinotarxisDto { FullName = "Jane Doe", Thesi = Thesi.Koinotarxis }
         };
 
         _mockStaffService.Setup(service => service.GetAllStaffInService()).ReturnsAsync(staffList);

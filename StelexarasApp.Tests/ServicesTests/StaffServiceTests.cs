@@ -45,7 +45,6 @@ public class StaffServiceTests
         var expectedStelexosDto = new OmadarxisDto
         {
             FullName = "Test Name",
-            Id = id,
             Age = 30,
             Sex = Sex.Male,
             Thesi = thesi,
@@ -180,7 +179,7 @@ public class StaffServiceTests
         };
         var omadarxisDtoList = new List<OmadarxisDto>
         {
-            new() { FullName = "Test Omadarxis", Id = 1, Tel = "12312312" }
+            new() { FullName = "Test Omadarxis", Tel = "12312312" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, string.Empty)).ReturnsAsync(omadarxisList);
@@ -207,7 +206,7 @@ public class StaffServiceTests
         };
         var koinotarxisDtoList = new List<KoinotarxisDto>
         {
-            new() { FullName = "Test Koinotarxis", Id = 1, Tel = "1231231" }
+            new() { FullName = "Test Koinotarxis", Tel = "1231231" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, string.Empty)).ReturnsAsync(koinotarxisList);
@@ -235,7 +234,7 @@ public class StaffServiceTests
         };
         var koinotarxisDtoList = new List<KoinotarxisDto>
         {
-            new() { FullName = "Test Koinotarxis", Id = 1, Tel = "1231231" , Sex = Sex.Female}
+            new() { FullName = "Test Koinotarxis", Tel = "1231231" , Sex = Sex.Female}
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, tomeaDto.Name)).ReturnsAsync(koinotarxisList);
@@ -263,7 +262,7 @@ public class StaffServiceTests
         };
         var omadarxisDtoList = new List<OmadarxisDto>
         {
-            new OmadarxisDto { FullName = "Test Omadarxis", Id = 1, Tel = "1235452" }
+            new OmadarxisDto { FullName = "Test Omadarxis", Tel = "1235452" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotita.Name)).ReturnsAsync(omadarxisList);
@@ -291,7 +290,7 @@ public class StaffServiceTests
         };
         var omadarxisDtoList = new List<OmadarxisDto>
         {
-            new OmadarxisDto { FullName = "Test Omadarxis", Id = 1 }
+            new OmadarxisDto { FullName = "Test Omadarxis"}
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, tomeaDto.Name)).ReturnsAsync(omadarxisList);
@@ -359,14 +358,14 @@ public class StaffServiceTests
         // Arrange
         var id = 1;
         var thesi = new Thesi { };
-        _mockStelexiRepository.Setup(r => r.DeleteStelexosInDb(id, thesi)).ReturnsAsync(true);
+        _mockStelexiRepository.Setup(r => r.DeleteStelexosInDb(id)).ReturnsAsync(true);
 
         // Act
-        var result = await _stelexiService.DeleteStelexosByIdInService(id, thesi);
+        var result = await _stelexiService.DeleteStelexosByIdInService(id);
 
         // Assert
         Assert.True(result);
-        _mockStelexiRepository.Verify(r => r.DeleteStelexosInDb(id, thesi), Times.Once);
+        _mockStelexiRepository.Verify(r => r.DeleteStelexosInDb(id), Times.Once);
     }
 
     [Fact]
@@ -379,7 +378,7 @@ public class StaffServiceTests
         };
         var tomearxesDtos = new List<TomearxisDto>
         {
-            new() { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890"}
+            new() { FullName = "John Doe", Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890"}
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Tomearxis, string.Empty)).ReturnsAsync(tomearxes);
@@ -401,7 +400,6 @@ public class StaffServiceTests
         var koinotitaName = "TestKoinotita";
         var koinotita = new KoinotitaDto
         {
-            Id = 1,
             Name = koinotitaName,
             TomeasName = "Tomeas1"
         };
@@ -415,7 +413,7 @@ public class StaffServiceTests
 
         var stelexoiDtos = new List<OmadarxisDto>
         {
-            new() { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890" }
+            new() { FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotitaName)).ReturnsAsync(stelexoi);
@@ -496,7 +494,6 @@ public class StaffServiceTests
         var stelexosDto = new OmadarxisDto
         {
             FullName = "Test Name",
-            Id = 1,
             Age = 30,
             Tel = "1234567890",
         };

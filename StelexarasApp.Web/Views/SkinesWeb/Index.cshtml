@@ -20,7 +20,7 @@
                 <td>
                     <a asp-action="Details" asp-route-name="@skini.Name">Details</a> |
                     <a asp-action="Edit" asp-route-name="@skini.Name">Edit</a> |
-                    <form asp-action="DeleteConfirmed" asp-route-id="@skini.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this?');">
+                    <form asp-action="DeleteConfirmed" asp-route-id="@skini.Name" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this?');">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>

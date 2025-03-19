@@ -26,8 +26,8 @@ public class KoinotitesWebControllerTests
         // Arrange
         var koinotites = new List<KoinotitaDto>
         {
-            new KoinotitaDto { Id = 1, Name = "Koinotita1", TomeasName ="TomeasName1" },
-            new KoinotitaDto { Id = 2, Name = "Koinotita2" , TomeasName ="TomeasName1" },
+            new KoinotitaDto { Name = "Koinotita1", TomeasName ="TomeasName1" },
+            new KoinotitaDto { Name = "Koinotita2" , TomeasName ="TomeasName1" },
         };
 
         _mockService.Setup(service => service.GetAllKoinotitesInService(new())).ReturnsAsync(koinotites);

@@ -97,7 +97,7 @@ public class StaffRepositoryTests
         _mockDbContext.Setup(db => db.Omadarxes).Returns(mockOmadarxisDbSet.Object);
 
         // Act
-        var result = await _stelexiRepository.DeleteStelexosInDb(existingOmadarxis.Id, existingOmadarxis.Thesi);
+        var result = await _stelexiRepository.DeleteStelexosInDb(existingOmadarxis.Id);
 
         // Assert
         Assert.True(result);

@@ -25,15 +25,16 @@ public partial class StaffPage : ContentPage
         if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
         {
             var staffService = DependencyService.Get<IStaffService>();
-            IStelexosDto? selectedWorker = e.CurrentSelection [0] as IStelexosDto;
-            if (selectedWorker != null)
+            int stelexosId = (e.CurrentSelection [0] as IStelexos).Id;
+            var selectedWorkerDto = e.CurrentSelection [0] as IStelexosDto;
+            if (selectedWorkerDto != null)
             {
-                var stelexosInfoPage = new StelexosInfoPage(staffService, selectedWorker);
+                var stelexosInfoPage = new StelexosInfoPage(staffService, selectedWorkerDto, stelexosId);
                 await Navigation.PushAsync(stelexosInfoPage);
             }
             else
             {
-                throw new ArgumentNullException(nameof(selectedWorker), "Selected staff cannot be null.");
+                throw new ArgumentNullException(nameof(selectedWorkerDto), "Selected staff cannot be null.");
             }
         }
     }

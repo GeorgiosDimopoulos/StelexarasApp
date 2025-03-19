@@ -179,7 +179,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.DeleteStelexosInDb(stelexos.Id, stelexos.Thesi);
+        var result = await _stelexiRepository.DeleteStelexosInDb(stelexos.Id);
 
         // Assert
         Assert.True(result);

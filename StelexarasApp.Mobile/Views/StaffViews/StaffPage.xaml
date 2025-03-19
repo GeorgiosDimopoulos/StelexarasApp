@@ -6,7 +6,7 @@
 		<ToolbarItem Text="+" Order="Primary" Priority="0" Clicked="OnAddStelexosClicked"/>
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
-		<CollectionView ItemsSource="{Binding AllStaff}" SelectionMode="Single" SelectionChanged="OnStelexosSelected">
+		<CollectionView ItemsSource="{Binding AllStaff}" SelectionMode="Multiple" SelectionChanged="OnStelexosSelected">
 			<CollectionView.Header>
 				<Grid Padding="10" ColumnDefinitions="*, *, *">
 					<Label Grid.Column="0" Text="Όνομα" FontAttributes="Bold" />

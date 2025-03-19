@@ -29,6 +29,6 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 
         Task<bool> DeleteSkiniInDb(int id);
         Task<bool> DeleteKoinotitaInDb(int id);
-        Task<bool> DeleteTomeasInDb(string id);
+        Task<bool> DeleteTomeasInDb(int id);
     }
 }

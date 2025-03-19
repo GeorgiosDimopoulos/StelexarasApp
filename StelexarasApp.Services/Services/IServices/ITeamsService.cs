@@ -14,7 +14,7 @@ public interface ITeamsService
 
     Task<bool> DeleteSkiniInService(int skiniId);
     Task<bool> DeleteKoinotitaInService(int koinotitaId);
-    Task<bool> DeleteTomeasInService(string tomeasId);
+    Task<bool> DeleteTomeasInService(int id);
 
     Task<bool> UpdateSkiniInService(int id, SkiniDto skini);
     Task<bool> UpdateKoinotitaInService(int id, KoinotitaDto koinotita);

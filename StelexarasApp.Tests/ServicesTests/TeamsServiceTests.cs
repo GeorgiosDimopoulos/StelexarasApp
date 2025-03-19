@@ -27,7 +27,7 @@ public class TeamsServiceTests
     public async Task AddSkiniInService_ShouldReturnTrue()
     {
         // Arrange
-        var team = new SkiniDto { Id = 1, Name = "TestTeam", KoinotitaName = "KoinotitaName", PaidiaNumber = 1, Sex = Sex.Female };
+        var team = new SkiniDto { Name = "TestTeam", KoinotitaName = "KoinotitaName", PaidiaNumber = 1, Sex = Sex.Female };
         _mockdteamsRepository.Setup(m => m.AddSkiniInDb(It.IsAny<Skini>())).ReturnsAsync(true);
 
         // Act
@@ -142,7 +142,7 @@ public class TeamsServiceTests
         var tomeas = new Tomeas { Id = 1, Name = "TestTomeas", Koinotites = new List<Koinotita>() };
         tomeas.Koinotites = teams;
 
-        _mockdteamsRepository.Setup(m => m.GetKoinotitesAnaTomeaInDb(new(),tomeasId)).ReturnsAsync(teams);
+        _mockdteamsRepository.Setup(m => m.GetKoinotitesAnaTomeaInDb(new(), tomeasId)).ReturnsAsync(teams);
 
         // Act
         var result = await _teamsService.GetAllKoinotitesInService(new());
@@ -155,11 +155,11 @@ public class TeamsServiceTests
     public async Task UpdateSkiniInService_ShouldReturnTeam()
     {
         // Arrange
-        var team = new SkiniDto { Id = 1, Name = "TestTeam" };
-        _mockdteamsRepository.Setup(m => m.UpdateSkiniInDb(It.IsAny<Skini>())).ReturnsAsync(true);
+        var team = new SkiniDto { Name = "TestTeam" };
+        _mockdteamsRepository.Setup(m => m.UpdateSkiniInDb(1, It.IsAny<Skini>())).ReturnsAsync(true);
 
         // Act
-        var result = await _teamsService.UpdateSkiniInService(team);
+        var result = await _teamsService.UpdateSkiniInService(1, team);
 
         // Assert
         Assert.True(result);

@@ -103,9 +103,9 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<bool> DeleteStelexosByIdInService(int id, Thesi thesi)
+    public async Task<bool> DeleteStelexosByIdInService(int id)
     {
-        return await _stelexiRepository!.DeleteStelexosInDb(id, thesi);
+        return await _stelexiRepository!.DeleteStelexosInDb(id);
     }
 
     public async Task<IEnumerable<OmadarxisDto>> GetAllOmadarxesInService()
