@@ -12,7 +12,7 @@ namespace StelexarasApp.Library.Models.Atoma.Staff
         public Sex Sex { get; set; }
 
         [Required]
-        public string Tel { get; set; }
+        public string Tel { get; set; } = string.Empty;
         public Thesi Thesi { get; set; } = Thesi.Ekpaideutis;
         public string? XwrosName { get; set; }
     }
