@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace StelexarasApp.DataAccess.DataProvider;
+﻿namespace StelexarasApp.DataAccess.DataProvider;
 
 public interface IDataProvider
 {
-    bool CheckDbConnection(IServiceCollection services);
-    void LoadDbEntities();
+    void LoadSqlServerDbEntities();
+    void ConfigureDatabaseForCrossPlatform();
 }

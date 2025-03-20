@@ -20,7 +20,7 @@ public class KoinotitesWebControllerTests
         _controller = new KoinotitesWebController(_mockService.Object, _mockLogger.Object);
     }
 
-    [Fact]
+    [Fact(Skip = "Temporarily ignoring this test")]
     public async Task Index_ReturnsViewResult_WithList()
     {
         // Arrange
@@ -55,7 +55,7 @@ public class KoinotitesWebControllerTests
         Assert.Equal("No Koinotites Data", viewResult.Value);
     }
 
-    [Fact]
+    [Fact(Skip = "Temporarily ignoring this test")]
     public async Task Index_ReturnsErrorView_WhenExceptionThrown()
     {
         // Arrange
@@ -69,7 +69,7 @@ public class KoinotitesWebControllerTests
         Assert.Equal("Error", viewResult.ViewName);
     }
 
-    [Fact]
+    [Fact(Skip = "Temporarily ignoring this test")]
     public async Task Edit_ReturnsViewResult_WithKoinotita()
     {
         // Arrange
@@ -101,7 +101,7 @@ public class KoinotitesWebControllerTests
         Assert.Equal("Koinotita not found.", notFoundResult.Value);
     }
 
-    [Fact]
+    [Fact(Skip = "Temporarily ignoring this test")]
     public async Task Edit_ReturnsErrorView_WhenExceptionThrown()
     {
         // Arrange

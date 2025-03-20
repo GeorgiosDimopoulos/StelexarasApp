@@ -328,7 +328,8 @@ public class StaffServiceTests
             Age = 30,
             Sex = Sex.Male,
             Tel = "11111111",
-            Thesi = Thesi.Omadarxis
+            Thesi = Thesi.Omadarxis,
+            XwrosName = "TestXwros"
         };
         var omadarxis = new Omadarxis
         {

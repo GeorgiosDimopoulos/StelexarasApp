@@ -60,7 +60,7 @@ public class ExpenseRepositoryDbTests
         // Arrange
         var existingExpense = new Expense
         {
-            Id = 1,
+            Id = 51,
             Description = "Test Expense",
             Amount = 100
         };

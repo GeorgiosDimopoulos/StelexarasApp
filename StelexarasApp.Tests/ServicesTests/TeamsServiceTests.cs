@@ -164,4 +164,18 @@ public class TeamsServiceTests
         // Assert
         Assert.True(result);
     }
+
+    [Fact]
+    public async Task UpdateKoinotitaInService_ShouldReturnExpectedResult()
+    {
+        // Arrange
+        var team = new SkiniDto { Name = "TestTeam" };
+        _mockdteamsRepository.Setup(m => m.UpdateSkiniInDb(1, It.IsAny<Skini>())).ReturnsAsync(true);
+
+        // Act
+        var result = await _teamsService.UpdateSkiniInService(1, team);
+
+        // Assert
+        Assert.True(result);
+    }
 }

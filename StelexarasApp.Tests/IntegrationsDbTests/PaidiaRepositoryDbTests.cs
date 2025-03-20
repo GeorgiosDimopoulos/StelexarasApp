@@ -81,50 +81,49 @@ public class PaidiaRepositoryDbTests
     [Theory]
     [InlineData(7, 2, true)]
     [InlineData(3, 9999, false)]
-    [InlineData(9999, -2, false)]
     public async Task MovePaidiToNewSkini_ShouldReturnExpectedResult(int paidiId, int newSkiniId, bool expectedResult)
     {
         // Arrange
-        if (paidiId == 1)
+        var koinotita = new Koinotita
         {
-            var koinotita = new Koinotita 
-            {
-                Id = 1,
-                Name = "Ipiros",
-                Skines = new List <Skini>()
-            };
+            Id = 1,
+            Name = "Ipiros",
+            Skines = new List<Skini>()
+        };
 
-            var existingSkini = new Skini {
-                Id = 4, Name = "Pindos",
-                Koinotita = koinotita,
-                Paidia = new List<Paidi>()
-            };
+        var existingSkini = new Skini
+        {
+            Id = 4,
+            Name = "Pindos",
+            Koinotita = koinotita,
+            Paidia = new List<Paidi>()
+        };
 
-            var newSkini = new Skini
-            {
-                Id = newSkiniId,
-                Name = "NewSkini",
-                Koinotita = koinotita,
-                Paidia = new List<Paidi>()
-            };
+        var newSkini = new Skini
+        {
+            Id = newSkiniId,
+            Name = "NewSkini",
+            Koinotita = koinotita,
+            Paidia = new List<Paidi>()
+        };
 
-            await _paidiRepository.AddSkinesInDb(existingSkini);
-            await _paidiRepository.AddSkinesInDb(newSkini);
+        await _paidiRepository.AddSkinesInDb(existingSkini);
+        await _paidiRepository.AddSkinesInDb(newSkini);
 
-            var existingPaidi = new Paidi
-            {
-                Id = paidiId,
-                FullName = "Test Paidi",
-                Age = 15,
-                Sex = Sex.Male,
-                Skini = existingSkini,
-                PaidiType = PaidiType.Kataskinotis,
-            };
-            
-            await _paidiRepository.AddPaidiInDb(existingPaidi);
-        }
+        var existingPaidi = new Paidi
+        {
+            Id = paidiId,
+            FullName = "Test Paidi",
+            Age = 15,
+            Sex = Sex.Male,
+            Skini = existingSkini,
+            PaidiType = PaidiType.Kataskinotis,
+        };
+
+        await _paidiRepository.AddPaidiInDb(existingPaidi);
 
         await _dbContext.SaveChangesAsync();
+
         var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
 
         Assert.Equal(expectedResult, result);

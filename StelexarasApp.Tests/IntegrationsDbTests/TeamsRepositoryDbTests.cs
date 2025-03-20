@@ -175,7 +175,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetKoinotitaByName_ShouldReturnTeam()
         {
             // Arrange
-            var koinotita = GetKoinotita(1, "Koinotita1");
+            var koinotita = GetKoinotita(7, "Koinotita1");
             await _dbContext.Koinotites!.AddAsync(koinotita);
             await _dbContext.SaveChangesAsync();
 
@@ -189,7 +189,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
 
         [Theory]
         [InlineData(6, "Updated Name", true)]
-        [InlineData(7, "", false)]
+        [InlineData(55, "", false)]
         public async Task UpdateKoinotitaInDbAsync_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
         {
             // Arrange

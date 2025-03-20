@@ -8,6 +8,8 @@ public class PaidiValidator : AbstractValidator<PaidiDto>
 {
     public PaidiValidator()
     {
+        RuleFor(user=>user.Id)
+            .LessThan(100).WithMessage("PaidiDto Id must be greater than 0");
         RuleFor(user => user.FullName)
             .NotEmpty().WithMessage("PaidiDto Name is required")
             .Length(5, 50).WithMessage("PaidiDto Name must be between 2 and 50 characters");

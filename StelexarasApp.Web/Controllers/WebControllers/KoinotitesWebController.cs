@@ -83,7 +83,7 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     {
         try
         {
-            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(new(), name);
+            var koinotita = await _koinotitaService.GetKoinotitaByNameInService(null, name);
             if (koinotita == null)
             {
                 _logger.LogWarning("Koinotita not found.");

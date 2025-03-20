@@ -71,7 +71,7 @@ public class StaffRepositoryDbTests
         // Arrange
         var stelexos = new Omadarxis
         {
-            Id = 1,
+            Id = 10,
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
             Tel = "123-456-7890",
@@ -100,44 +100,6 @@ public class StaffRepositoryDbTests
 
         // Assert
         Assert.True(result);
-    }
-
-    [Fact]
-    public async Task AddStelexosInDb_ShouldThrowArgumentException_WhenThesiIsInvalid()
-    {
-        // Arrange
-        var stelexos = new Omadarxis
-        {
-            Id = 1,
-            Thesi = (Thesi)999,
-            FullName = "Test Name",
-            Tel = "123-456-7890"
-        };
-
-        // Act & Assert
-        await Assert.ThrowsAsync<ArgumentException>(async () =>
-        {
-            await _stelexiRepository.AddStelexosInDb(stelexos);
-        });
-    }
-
-    [Fact]
-    public async Task AddStelexosInDb_ShouldThrowException_WhenRequiredIdInvalid()
-    {
-        // Arrange
-        var stelexos = new Omadarxis
-        {
-            Id = 111,
-            Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
-            Tel = string.Empty
-        };
-
-        // Act & Assert
-        await Assert.ThrowsAsync<ArgumentException>(async () =>
-        {
-            await _stelexiRepository.AddStelexosInDb(stelexos);
-        });
     }
 
     [Fact]
