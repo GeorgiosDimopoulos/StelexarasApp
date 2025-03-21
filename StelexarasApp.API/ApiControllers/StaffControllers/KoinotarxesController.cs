@@ -67,7 +67,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
             return BadRequest("Koinotarxis cannot be null");
         }
 
-        var result = await _stelexiService.UpdateStelexosInService(koinotarxisDto);
+        var result = await _stelexiService.UpdateStelexosInService(id, koinotarxisDto);
 
         if (!result)
             return NotFound();

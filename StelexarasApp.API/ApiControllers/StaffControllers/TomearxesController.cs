@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.StaffControllers;
@@ -12,7 +11,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
     private readonly IStaffService _stelexiService = stelexiService;
 
     [HttpGet("Tomearxes")]
-    public async Task<ActionResult<IEnumerable<Tomearxis>>> GetTomearxes()
+    public async Task<ActionResult<IEnumerable<TomearxisDto>>> GetTomearxes()
     {
         var result = await _stelexiService.GetAllTomearxesInService();
 
@@ -23,7 +22,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpGet("Tomearxi/{id}")]
-    public async Task<ActionResult<Tomearxis>> GetTomearxis(int id)
+    public async Task<ActionResult<TomearxisDto>> GetTomearxis(int id)
     {
         var result = await _stelexiService.GetStelexosByIdInService(id);
 
@@ -34,7 +33,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPost("Tomearxi")]
-    public async Task<ActionResult<Tomearxis>> PostTomearxi([FromBody] TomearxisDto tomearxisDto)
+    public async Task<ActionResult<TomearxisDto>> PostTomearxi([FromBody] TomearxisDto tomearxisDto)
     {
         if (tomearxisDto == null)
         {
@@ -50,14 +49,14 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpPut("Tomearxi/{id}")]
-    public async Task<IActionResult> PutTomearxi([FromBody] TomearxisDto tomearxisDto)
+    public async Task<IActionResult> PutTomearxi(int id, [FromBody] TomearxisDto tomearxisDto)
     {
         if (tomearxisDto == null)
         {
             return BadRequest("Tomearxis cannot be null");
         }
 
-        var result = await _stelexiService.UpdateStelexosInService(tomearxisDto);
+        var result = await _stelexiService.UpdateStelexosInService(id, tomearxisDto);
 
         if (!result)
             return NotFound();

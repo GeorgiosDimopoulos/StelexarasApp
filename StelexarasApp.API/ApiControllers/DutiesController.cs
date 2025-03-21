@@ -9,7 +9,6 @@ namespace StelexarasApp.API.ApiControllers;
 
 [ApiController]
 [Route("[controller]")]
-[ApiExplorerSettings(IgnoreApi = false)]
 [Authorize]
 public class DutiesController : ControllerBase
 {

@@ -77,9 +77,9 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
 
 
     [HttpPut("Omadarxi/{id}")]
-    public async Task<IActionResult> PutOmadarxi(string id, [FromBody] OmadarxisDto omadarxisDto)
+    public async Task<IActionResult> PutOmadarxi(int id, [FromBody] OmadarxisDto omadarxisDto)
     {
-        var result = await _stelexiService.UpdateStelexosInService(omadarxisDto);
+        var result = await _stelexiService.UpdateStelexosInService(id , omadarxisDto);
 
         if (!result)
             return NotFound();

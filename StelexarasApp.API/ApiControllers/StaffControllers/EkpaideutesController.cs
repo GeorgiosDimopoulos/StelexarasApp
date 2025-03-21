@@ -34,9 +34,9 @@ public class EkpaideutesController(IStaffService stelexiService) : ControllerBas
     }
 
     [HttpPut("Ekpaideutis/{id}")]
-    public async Task<IActionResult> PutEkpaideutis([FromBody] EkpaideutisDto ekpaideutisDto)
+    public async Task<IActionResult> PutEkpaideutis(int id,[FromBody] EkpaideutisDto ekpaideutisDto)
     {
-        var result = await _stelexiService.UpdateStelexosInService(ekpaideutisDto);
+        var result = await _stelexiService.UpdateStelexosInService(id, ekpaideutisDto);
 
         if (!result)
             return NotFound();
