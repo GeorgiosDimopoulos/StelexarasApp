@@ -21,6 +21,10 @@ public class PaidiValidator : AbstractValidator<PaidiDto>
         RuleFor(user => user.PaidiType)
             .NotNull().WithMessage("PaidiType is required");
 
+        RuleFor(user => user.Id)
+            .InclusiveBetween(1, 999)
+            .WithMessage("Id is required");
+
         When(paidi => paidi.PaidiType == PaidiType.Kataskinotis,()=>
         {
             RuleFor(paidi => paidi.Age)

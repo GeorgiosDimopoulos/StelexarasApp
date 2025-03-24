@@ -17,5 +17,9 @@ public class StelexosValidator : AbstractValidator<IStelexosDto>
         
         RuleFor(user => user.Thesi)
             .NotNull().WithMessage("Stelexos Thesi is required");
+
+        RuleFor(user => user.Id)
+            .InclusiveBetween(1, 999)
+            .WithMessage("Id is required");
     }
 }

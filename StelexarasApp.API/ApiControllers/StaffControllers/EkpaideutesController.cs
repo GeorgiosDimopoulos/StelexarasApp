@@ -11,6 +11,17 @@ public class EkpaideutesController(IStaffService stelexiService) : ControllerBas
 {
     private readonly IStaffService _stelexiService = stelexiService;
 
+    [HttpGet("Ekpaideutes")]
+    public async Task<ActionResult<Ekpaideutis>> GetEkpaideutis()
+    {
+        var result = await _stelexiService.GetAllEkpaideutesInService();
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
+    }
+
     [HttpGet("Ekpaideutis/{id}")]
     public async Task<ActionResult<Ekpaideutis>> GetEkpaideutis(int id)
     {

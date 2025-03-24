@@ -23,6 +23,19 @@ public class StaffService : IStaffService
         _stelexiRepository = stelexiRepository;
     }
 
+    public async Task<IEnumerable<EkpaideutisDto>> GetAllEkpaideutesInService() 
+    {
+        if (_stelexiRepository is null || _mapper is null)
+            throw new ArgumentException("StaffRepository or _mapper cannot be null");
+
+        var ekpaideutisInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Ekpaideutis, string.Empty);
+        var ekpaideutisInService = _mapper.Map<IEnumerable<EkpaideutisDto>>(ekpaideutisInDb);
+
+        if (ekpaideutisInService is null || !ekpaideutisInService.Any())
+            return null!;
+        return ekpaideutisInService;
+    }
+
     public async Task<IEnumerable<IStelexosDto>> GetAllStaffInService()
     {
         try
@@ -287,7 +300,7 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<bool> UpdateStelexosInService(IStelexosDto stelexosDto)
+    public async Task<bool> UpdateStelexosInService(int id, IStelexosDto stelexosDto)
     {
         if (_stelexiRepository is null || stelexosDto is null)
             throw new ArgumentException("StaffRepository or stelexosDto cannot be null");
@@ -296,7 +309,7 @@ public class StaffService : IStaffService
         if (stelexos == null)
             return false;
 
-        return await _stelexiRepository.UpdateStelexosInDb(stelexos);
+        return await _stelexiRepository.UpdateStelexosInDb(id, stelexos);
     }
 
     public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomeaInService(TomeasDto tomea)

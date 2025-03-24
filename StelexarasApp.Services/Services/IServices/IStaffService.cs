@@ -8,7 +8,7 @@ namespace StelexarasApp.Services.Services.IServices
     {
         Task<bool> AddStelexosInService(IStelexosDto stelexosDto);
         Task<bool> DeleteStelexosByIdInService(int id);
-        Task<bool> UpdateStelexosInService(IStelexosDto stelexosDto);
+        Task<bool> UpdateStelexosInService(int id, IStelexosDto stelexosDto);
         Task<bool> MoveOmadarxisToAnotherSkiniInService(int Id, string newSkiniName);
 
         Task<IStelexosDto> GetStelexosByIdInService(int id);
@@ -17,6 +17,7 @@ namespace StelexarasApp.Services.Services.IServices
         Task<IEnumerable<OmadarxisDto>> GetAllOmadarxesInService();
         Task<IEnumerable<KoinotarxisDto>> GetAllKoinotarxesInService();
         Task<IEnumerable<TomearxisDto>> GetAllTomearxesInService();
+        Task<IEnumerable<EkpaideutisDto>> GetAllEkpaideutesInService();
         Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(KoinotitaDto koinotita);
         Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomeaInService(TomeasDto tomea);
         Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomeaInService(TomeasDto tomea);
