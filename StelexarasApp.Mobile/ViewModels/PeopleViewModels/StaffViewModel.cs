@@ -76,12 +76,12 @@ public class StaffViewModel : INotifyPropertyChanged
 
     public async Task<IEnumerable<OmadarxisDto>> GetAllOmadarxes()
     {
-        return await _staffService.GetAllOmadarxesInService();
+        return await _staffService.GetAllOmadarxesInService(new());
     }
 
     public async Task<IEnumerable<TomearxisDto>> GetAllTomearxes()
     {
-        return await _staffService.GetAllTomearxesInService();
+        return await _staffService.GetAllTomearxesInService(new());
     }
 
     public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomea(TomeasDto tomeasDto)

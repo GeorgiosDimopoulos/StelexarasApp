@@ -6,6 +6,7 @@ using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Library.Models.Logs;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.DataAccess.Repositories;
 
@@ -157,12 +158,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IEnumerable<Omadarxis>> GetOmadarxesSeKoinotitaInDb(Koinotita koinotita)
-    {
-        return (IEnumerable<Omadarxis>)await GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotita.Name);
-    }
-
-    public async Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName)
+    public async Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName, StelexosQueryParameters queryParameters)
     {
         try
         {
@@ -225,7 +221,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         return null!;
     }
 
-    public async Task<bool> UpdateStelexosInDb(IStelexos stelexos)
+    public async Task<bool> UpdateStelexosInDb(int id, IStelexos stelexos)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -234,6 +230,16 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         if (parts.Length < 2)
             throw new ArgumentException("Invalid FullName", nameof(stelexos.FullName));
 
+        var existingStelexos = await GetStelexosByIdInDb(id);
+        if (existingStelexos == null)
+            return false;
+
+        existingStelexos.XwrosName = stelexos.XwrosName;
+        existingStelexos.FullName = stelexos.FullName;
+        existingStelexos.Tel = stelexos.Tel;
+        existingStelexos.Age = stelexos.Age;
+        existingStelexos.Sex = stelexos.Sex;
+
         try
         {
             switch (stelexos.Thesi)
@@ -241,27 +247,27 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                 case Thesi.Omadarxis:
                     if (_dbContext.Omadarxes == null)
                         return false;
-                    _dbContext.Omadarxes.Update((Omadarxis)stelexos);
+                    _dbContext.Omadarxes.Update((Omadarxis)existingStelexos);
                     break;
                 case Thesi.Koinotarxis:
                     if (_dbContext.Koinotarxes == null)
                         return false;
-                    _dbContext.Koinotarxes.Update((Koinotarxis)stelexos);
+                    _dbContext.Koinotarxes.Update((Koinotarxis)existingStelexos);
                     break;
                 case Thesi.Tomearxis:
                     if (_dbContext.Tomearxes == null)
                         return false;
-                    _dbContext.Tomearxes.Update((Tomearxis)stelexos);
+                    _dbContext.Tomearxes.Update((Tomearxis)existingStelexos);
                     break;
                 case Thesi.Ekpaideutis:
                     if (_dbContext.Ekpaideutes == null)
                         return false;
-                    _dbContext.Ekpaideutes.Update((Ekpaideutis)stelexos);
+                    _dbContext.Ekpaideutes.Update((Ekpaideutis)existingStelexos);
                     break;
                 case Thesi.None:
                     break;
                 default:
-                    throw new ArgumentException("Invalid Thesi value!", nameof(stelexos.Thesi));
+                    throw new ArgumentException("Invalid Thesi value!", nameof(existingStelexos.Thesi));
             }
 
             var changes = await _dbContext.SaveChangesAsync();

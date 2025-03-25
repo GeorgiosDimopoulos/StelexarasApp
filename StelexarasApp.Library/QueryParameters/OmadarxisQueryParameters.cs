@@ -1,6 +1,6 @@
 ﻿namespace StelexarasApp.Library.QueryParameters;
 
-public class OmadarxisQueryParameters
+public class OmadarxisQueryParameters : StelexosQueryParameters
 {
     public bool IncludePaidia { get; set; } = false;
 }
