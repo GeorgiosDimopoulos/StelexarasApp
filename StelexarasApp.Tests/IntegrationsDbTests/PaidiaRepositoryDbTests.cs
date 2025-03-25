@@ -26,8 +26,8 @@ public class PaidiaRepositoryDbTests
     }
 
     [Theory]
-    [InlineData(3, PaidiType.Kataskinotis, true)]
-    [InlineData(2, PaidiType.Ekpaideuomenos, true)]
+    [InlineData(23, PaidiType.Kataskinotis, true)]
+    [InlineData(22, PaidiType.Ekpaideuomenos, true)]
     [InlineData(-1, PaidiType.Ekpaideuomenos, false)]
     [InlineData(0, PaidiType.Kataskinotis, false)]
     public async Task AddPaidi_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
@@ -140,12 +140,14 @@ public class PaidiaRepositoryDbTests
     }
 
     [Theory]
-    [InlineData(1, "Updated Name", true)]
-    [InlineData(1, null, false)]
+    [InlineData(13, "Updated Name", true)]
+    [InlineData(21, null, false)]
     public async Task UpdatePaidiInDb_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
     {
         // Arrange
-        var paidi = new Paidi { 
+        var paidi = new Paidi 
+        {            
+            Id  = id,
             FullName = "New Paidi",
             Age = 10,
             PaidiType = PaidiType.Kataskinotis,

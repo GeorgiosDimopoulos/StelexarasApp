@@ -32,7 +32,7 @@ public class StaffWebControllerTests
             new KoinotarxisDto { FullName = "Jane Doe", Thesi = Thesi.Koinotarxis }
         };
 
-        _mockStaffService.Setup(service => service.GetAllStaffInService()).ReturnsAsync(staffList);
+        _mockStaffService.Setup(service => service.GetAllStaffInService(new())).ReturnsAsync(staffList);
 
         // Act
         var result = await _controller.Index();
@@ -47,7 +47,7 @@ public class StaffWebControllerTests
     public async Task Index_ReturnsNotFound_WhenNoStaffAvailable()
     {
         // Arrange
-        _mockStaffService.Setup(service => service.GetAllStaffInService()).ReturnsAsync((List<IStelexosDto>)null);
+        _mockStaffService.Setup(service => service.GetAllStaffInService(new())).ReturnsAsync((List<IStelexosDto>)null);
 
         // Act
         var result = await _controller.Index();
@@ -61,7 +61,7 @@ public class StaffWebControllerTests
     public async Task Index_ReturnsErrorView_WhenExceptionThrown()
     {
         // Arrange
-        _mockStaffService.Setup(service => service.GetAllStaffInService()).ThrowsAsync(new Exception("Test exception"));
+        _mockStaffService.Setup(service => service.GetAllStaffInService(new())).ThrowsAsync(new Exception("Test exception"));
 
         // Act
         var result = await _controller.Index();

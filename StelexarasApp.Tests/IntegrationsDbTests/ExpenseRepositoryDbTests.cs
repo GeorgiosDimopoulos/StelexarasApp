@@ -81,8 +81,8 @@ public class ExpenseRepositoryDbTests
     public async Task DeleteExpenseAsync_ShouldNotWorkWhenExpenseNotFound()
     {
         // Arrange
-        var existingExpense = new Expense { Id = 1, Description = "Test Expense", Amount = 100 };
-        var notIdDbExpense = new Expense { Id = 2, Description = "Test Expense2", Amount = 20 };
+        var existingExpense = new Expense { Id = 18, Description = "Test Expense", Amount = 100 };
+        var notIdDbExpense = new Expense { Id = 28, Description = "Test Expense2", Amount = 20 };
         _dbContext.Expenses.Add(existingExpense);
         await _dbContext.SaveChangesAsync();
 
@@ -153,7 +153,7 @@ public class ExpenseRepositoryDbTests
     public async Task GetExpensesAsync_ShouldReturnAllExpensesWhenExisted()
     {
         _dbContext.Expenses.AddRange(
-            new Expense { Id = 11, Description = "ExpenseTest1", Amount = 100 },
+            new Expense { Id = 91, Description = "ExpenseTest1", Amount = 100 },
             new Expense { Id = 22, Description = "ExpenseTest1", Amount = 200 }
         );
         await _dbContext.SaveChangesAsync();

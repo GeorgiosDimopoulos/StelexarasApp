@@ -138,10 +138,10 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             var teams = new List<Skini>
             {
                 new() {
-                    Id = 14, Name = "TestTeam1", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName" }
+                    Id = 14, Name = "TestTeam1", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName3" }
                 },
                 new() {
-                    Id = 22, Name = "TestTeam2", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName2" }
+                    Id = 22, Name = "TestTeam2", Paidia = new List<Paidi>(), Koinotita = new Koinotita { Name = "KoinotitaName4" }
                 }
             };
             await _dbContext.Skines!.AddRangeAsync(teams);
@@ -175,7 +175,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetKoinotitaByName_ShouldReturnTeam()
         {
             // Arrange
-            var koinotita = GetKoinotita(7, "Koinotita1");
+            var koinotita = GetKoinotita(41, "Koinotita8");
             await _dbContext.Koinotites!.AddAsync(koinotita);
             await _dbContext.SaveChangesAsync();
 
@@ -188,8 +188,8 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         }
 
         [Theory]
-        [InlineData(6, "Updated Name", true)]
-        [InlineData(55, "", false)]
+        [InlineData(63, "Updated Name", true)]
+        [InlineData(52, "", false)]
         public async Task UpdateKoinotitaInDbAsync_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
         {
             // Arrange
@@ -273,7 +273,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task DeleteKoinotitaInDbAsync_ShouldWork()
         {
             // Arrange
-            var koinotita = new Koinotita { Id = 1, Name = "TestKOinotita" };
+            var koinotita = new Koinotita { Id = 90, Name = "TestKoinotita2" };
             await _dbContext.Koinotites!.AddAsync(koinotita);
             await _dbContext.SaveChangesAsync();
 

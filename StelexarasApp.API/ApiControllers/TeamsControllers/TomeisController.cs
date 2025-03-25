@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Library.Dtos.Domi;
+using Microsoft.AspNetCore.Authorization;
+using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.API.ApiControllers.TeamsControllers;
 
@@ -10,6 +12,27 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
 {
     private readonly ITeamsService _teamsService = teamsService;
 
+    [HttpGet("Tomeis")]
+    public async Task<ActionResult<IEnumerable<TomeasDto>>> GetTomeis([FromQuery] TomeasQueryParameters queryParameters)
+    {
+        var result = await _teamsService.GetAllTomeisInService(queryParameters);
+
+        if (result is null)
+            return NotFound();
+        return Ok(result);
+    }
+
+    [HttpGet("Tomea/{name}")]
+    public async Task<ActionResult<TomeasDto>> GetTomea(string name, [FromQuery] TomeasQueryParameters queryParameters)
+    {
+        var result = await _teamsService.GetTomeaByNameInService(queryParameters, name);
+
+        if (result is null)
+            return NotFound();
+        return Ok(result);
+    }
+
+    [Authorize]
     [HttpPost("Tomea")]
     public async Task<ActionResult<TomeasDto>> PostTomea(TomeasDto tomeasDto)
     {
@@ -21,6 +44,7 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("Tomea/{id}")]
     public async Task<IActionResult> DeleteTomea(int id)
     {
@@ -39,26 +63,6 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
 
         if (!result)
             return StatusCode(500, "An error occurred while updating the Tomea.");
-        return Ok(result);
-    }
-
-    [HttpGet("Tomeis")]
-    public async Task<ActionResult<IEnumerable<TomeasDto>>> GetTomeis()
-    {
-        var result = await _teamsService.GetAllTomeisInService(new());
-
-        if (result is null)
-            return NotFound();
-        return Ok(result);
-    }
-
-    [HttpGet("Tomea/{name}")]
-    public async Task<ActionResult<TomeasDto>> GetTomea(string name)
-    {
-        var result = await _teamsService.GetTomeaByNameInService(new(), name);
-
-        if (result is null)
-            return NotFound();
         return Ok(result);
     }
 }

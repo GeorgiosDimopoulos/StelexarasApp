@@ -12,7 +12,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     private readonly ITeamsService _teamsService = teamsService;
 
     [HttpGet("Skines")]
-    public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkines(SkiniQueryParameters skinQueryParameters)
+    public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkines([FromQuery] SkiniQueryParameters skinQueryParameters)
     {
         var result = await _teamsService.GetAllSkinesInService(skinQueryParameters);
 
@@ -23,7 +23,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpGet("Skini/{name}")]
-    public async Task<ActionResult<SkiniDto>> GetSkini(SkiniQueryParameters parameters, string name)
+    public async Task<ActionResult<SkiniDto>> GetSkini([FromQuery] SkiniQueryParameters parameters, string name)
     {
         var result = await _teamsService.GetSkiniByNameInService(parameters, name);
 

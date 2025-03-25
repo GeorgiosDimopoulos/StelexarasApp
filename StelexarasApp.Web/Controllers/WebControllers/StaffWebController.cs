@@ -17,13 +17,12 @@ public class StaffWebController : Controller
         _logger = logger;
     }
 
-    // GET: StaffWeb
     [HttpGet("Index")]
     public async Task<IActionResult> Index()
     {
         try
         {
-            var staffList = await _staffService.GetAllStaffInService();
+            var staffList = await _staffService.GetAllStaffInService(new());
             if (staffList == null || !staffList.Any())
             {
                 _logger.LogWarning("No staff members found.");

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.StaffControllers;
@@ -14,9 +15,9 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
     private readonly IStaffService _stelexiService = stelexiService;
 
     [HttpGet("Omadarxes")]
-    public async Task<ActionResult<IEnumerable<IStelexos>>> GetOmadarxes()
+    public async Task<ActionResult<IEnumerable<IStelexos>>> GetOmadarxes([FromQuery] OmadarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetAllOmadarxesInService();
+        var result = await _stelexiService.GetAllOmadarxesInService(queryParameters);
 
         if (result is null)
             return NotFound();
@@ -56,9 +57,9 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
 
 
     [HttpGet("OmadarxesKoinotitas/{id}")]
-    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaKoinotita([FromBody] KoinotitaDto koinotita)
+    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaKoinotita([FromBody] KoinotitaDto koinotita, OmadarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(koinotita);
+        var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(koinotita, queryParameters);
         if (result is null)
             return NotFound();
 
@@ -66,9 +67,9 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpGet("OmadarxesTomea/{id}")]
-    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaTomea([FromBody] TomeasDto tomea)
+    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaTomea([FromBody] TomeasDto tomea, OmadarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetOmadarxesSeTomeaInService(tomea);
+        var result = await _stelexiService.GetOmadarxesSeTomeaInService(tomea, queryParameters);
         if (result is null)
             return NotFound();
 

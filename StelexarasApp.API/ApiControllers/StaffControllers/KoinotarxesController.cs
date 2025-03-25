@@ -2,6 +2,7 @@
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.StaffControllers;
@@ -13,9 +14,9 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     private readonly IStaffService _stelexiService = stelexiService;
 
     [HttpGet("Koinotarxes")]
-    public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes()
+    public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes(KoinotarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetAllKoinotarxesInService();
+        var result = await _stelexiService.GetAllKoinotarxesInService(queryParameters);
         if (result is null)
             return NotFound();
 
@@ -33,9 +34,9 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     }
 
     [HttpGet("KoinotarxesTomea/{id}")]
-    public async Task<ActionResult<OmadarxisDto>> GetKoinotarxesAnaTomea([FromBody] TomeasDto tomea)
+    public async Task<ActionResult<OmadarxisDto>> GetKoinotarxesAnaTomea([FromBody] TomeasDto tomea, KoinotarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetKoinotarxesSeTomeaInService(tomea);
+        var result = await _stelexiService.GetKoinotarxesSeTomeaInService(tomea, queryParameters);
         if (result is null)
             return NotFound();
 

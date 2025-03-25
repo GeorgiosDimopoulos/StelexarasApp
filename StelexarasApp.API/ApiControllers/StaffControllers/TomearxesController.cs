@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.StaffControllers;
@@ -11,9 +12,9 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
     private readonly IStaffService _stelexiService = stelexiService;
 
     [HttpGet("Tomearxes")]
-    public async Task<ActionResult<IEnumerable<TomearxisDto>>> GetTomearxes()
+    public async Task<ActionResult<IEnumerable<TomearxisDto>>> GetTomearxes(TomearxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetAllTomearxesInService();
+        var result = await _stelexiService.GetAllTomearxesInService(queryParameters);
 
         if (result is null)
             return NotFound();

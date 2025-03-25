@@ -30,7 +30,7 @@ public class StaffRepositoryDbTests
     public async Task GetStelexosByIdInDb_ShouldReturnStelexos_WhenStelexosExists()
     {
         // Arrange
-        var stelexos = new Omadarxis { Id = 1, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "19123123" };
+        var stelexos = new Omadarxis { Id = 35, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "19123123" };
 
         await _dbContext.Omadarxes!.AddAsync(stelexos);
         await _dbContext.SaveChangesAsync();
@@ -48,7 +48,7 @@ public class StaffRepositoryDbTests
         // Arrange
         var stelexos = new Omadarxis
         {
-            Id = 1,
+            Id = 91,
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
             Sex = Sex.Male,
@@ -71,7 +71,7 @@ public class StaffRepositoryDbTests
         // Arrange
         var stelexos = new Omadarxis
         {
-            Id = 10,
+            Id = 18,
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
             Tel = "123-456-7890",
@@ -80,7 +80,7 @@ public class StaffRepositoryDbTests
             Sex = Sex.Male,
             Skini = new Skini
             {
-                Id = 1,
+                Id = 11,
                 Name = "TestSkini",
                 Koinotita = new Koinotita
                 {
@@ -119,7 +119,7 @@ public class StaffRepositoryDbTests
 
         // Act
         stelexos.FullName = "Updated Name";
-        var result = await _stelexiRepository.UpdateStelexosInDb(stelexos);
+        var result = await _stelexiRepository.UpdateStelexosInDb(stelexos.Id, stelexos);
 
         // Assert
         Assert.True(result);
@@ -159,7 +159,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, string.Empty);
+        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, string.Empty, new());
 
         // Assert
         Assert.NotNull(result);
@@ -176,7 +176,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, string.Empty);
+        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, string.Empty, new());
 
         // Assert
         Assert.NotNull(result);
