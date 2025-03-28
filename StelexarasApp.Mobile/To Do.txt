@@ -5,6 +5,7 @@
 - check for unused methods and call them properly (also check for relevant UT)
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
 - check in the MAUI mobile app, if inside the StelexosInfoPage, we are receiving the ID of the StelexosDto etc
+- add extra Swagger page in API (via UseSwaggerUI()), in order to hide: PUT DELETE and INSERT endpoints for normal users
 - ADVANCED (tools to be used in future):  
   - Docker and Github-actions images via yaml (IMPLEMENTED, NOT FINISHED)
   - Audit tool and relevant Models fro logging and CRUD tracking
