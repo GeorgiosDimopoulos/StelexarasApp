@@ -1,3 +1,4 @@
 https://matthewregis.dev/posts/8-steps-for-creating-a-minimal-api-with-docker
 https://medium.com/net-core/using-refit-in-net-0843bb199987
 https://medium.com/@erdalkama/exploring-sqlite-integration-in-net-maui-59371a8ec1d3
+https://salihcantekin.medium.com/what-is-api-versioning-how-to-use-it-and-integrate-with-swagger-4c82e7d62b53
