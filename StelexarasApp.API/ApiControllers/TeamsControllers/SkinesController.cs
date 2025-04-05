@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
@@ -33,6 +34,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost("Skini")]
     public async Task<ActionResult<SkiniDto>> PostSkini([FromBody] SkiniDto skiniDto)
     {
@@ -44,6 +46,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPut("Skini/{id}")]
     public async Task<IActionResult> PutSkini(int id, [FromBody] SkiniDto skiniDto)
     {
@@ -55,6 +58,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("Skini/{id}")]
     public async Task<IActionResult> DeleteSkini(int id)
     {

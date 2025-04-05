@@ -45,10 +45,10 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("Tomea/{id}")]
-    public async Task<IActionResult> DeleteTomea(int id)
+    [HttpDelete("Tomea/{name}")]
+    public async Task<IActionResult> DeleteTomea(string name)
     {
-        var result = await _teamsService.DeleteTomeasInService(id);
+        var result = await _teamsService.DeleteTomeasInService(name);
 
         if (!result)
             return NotFound();
@@ -56,6 +56,7 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPut("Tomea/{id}")]
     public async Task<IActionResult> PutTomea(int id, [FromBody] TomeasDto tomeasDto)
     {
