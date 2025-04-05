@@ -6,7 +6,7 @@ using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.API.ApiControllers.StaffControllers;
+namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -36,8 +36,8 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("Omadarxi")]
     [Authorize]
+    [HttpPost("Omadarxi")]    
     public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] IStelexosDto omadarxis)
     {
         if (omadarxis == null)
@@ -56,27 +56,27 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
     }
 
 
-    [HttpGet("OmadarxesKoinotitas/{id}")]
-    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaKoinotita([FromBody] KoinotitaDto koinotita, OmadarxisQueryParameters queryParameters)
+    [HttpGet("OmadarxesKoinotitas/{name}")]
+    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaKoinotita(string name, OmadarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(koinotita, queryParameters);
+        var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(name, queryParameters);
         if (result is null)
             return NotFound();
 
         return Ok(result);
     }
 
-    [HttpGet("OmadarxesTomea/{id}")]
-    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaTomea([FromBody] TomeasDto tomea, OmadarxisQueryParameters queryParameters)
+    [HttpGet("OmadarxesTomea/{name}")]
+    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaTomea(string name, OmadarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetOmadarxesSeTomeaInService(tomea, queryParameters);
+        var result = await _stelexiService.GetOmadarxesSeTomeaInService(name, queryParameters);
         if (result is null)
             return NotFound();
 
         return Ok(result);
     }
 
-
+    [Authorize]
     [HttpPut("Omadarxi/{id}")]
     public async Task<IActionResult> PutOmadarxi(int id, [FromBody] OmadarxisDto omadarxisDto)
     {
@@ -88,6 +88,7 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("Omadarxi/{id}")]
     public async Task<IActionResult> DeleteOmadarxi(int id)
     {

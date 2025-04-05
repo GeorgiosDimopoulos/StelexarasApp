@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services.IServices;
 
@@ -30,6 +31,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost("Koinotita")]
     public async Task<ActionResult<KoinotitaDto>> PostKoinotita([FromBody] KoinotitaDto koinotitaDto)
     {
@@ -41,6 +43,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("Koinotita/{id}")]
     public async Task<IActionResult> DeleteKoinotita(int id)
     {
@@ -52,6 +55,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPut("Koinotita/{id}")]
     public async Task<IActionResult> PutKoinotita(int id, [FromBody] KoinotitaDto koinotitaDto)
     {

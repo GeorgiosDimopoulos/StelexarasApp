@@ -25,7 +25,7 @@ public partial class StaffPage : ContentPage
         if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
         {
             var staffService = DependencyService.Get<IStaffService>();
-            int stelexosId = (e.CurrentSelection [0] as IStelexos).Id;
+            int stelexosId = (e.CurrentSelection [0] as IStelexos)!.Id;
             var selectedWorkerDto = e.CurrentSelection [0] as IStelexosDto;
             if (selectedWorkerDto != null)
             {

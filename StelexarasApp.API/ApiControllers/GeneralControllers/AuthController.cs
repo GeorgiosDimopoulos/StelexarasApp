@@ -1,10 +1,8 @@
-﻿using Audit.Core;
-using k8s.KubeConfigModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.API.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace StelexarasApp.API.ApiControllers;
+namespace StelexarasApp.API.ApiControllers.GeneralControllers;
 
 [ApiController]
 [Route("api/[controller]")]

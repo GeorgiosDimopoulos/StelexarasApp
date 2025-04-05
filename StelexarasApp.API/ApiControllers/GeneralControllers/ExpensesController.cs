@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.API.ApiControllers;
+namespace StelexarasApp.API.ApiControllers.GeneralControllers;
 
 [ApiController]
 [Route("[controller]")]

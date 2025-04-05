@@ -3,7 +3,7 @@ using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.API.ApiControllers.StaffControllers;
+namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 
 [ApiController]
 [Route("[controller]")]

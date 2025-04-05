@@ -4,7 +4,7 @@ using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Library.Dtos.Atoma;
 using Microsoft.AspNetCore.Authorization;
 
-namespace StelexarasApp.API.ApiControllers;
+namespace StelexarasApp.API.ApiControllers.PeopleControllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -51,6 +51,7 @@ public class PaidiaController : ControllerBase
         return paidi;
     }
 
+    [Authorize]
     [HttpPost("Paidi")]
     public async Task<ActionResult<Paidi>> PostPaidi([FromBody] PaidiDto paidiDto)
     {
@@ -65,6 +66,7 @@ public class PaidiaController : ControllerBase
         return NotFound();
     }
 
+    [Authorize]
     [HttpPut("Paidi/{id}")]
     public async Task<IActionResult> PutPaidi(int id, PaidiDto paidiDto)
     {
@@ -77,6 +79,7 @@ public class PaidiaController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePaidi(int id)
     {

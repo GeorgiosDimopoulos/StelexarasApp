@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.API.ApiControllers.StaffControllers;
+namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -20,7 +21,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
         if (result is null)
             return NotFound();
 
-        return Ok(result);
+        return Ok(result); 
     }
 
     [HttpGet("Koinotarxi/{id}")]
@@ -33,16 +34,17 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
         return Ok(result);
     }
 
-    [HttpGet("KoinotarxesTomea/{id}")]
-    public async Task<ActionResult<OmadarxisDto>> GetKoinotarxesAnaTomea([FromBody] TomeasDto tomea, KoinotarxisQueryParameters queryParameters)
+    [HttpGet("KoinotarxesTomea/{name}")]
+    public async Task<ActionResult<OmadarxisDto>> GetKoinotarxesAnaTomea(string name, KoinotarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetKoinotarxesSeTomeaInService(tomea, queryParameters);
+        var result = await _stelexiService.GetKoinotarxesSeTomeaInService(name, queryParameters);
         if (result is null)
             return NotFound();
 
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost("Koinotarxi")]
     public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] IStelexosDto koinotarxis)
     {
@@ -60,6 +62,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPut("Koinotarxi/{id}")]
     public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisDto koinotarxisDto, int id)
     {
@@ -76,6 +79,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("Koinotarxi/{id}")]
     public async Task<IActionResult> DeleteKoinotarxi(int id)
     {

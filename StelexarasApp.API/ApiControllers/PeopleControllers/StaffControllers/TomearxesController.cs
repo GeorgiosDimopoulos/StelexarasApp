@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.QueryParameters;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.API.ApiControllers.StaffControllers;
+namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -33,6 +34,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost("Tomearxi")]
     public async Task<ActionResult<TomearxisDto>> PostTomearxi([FromBody] TomearxisDto tomearxisDto)
     {
@@ -49,6 +51,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPut("Tomearxi/{id}")]
     public async Task<IActionResult> PutTomearxi(int id, [FromBody] TomearxisDto tomearxisDto)
     {
@@ -65,6 +68,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("Tomearxi/{id}")]
     public async Task<IActionResult> DeleteTomearxi(int id)
     {

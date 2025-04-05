@@ -199,7 +199,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 existingKoinotita.Tomeas = koinotita.Tomeas;
                 existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
                 existingKoinotita.Skines = koinotita.Skines;
-                
+
                 _dbContext.Koinotites.Update(existingKoinotita);
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
@@ -236,7 +236,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 existingSkini.Koinotita = skini.Koinotita;
                 existingSkini.Omadarxis = skini.Omadarxis;
                 existingSkini.Paidia = skini.Paidia;
-                
+
                 _dbContext.Skines.Update(existingSkini);
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
@@ -271,8 +271,8 @@ namespace StelexarasApp.DataAccess.Repositories
 
                 existingTomeas.Name = tomeas.Name;
                 existingTomeas.Koinotites = tomeas.Koinotites;
-                existingTomeas.Tomearxis= tomeas.Tomearxis;
-                
+                existingTomeas.Tomearxis = tomeas.Tomearxis;
+
                 _dbContext.Tomeis.Update(existingTomeas);
                 await _dbContext.SaveChangesAsync();
                 if (transaction != null)
@@ -291,17 +291,17 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteKoinotitaInDb(int koinotitaId)
+        public async Task<bool> DeleteKoinotitaInDb(int id)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-            if (koinotitaId == 0 || _dbContext.Koinotites is null)
+            if (id == 0 || _dbContext.Koinotites is null)
                 return false;
 
             try
             {
-                var koinotita = await _dbContext.Koinotites.FindAsync(koinotitaId);
+                var koinotita = _dbContext.Koinotites.FirstOrDefault(k => k.Id.Equals(id));
                 if (koinotita == null)
                     return false;
 
@@ -357,7 +357,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteTomeasInDb(int id)
+        public async Task<bool> DeleteTomeasInDb(string n)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -367,7 +367,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (_dbContext.Tomeis is null)
                     return false;
 
-                var tomeas = await _dbContext.Tomeis.FindAsync(id);
+                var tomeas = _dbContext.Tomeis.FirstOrDefault(t => t.Name.Equals(n));
                 if (tomeas == null)
                     return false;
 

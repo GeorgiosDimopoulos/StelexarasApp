@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Services.Services.IServices;
 
-namespace StelexarasApp.API.ApiControllers.StaffControllers;
+namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class EkpaideutesController(IStaffService stelexiService) : ControllerBase
 {
     private readonly IStaffService _stelexiService = stelexiService;
@@ -33,6 +34,7 @@ public class EkpaideutesController(IStaffService stelexiService) : ControllerBas
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost("Ekpaideutis")]
     public async Task<ActionResult<Ekpaideutis>> PostEkpaideutis([FromBody] EkpaideutisDto ekpaideutisDto)
     {
@@ -44,8 +46,9 @@ public class EkpaideutesController(IStaffService stelexiService) : ControllerBas
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPut("Ekpaideutis/{id}")]
-    public async Task<IActionResult> PutEkpaideutis(int id,[FromBody] EkpaideutisDto ekpaideutisDto)
+    public async Task<IActionResult> PutEkpaideutis(int id, [FromBody] EkpaideutisDto ekpaideutisDto)
     {
         var result = await _stelexiService.UpdateStelexosInService(id, ekpaideutisDto);
 
@@ -55,6 +58,7 @@ public class EkpaideutesController(IStaffService stelexiService) : ControllerBas
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("Ekpaideutis/{id}")]
     public async Task<IActionResult> DeleteEkpaideutis(int id)
     {
