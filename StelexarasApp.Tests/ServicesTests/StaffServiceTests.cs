@@ -241,7 +241,7 @@ public class StaffServiceTests
         _mockMapper.Setup(m => m.Map<IEnumerable<KoinotarxisDto>>(koinotarxisList)).Returns(koinotarxisDtoList);
 
         // Act
-        var result = await _stelexiService.GetKoinotarxesSeTomeaInService(tomeaDto, new());
+        var result = await _stelexiService.GetKoinotarxesSeTomeaInService(tomeaDto.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -269,7 +269,7 @@ public class StaffServiceTests
         _mockMapper.Setup(m => m.Map<IEnumerable<OmadarxisDto>>(omadarxisList)).Returns(omadarxisDtoList);
 
         // Act
-        var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(koinotita, new());
+        var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(koinotita.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -297,7 +297,7 @@ public class StaffServiceTests
         _mockMapper.Setup(m => m.Map<IEnumerable<OmadarxisDto>>(omadarxisList)).Returns(omadarxisDtoList);
 
         // Act
-        var result = await _stelexiService.GetOmadarxesSeTomeaInService(tomeaDto, new());
+        var result = await _stelexiService.GetOmadarxesSeTomeaInService(tomeaDto.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -423,7 +423,7 @@ public class StaffServiceTests
         _mockMapper.Setup(m => m.Map<IEnumerable<OmadarxisDto>>(It.IsAny<IEnumerable<Omadarxis>>())).Returns(stelexoiDtos);
 
         // Act
-        var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(koinotita, new());
+        var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(koinotita.Name, new());
 
         // Assert
         Assert.Single(result);

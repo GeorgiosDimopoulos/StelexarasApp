@@ -198,14 +198,14 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(KoinotitaDto koinotita, OmadarxisQueryParameters omadarxisQueryParameters)
+    public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(string koinotitaName, OmadarxisQueryParameters omadarxisQueryParameters)
     {
         try
         {
             if (_stelexiRepository is null || _mapper is null)
                 throw new ArgumentException("StaffRepository or _mapper cannot be null");
 
-            var stelexoiInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotita.Name, omadarxisQueryParameters);
+            var stelexoiInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, koinotitaName, omadarxisQueryParameters);
             if (stelexoiInDb is null || !stelexoiInDb.Any())
                 return [];
 
@@ -239,14 +239,14 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomeaInService(TomeasDto tomeaDto, OmadarxisQueryParameters omadarxisQueryParameters)
+    public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomeaInService(string tomeaDtoName, OmadarxisQueryParameters omadarxisQueryParameters)
     {
         try
         {
             if (_stelexiRepository is null || _mapper is null)
                 throw new ArgumentException("StaffRepository or _mapper cannot be null");
 
-            var stelexoiInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, tomeaDto.Name, omadarxisQueryParameters);
+            var stelexoiInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, tomeaDtoName, omadarxisQueryParameters);
             if (stelexoiInDb is null || !stelexoiInDb.Any())
                 return [];
 
@@ -313,14 +313,14 @@ public class StaffService : IStaffService
         return await _stelexiRepository.UpdateStelexosInDb(id, stelexos);
     }
 
-    public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomeaInService(TomeasDto tomea, KoinotarxisQueryParameters queryParameters)
+    public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomeaInService(string tomeaName, KoinotarxisQueryParameters queryParameters)
     {
         try
         {
             if (_stelexiRepository is null || _mapper is null)
                 throw new ArgumentException("StaffRepository or _mapper cannot be null");
 
-            var koinotarxes = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, tomea.Name, queryParameters);
+            var koinotarxes = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, tomeaName, queryParameters);
             if (koinotarxes is null || !koinotarxes.Any())
                 return [];
 

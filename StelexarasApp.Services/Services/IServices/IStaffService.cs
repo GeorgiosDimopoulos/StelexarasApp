@@ -19,7 +19,7 @@ public interface IStaffService
     Task<IEnumerable<KoinotarxisDto>> GetAllKoinotarxesInService(KoinotarxisQueryParameters queryParameters);
     Task<IEnumerable<TomearxisDto>> GetAllTomearxesInService(TomearxisQueryParameters queryParameters);
     Task<IEnumerable<EkpaideutisDto>> GetAllEkpaideutesInService();
-    Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(KoinotitaDto koinotita, OmadarxisQueryParameters queryParameters);
-    Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomeaInService(TomeasDto tomea, OmadarxisQueryParameters queryParameters);
-    Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomeaInService(TomeasDto tomea, KoinotarxisQueryParameters queryParameters);
+    Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotitaInService(string name, OmadarxisQueryParameters queryParameters);
+    Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomeaInService(string tomeaName, OmadarxisQueryParameters queryParameters);
+    Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomeaInService(string tomeaName, KoinotarxisQueryParameters queryParameters);
 }

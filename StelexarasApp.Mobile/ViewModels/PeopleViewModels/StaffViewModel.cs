@@ -29,8 +29,12 @@ public class StaffViewModel : INotifyPropertyChanged
         {
             AllStaff.Clear();
 
-            var allStaff = await _staffService.GetAllStaffInService();
-            
+            var allStaff = await _staffService.GetAllStaffInService(new()
+            {
+                IncludeXwros = true,
+                IncludeYpostelexi = true,
+            });
+
             if (allStaff == null)
                 return;
 
@@ -61,17 +65,17 @@ public class StaffViewModel : INotifyPropertyChanged
 
     public async Task<IEnumerable<IStelexosDto>> GetAllStaff()
     {
-        return await _staffService.GetAllStaffInService();
+        return await _staffService.GetAllStaffInService(new());
     }
 
     public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotita(KoinotitaDto koinotitaDto)
     {
-        return await _staffService.GetOmadarxesSeKoinotitaInService(koinotitaDto);
+        return await _staffService.GetOmadarxesSeKoinotitaInService(koinotitaDto.Name, new());
     }
 
     public async Task<IEnumerable<KoinotarxisDto>> GetAllKoinotarxes()
     {
-        return await _staffService.GetAllKoinotarxesInService();
+        return await _staffService.GetAllKoinotarxesInService(new());
     }
 
     public async Task<IEnumerable<OmadarxisDto>> GetAllOmadarxes()
@@ -86,12 +90,12 @@ public class StaffViewModel : INotifyPropertyChanged
 
     public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomea(TomeasDto tomeasDto)
     {
-        return await _staffService.GetOmadarxesSeTomeaInService(tomeasDto);
+        return await _staffService.GetOmadarxesSeTomeaInService(tomeasDto.Name, new());
     }
 
     public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomea(TomeasDto tomeasDto)
     {
-        return await _staffService.GetKoinotarxesSeTomeaInService(tomeasDto);
+        return await _staffService.GetKoinotarxesSeTomeaInService(tomeasDto.Name, new());
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

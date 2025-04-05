@@ -135,9 +135,9 @@ namespace StelexarasApp.Services.Services
             return _teamsRepository.DeleteKoinotitaInDb(koinotitaId);
         }
 
-        public Task<bool> DeleteTomeasInService(int id)
+        public Task<bool> DeleteTomeasInService(string n)
         {
-            return _teamsRepository.DeleteTomeasInDb(id);
+            return _teamsRepository.DeleteTomeasInDb(n);
         }
 
         public async Task<TomeasDto> GetTomeaByNameInService(TomeasQueryParameters tomeasQueryParameters, string name)

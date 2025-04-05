@@ -1,4 +1,5 @@
 ﻿using StelexarasApp.Library.Dtos.Atoma;
+using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -49,7 +50,7 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
             if (skiniIsChanged)
                 await MoveOmadarxisToAnotherSkini();
 
-            var result = await _stelexiService.UpdateStelexosInService(_stelexos);
+            var result = await _stelexiService.UpdateStelexosInService(Id, _stelexos);
             StatusMessage = result ? "Save successful" : "Save failed";
             OnPropertyChanged(nameof(Stelexos));
         }
