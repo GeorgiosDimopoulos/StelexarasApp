@@ -14,12 +14,23 @@ var dataProvider = serviceProvider.GetRequiredService<DataProvider>();
 var dbOk = dataProvider.ConfigureDatabaseForWindows();
 
 if (dbOk)
-    dataProvider.LoadSqlServerDbEntities();
+{
+    var result = dataProvider.LoadSqlServerDbEntities();
+    if (result)
+    {
+        Console.WriteLine("Database loaded successfully.");
+    }
+    else
+    {
+        Console.WriteLine("Failed to load database entities.");
+    }
+}
 else
 {
     Console.WriteLine("Database not found. Exiting...");
     return;
 }
+
 
 static IServiceProvider ConfigureServices()
 {

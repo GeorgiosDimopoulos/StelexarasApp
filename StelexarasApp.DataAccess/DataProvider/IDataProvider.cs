@@ -2,6 +2,6 @@
 
 public interface IDataProvider
 {
-    void LoadSqlServerDbEntities();
-    void ConfigureDatabaseForCrossPlatform();
+    bool LoadSqlServerDbEntities();
+    bool ConfigureDatabaseForCrossPlatform();
 }

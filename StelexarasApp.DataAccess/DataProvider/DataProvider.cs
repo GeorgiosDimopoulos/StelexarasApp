@@ -16,11 +16,11 @@ public class DataProvider : IDataProvider
     private IConfiguration? _configuration;
     private readonly ILogger<DataProvider> _logger;
     private AppDbContext? _dbContext;
-    
-    public List<IStelexos> AllStaff { get; set; }
-    public List<IStelexos> Koinotarxes { get; set; }
-    public List<IStelexos> Omadarxes { get; set; }
-    public List<IStelexos> Tomearxes { get; set; }
+
+    public List<IStelexos> AllStaff { get; set; } = default!;
+    public List<IStelexos> Koinotarxes { get; set; } = default!;
+    public List<IStelexos> Omadarxes { get; set; } = default!;
+    public List<IStelexos> Tomearxes { get; set; } = default!;
 
 
     public DataProvider(IConfiguration configuration, AppDbContext dbContext, ILogger<DataProvider> logger)
@@ -30,7 +30,7 @@ public class DataProvider : IDataProvider
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public void ConfigureDatabaseForCrossPlatform()
+    public bool ConfigureDatabaseForCrossPlatform()
     {
         var assembly = typeof(DataProvider).Assembly;
         using (var stream = assembly.GetManifestResourceStream("com.companyname.stelexarasapp.Resources.appsettings.json"))
@@ -47,14 +47,25 @@ public class DataProvider : IDataProvider
                 if (string.IsNullOrEmpty(_connectionString))
                 {
                     _logger.LogError("Connection string not found in appsettings.json.");
-                    return;
+                    return false;
                 }
             }
 
-            if (SetSqliteConfiguration(_connectionString))
+            var sqlConfigured = SetSqliteConfiguration(_connectionString);
+
+            if (sqlConfigured)
+            {
                 LoadSqlServerDbEntities();
+                if (LoadSqlServerDbEntities())
+                    return true;
+                else
+                {
+                    _logger.LogError("Failed to load SQL Server database entities.");
+                    return false;
+                }
+            }
             else
-                return;
+                return false;
         }
     }
 
@@ -137,7 +148,7 @@ public class DataProvider : IDataProvider
         }
     }
 
-    public void LoadSqlServerDbEntities()
+    public bool LoadSqlServerDbEntities()
     {
         if (string.IsNullOrEmpty(_connectionString))
             _connectionString = _configuration.GetConnectionString("DefaultConnection");
@@ -145,7 +156,7 @@ public class DataProvider : IDataProvider
         if (string.IsNullOrEmpty(_connectionString))
         {
             _logger.LogError("Connection string not found in appsettings.json for Windows app or in app.db for mobile");
-            return;
+            return false;
         }
         var services = new ServiceCollection();
         services.AddDbContext<AppDbContext>(options =>
@@ -159,7 +170,7 @@ public class DataProvider : IDataProvider
         if (_dbContext is null)
         {
             Console.WriteLine("Database context is null.");
-            return;
+            return false;
         }
 
         LoadDuties();
@@ -167,6 +178,8 @@ public class DataProvider : IDataProvider
         LoadStaffDbEntities();
 
         _dbContext.Database.EnsureCreated();
+
+        return true;
     }
 
     public void LoadDuties()
