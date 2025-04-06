@@ -9,8 +9,8 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
         Task<bool> DeleteDutyInDb(int value);
         Task<bool> UpdateDutyInDb(string name, Duty newDuty);
 
-        Task<Duty> GetDutyFromDb(string name);
+        Task<Duty> GetDutyFromDb(int id);
+        //Task<Duty> GetDutyFromDbByName(string name);
         Task<IEnumerable<Duty>> GetDutiesFromDb();
-        Task<bool> HasData();
     }
 }

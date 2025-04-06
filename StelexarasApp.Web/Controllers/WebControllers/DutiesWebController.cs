@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Library.Models;
+using StelexarasApp.Library.Dtos;
 using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;
@@ -42,7 +42,7 @@ public class DutiesWebController : Controller
     // POST: DutiesWeb/Create
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Name,Date")] Duty duty)
+    public async Task<IActionResult> Create([Bind("Id,Name,Date")] DutyDto duty)
     {
         if (ModelState.IsValid)
         {
@@ -70,7 +70,7 @@ public class DutiesWebController : Controller
     // POST: DutiesWeb/Edit/5
     [HttpPost("edit/{id:int}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date")] Duty duty)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date")] DutyDto duty)
     {
         if (ModelState.IsValid)
         {

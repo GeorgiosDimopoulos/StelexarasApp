@@ -1,4 +1,4 @@
-﻿namespace StelexarasApp.API
+﻿namespace StelexarasApp.DataAccess
 {
     public class ApiConstants
     {
@@ -13,5 +13,11 @@
             public const string v1 = "v1";
             public const string v2 = "v2";
         }
+
+        //public enum DatabaseType
+        //{
+        //    SQLite,
+        //    SqlServer
+        //}
     }
 }

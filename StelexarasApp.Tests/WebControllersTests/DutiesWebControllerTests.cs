@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using StelexarasApp.Library.Dtos;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Web.Controllers.WebControllers;
@@ -24,11 +25,11 @@ public class DutiesWebControllerTests
     public async Task Index_ReturnsViewResult_WithDutiesList()
     {
         // Arrange
-        var duties = new List<Duty>
+        var duties = new List<DutyDto>
         {
-            new Duty { Id = 1, Name = "Duty 1", Date = DateTime.Now },
-            new Duty { Id = 2, Name = "Duty 2", Date = DateTime.Now },
-            new Duty { Id = 3, Name = "Duty 3", Date = DateTime.Now }
+            new() { Id = 1, Name = "Duty 1" },
+            new() { Id = 2, Name = "Duty 2" },
+            new() { Id = 3, Name = "Duty 3" }
         };
 
         _mockService.Setup(service => service.GetDutiesInService()).ReturnsAsync(duties);
