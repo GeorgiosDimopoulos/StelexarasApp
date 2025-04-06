@@ -1,6 +1,8 @@
-﻿using Moq;
-using StelexarasApp.Library.Models;
+﻿using AutoMapper;
+using Moq;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.Library.Dtos;
+using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.Tests.ServicesTests;
@@ -8,19 +10,21 @@ namespace StelexarasApp.Tests.ServicesTests;
 public class DutyServiceTests
 {
     private readonly Mock<IDutyRepository> _mockdutyRepository;
+    private readonly Mock<IMapper> _mockMapper;
     private readonly DutyService _dutyService;
 
     public DutyServiceTests()
     {
         _mockdutyRepository = new Mock<IDutyRepository>();
-        _dutyService = new DutyService(_mockdutyRepository.Object);
+        _mockMapper = new Mock<IMapper>();
+        _dutyService = new DutyService(_mockdutyRepository.Object, _mockMapper.Object);
     }
 
     [Fact]
     public async Task AddDutyInService_ShouldReturnTrue()
     {
         // Arrange
-        var duty = new Duty { Id = 1, Name = "TestDuty", Date = DateTime.Now };
+        var duty = new DutyDto { Id = 1, Name = "TestDuty" };
         _mockdutyRepository.Setup(m => m.AddDutyInDb(It.IsAny<Duty>())).ReturnsAsync(true);
 
         // Act
@@ -34,7 +38,7 @@ public class DutyServiceTests
     public async Task DeleteDutyInService_ShouldReturnTrue()
     {
         // Arrange
-        var duty = new Duty { Id = 1, Name = "TestDuty", Date = DateTime.Now };
+        var duty = new DutyDto { Id = 1, Name = "TestDuty" };
         _mockdutyRepository.Setup(m => m.DeleteDutyInDb(It.IsAny<int>())).ReturnsAsync(true);
 
         // Act
@@ -50,8 +54,8 @@ public class DutyServiceTests
         // Arrange
         var duties = new List<Duty>
         {
-            new Duty { Id = 1, Name = "TestDuty1", Date = DateTime.Now },
-            new Duty { Id = 2, Name = "TestDuty2", Date = DateTime.Now }
+            new() { Id = 1, Name = "TestDuty1" },
+            new() { Id = 2, Name = "TestDuty2" }
         };
         _mockdutyRepository.Setup(m => m.GetDutiesFromDb()).ReturnsAsync(duties);
 
@@ -67,7 +71,7 @@ public class DutyServiceTests
     public async Task UpdateDutyByIdInService()
     {
         // Arrange
-        var duty = new Duty { Id = 1, Name = "TestDuty", Date = DateTime.Now };
+        var duty = new DutyDto { Id = 1, Name = "TestDuty" };
         _mockdutyRepository.Setup(m => m.UpdateDutyInDb(It.IsAny<string>(), It.IsAny<Duty>())).ReturnsAsync(true);
 
         // Act

@@ -1,19 +1,23 @@
-﻿using StelexarasApp.Library.Models;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
+﻿using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Models.Logs;
+using StelexarasApp.Library.Dtos;
+using AutoMapper;
+using StelexarasApp.Library.Models;
 
 namespace StelexarasApp.Services.Services
 {
     public class DutyService : IDutyService
     {
         private readonly IDutyRepository? _dutyRepository;
+        private readonly IMapper _mapper = default!;
 
-        public DutyService(IDutyRepository dutyRepository)
+        public DutyService(IDutyRepository dutyRepository, IMapper mapper)
         {
             try
             {
+                _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
                 _dutyRepository = dutyRepository;
             }
             catch (Exception ex)
@@ -22,13 +26,14 @@ namespace StelexarasApp.Services.Services
             }
         }
 
-        public async Task<bool> AddDutyInService(Duty duty)
+        public async Task<bool> AddDutyInService(DutyDto dutyDto)
         {
-            try 
+            try
             {
-                if (string.IsNullOrEmpty(duty.Name) || _dutyRepository is null)
+                if (string.IsNullOrEmpty(dutyDto.Name) || _dutyRepository is null)
                     throw new ArgumentException("Duty name or duty Repository cannot be null");
 
+                var duty = _mapper.Map<Duty>(dutyDto);
                 return await _dutyRepository.AddDutyInDb(duty);
             }
             catch (Exception ex)
@@ -44,33 +49,31 @@ namespace StelexarasApp.Services.Services
             return await _dutyRepository.DeleteDutyInDb(dutyId);
         }
 
-        public async Task<bool> UpdateDutyInService(string dutyName, Duty updatedDuty)
+        public async Task<bool> UpdateDutyInService(string dutyName, DutyDto updatedDutyDto)
         {
-            if (string.IsNullOrEmpty(dutyName) || updatedDuty is null || _dutyRepository is null)
+            if (string.IsNullOrEmpty(dutyName) || updatedDutyDto is null || _dutyRepository is null)
                 throw new ArgumentException("Duty name or updated duty or duty Repository cannot be null");
+            var updatedDuty = _mapper.Map<Duty>(updatedDutyDto);
 
             return await _dutyRepository.UpdateDutyInDb(dutyName, updatedDuty);
         }
 
-        public async Task<IEnumerable<Duty>> GetDutiesInService()
+        public async Task<IEnumerable<DutyDto>> GetDutiesInService()
         {
             if (_dutyRepository is null)
                 throw new ArgumentException("Duty Repository cannot be null");
-            return await _dutyRepository.GetDutiesFromDb();
+            var duties = await _dutyRepository.GetDutiesFromDb();
+            var dutiesDto = _mapper.Map<IEnumerable<DutyDto>>(duties);
+            return dutiesDto;
         }
 
-        public Task<bool> HasData()
+        public async Task<DutyDto> GetDutyByIdInService(int id)
         {
             if (_dutyRepository is null)
                 throw new ArgumentException("Duty Repository cannot be null");
-            return Task.FromResult(_dutyRepository.GetDutiesFromDb().Result.Any());
-        }
-
-        public Task<Duty> GetDutyByIdInService(int id)
-        {
-            if (_dutyRepository is null)
-                throw new ArgumentException("Duty Repository cannot be null");
-            return _dutyRepository.GetDutyFromDb(id.ToString());
+            var duty = await _dutyRepository.GetDutyFromDb(id);
+            var dutyDto = _mapper.Map<DutyDto>(duty);
+            return dutyDto;
         }
     }
 }

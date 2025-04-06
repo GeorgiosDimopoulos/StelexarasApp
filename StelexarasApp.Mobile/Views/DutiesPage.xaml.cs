@@ -1,6 +1,7 @@
 ﻿using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Mobile.ViewModels;
+using StelexarasApp.Library.Dtos;
 
 namespace StelexarasApp.Mobile.Views;
 
@@ -35,7 +36,7 @@ public partial class DutiesPage : ContentPage
 
     private async void OnDutyTapped(object sender, SelectionChangedEventArgs e)
     {
-        var selectedDuty = e.CurrentSelection.FirstOrDefault() as Duty;
+        var selectedDuty = e.CurrentSelection.FirstOrDefault() as DutyDto;
         if (selectedDuty == null)
             return;
 

@@ -1,13 +1,12 @@
-﻿using StelexarasApp.Library.Models;
+﻿using StelexarasApp.Library.Dtos;
 
 namespace StelexarasApp.Services.Services.IServices;
 
 public interface IDutyService
 {
-    Task<bool> AddDutyInService(Duty duty);
+    Task<bool> AddDutyInService(DutyDto duty);
     Task<bool> DeleteDutyInService(int id);
-    Task<bool> UpdateDutyInService(string dutyName, Duty duty);
-    Task<IEnumerable<Duty>> GetDutiesInService();
-    Task<bool> HasData();
-    Task<Duty> GetDutyByIdInService(int id);
+    Task<bool> UpdateDutyInService(string dutyName, DutyDto duty);
+    Task<IEnumerable<DutyDto>> GetDutiesInService();
+    Task<DutyDto> GetDutyByIdInService(int id);
 }

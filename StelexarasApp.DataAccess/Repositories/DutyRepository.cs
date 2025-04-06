@@ -82,20 +82,12 @@ namespace StelexarasApp.DataAccess.Repositories
             return await _dbContext.Duties.ToListAsync();
         }
 
-        public async Task<Duty> GetDutyFromDb(string name)
+        public async Task<Duty> GetDutyFromDb(int id)
         {
             if (_dbContext.Duties is null)
                 return null!;
 
-            return await _dbContext.Duties.FirstAsync(d => d.Name.Equals(name));
-        }
-
-        public Task<bool> HasData()
-        {
-            if (_dbContext.Duties is null)
-                return Task.FromResult(false);
-
-            return Task.FromResult(GetDutiesFromDb().Result.Any());
+            return await _dbContext.Duties.FirstAsync(d => d.Id == id);
         }
 
         public async Task<bool> UpdateDutyInDb(string name, Duty newDuty)
@@ -126,7 +118,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError); 
+                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
                 if (transaction != null)
                     await transaction.RollbackAsync();
                 return false;

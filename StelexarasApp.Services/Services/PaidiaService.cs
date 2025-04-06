@@ -17,7 +17,7 @@ namespace StelexarasApp.Services.Services
 
         public PaidiaService(
             IPaidiRepository paidiRepository,
-            IMapper mapper, 
+            IMapper mapper,
             ILogger<PaidiaService> logger,
             IValidator<PaidiDto> paidiValidator)
         {
