@@ -1,14 +1,22 @@
+DATA:
 - set possibility for the Ekpaideuomenos object to be Omadarxis at the same time
-- set in the UI accordingly, who Ekpaideuomenos is Omadarxis daily
-- add Dockerfile in the apis
-- check for the id of the Duty, not the name
-- check for unused methods and call them properly (also check for relevant UT)
+  - set in the UI accordingly, who Ekpaideuomenos is Omadarxis daily
+- add Id in the Duty model and set it as Key, not the Name
+
+API:
+- split to 2 Swagger pages, so we will have Admins and normal-users (hide PUT DELETE and INSERT endpoints for normal users)
+
+MOBILE:
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
 - check in the MAUI mobile app, if inside the StelexosInfoPage, we are receiving the ID of the StelexosDto etc
-- add extra Swagger page in API (via UseSwaggerUI()), in order to hide: PUT DELETE and INSERT endpoints for normal users
-- ADVANCED (tools to be used in future):  
-  - Docker and Github-actions images via yaml (IMPLEMENTED, NOT FINISHED)
-  - Audit tool and relevant Models fro logging and CRUD tracking
-  - SignalR and Hub, for real time communication (eg get notification if a user updates something)
-    - IDisposable and IHostedService maybe
-  - connect Github project with Atlassian side (Jira & Confluence)
+
+OTHER:
+- Audit tool and relevant Models for logging and CRUD tracking
+- check again HealthChecks process
+- SignalR and Hub, for real time communication (eg get notification if a user updates something)
+  - IDisposable and IHostedService maybe
+
+EXTERNAL:
+- set/fix properly Docker images in all layers, docker-compose
+- test 100% Github-actions via yaml (IMPLEMENTED, NOT FINISHED)
+- connect Github project with Atlassian side (Jira & Confluence)
