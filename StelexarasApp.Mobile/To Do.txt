@@ -1,3 +1,5 @@
+- add global Usings.cs
+
 DATA:
 - set possibility for the Ekpaideuomenos object to be Omadarxis at the same time
   - set in the UI accordingly, who Ekpaideuomenos is Omadarxis daily
@@ -5,6 +7,7 @@ DATA:
 
 API:
 - split to 2 Swagger pages, so we will have Admins and normal-users (hide PUT DELETE and INSERT endpoints for normal users)
+- add Documentation info with class <summary> comments, like ///
 
 MOBILE:
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
