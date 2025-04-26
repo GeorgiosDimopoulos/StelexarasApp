@@ -21,6 +21,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpGet("Koinotites/{tomeaId}")]
     public async Task<ActionResult<IEnumerable<KoinotitaDto>>> GetKoinotitesByTomea(int tomeaId)
     {

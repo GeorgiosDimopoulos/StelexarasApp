@@ -15,7 +15,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     private readonly IStaffService _stelexiService = stelexiService;
 
     [HttpGet("Koinotarxes")]
-    public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes(KoinotarxisQueryParameters queryParameters)
+    public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes([FromQuery] KoinotarxisQueryParameters queryParameters)
     {
         var result = await _stelexiService.GetAllKoinotarxesInService(queryParameters);
         if (result is null)
@@ -35,7 +35,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     }
 
     [HttpGet("KoinotarxesTomea/{name}")]
-    public async Task<ActionResult<OmadarxisDto>> GetKoinotarxesAnaTomea(string name, KoinotarxisQueryParameters queryParameters)
+    public async Task<ActionResult<OmadarxisDto>> GetKoinotarxesAnaTomea(string name, [FromQuery] KoinotarxisQueryParameters queryParameters)
     {
         var result = await _stelexiService.GetKoinotarxesSeTomeaInService(name, queryParameters);
         if (result is null)

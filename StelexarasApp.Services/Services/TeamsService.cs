@@ -40,6 +40,12 @@ namespace StelexarasApp.Services.Services
                 if (koinotitaDto is null || string.IsNullOrEmpty(koinotitaDto.Name))
                     return false;
 
+                var tomeasExisting = await _teamsRepository.GetTomeaByNameInDb(new(), koinotitaDto.TomeasName);
+                if (tomeasExisting == null)
+                {
+                    return false;
+                }
+
                 var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
 
                 koinotita.Tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), koinotitaDto.TomeasName);

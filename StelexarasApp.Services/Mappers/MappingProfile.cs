@@ -4,6 +4,8 @@ using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Library.Dtos;
+using StelexarasApp.Library.Models;
 
 namespace StelexarasApp.Services.Mappers;
 
@@ -11,6 +13,14 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap<DutyDto, Duty>()
+            .ForMember(dest => dest.Date, opt => opt.Ignore())
+            .ReverseMap();
+
+        CreateMap<ExpenseDto, Expense>()
+            .ForMember(dest => dest.Date, opt => opt.Ignore())
+            .ReverseMap();
+
         CreateMap<IStelexosDto, IStelexos>()
             .ReverseMap();
 
