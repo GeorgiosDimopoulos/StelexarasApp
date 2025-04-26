@@ -17,7 +17,6 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
 
 namespace StelexarasApp.API;
 
@@ -71,61 +70,61 @@ public static class ServiceCollectionExtensions
 
         services.AddSwaggerGen(options =>
         {
-            //string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            //options.IncludeXmlComments(xmlPath);
-
             options.EnableAnnotations();
-            options.SwaggerDoc("general", new() { Title = ApiConstants.ApiGroups.General, Version = "v1" });
-            options.SwaggerDoc("admin", new() { Title = ApiConstants.ApiGroups.Admin, Version = "v1" });
 
-            options.DocInclusionPredicate((docName, apiDesc) =>
-            {
-                if (!apiDesc.TryGetMethodInfo(out var methodInfo))
-                    return false;
+            //AddVersioning(options);
 
-                var tags = methodInfo
-                    .GetCustomAttributes(true)
-                    .OfType<SwaggerOperationAttribute>()
-                    .SelectMany(attr => attr.Tags)
-                    .ToList();
-
-                if (docName.Equals("general"))
-                {
-                    // return tags.Contains("General API");
-                    return apiDesc.GroupName == "General API";
-                }
-
-                if (docName.Equals("admin"))
-                {
-                    // return tags.Contains("Admin API") || tags.Contains("General API");
-                    return apiDesc.GroupName == "Admin API";
-                }
-
-                return false;
-            });
-
-            var securityScheme = new OpenApiSecurityScheme
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,
-                In = ParameterLocation.Header,
                 Scheme = "Bearer",
-                Description = "JWT Authorization header using the Bearer scheme.",
-            };
-            options.AddSecurityDefinition("Bearer", securityScheme);
-                        
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement        
-            {
-            
-                { securityScheme, Array.Empty<string>() }        
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Enter only the JWT token. The 'Bearer' prefix will be added automatically."
             });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+            
+            //options.OperationFilter<AuthorizeCheckOperationFilter>();
         });
 
         // Configure Authentication
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine("Authentication failed: " + context.Exception.Message);
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        Console.WriteLine("JWT CHALLENGE ERROR: " + context.ErrorDescription);
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        Console.WriteLine("Token validated!");
+                        return Task.CompletedTask;
+                    }
+                };
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -141,5 +140,52 @@ public static class ServiceCollectionExtensions
 
         // Add Authorization
         services.AddAuthorization();
+    }
+
+    private static void AddVersioning(SwaggerGenOptions options)
+    {
+        options.SwaggerDoc(ApiConstants.VersionsGroups.v1, new() { Title = ApiConstants.VersionsGroups.v1, Version = ApiConstants.VersionsGroups.v1 });
+        options.SwaggerDoc(ApiConstants.VersionsGroups.v2, new() { Title = ApiConstants.VersionsGroups.v2, Version = ApiConstants.VersionsGroups.v2 });
+
+        options.DocInclusionPredicate((docName, apiDesc) =>
+        {
+            if (!apiDesc.TryGetMethodInfo(out var methodInfo))
+                return false;
+
+            var tags = methodInfo
+                .GetCustomAttributes(true)
+                .OfType<SwaggerOperationAttribute>()
+                .SelectMany(attr => attr.Tags)
+                .ToList();
+
+            if (docName.Equals("v1"))
+            {
+                // return tags.Contains("General API");
+                return apiDesc.GroupName == "v1";
+            }
+
+            if (docName.Equals("v2"))
+            {
+                // return tags.Contains("Admin API") || tags.Contains("General API");
+                return apiDesc.GroupName == "v2 API";
+            }
+
+            return false;
+        });
+
+        //services.AddApiVersioning(options =>
+        //{
+        //    options.ReportApiVersions = true;
+        //    options.AssumeDefaultVersionWhenUnspecified = true;
+        //    options.DefaultApiVersion = new ApiVersion(1, 0);
+        //    options.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
+        //                                            new HeaderApiVersionReader("x-api-version"),
+        //                                            new MediaTypeApiVersionReader("x-api-version"));
+        //});
+        //services.AddVersionedApiExplorer(options =>
+        //{
+        //    options.GroupNameFormat = "'v'VVV";
+        //    options.SubstituteApiVersionInUrl = true;
+        //});
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using StelexarasApp.API.Authorization;
+using StelexarasApp.Library.Models;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace StelexarasApp.API.ApiControllers.GeneralControllers;
@@ -18,15 +20,15 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> GetAuthToken(string input)
+    public async Task<IActionResult> GetAuthToken([FromQuery] LoginRequest request)
     {
-        if (string.IsNullOrEmpty(input))
+        if (string.IsNullOrEmpty(request.Password))
             return BadRequest();
 
         var password = _configuration ["Jwt:Key"];
-        if (input.Equals(password))
+        if (request.Password.Equals(password))
         {
-            var token = await _authTokenProvider.GetJwtToken(input);
+            var token = await _authTokenProvider.GetJwtToken(request.Password);
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenString = tokenHandler.WriteToken(token);
 

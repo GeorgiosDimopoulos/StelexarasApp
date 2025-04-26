@@ -34,7 +34,7 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPost("Tomea")]
-    public async Task<ActionResult<TomeasDto>> PostTomea(TomeasDto tomeasDto)
+    public async Task<ActionResult<TomeasDto>> PostTomea([FromQuery]TomeasDto tomeasDto)
     {
         var result = await _teamsService.AddTomeasInService(tomeasDto);
 
