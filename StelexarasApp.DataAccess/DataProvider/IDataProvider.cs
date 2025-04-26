@@ -3,5 +3,5 @@
 public interface IDataProvider
 {
     bool LoadSqlServerDbEntities();
-    bool ConfigureDatabaseForCrossPlatform();
+    bool ConfigureDatabase();
 }

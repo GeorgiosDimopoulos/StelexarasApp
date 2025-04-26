@@ -16,6 +16,7 @@ public class DataProvider : IDataProvider
     private IConfiguration? _configuration;
     private readonly ILogger<DataProvider> _logger;
     private AppDbContext? _dbContext;
+    //private DatabaseType _databaseType;
 
     public List<IStelexos> AllStaff { get; set; } = default!;
     public List<IStelexos> Koinotarxes { get; set; } = default!;
@@ -23,14 +24,15 @@ public class DataProvider : IDataProvider
     public List<IStelexos> Tomearxes { get; set; } = default!;
 
 
-    public DataProvider(IConfiguration configuration, AppDbContext dbContext, ILogger<DataProvider> logger)
+    public DataProvider(IConfiguration configuration, AppDbContext dbContext, ILogger<DataProvider> logger) // DatabaseType databaseType
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        //_databaseType = databaseType;
     }
 
-    public bool ConfigureDatabaseForCrossPlatform()
+    public bool ConfigureDatabase()
     {
         var assembly = typeof(DataProvider).Assembly;
         using (var stream = assembly.GetManifestResourceStream("com.companyname.stelexarasapp.Resources.appsettings.json"))
@@ -51,21 +53,28 @@ public class DataProvider : IDataProvider
                 }
             }
 
-            var sqlConfigured = SetSqliteConfiguration(_connectionString);
-
-            if (sqlConfigured)
-            {
-                LoadSqlServerDbEntities();
-                if (LoadSqlServerDbEntities())
-                    return true;
-                else
+#if ANDROID || IOS // _databaseType == DatabaseType.SQLite
+            
+                var sqlConfigured = SetSqliteConfiguration(_connectionString);
+                if (sqlConfigured)
                 {
-                    _logger.LogError("Failed to load SQL Server database entities.");
-                    return false;
+                    return true;
                 }
-            }
+                else
+                    return false;
+#elif WINDOWS
+            LoadSqlServerDbEntities();
+            if (LoadSqlServerDbEntities())
+                return true;
             else
+            {
+                _logger.LogError("Failed to load SQL Server database entities.");
                 return false;
+            }
+#else
+            _logger.LogError("Unsupported platform or configuration.");
+            return false;
+#endif
         }
     }
 
