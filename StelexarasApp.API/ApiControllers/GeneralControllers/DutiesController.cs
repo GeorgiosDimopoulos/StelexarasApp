@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.Library.Dtos;
-using StelexarasApp.Library.Models.Logs;
-using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.GeneralControllers;
 

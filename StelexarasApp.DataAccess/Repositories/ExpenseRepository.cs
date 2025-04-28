@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.Library.Models;
-using StelexarasApp.Library.Models.Logs;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.DataAccess.Repositories;
 

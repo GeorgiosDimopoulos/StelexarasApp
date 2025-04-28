@@ -1,7 +1,4 @@
-﻿
-using StelexarasApp.Library.Models;
-
-namespace StelexarasApp.DataAccess.Repositories.IRepositories
+﻿namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface IDutyRepository
     {

@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Library.Models.Domi;
 using System.Data;
 using Microsoft.Extensions.Logging;
 using Microsoft.Data.Sqlite;

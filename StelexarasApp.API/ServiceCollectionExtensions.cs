@@ -6,9 +6,7 @@ using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess;
-using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Services.Mappers;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -99,8 +97,6 @@ public static class ServiceCollectionExtensions
                     Array.Empty<string>()
                 }
             });
-            
-            //options.OperationFilter<AuthorizeCheckOperationFilter>();
         });
 
         // Configure Authentication

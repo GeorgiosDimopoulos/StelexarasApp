@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 
 [ApiController]
+//[Route("api/v{version:apiVersion}/[controller]")]
 [Route("api/[controller]")]
+//[ApiVersion("1.0")]
 public class EkpaideutesController(IStaffService stelexiService) : ControllerBase
 {
     private readonly IStaffService _stelexiService = stelexiService;
 
+    //[MapToApiVersion("1.0")]
     [HttpGet("Ekpaideutes")]
     public async Task<ActionResult<Ekpaideutis>> GetEkpaideutis()
     {

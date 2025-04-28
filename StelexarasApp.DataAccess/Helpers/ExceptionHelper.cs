@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using StelexarasApp.Library.Models.Logs;
 
 namespace StelexarasApp.DataAccess.Helpers;
 

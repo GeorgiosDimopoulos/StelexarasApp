@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.Library.Models;
-using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.GeneralControllers;
 

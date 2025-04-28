@@ -1,7 +1,4 @@
-﻿using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.Library.Models.Domi;
-
-namespace StelexarasApp.DataAccess.Repositories.IRepositories
+﻿namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface IPaidiRepository
     {

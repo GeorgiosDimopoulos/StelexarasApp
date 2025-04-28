@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Library.Dtos.Domi;
 using Microsoft.AspNetCore.Authorization;
-using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.API.ApiControllers.TeamsControllers;
 

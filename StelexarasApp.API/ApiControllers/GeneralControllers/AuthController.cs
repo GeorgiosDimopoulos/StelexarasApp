@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using StelexarasApp.API.Authorization;
-using StelexarasApp.Library.Models;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace StelexarasApp.API.ApiControllers.GeneralControllers;

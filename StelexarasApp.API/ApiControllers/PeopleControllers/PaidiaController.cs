@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Library.Dtos.Atoma;
 using Microsoft.AspNetCore.Authorization;
 
 namespace StelexarasApp.API.ApiControllers.PeopleControllers;

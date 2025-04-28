@@ -1,5 +1,4 @@
-﻿using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Library.QueryParameters;
+﻿using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {

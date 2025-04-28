@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.Models.Logs;
-
-namespace StelexarasApp.DataAccess.Helpers;
+﻿namespace StelexarasApp.DataAccess.Helpers;
 
 public class LogFileWriter
 {
