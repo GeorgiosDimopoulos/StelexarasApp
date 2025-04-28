@@ -125,7 +125,7 @@ namespace StelexarasApp.Services.Services
             return _teamsRepository.UpdateSkiniInDb(id, skini);
         }
 
-        public Task<bool> UpdateTomeaInService(int id, TomeasDto tomeasDto)
+        public Task<bool> UpdateTomeaInService(string id, TomeasDto tomeasDto)
         {
             var tomeas = _mapper.Map<Tomeas>(tomeasDto);
             return _teamsRepository.UpdateTomeasInDb(id, tomeas);

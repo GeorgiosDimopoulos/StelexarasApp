@@ -49,11 +49,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.TomearxisId, opt => opt.Ignore())
             .ForMember(dest => dest.Tomearxis, opt => opt.Ignore())
-            .ForMember(dest => dest.Koinotites, opt => opt.MapFrom(src => new Tomeas
-            {
-                Name = src.Name,
-                Koinotites = new List<Koinotita>(src.KoinotitesNumber)
-            }))
+            .ForMember(dest => dest.Koinotites, opt => opt.MapFrom(src => Enumerable.Range(0, src.KoinotitesNumber).Select(_ => new Koinotita()).ToList()))
             .ReverseMap()
             .ForMember(dest => dest.KoinotitesNumber, opt => opt.MapFrom(src => src.Koinotites != null ? src.Koinotites.Count() : 0));
 
@@ -79,6 +75,6 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Skines, opt => opt.MapFrom(src => new List<Skini>(new Skini [src.SkinesNumber])))
             .ReverseMap()
             .ForMember(dest => dest.TomeasName, opt => opt.MapFrom(src => src.Tomeas.Name))
-            .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom(src => src.Skines.Count()));
+            .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom(src => src.Skines != null ? src.Skines.Count() : 0));
     }
 }

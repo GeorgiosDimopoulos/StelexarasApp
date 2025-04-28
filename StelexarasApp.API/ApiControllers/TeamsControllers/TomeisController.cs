@@ -57,10 +57,10 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("Tomea/{id}")]
-    public async Task<IActionResult> PutTomea(int id, [FromBody] TomeasDto tomeasDto)
+    [HttpPut("Tomea/{name}")]
+    public async Task<IActionResult> PutTomea(string name, [FromBody] TomeasDto tomeasDto)
     {
-        var result = await _teamsService.UpdateTomeaInService(id, tomeasDto);
+        var result = await _teamsService.UpdateTomeaInService(name, tomeasDto);
 
         if (!result)
             return StatusCode(500, "An error occurred while updating the Tomea.");

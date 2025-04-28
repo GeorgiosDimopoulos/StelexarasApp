@@ -25,7 +25,7 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 
         Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita);
         Task<bool> UpdateSkiniInDb(int id, Skini skini);
-        Task<bool> UpdateTomeasInDb(int id, Tomeas tomeas);
+        Task<bool> UpdateTomeasInDb(string id, Tomeas tomeas);
 
         Task<bool> DeleteSkiniInDb(int id);
         Task<bool> DeleteKoinotitaInDb(int id);
