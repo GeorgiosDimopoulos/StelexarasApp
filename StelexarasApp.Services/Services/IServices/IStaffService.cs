@@ -1,9 +1,4 @@
-﻿using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Library.QueryParameters;
-
-namespace StelexarasApp.Services.Services.IServices;
+﻿namespace StelexarasApp.Services.Services.IServices;
 
 public interface IStaffService
 {

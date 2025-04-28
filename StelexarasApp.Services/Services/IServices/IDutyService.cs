@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.Dtos;
-
-namespace StelexarasApp.Services.Services.IServices;
+﻿namespace StelexarasApp.Services.Services.IServices;
 
 public interface IDutyService
 {

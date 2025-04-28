@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Models.Atoma;
 
 namespace StelexarasApp.Services.Validators;
 

@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Library.Dtos.Atoma;
 using Microsoft.Extensions.Logging;
 using FluentValidation;
 

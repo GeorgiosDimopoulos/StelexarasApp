@@ -1,8 +1,4 @@
-﻿using StelexarasApp.Library.QueryParameters;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
-
-namespace StelexarasApp.Services.Services.IServices;
+﻿namespace StelexarasApp.Services.Services.IServices;
 
 public interface ITeamsService
 {

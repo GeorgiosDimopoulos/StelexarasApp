@@ -1,7 +1,4 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Models.Atoma;
-
-namespace StelexarasApp.Services.Services.IServices
+﻿namespace StelexarasApp.Services.Services.IServices
 {
     public interface IPaidiaService
     {

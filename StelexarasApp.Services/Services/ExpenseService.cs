@@ -1,8 +1,4 @@
-﻿using StelexarasApp.Library.Models;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Services.Services.IServices;
-
-namespace StelexarasApp.Services.Services;
+﻿namespace StelexarasApp.Services.Services;
 
 public class ExpenseService : IExpenseService
 {

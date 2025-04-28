@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using StelexarasApp.Library.Models.Domi;
 
 namespace StelexarasApp.Services.Validators;
 

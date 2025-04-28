@@ -1,11 +1,4 @@
-﻿using StelexarasApp.Library.Models.Atoma.Staff;
-using AutoMapper;
-using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Library.Dtos;
-using StelexarasApp.Library.Models;
+﻿using AutoMapper;
 
 namespace StelexarasApp.Services.Mappers;
 
@@ -49,13 +42,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.TomearxisId, opt => opt.Ignore())
             .ForMember(dest => dest.Tomearxis, opt => opt.Ignore())
-            .ForMember(dest => dest.Koinotites, opt => opt.MapFrom(src => Enumerable.Range(0, src.KoinotitesNumber).Select(_ => new Koinotita()).ToList()))
+            .ForMember(dest => dest.Koinotites, opt => opt.Ignore())
             .ReverseMap()
             .ForMember(dest => dest.KoinotitesNumber, opt => opt.MapFrom(src => src.Koinotites != null ? src.Koinotites.Count() : 0));
-
-        CreateMap<Tomeas, TomeasDto>()
-            .ForMember(dest => dest.KoinotitesNumber, opt => opt.MapFrom(src => src.Koinotites != null ? src.Koinotites.Count() : 0))
-            .ReverseMap();
 
         CreateMap<SkiniDto, Skini>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -72,7 +61,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Koinotarxis, opt => opt.Ignore())
             .ForMember(dest => dest.KoinotarxisId, opt => opt.Ignore())
             .ForMember(dest => dest.Tomeas, opt => opt.Ignore())
-            .ForMember(dest => dest.Skines, opt => opt.MapFrom(src => new List<Skini>(new Skini [src.SkinesNumber])))
+            .ForMember(dest => dest.Skines, opt => opt.Ignore())
             .ReverseMap()
             .ForMember(dest => dest.TomeasName, opt => opt.MapFrom(src => src.Tomeas.Name))
             .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom(src => src.Skines != null ? src.Skines.Count() : 0));

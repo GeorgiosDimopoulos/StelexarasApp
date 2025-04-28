@@ -242,12 +242,12 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         }
 
         [Theory]
-        [InlineData(11, "UpdatedName", true)]
-        [InlineData(22, "", false)]
-        public async Task UpdateTomeasInDbAsync_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
+        [InlineData("11", "UpdatedName", true)]
+        [InlineData("22", "", false)]
+        public async Task UpdateTomeasInDbAsync_ShouldReturnExpectedResult(string id, string newName, bool expectedResult)
         {
             // Arrange
-            var tomeas = GetTomeas(id, newName);
+            var tomeas = GetTomeas(newName);
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
@@ -290,7 +290,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task DeleteTomeasInDbAsync_ShouldWork()
         {
             // Arrange
-            var tomeas = GetTomeas(8, "Tomeas1");
+            var tomeas = GetTomeas("Tomeas1");
             await _dbContext.Tomeis.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
@@ -307,7 +307,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetTomeaByName_ShouldReturnTomea()
         {
             // Arrange
-            var tomeas = GetTomeas(6, "Tomeas1");
+            var tomeas = GetTomeas("Tomeas1");
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
@@ -318,11 +318,10 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             Assert.NotNull(result);
         }
 
-        private static Tomeas GetTomeas(int id, string name)
+        private static Tomeas GetTomeas(string name)
         {
             return new Tomeas
             {
-                Id = id,
                 Name = name,
                 Tomearxis = new Tomearxis
                 {

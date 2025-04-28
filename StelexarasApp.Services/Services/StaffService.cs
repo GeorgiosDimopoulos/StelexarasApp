@@ -1,13 +1,5 @@
 ﻿using AutoMapper;
-using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Library.Models.Logs;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
 using FluentValidation;
-using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.Services.Services;
 

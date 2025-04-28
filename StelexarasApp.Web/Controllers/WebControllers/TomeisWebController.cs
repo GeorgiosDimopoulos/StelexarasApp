@@ -86,7 +86,7 @@ public class TomeisWebController : Controller
     // POST: TomeisWeb/Edit/5
     [HttpPost("Edit/{id}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, TomeasDto tomeis)
+    public async Task<IActionResult> Edit(string id, TomeasDto tomeis)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
