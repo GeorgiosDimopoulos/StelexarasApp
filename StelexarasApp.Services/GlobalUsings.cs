@@ -5,6 +5,7 @@ global using StelexarasApp.Services.Services.IServices;
 global using StelexarasApp.Library.Models.Logs;
 global using StelexarasApp.Library.Dtos.Atoma;
 global using StelexarasApp.Library.QueryParameters;
+global using StelexarasApp.Library.Dtos.People;
 global using StelexarasApp.Library.Models.Atoma;
 global using StelexarasApp.Library.Dtos;
 global using StelexarasApp.Library.Models;

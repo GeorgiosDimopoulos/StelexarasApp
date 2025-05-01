@@ -1,9 +1,7 @@
-﻿using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.Library.Models.Atoma.Staff;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace StelexarasApp.Library.Dtos.Atoma;
+namespace StelexarasApp.Library.Dtos.People;
 
 public class TomearxisDto : IStelexosDto
 {
