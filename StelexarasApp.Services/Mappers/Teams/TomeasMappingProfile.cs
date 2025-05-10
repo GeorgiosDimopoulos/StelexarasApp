@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace StelexarasApp.Services.Mappers.Xwroi;
+namespace StelexarasApp.Services.Mappers.Teams;
 
 public class TomeasMappingProfile : Profile
 {
