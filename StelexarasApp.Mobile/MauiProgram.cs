@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.DataProvider;
 using static StelexarasApp.DataAccess.ApiConstants;
 using Microsoft.Extensions.DependencyInjection;
+using StelexarasApp.Services.Services.IServices.People;
 
 namespace StelexarasApp.Mobile;
 
@@ -60,7 +61,7 @@ public static class MauiProgram
             loggingBuilder.AddDebug();
         });
 
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddAutoMapper(typeof(ExpenseMappingProfile));
         //services.AddSingleton<ApiConstants.DatabaseType>(provider => ApiConstants.DatabaseType.SQLite);
 
         RegisterModels(services);
@@ -162,7 +163,7 @@ public static class MauiProgram
     {
         services.AddScoped<IDutyService, DutyService>();
         services.AddScoped<IStaffService, StaffService>();
-        services.AddScoped<IPaidiaService, PaidiaService>();
+        services.AddScoped<IKataskinotisService, PaidiaService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<SignalrService>();
