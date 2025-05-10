@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace StelexarasApp.Library.Dtos.People;
+namespace StelexarasApp.Library.Dtos.People.Staff;
 
 public class EkpaideutisDto : IStelexosDto
 {

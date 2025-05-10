@@ -1,4 +1,4 @@
-﻿using StelexarasApp.Library.Models.Atoma;
+﻿using StelexarasApp.Library.Models.Atoma.Children;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using System.ComponentModel.DataAnnotations;
 

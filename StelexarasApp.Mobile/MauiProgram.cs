@@ -18,6 +18,11 @@ using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Library.Models;
 using Microsoft.Extensions.Configuration;
+using StelexarasApp.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using StelexarasApp.DataAccess.DataProvider;
+using static StelexarasApp.DataAccess.ApiConstants;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace StelexarasApp.Mobile;
 
@@ -49,20 +54,21 @@ public static class MauiProgram
 
     private static void ConfigureServices(IServiceCollection services)
     {
-        RegisterDatabase(services);
-
         services.AddLogging(loggingBuilder =>
         {
             loggingBuilder.AddConsole();
             loggingBuilder.AddDebug();
         });
+
         services.AddAutoMapper(typeof(MappingProfile));
+        //services.AddSingleton<ApiConstants.DatabaseType>(provider => ApiConstants.DatabaseType.SQLite);
 
         RegisterModels(services);
         RegisterServices(services);
         RegisterViewModels(services);
         RegisterRepositories(services);
         RegisterPages(services);
+        RegisterDatabase(services);
     }
 
     private static void RegisterDatabase(IServiceCollection services)
@@ -76,32 +82,31 @@ public static class MauiProgram
 
         services.AddSingleton<IConfiguration>(configuration);
 
-        //var connectionString = configuration.GetConnectionString("DefaultConnection");
-        //services.AddDbContext<AppDbContext>(options =>
-        //{
-        //    options.UseSqlite($"Filename={Path.Combine(FileSystem.AppDataDirectory, "app.db")}");
-        //    if (string.IsNullOrEmpty(connectionString))
-        //    {
-        //        connectionString = $"Data Source={Path.Combine(FileSystem.AppDataDirectory, "app.db")}";
-        //    }
-        //    options.UseSqlite(connectionString);
-        //});
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseSqlite($"Filename={Path.Combine(FileSystem.AppDataDirectory, "app.db")}");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = $"Data Source={Path.Combine(FileSystem.AppDataDirectory, "app.db")}";
+            }
+            options.UseSqlite(connectionString);
+        });
 
-        //var serviceProvider = services.BuildServiceProvider();
-        //var dbContext = serviceProvider.GetRequiredService<AppDbContext>();
-        //var logger = serviceProvider.GetRequiredService<ILogger<DataProvider>>();
-        //var dataProvider = new DataProvider(configuration, dbContext, logger);
-        //dataProvider.ConfigureDatabaseForCrossPlatform();
-        //var dataProvider = serviceProvider.GetRequiredService<IDataProvider>();
-        //dataProvider.ConfigureDatabaseForCrossPlatform();
+        var serviceProvider = services.BuildServiceProvider();
+        var dbContext = serviceProvider.GetRequiredService<AppDbContext>();
+        var logger = serviceProvider.GetRequiredService<ILogger<DataProvider>>();
 
-        //if (dbOk)
-        //    dataProvider.LoadSqliteDbEntities();
-        //else
-        //{
-        //    Console.WriteLine("Database not found. Exiting...");
-        //    return;
-        //}
+        var dataProvider = serviceProvider.GetRequiredService<IDataProvider>();
+        var dbLoaded = dataProvider.ConfigureDatabase();
+
+        if (dbLoaded)
+            Console.WriteLine("Database loaded successfully.");
+        else
+        {
+            Console.WriteLine("Database not found. Exiting...");
+            return;
+        }
     }
 
     private static void RegisterPages(IServiceCollection services)
@@ -121,6 +126,8 @@ public static class MauiProgram
         services.AddScoped<StelexosInfoPage>();
         services.AddScoped<PaidiInfoPage>();
         services.AddScoped<PaidiaPage>();
+
+        services.AddScoped<IDataProvider, DataProvider>();
     }
 
     private static void RegisterRepositories(IServiceCollection services)
@@ -134,6 +141,7 @@ public static class MauiProgram
 
     private static void RegisterModels(IServiceCollection services)
     {
+        //services.AddSingleton<DatabaseType>();
         services.AddTransient<IValidator<IStelexosDto>, StelexosValidator>();
         services.AddTransient<IValidator<PaidiDto>, PaidiValidator>();
         services.AddTransient<IValidator<Duty>, DutyValidator>();

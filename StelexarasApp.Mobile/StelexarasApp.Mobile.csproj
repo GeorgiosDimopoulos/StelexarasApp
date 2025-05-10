@@ -22,6 +22,23 @@
 		<RuntimeIdentifiers Condition="'$(TargetFramework)' == 'net8.0-android'">android-arm64;android-x86;android-x64</RuntimeIdentifiers>
 		<RuntimeIdentifiers Condition="'$(TargetFramework)' == 'net8.0-ios'">ios-arm64</RuntimeIdentifiers>
 		<RuntimeIdentifiers Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifiers>
+		<DefineConstants>ANDROID</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+		<DefineConstants>ANDROID</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-ios'">
+		<DefineConstants>IOS</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">
+		<DefineConstants>MACCATALYST</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+		<DefineConstants>WINDOWS</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>

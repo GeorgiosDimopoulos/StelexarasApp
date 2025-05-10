@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Moq;
-using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Library.Models.Domi;
@@ -9,6 +8,7 @@ using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Services.Services;
 using FluentValidation;
 using StelexarasApp.Services.Validators;
+using StelexarasApp.Library.Dtos.People.Staff;
 
 namespace StelexarasApp.Tests.ServicesTests;
 

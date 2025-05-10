@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using StelexarasApp.Library.Dtos.People.Staff;
 
 namespace StelexarasApp.Services.Services;
 
@@ -172,7 +173,7 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<IEnumerable<TomearxisDto>> GetAllTomearxesInService(TomearxisQueryParameters queryParameters)
+    public async Task<IEnumerable<TomearxisResponse>> GetAllTomearxesInService(TomearxisQueryParameters queryParameters)
     {
         try
         {

@@ -6,6 +6,7 @@ using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.Library.Models.Domi;
 using Microsoft.Extensions.Logging;
+using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.Tests.IntegrationDbTests;
 

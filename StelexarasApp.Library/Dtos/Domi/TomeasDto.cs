@@ -1,17 +1,17 @@
 ﻿namespace StelexarasApp.Library.Dtos.Domi;
 
-public class TomeasDto
-{
-    public string Name { get; set; } = string.Empty;
-    public int KoinotitesNumber { get; set; }    
-}
-
-public class UpdateTomeasDto
+public class BaseTomeasDto : IXwrosDto
 {
     public string Name { get; set; } = string.Empty;
 }
 
-public class CreateTomeasDto
+public class CreateTomeasRequest : BaseTomeasDto { }
+
+public class UpdateTomeasRequest : BaseTomeasDto { }
+
+public class DeleteTomeasRequest : BaseTomeasDto { }
+
+public class TomeasResponse : BaseTomeasDto
 {
-    public string Name { get; set; } = string.Empty;
+    public int KoinotitesNumber { get; set; }
 }

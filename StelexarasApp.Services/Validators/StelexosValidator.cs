@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using StelexarasApp.Library.Dtos.People.Staff;
 
 namespace StelexarasApp.Services.Validators;
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Library.Dtos.People.Staff;
 
 namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 

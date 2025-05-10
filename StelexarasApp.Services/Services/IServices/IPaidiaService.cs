@@ -1,4 +1,6 @@
-﻿namespace StelexarasApp.Services.Services.IServices
+﻿using StelexarasApp.Library.Models.Atoma.Children;
+
+namespace StelexarasApp.Services.Services.IServices
 {
     public interface IPaidiaService
     {

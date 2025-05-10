@@ -10,7 +10,7 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
     private readonly ITeamsService _teamsService = teamsService;
 
     [HttpGet("Tomeis")]
-    public async Task<ActionResult<IEnumerable<TomeasDto>>> GetTomeis([FromQuery] TomeasQueryParameters queryParameters)
+    public async Task<ActionResult<IEnumerable<TomeasResponse>>> GetTomeis([FromQuery] TomeasQueryParameters queryParameters)
     {
         var result = await _teamsService.GetAllTomeisInService(queryParameters);
 
@@ -20,7 +20,7 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpGet("Tomea/{name}")]
-    public async Task<ActionResult<TomeasDto>> GetTomea(string name, [FromQuery] TomeasQueryParameters queryParameters)
+    public async Task<ActionResult<TomeasResponse>> GetTomea(string name, [FromQuery] TomeasQueryParameters queryParameters)
     {
         var result = await _teamsService.GetTomeaByNameInService(queryParameters, name);
 
@@ -31,7 +31,7 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPost("Tomea")]
-    public async Task<ActionResult<TomeasDto>> PostTomea([FromQuery]TomeasDto tomeasDto)
+    public async Task<ActionResult<CreateTomeasRequest>> PostTomea([FromQuery] CreateTomeasRequest tomeasDto)
     {
         var result = await _teamsService.AddTomeasInService(tomeasDto);
 
@@ -55,7 +55,7 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPut("Tomea/{name}")]
-    public async Task<IActionResult> PutTomea(string name, [FromBody] TomeasDto tomeasDto)
+    public async Task<IActionResult> PutTomea(string name, [FromBody] UpdateTomeasRequest tomeasDto)
     {
         var result = await _teamsService.UpdateTomeaInService(name, tomeasDto);
 

@@ -7,7 +7,7 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
     private readonly ITeamsRepository _teamsRepository = teamsRepository;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<bool> AddSkiniInService(SkiniDto skiniDto)
+    public async Task<bool> AddSkiniInService(CreateSkiniDto skiniDto)
     {
         try
         {
@@ -24,7 +24,7 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         }
     }
 
-    public async Task<bool> AddKoinotitaInService(KoinotitaDto koinotitaDto)
+    public async Task<bool> AddKoinotitaInService(CreateKoinotitaRequest koinotitaDto)
     {
         try
         {
@@ -49,74 +49,74 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         }
     }
 
-    public async Task<IEnumerable<SkiniDto>> GetAllSkinesInService(SkiniQueryParameters? skiniQueryParameters)
+    public async Task<IEnumerable<SkiniResponse>> GetAllSkinesInService(SkiniQueryParameters? skiniQueryParameters)
     {
         try
         {
             var skini = await _teamsRepository.GetSkinesInDb(skiniQueryParameters);
-            return _mapper.Map<IEnumerable<SkiniDto>>(skini);
+            return _mapper.Map<IEnumerable<SkiniResponse>>(skini);
         }
         catch
         {
-            return new List<SkiniDto>();
+            return new List<SkiniResponse>();
         }
     }
 
-    public async Task<SkiniDto> GetSkiniByNameInService(SkiniQueryParameters skiniQueryParameters, string name)
+    public async Task<SkiniResponse> GetSkiniByNameInService(SkiniQueryParameters skiniQueryParameters, string name)
     {
         var skini = await _teamsRepository.GetSkiniByNameInDb(skiniQueryParameters, name);
-        return _mapper.Map<SkiniDto>(skini);
+        return _mapper.Map<SkiniResponse>(skini);
     }
 
-    public async Task<IEnumerable<SkiniDto>> GetSkinesAnaKoinotitaInService(SkiniQueryParameters? skiniQueryParameters, string koinotitaName)
+    public async Task<IEnumerable<SkiniResponse>> GetSkinesAnaKoinotitaInService(SkiniQueryParameters? skiniQueryParameters, string koinotitaName)
     {
         var skines = await _teamsRepository.GetSkinesAnaKoinotitaInDb(skiniQueryParameters, koinotitaName);
-        return _mapper.Map<IEnumerable<SkiniDto>>(skines);
+        return _mapper.Map<IEnumerable<SkiniResponse>>(skines);
     }
 
-    public async Task<IEnumerable<SkiniDto>> GetSkinesEkpaideuomenonInService(SkiniQueryParameters skiniQueryParameters)
+    public async Task<IEnumerable<SkiniResponse>> GetSkinesEkpaideuomenonInService(SkiniQueryParameters skiniQueryParameters)
     {
         var skines = await _teamsRepository.GetSkinesEkpaideuomenonInDb(skiniQueryParameters);
-        return _mapper.Map<IEnumerable<SkiniDto>>(skines);
+        return _mapper.Map<IEnumerable<SkiniResponse>>(skines);
     }
 
-    public async Task<IEnumerable<KoinotitaDto>> GetAllKoinotitesInService(KoinotitaQueryParameters koinotitaQueryParameters)
+    public async Task<IEnumerable<KoinotitaResponse>> GetAllKoinotitesInService(KoinotitaQueryParameters koinotitaQueryParameters)
     {
         var koinotitaInDb = await _teamsRepository.GetKoinotitesInDb(koinotitaQueryParameters);
-        return _mapper.Map<IEnumerable<KoinotitaDto>>(koinotitaInDb);
+        return _mapper.Map<IEnumerable<KoinotitaResponse>>(koinotitaInDb);
     }
 
-    public async Task<IEnumerable<KoinotitaDto>> GetKoinotitesAnaTomeaInService(KoinotitaQueryParameters koinotitaQueryParameters, int tomeaId)
+    public async Task<IEnumerable<KoinotitaResponse>> GetKoinotitesAnaTomeaInService(KoinotitaQueryParameters koinotitaQueryParameters, int tomeaId)
     {
         var koinotitaInDb = await _teamsRepository.GetKoinotitesAnaTomeaInDb(koinotitaQueryParameters, tomeaId);
-        return _mapper.Map<IEnumerable<KoinotitaDto>>(koinotitaInDb);
+        return _mapper.Map<IEnumerable<KoinotitaResponse>>(koinotitaInDb);
     }
 
-    public async Task<IEnumerable<TomeasDto>> GetAllTomeisInService(TomeasQueryParameters tomeasQueryParameters)
+    public async Task<IEnumerable<TomeasResponse>> GetAllTomeisInService(TomeasQueryParameters tomeasQueryParameters)
     {
         var tomeisInDb = await _teamsRepository.GetTomeisInDb(tomeasQueryParameters);
-        return _mapper.Map<IEnumerable<TomeasDto>>(tomeisInDb);
+        return _mapper.Map<IEnumerable<TomeasResponse>>(tomeisInDb);
     }
 
-    public async Task<KoinotitaDto> GetKoinotitaByNameInService(KoinotitaQueryParameters koinotitaQueryParameters, string name)
+    public async Task<KoinotitaResponse> GetKoinotitaByNameInService(KoinotitaQueryParameters koinotitaQueryParameters, string name)
     {
         var skini = await _teamsRepository.GetKoinotitaByNameInDb(koinotitaQueryParameters, name);
-        return _mapper.Map<KoinotitaDto>(skini);
+        return _mapper.Map<KoinotitaResponse>(skini);
     }
 
-    public Task<bool> UpdateKoinotitaInService(int id, KoinotitaDto koinotitaDto)
+    public Task<bool> UpdateKoinotitaInService(int id, UpdateKoinotitaRequest koinotitaDto)
     {
         var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
         return _teamsRepository.UpdateKoinotitaInDb(id, koinotita);
     }
 
-    public Task<bool> UpdateSkiniInService(int id, SkiniDto skiniDto)
+    public Task<bool> UpdateSkiniInService(int id, UpdateSkiniDto skiniDto)
     {
         var skini = _mapper.Map<Skini>(skiniDto);
         return _teamsRepository.UpdateSkiniInDb(id, skini);
     }
 
-    public Task<bool> UpdateTomeaInService(string id, TomeasDto tomeasDto)
+    public Task<bool> UpdateTomeaInService(string id, UpdateTomeasRequest tomeasDto)
     {
         var tomeas = _mapper.Map<Tomeas>(tomeasDto);
         return _teamsRepository.UpdateTomeasInDb(id, tomeas);
@@ -137,13 +137,13 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return _teamsRepository.DeleteTomeasInDb(n);
     }
 
-    public async Task<TomeasDto> GetTomeaByNameInService(TomeasQueryParameters tomeasQueryParameters, string name)
+    public async Task<TomeasResponse> GetTomeaByNameInService(TomeasQueryParameters tomeasQueryParameters, string name)
     {
         var tomeasInDb = await _teamsRepository.GetTomeaByNameInDb(tomeasQueryParameters, name);
-        return _mapper.Map<TomeasDto>(tomeasInDb);
+        return _mapper.Map<TomeasResponse>(tomeasInDb);
     }
 
-    public async Task<bool> AddTomeasInService(TomeasDto tomeasDto)
+    public async Task<bool> AddTomeasInService(CreateTomeasRequest tomeasDto)
     {
         try
         {

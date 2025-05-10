@@ -1,9 +1,9 @@
 ﻿using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Mobile.Views.PaidiaViews;
 using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
+using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.Mobile.Views.TeamsViews;
 

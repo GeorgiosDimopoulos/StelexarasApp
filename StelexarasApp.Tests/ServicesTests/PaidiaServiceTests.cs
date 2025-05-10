@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Moq;
 using StelexarasApp.DataAccess;
-using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Services.Services;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Library.Dtos.Atoma;
 using FluentValidation;
+using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.Tests.ServicesTests;
 

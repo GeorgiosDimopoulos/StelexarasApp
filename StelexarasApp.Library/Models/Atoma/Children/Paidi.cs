@@ -1,7 +1,7 @@
 ﻿using StelexarasApp.Library.Models.Domi;
 using System.ComponentModel.DataAnnotations;
 
-namespace StelexarasApp.Library.Models.Atoma
+namespace StelexarasApp.Library.Models.Atoma.Children
 {
     public class Paidi : IPerson
     {
@@ -21,7 +21,6 @@ namespace StelexarasApp.Library.Models.Atoma
     public enum PaidiType
     {
         Ekpaideuomenos = 0,
-        Kataskinotis = 1,
-        Unknown = 2,
+        Kataskinotis = 1
     }
 }

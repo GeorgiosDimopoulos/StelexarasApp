@@ -10,7 +10,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
     private readonly IStaffService _stelexiService = stelexiService;
 
     [HttpGet("Tomearxes")]
-    public async Task<ActionResult<IEnumerable<TomearxisDto>>> GetTomearxes(TomearxisQueryParameters queryParameters)
+    public async Task<ActionResult<IEnumerable<TomearxisResponse>>> GetTomearxes(TomearxisQueryParameters queryParameters)
     {
         var result = await _stelexiService.GetAllTomearxesInService(queryParameters);
 
@@ -21,7 +21,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpGet("Tomearxi/{id}")]
-    public async Task<ActionResult<TomearxisDto>> GetTomearxis(int id)
+    public async Task<ActionResult<TomearxisResponse>> GetTomearxis(int id)
     {
         var result = await _stelexiService.GetStelexosByIdInService(id);
 
@@ -33,14 +33,14 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
 
     [Authorize]
     [HttpPost("Tomearxi")]
-    public async Task<ActionResult<TomearxisDto>> PostTomearxi([FromBody] TomearxisDto tomearxisDto)
+    public async Task<ActionResult<CreateTomeasRequest>> PostTomearxi([FromBody] CreateTomeasRequest tomearxisDto)
     {
         if (tomearxisDto == null)
         {
             return BadRequest("Tomearxis input cannot be null");
         }
 
-        var result = await _stelexiService.AddStelexosInService(tomearxisDto);
+        var result = await _stelexiService.AddTomearxisInService(tomearxisDto);
 
         if (!result)
             return NotFound();
@@ -50,7 +50,7 @@ public class TomearxesController(IStaffService stelexiService) : ControllerBase
 
     [Authorize]
     [HttpPut("Tomearxi/{id}")]
-    public async Task<IActionResult> PutTomearxi(int id, [FromBody] TomearxisDto tomearxisDto)
+    public async Task<IActionResult> PutTomearxi(int id, [FromBody] UpdateTomearxisRequest tomearxisDto)
     {
         if (tomearxisDto == null)
         {

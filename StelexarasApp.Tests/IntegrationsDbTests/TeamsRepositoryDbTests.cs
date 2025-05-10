@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.Tests.IntegrationDbTests
 {

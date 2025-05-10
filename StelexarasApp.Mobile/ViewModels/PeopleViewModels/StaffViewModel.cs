@@ -1,5 +1,5 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
+﻿using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Library.Dtos.People.Staff;
 using StelexarasApp.Services;
 using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;

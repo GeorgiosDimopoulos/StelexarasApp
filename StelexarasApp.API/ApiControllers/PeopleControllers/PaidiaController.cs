@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Library.Models.Atoma;
 using Microsoft.AspNetCore.Authorization;
+using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.API.ApiControllers.PeopleControllers;
 

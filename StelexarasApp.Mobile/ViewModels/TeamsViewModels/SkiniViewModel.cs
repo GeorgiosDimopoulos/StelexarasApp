@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma.Children;
 using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
