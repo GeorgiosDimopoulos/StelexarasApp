@@ -19,12 +19,13 @@ using StelexarasApp.Library.Dtos.People.Staff;
 using StelexarasApp.Library.Dtos.People.Children;
 using StelexarasApp.Services.Interfaces.People.Children;
 using StelexarasApp.Services.Interfaces.People.Staff;
+using StelexarasApp.Services.Services.Staff;
 
 namespace StelexarasApp.ClientApp;
 
 class Program
 {
-    private static HubConnection connection;
+    private static HubConnection connection = null!;
 
     private static async Task Main(string [] args)
     {
@@ -36,20 +37,24 @@ class Program
 
         var mapper = ConfigureMapper();
 
+        int choice = GetPersonTypeChoice();
+        await HandlePersonCreation(choice, serviceProvider);
+    }
+
+    private static async Task HandlePersonCreation(int choice, ServiceProvider serviceProvider)
+    {
         var paidiService = serviceProvider.GetService<IKataskinotisService>();
-        var stelexiService = serviceProvider.GetService<IStaffService>();
-        if (paidiService is null || stelexiService is null)
+        var ekpaideutisService = serviceProvider.GetService<IEkpaideutisService>();
+        var omadarxisService = serviceProvider.GetService<IOmadarxisService>();
+        var koinotarxisService = serviceProvider.GetService<IKoinotarxisService>();
+        var tomearxisService = serviceProvider.GetService<ITomearxisService>();
+
+        if (paidiService == null || ekpaideutisService == null || omadarxisService == null || koinotarxisService == null || tomearxisService == null)
         {
-            Console.WriteLine("Failed to get PaidiService or StelexiService from ServiceProvider.");
+            Console.WriteLine("Error: Unable to resolve services.");
             return;
         }
 
-        int choice = GetPersonTypeChoice();
-        await HandlePersonCreation(choice, paidiService, stelexiService);
-    }
-
-    private static async Task HandlePersonCreation(int choice, IKataskinotisService paidiService, IStaffService stelexiService)
-    {
         switch (choice)
         {
             case 1:
@@ -59,16 +64,72 @@ class Program
                 await CreatePaidi(paidiService, 1);
                 break;
             case 3:
-                await CreateStelexos(stelexiService, Thesi.Omadarxis);
+                var newOmadarxis = new CreateOmadarxisRequest()
+                {
+                    Age = 0,
+                    FullName = GetPersonName(),
+                    Sex = GetPersonSex(),
+                    Tel = "123456789",
+                    XwrosName = "Test Xwros",
+                };
+                if (await omadarxisService.CreateOmadarxisInService(newOmadarxis))
+                {
+                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newOmadarxis.FullName}");
+                    Console.WriteLine("Stelexos created");
+                }
+                else
+                    Console.WriteLine("Failed to create Stelexos.");
                 break;
             case 4:
-                await CreateStelexos(stelexiService, Thesi.Koinotarxis);
+                var newKoinotarxis = new CreateKoinotarxisRequest()
+                {
+                    Age = 0,
+                    FullName = GetPersonName(),
+                    Sex = GetPersonSex(),
+                    Tel = "123456789",
+                    XwrosName = "Test Xwros",
+                };
+                if (await koinotarxisService.CreateKoinotarxisInService(newKoinotarxis))
+                {
+                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New koinotarxis created: {newKoinotarxis.FullName}");
+                    Console.WriteLine("Stelexos created");
+                }
+                else
+                    Console.WriteLine("Failed to create Stelexos.");
                 break;
             case 5:
-                await CreateStelexos(stelexiService, Thesi.Tomearxis);
+                var newTomearxis = new CreateTomearxisRequest()
+                {
+                    Age = 0,
+                    FullName = GetPersonName(),
+                    Sex = GetPersonSex(),
+                    Tel = "123456789",
+                    XwrosName = "Test Xwros",
+                };
+                if (await tomearxisService.CreateTomearxisInService(newTomearxis))
+                {
+                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newTomearxis.FullName}");
+                    Console.WriteLine("Stelexos created");
+                }
+                else
+                    Console.WriteLine("Failed to create Stelexos.");
                 break;
             case 6:
-                await CreateStelexos(stelexiService, Thesi.Ekpaideutis);
+                var newEkpaideutis = new CreateEkpaideutisRequest()
+                {
+                    Age = 0,
+                    FullName = GetPersonName(),
+                    Sex = GetPersonSex(),
+                    Tel = "123456789",
+                    XwrosName = "Test Xwros",
+                };
+                if (await ekpaideutisService.CreateEkpaideutisInService(newEkpaideutis))
+                {
+                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New ekpaideutis created: {newEkpaideutis.FullName}");
+                    Console.WriteLine("Stelexos created");
+                }
+                else
+                    Console.WriteLine("Failed to create Stelexos.");
                 break;
             default:
                 LogFileWriter.WriteToLog("Invalid choice", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
@@ -79,25 +140,23 @@ class Program
     private static async Task CreatePaidi(IKataskinotisService paidiService, int typeOfPaidi)
     {
         var newPaidi = CreatePaidiFromUserInput(typeOfPaidi);
-        if (await paidiService.CreatePaidiInService(newPaidi))
+        var createKataskinotisRequest = new CreateKataskinotisRequest()
+        {
+            Age = newPaidi.Age,
+            FullName = newPaidi.FullName,
+            PaidiType = newPaidi.PaidiType,
+            SeAdeia = false,
+            Sex = Sex.Male,
+            SkiniName = newPaidi.SkiniName
+        };
+
+        if (await paidiService.CreateKataskinotisInService(createKataskinotisRequest))
         {
             await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Paidi created: {newPaidi.FullName}");
             Console.WriteLine("Paidi created");
         }
         else
             Console.WriteLine("Failed to create Paidi.");
-    }
-
-    private static async Task CreateStelexos(IStaffService stelexiService, Thesi stelexosThesi)
-    {
-        var newStelexos = CreateStelexosFromUserInput(stelexosThesi);
-        if (await stelexiService.AddStelexosInService(newStelexos))
-        {
-            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Stelexos created: {newStelexos.FullName}");
-            Console.WriteLine("Stelexos created");
-        }
-        else
-            Console.WriteLine("Failed to create Stelexos.");
     }
 
     private static int GetPersonTypeChoice()
@@ -151,10 +210,14 @@ class Program
         .AddAutoMapper(typeof(Program))
         .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()
         .AddTransient<IValidator<Duty>, DutyValidator>()
-        .AddTransient<IValidator<IStelexosDto>, StelexosValidator>()
-        .AddScoped<IKataskinotisService, EkpaideuomenosService>()
+        .AddTransient<IValidator<IStelexos>, StelexosValidator>()
+        .AddScoped<IKataskinotisService, KataskinotisService>()
+        .AddScoped<IEkpaideuomenosService, EkpaideuomenosService>()
         .AddScoped<IStaffRepository, StaffRepository>()
-        .AddTransient<IStaffService, StaffService>()
+        .AddTransient<IOmadarxisService, OmadarxisService>()
+        .AddTransient<IKoinotarxisService, KoinotarxisService>()
+        .AddTransient<ITomearxisService, TomearxisService>()
+        .AddTransient<IEkpaideutisService, EkpaideutisService>()
         .AddScoped<IPaidiRepository, PaidiRepository>()
         .BuildServiceProvider();
 
@@ -178,32 +241,6 @@ class Program
             {
                 Console.WriteLine($"Reconnection failed: {ex.Message}");
             }
-        };
-    }
-
-    private static IStelexosDto CreateStelexosFromUserInput(Thesi stelexosThesi)
-    {
-        var fullName = GetPersonName();
-        var age = GetPersonAge();
-
-        return stelexosThesi switch
-        {
-            Thesi.Omadarxis => new OmadarxisDtoBase
-            {
-                FullName = fullName,
-                Age = age
-            },
-            Thesi.Koinotarxis => new KoinotarxisDtoBase
-            {
-                FullName = fullName,
-                Age = age
-            },
-            Thesi.Tomearxis => new TomearxisDtoBase
-            {
-                FullName = fullName,
-                Age = age
-            },
-            _ => throw new ArgumentException("Invalid Thesi value")
         };
     }
 
