@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Library.Dtos.People.Staff;
 
 namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 
@@ -11,13 +10,13 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     private readonly IStaffService _stelexiService = stelexiService;
 
     [HttpGet("Koinotarxes")]
-    public async Task<ActionResult<IEnumerable<KoinotarxisDto>>> GetKoinotarxes([FromQuery] KoinotarxisQueryParameters queryParameters)
+    public async Task<ActionResult<IEnumerable<KoinotarxisDtoBase>>> GetKoinotarxes([FromQuery] KoinotarxisQueryParameters queryParameters)
     {
         var result = await _stelexiService.GetAllKoinotarxesInService(queryParameters);
         if (result is null)
             return NotFound();
 
-        return Ok(result); 
+        return Ok(result);
     }
 
     [HttpGet("Koinotarxi/{id}")]
@@ -31,7 +30,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     }
 
     [HttpGet("KoinotarxesTomea/{name}")]
-    public async Task<ActionResult<OmadarxisDto>> GetKoinotarxesAnaTomea(string name, [FromQuery] KoinotarxisQueryParameters queryParameters)
+    public async Task<ActionResult<OmadarxisDtoBase>> GetKoinotarxesAnaTomea(string name, [FromQuery] KoinotarxisQueryParameters queryParameters)
     {
         var result = await _stelexiService.GetKoinotarxesSeTomeaInService(name, queryParameters);
         if (result is null)
@@ -42,14 +41,13 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
 
     [Authorize]
     [HttpPost("Koinotarxi")]
-    public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] IStelexosDto koinotarxis)
+    public async Task<ActionResult<Koinotarxis>> PostKoinotarxi([FromBody] CreateKoinotarxisRequest koinotarxis)
     {
         if (koinotarxis == null)
         {
             return BadRequest("Koinotarxis parameters cannot be null");
         }
 
-        koinotarxis.Thesi = Thesi.Koinotarxis;
         var result = await _stelexiService.AddStelexosInService(koinotarxis);
 
         if (!result)
@@ -60,7 +58,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
 
     [Authorize]
     [HttpPut("Koinotarxi/{id}")]
-    public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisDto koinotarxisDto, int id)
+    public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisDtoBase koinotarxisDto, int id)
     {
         if (koinotarxisDto == null)
         {

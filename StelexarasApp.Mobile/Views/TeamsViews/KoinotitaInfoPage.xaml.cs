@@ -1,19 +1,17 @@
-using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 
 namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class KoinotitaInfoPage : ContentPage
 {
-    private IPaidiaService _paidiaService;
+    private IKataskinotisService _paidiaService;
     private ITeamsService _teamsService;
     private Koinotita MyKoinotita;
 
     public KoinotitaDto Koinotita { get; set; }
 
-    public KoinotitaInfoPage(ITeamsService teamsService, IPaidiaService paidiaService, KoinotitaViewModel koinotitaViewModel)
+    public KoinotitaInfoPage(ITeamsService teamsService, IKataskinotisService paidiaService, KoinotitaViewModel koinotitaViewModel)
     {
         InitializeComponent();
         _teamsService = teamsService;

@@ -1,7 +1,4 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Mobile.Views.PaidiaViews;
+﻿using StelexarasApp.Mobile.Views.PaidiaViews;
 using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 using StelexarasApp.Library.Models.Atoma.Children;
 
@@ -10,9 +7,9 @@ namespace StelexarasApp.Mobile.Views.TeamsViews;
 public partial class SkiniInfoPage : ContentPage
 {
     private readonly SkiniViewModel _skiniViewModel;
-    private readonly IPaidiaService _paidiaService;
+    private readonly IKataskinotisService _paidiaService;
 
-    public SkiniInfoPage(SkiniDto skini, IPaidiaService paidiaService)
+    public SkiniInfoPage(SkiniDto skini, IKataskinotisService paidiaService)
     {
         InitializeComponent();
         _skiniViewModel = new SkiniViewModel(skini, paidiaService);

@@ -1,8 +1,6 @@
 ﻿using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.API.Authorization;
-using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess;
@@ -15,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using StelexarasApp.Services.Interfaces;
+using StelexarasApp.Services.Services.Children;
 
 namespace StelexarasApp.API;
 
@@ -35,7 +35,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITeamsRepository, TeamsRepository>();
 
         services.AddScoped<IStaffService, StaffService>();
-        services.AddScoped<IPaidiaService, PaidiaService>();
+        services.AddScoped<IKataskinotisService, EkpaideuomenosService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<IDutyService, DutyService>();
@@ -43,7 +43,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthTokenProvider, AuthTokenProvider>();
 
         // Add AutoMapper
-        services.AddAutoMapper(typeof(MappingProfile).Assembly);
+        services.AddAutoMapper(typeof(ExpenseMappingProfile).Assembly);
 
         // Add DbContext
         services.AddDbContext<AppDbContext>(options =>

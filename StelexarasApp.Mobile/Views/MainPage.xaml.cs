@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using StelexarasApp.Services;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Mobile.Views.PaidiaViews;
 using StelexarasApp.Mobile.Views.StaffViews;
 using StelexarasApp.Mobile.Views.TeamsViews;
+using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.Mobile.Views;
 
@@ -11,7 +11,7 @@ public partial class MainPage : ContentPage
 {
     private readonly IExpenseService _expenseService;
     private readonly IStaffService _stelexiService;
-    private readonly IPaidiaService _paidiaService;
+    private readonly IKataskinotisService _paidiaService;
     private readonly IDutyService _dutiesService;
     private readonly ITeamsService _teamsService;
     private readonly SignalrService _signalRService;
@@ -21,7 +21,7 @@ public partial class MainPage : ContentPage
     public MainPage(
         IStaffService peopleService,
         IDutyService dutyService,
-        IPaidiaService paidiaService,
+        IKataskinotisService paidiaService,
         ITeamsService teamsService,
         IExpenseService expenseService,
         SignalrService signalRService,

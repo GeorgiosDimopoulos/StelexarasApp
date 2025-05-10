@@ -6,8 +6,8 @@ public class EkpaideutisMappingProfile : Profile
 {
     public EkpaideutisMappingProfile()
     {
-        CreateMap<EkpaideutisDto, Ekpaideutis>()
+        CreateMap<EkpaideutisDtoBase, Ekpaideutis>()
                .IncludeBase<IStelexosDto, IStelexos>()
                .ReverseMap();
-    }
+    }          
 }

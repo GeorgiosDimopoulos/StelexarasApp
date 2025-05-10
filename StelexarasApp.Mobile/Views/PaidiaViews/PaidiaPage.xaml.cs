@@ -1,15 +1,13 @@
-﻿using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
-using StelexarasApp.Library.Dtos.Atoma;
+﻿using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 namespace StelexarasApp.Mobile.Views.PaidiaViews
 {
     public partial class PaidiaPage : ContentPage
     {
-        private readonly IPaidiaService _peopleService;
+        private readonly IKataskinotisService _peopleService;
         private readonly PaidiaViewModel paidiaViewModel;
 
-        public PaidiaPage(IPaidiaService peopleService)
+        public PaidiaPage(IKataskinotisService peopleService)
         {
             InitializeComponent();
             _peopleService = peopleService;

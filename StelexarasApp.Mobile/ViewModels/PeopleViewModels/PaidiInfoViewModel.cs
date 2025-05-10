@@ -1,20 +1,18 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Services.Services.IServices;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Input;
 
 namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 {
     public class PaidiInfoViewModel : INotifyPropertyChanged
     {
-        private readonly IPaidiaService _paidiaService;
+        private readonly IKataskinotisService _paidiaService;
         private ICommand SavePaidiCommand { get; }
 
         public PaidiDto PaidiDto { get; set; } = new PaidiDto();
         public string SkiniName { get; set; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public PaidiInfoViewModel(PaidiDto paidiDto,IPaidiaService peopleService, string skini)
+        public PaidiInfoViewModel(PaidiDto paidiDto,IKataskinotisService peopleService, string skini)
         {
             PaidiDto = paidiDto;
             _paidiaService = peopleService;

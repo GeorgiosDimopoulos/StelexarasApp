@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Library.Dtos;
+using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.API.ApiControllers.GeneralControllers;
 
@@ -17,7 +19,7 @@ public class DutiesController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<DutyDto>>> GetDuties()
+    public async Task<ActionResult<IEnumerable<DutyResponse>>> GetDuties()
     {
         try
         {
@@ -39,7 +41,7 @@ public class DutiesController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("Duty/{id}")]
-    public async Task<ActionResult<DutyDto>> GetDutyById(int id)
+    public async Task<ActionResult<DutyResponse>> GetDutyById(int id)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -51,7 +53,7 @@ public class DutiesController : ControllerBase
     }
 
     [HttpPost("Duty")]
-    public async Task<ActionResult<DutyDto>> PostDuty([FromBody] DutyDto duty)
+    public async Task<ActionResult<bool>> PostDuty([FromBody] CreateDutyRequest duty)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -63,7 +65,7 @@ public class DutiesController : ControllerBase
     }
 
     [HttpPut("Duty/{id}")]
-    public async Task<IActionResult> PutDuty(int id, [FromBody] DutyDto duty)
+    public async Task<IActionResult> PutDuty(int id, [FromBody] UpdateDutyRequest duty)
     {
         if (id != duty.Id)
             return BadRequest();

@@ -33,7 +33,7 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
 
     [Authorize]
     [HttpPost("Omadarxi")]
-    public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] IStelexosDto omadarxis)
+    public async Task<ActionResult<Omadarxis>> PostOmadarxi([FromBody] CreateOmadarxisRequest omadarxis)
     {
         if (omadarxis == null)
         {
@@ -52,7 +52,7 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
 
 
     [HttpGet("OmadarxesKoinotitas/{name}")]
-    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaKoinotita(string name, [FromBody] OmadarxisQueryParameters queryParameters)
+    public async Task<ActionResult<OmadarxisResponse>> GetOmadarxesAnaKoinotita(string name, [FromBody] OmadarxisQueryParameters queryParameters)
     {
         var result = await _stelexiService.GetOmadarxesSeKoinotitaInService(name, queryParameters);
         if (result is null)
@@ -62,7 +62,7 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpGet("OmadarxesTomea/{name}")]
-    public async Task<ActionResult<OmadarxisDto>> GetOmadarxesAnaTomea(string name, [FromBody] OmadarxisQueryParameters queryParameters)
+    public async Task<ActionResult<OmadarxisResponse>> GetOmadarxesAnaTomea(string name, [FromBody] OmadarxisQueryParameters queryParameters)
     {
         var result = await _stelexiService.GetOmadarxesSeTomeaInService(name, queryParameters);
         if (result is null)
@@ -73,7 +73,7 @@ public class OmadarxesController(IStaffService stelexiService) : ControllerBase
 
     [Authorize]
     [HttpPut("Omadarxi/{id}")]
-    public async Task<IActionResult> PutOmadarxi(int id, [FromBody] OmadarxisDto omadarxisDto)
+    public async Task<IActionResult> PutOmadarxi(int id, [FromBody] UpdateOmadarxisRequest omadarxisDto)
     {
         var result = await _stelexiService.UpdateStelexosInService(id, omadarxisDto);
 

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.DataProvider;
 using StelexarasApp.Mobile.Views;
 
 namespace StelexarasApp.Mobile;

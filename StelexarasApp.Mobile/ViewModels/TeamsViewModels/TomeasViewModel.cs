@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Services.Services.IServices;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
@@ -8,12 +6,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
     public class TomeasViewModel : INotifyPropertyChanged
     {
         private readonly ITeamsService _teamsService;
-        private IPaidiaService _paidiaService;
+        private IKataskinotisService _paidiaService;
 
         public List<KoinotitaDto>? Koinotites { get; set; }
         public string TomeasNumber { get; set; }
 
-        public TomeasViewModel(int tomeasNumber, ITeamsService teamsService, IPaidiaService paidiaService)
+        public TomeasViewModel(int tomeasNumber, ITeamsService teamsService, IKataskinotisService paidiaService)
         {
             _teamsService = teamsService;
             _paidiaService = paidiaService;

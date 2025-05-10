@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.TeamsControllers;
 
@@ -10,7 +11,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     private readonly ITeamsService _teamsService = teamsService;
 
     [HttpGet("Koinotites")]
-    public async Task<ActionResult<IEnumerable<KoinotitaDto>>> GetKoinotites()
+    public async Task<ActionResult<IEnumerable<KoinotitaResponse>>> GetKoinotites()
     {
         var result = await _teamsService.GetAllKoinotitesInService(new());
 
@@ -21,7 +22,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("Koinotites/{tomeaId}")]
-    public async Task<ActionResult<IEnumerable<KoinotitaDto>>> GetKoinotitesByTomea(int tomeaId)
+    public async Task<ActionResult<IEnumerable<KoinotitaResponse>>> GetKoinotitesByTomea(int tomeaId)
     {
         var result = await _teamsService.GetKoinotitesAnaTomeaInService(new(), tomeaId);
 
@@ -32,7 +33,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPost("Koinotita")]
-    public async Task<ActionResult<KoinotitaDto>> PostKoinotita([FromBody] KoinotitaDto koinotitaDto)
+    public async Task<ActionResult<bool>> PostKoinotita([FromBody] CreateKoinotitaRequest koinotitaDto)
     {
         var result = await _teamsService.AddKoinotitaInService(koinotitaDto);
 
@@ -56,7 +57,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPut("Koinotita/{id}")]
-    public async Task<IActionResult> PutKoinotita(int id, [FromBody] KoinotitaDto koinotitaDto)
+    public async Task<IActionResult> PutKoinotita(int id, [FromBody] UpdateKoinotitaRequest koinotitaDto)
     {
         var result = await _teamsService.UpdateKoinotitaInService(id, koinotitaDto);
 
@@ -67,7 +68,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpGet("Koinotita/{name}")]
-    public async Task<ActionResult<KoinotitaDto>> GetKoinotita(string name)
+    public async Task<ActionResult<KoinotitaResponse>> GetKoinotita(string name)
     {
         var result = await _teamsService.GetKoinotitaByNameInService(new(), name);
 

@@ -1,4 +1,4 @@
-﻿using StelexarasApp.Services.IServices;
+﻿using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.Services
 {

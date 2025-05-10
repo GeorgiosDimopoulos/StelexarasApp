@@ -1,18 +1,17 @@
-﻿namespace StelexarasApp.Services.Services.IServices;
+﻿namespace StelexarasApp.Services.IServices;
 
 public interface ITeamsService
 {
     Task<bool> HasData();
-    Task<bool> AddSkiniInService(CreateSkiniDto skini);
+    Task<bool> AddSkiniInService(CreateSkiniRequest skini);
     Task<bool> AddKoinotitaInService(CreateKoinotitaRequest koinotita);
     Task<bool> AddTomeasInService(CreateTomeasRequest tomeas);
-    Task<bool> CheckStelexousXwroNameInService(IStelexosDto stelexosDto, string xwrosName);
 
     Task<bool> DeleteSkiniInService(int skiniId);
     Task<bool> DeleteKoinotitaInService(int koinotitaId);
     Task<bool> DeleteTomeasInService(string n);
 
-    Task<bool> UpdateSkiniInService(int id, UpdateSkiniDto skini);
+    Task<bool> UpdateSkiniInService(int id, UpdateSkiniRequest skini);
     Task<bool> UpdateKoinotitaInService(int id, UpdateKoinotitaRequest koinotita);
     Task<bool> UpdateTomeaInService(string id, UpdateTomeasRequest tomeas);
 

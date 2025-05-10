@@ -1,13 +1,10 @@
-﻿using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Library.QueryParameters;
-
-namespace StelexarasApp.DataAccess.Repositories.IRepositories;
+﻿namespace StelexarasApp.DataAccess.Repositories.IRepositories;
 
 public interface IStaffRepository
 {
     Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName, StelexosQueryParameters queryParameters);
     Task<IStelexos> GetStelexosByIdInDb(int id);
-    Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi);
+    Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi, StelexosQueryParameters stelexosQueryParameters);
 
     //Task<bool> AddOmadarxiInDb(Omadarxis omadarxis);
     //Task<bool> AddKoinotarxiInDb(Koinotarxis koinotarxis);

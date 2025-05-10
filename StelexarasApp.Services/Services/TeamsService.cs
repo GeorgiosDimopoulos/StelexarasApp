@@ -7,7 +7,7 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
     private readonly ITeamsRepository _teamsRepository = teamsRepository;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<bool> AddSkiniInService(CreateSkiniDto skiniDto)
+    public async Task<bool> AddSkiniInService(CreateSkiniRequest skiniDto)
     {
         try
         {
@@ -110,7 +110,7 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return _teamsRepository.UpdateKoinotitaInDb(id, koinotita);
     }
 
-    public Task<bool> UpdateSkiniInService(int id, UpdateSkiniDto skiniDto)
+    public Task<bool> UpdateSkiniInService(int id, UpdateSkiniRequest skiniDto)
     {
         var skini = _mapper.Map<Skini>(skiniDto);
         return _teamsRepository.UpdateSkiniInDb(id, skini);
@@ -166,40 +166,5 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
             !_teamsRepository.GetKoinotitesAnaTomeaInDb(new(), 1).Result.Any())
             return Task.FromResult(false);
         return Task.FromResult(true);
-    }
-
-    public async Task<bool> CheckStelexousXwroNameInService(IStelexosDto stelexosDto, string xwrosName)
-    {
-        switch (stelexosDto.Thesi)
-        {
-            case Thesi.Omadarxis:
-                var skini = await _teamsRepository.GetSkiniByNameInDb(new(), xwrosName);
-                if (skini == null)
-                {
-                    Console.WriteLine($"Skini {xwrosName} doesnt exist in DB!");
-                    return false;
-                }
-                return true;
-            case Thesi.Koinotarxis:
-                var koinotita = await _teamsRepository.GetKoinotitaByNameInDb(new(), xwrosName);
-                if (koinotita == null)
-                {
-                    Console.WriteLine($"Koinotita {xwrosName} doesnt exist in DB!");
-                    return false;
-                }
-                return true;
-            case Thesi.Tomearxis:
-                var tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), xwrosName);
-                if (tomeas == null)
-                {
-                    Console.WriteLine($"Tomeas {xwrosName} doesnt exist in DB!");
-                    return false;
-                }
-                return true;
-            case Thesi.Ekpaideutis:
-                throw new NotImplementedException();
-            default:
-                return false;
-        }
     }
 }

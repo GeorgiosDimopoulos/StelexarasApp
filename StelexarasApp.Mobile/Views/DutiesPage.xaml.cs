@@ -1,7 +1,5 @@
-﻿using StelexarasApp.Library.Models;
-using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Mobile.ViewModels;
-using StelexarasApp.Library.Dtos;
+﻿using StelexarasApp.Mobile.ViewModels;
+using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.Mobile.Views;
 

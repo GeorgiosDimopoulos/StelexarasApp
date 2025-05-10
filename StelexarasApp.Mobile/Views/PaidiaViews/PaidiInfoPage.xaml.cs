@@ -1,7 +1,4 @@
-﻿using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
+﻿using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 namespace StelexarasApp.Mobile.Views.PaidiaViews
 {
@@ -15,7 +12,7 @@ namespace StelexarasApp.Mobile.Views.PaidiaViews
         private bool isPaidiNameFilled = false;
         private bool isPaidiAgeFilled = false;
 
-        public PaidiInfoPage(IPaidiaService peopleService, PaidiDto paidi)
+        public PaidiInfoPage(IKataskinotisService peopleService, PaidiDto paidi)
         {
             InitializeComponent();
             _paidiDto = paidi;

@@ -222,7 +222,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
         var parts = stelexos.FullName.Trim().Split(' ');
         if (parts.Length < 2)
-            throw new ArgumentException("Invalid FullName", nameof(stelexos.FullName));
+        {
+            ArgumentException argumentException = new("Invalid FullName", nameof(stelexos.FullName));
+            throw argumentException;
+        }
 
         var existingStelexos = await GetStelexosByIdInDb(id);
         if (existingStelexos == null)
@@ -315,7 +318,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi)
+    public async Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi, StelexosQueryParameters stelexosQueryParameters)
     {
         try
         {
@@ -328,6 +331,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                     .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
                     .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
                 return await query.FirstOrDefaultAsync(e => e.FullName == name) ?? null!;
+            }
+
+            if (stelexosQueryParameters.IncludeXwros) 
+            {
             }
 
             return thesi switch

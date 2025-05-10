@@ -4,9 +4,10 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Mappers;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Validators;
+using StelexarasApp.Services.Interfaces;
+using StelexarasApp.Services.Services.Children;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,12 +52,12 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddScoped<ITeamsRepository, TeamsRepository>();
 
     builder.Services.AddScoped<IStaffService, StaffService>();
-    builder.Services.AddScoped<IPaidiaService, PaidiaService>();
+    builder.Services.AddScoped<IKataskinotisService, EkpaideuomenosService>();
     builder.Services.AddScoped<IExpenseService, ExpenseService>();
     builder.Services.AddScoped<ITeamsService, TeamsService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
 
-    builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+    builder.Services.AddAutoMapper(typeof(ExpenseMappingProfile).Assembly);
 
     // Add MVC services
     builder.Services.AddControllersWithViews();

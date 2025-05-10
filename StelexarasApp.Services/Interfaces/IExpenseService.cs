@@ -1,4 +1,4 @@
-﻿namespace StelexarasApp.Services.Services.IServices
+﻿namespace StelexarasApp.Services.IServices
 {
     public interface IExpenseService
     {

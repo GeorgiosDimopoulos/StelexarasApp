@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.Services.Services;
 
@@ -20,7 +21,7 @@ public class DutyService : IDutyService
         }
     }
 
-    public async Task<bool> AddDutyInService(DutyDto dutyDto)
+    public async Task<bool> AddDutyInService(CreateDutyRequest dutyDto)
     {
         try
         {
@@ -43,7 +44,7 @@ public class DutyService : IDutyService
         return await _dutyRepository.DeleteDutyInDb(dutyId);
     }
 
-    public async Task<bool> UpdateDutyInService(string dutyName, DutyDto updatedDutyDto)
+    public async Task<bool> UpdateDutyInService(string dutyName, UpdateDutyRequest updatedDutyDto)
     {
         if (string.IsNullOrEmpty(dutyName) || updatedDutyDto is null || _dutyRepository is null)
             throw new ArgumentException("Duty name or updated duty or duty Repository cannot be null");
@@ -52,21 +53,21 @@ public class DutyService : IDutyService
         return await _dutyRepository.UpdateDutyInDb(dutyName, updatedDuty);
     }
 
-    public async Task<IEnumerable<DutyDto>> GetDutiesInService()
+    public async Task<IEnumerable<DutyResponse>> GetDutiesInService()
     {
         if (_dutyRepository is null)
             throw new ArgumentException("Duty Repository cannot be null");
         var duties = await _dutyRepository.GetDutiesFromDb();
-        var dutiesDto = _mapper.Map<IEnumerable<DutyDto>>(duties);
+        var dutiesDto = _mapper.Map<IEnumerable<DutyResponse>>(duties);
         return dutiesDto;
     }
 
-    public async Task<DutyDto> GetDutyByIdInService(int id)
+    public async Task<DutyResponse> GetDutyByIdInService(int id)
     {
         if (_dutyRepository is null)
             throw new ArgumentException("Duty Repository cannot be null");
         var duty = await _dutyRepository.GetDutyFromDb(id);
-        var dutyDto = _mapper.Map<DutyDto>(duty);
+        var dutyDto = _mapper.Map<DutyResponse>(duty);
         return dutyDto;
     }
 }

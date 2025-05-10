@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Services.Services.IServices;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
@@ -8,10 +6,10 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
     public class SxoliViewModel : INotifyPropertyChanged
     {
         private readonly ITeamsService _teamsService;
-        private readonly IPaidiaService _paidiaService;
+        private readonly IKataskinotisService _paidiaService;
         public List<string> SkinesNames { get; set; }
 
-        public SxoliViewModel(ITeamsService teamsService, IPaidiaService paidiaService)
+        public SxoliViewModel(ITeamsService teamsService, IKataskinotisService paidiaService)
         {
             _teamsService = teamsService;
             _paidiaService = paidiaService;

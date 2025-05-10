@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.Models.Atoma.Children;
 using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Services.Services.IServices;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -11,12 +8,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 
 public class SkiniViewModel : INotifyPropertyChanged
 {
-    private readonly IPaidiaService _paidiaService;
+    private readonly IKataskinotisService _paidiaService;
     private readonly IMapper mapper;
 
     public Skini Skini { get; set; }
 
-    public SkiniViewModel(SkiniDto skini, IPaidiaService paidiaService)
+    public SkiniViewModel(SkiniDto skini, IKataskinotisService paidiaService)
     {
         mapper = new MapperConfiguration(cfg =>
         {

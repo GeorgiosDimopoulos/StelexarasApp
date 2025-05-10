@@ -9,9 +9,9 @@ namespace StelexarasApp.API.ApiControllers.PeopleControllers;
 [Authorize]
 public class PaidiaController : ControllerBase
 {
-    private readonly IPaidiaService _paidiaService;
+    private readonly IKataskinotisService _paidiaService;
 
-    public PaidiaController(IPaidiaService teamsService)
+    public PaidiaController(IKataskinotisService teamsService)
     {
         _paidiaService = teamsService;
     }

@@ -1,14 +1,11 @@
 ﻿using FluentValidation;
-using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.Services.Validators;
 
-public class PaidiValidator : AbstractValidator<PaidiDto>
+public class PaidiValidator : AbstractValidator<PaidiDtoBase>
 {
     public PaidiValidator()
     {
-        RuleFor(user=>user.Id)
-            .LessThan(100).WithMessage("PaidiDto Id must be greater than 0");
         RuleFor(user => user.FullName)
             .NotEmpty().WithMessage("PaidiDto Name is required")
             .Length(5, 50).WithMessage("PaidiDto Name must be between 2 and 50 characters");
@@ -19,10 +16,6 @@ public class PaidiValidator : AbstractValidator<PaidiDto>
 
         RuleFor(user => user.PaidiType)
             .NotNull().WithMessage("PaidiType is required");
-
-        RuleFor(user => user.Id)
-            .InclusiveBetween(1, 999)
-            .WithMessage("Id is required");
 
         When(paidi => paidi.PaidiType == PaidiType.Kataskinotis,()=>
         {

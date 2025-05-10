@@ -1,7 +1,6 @@
 ﻿global using StelexarasApp.Library.Models.Atoma.Staff;
 global using StelexarasApp.DataAccess.Repositories.IRepositories;
 global using StelexarasApp.DataAccess.Helpers;
-global using StelexarasApp.Services.Services.IServices;
 global using StelexarasApp.Library.Models.Logs;
 global using StelexarasApp.Library.QueryParameters;
 global using StelexarasApp.Library.Models.Atoma;
@@ -10,3 +9,8 @@ global using StelexarasApp.Library.Models.Domi;
 global using StelexarasApp.Library.Dtos.Domi;
 global using StelexarasApp.Library.Dtos.People.Staff;
 global using StelexarasApp.Library.Models.Atoma.Children;
+global using StelexarasApp.Library.Dtos.People.Children;
+global using StelexarasApp.Library.Dtos;
+global using StelexarasApp.Services.IServices;
+global using StelexarasApp.Services.Interfaces.People.Children;
+global using StelexarasApp.Services.Interfaces.People.Staff;

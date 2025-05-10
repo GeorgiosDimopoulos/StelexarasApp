@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.API.ApiControllers.TeamsControllers;
 
@@ -10,7 +11,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     private readonly ITeamsService _teamsService = teamsService;
 
     [HttpGet("Skines")]
-    public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkines([FromQuery] SkiniQueryParameters skinQueryParameters)
+    public async Task<ActionResult<IEnumerable<SkiniResponse>>> GetSkines([FromQuery] SkiniQueryParameters skinQueryParameters)
     {
         var result = await _teamsService.GetAllSkinesInService(skinQueryParameters);
 
@@ -21,7 +22,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpGet("Skini/{name}")]
-    public async Task<ActionResult<SkiniDto>> GetSkini([FromQuery] SkiniQueryParameters parameters, string name)
+    public async Task<ActionResult<SkiniResponse>> GetSkini([FromQuery] SkiniQueryParameters parameters, string name)
     {
         var result = await _teamsService.GetSkiniByNameInService(parameters, name);
 
@@ -33,7 +34,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPost("Skini")]
-    public async Task<ActionResult<SkiniDto>> PostSkini([FromBody] SkiniDto skiniDto)
+    public async Task<IActionResult> PostSkini([FromBody] CreateSkiniRequest skiniDto)
     {
         var result = await _teamsService.AddSkiniInService(skiniDto);
 
@@ -45,7 +46,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPut("Skini/{id}")]
-    public async Task<IActionResult> PutSkini(int id, [FromBody] SkiniDto skiniDto)
+    public async Task<IActionResult> PutSkini(int id, [FromBody] UpdateSkiniRequest skiniDto)
     {
         var result = await _teamsService.UpdateSkiniInService(id, skiniDto);
 
@@ -68,7 +69,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpGet("Skines/{koinotitaName}")]
-    public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkinesByKoinotita(string koinotitaName)
+    public async Task<ActionResult<IEnumerable<SkiniResponse>>> GetSkinesByKoinotita(string koinotitaName)
     {
         var result = await _teamsService.GetSkinesAnaKoinotitaInService(new(), koinotitaName);
 
@@ -78,7 +79,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpGet("SkinesEkpaideuomenon")]
-    public async Task<ActionResult<IEnumerable<SkiniDto>>> GetSkinesEkpaideuomenon()
+    public async Task<ActionResult<IEnumerable<SkiniResponse>>> GetSkinesEkpaideuomenon()
     {
         var result = await _teamsService.GetSkinesEkpaideuomenonInService(new());
 

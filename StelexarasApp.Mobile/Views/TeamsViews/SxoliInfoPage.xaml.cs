@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Services.Services.IServices;
-using StelexarasApp.Mobile.Views.PaidiaViews;
+﻿using StelexarasApp.Mobile.Views.PaidiaViews;
 using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 using StelexarasApp.Library.Models.Atoma.Children;
 
@@ -9,9 +7,9 @@ namespace StelexarasApp.Mobile.Views.TeamsViews;
 public partial class SxoliInfoPage : ContentPage
 {
     private readonly SxoliViewModel _sxoliViewModel;
-    private readonly IPaidiaService _paidiaService;
+    private readonly IKataskinotisService _paidiaService;
 
-    public SxoliInfoPage(IPaidiaService paidiaService, SxoliViewModel sxoliViewModel)
+    public SxoliInfoPage(IKataskinotisService paidiaService, SxoliViewModel sxoliViewModel)
     {
         InitializeComponent();
         _paidiaService = paidiaService ?? throw new ArgumentNullException(nameof(paidiaService));

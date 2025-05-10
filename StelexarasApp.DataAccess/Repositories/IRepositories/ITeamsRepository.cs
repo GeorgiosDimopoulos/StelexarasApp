@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.QueryParameters;
-
-namespace StelexarasApp.DataAccess.Repositories.IRepositories
+﻿namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
     public interface ITeamsRepository
     {

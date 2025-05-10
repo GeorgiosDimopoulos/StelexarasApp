@@ -1,22 +1,19 @@
 ﻿using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Services.Services.IServices;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Dtos.Domi;
 using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 {
     public class KoinotitaViewModel : INotifyPropertyChanged
     {
-        private readonly IPaidiaService _paidiaService;
+        private readonly IKataskinotisService _paidiaService;
         private readonly ITeamsService _teamsService;
         public ObservableCollection<string> Skines { get; set; }
         public Koinotita? Koinotita { get; set; }
 
-        public KoinotitaViewModel(IPaidiaService paidiaService, ITeamsService teamsService)
+        public KoinotitaViewModel(IKataskinotisService paidiaService, ITeamsService teamsService)
         {
             _paidiaService = paidiaService;
             _teamsService = teamsService;

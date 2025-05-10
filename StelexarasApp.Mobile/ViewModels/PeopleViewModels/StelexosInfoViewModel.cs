@@ -1,7 +1,4 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Services.Services.IServices;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 

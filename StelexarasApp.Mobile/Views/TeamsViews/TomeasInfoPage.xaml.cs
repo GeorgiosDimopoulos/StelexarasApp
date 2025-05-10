@@ -1,6 +1,4 @@
 ﻿using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 
 namespace StelexarasApp.Mobile.Views.TeamsViews;
@@ -9,10 +7,10 @@ public partial class TomeasInfoPage : ContentPage
 {
     private readonly TomeasViewModel _tomeasViewModel;
     private readonly KoinotitaViewModel _koinotitaViewModel;
-    private readonly IPaidiaService _paidiaService;
+    private readonly IKataskinotisService _paidiaService;
     private readonly ITeamsService _teamsService;
 
-    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiaService paidiaService)
+    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IKataskinotisService paidiaService)
     {
         InitializeComponent();
         _teamsService = teamsService;

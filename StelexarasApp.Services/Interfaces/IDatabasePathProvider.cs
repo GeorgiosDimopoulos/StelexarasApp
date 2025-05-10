@@ -1,4 +1,4 @@
-﻿namespace StelexarasApp.Services.IServices
+﻿namespace StelexarasApp.Services.Interfaces
 {
     public interface IDatabasePathProvider
     {

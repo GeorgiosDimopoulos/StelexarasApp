@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
-using StelexarasApp.Library.Dtos.People.Staff;
 
 namespace StelexarasApp.Services.Validators;
 
-public class StelexosValidator : AbstractValidator<IStelexosDto>
+public class StelexosValidator : AbstractValidator<IStelexos>
 {
     public StelexosValidator()
     {

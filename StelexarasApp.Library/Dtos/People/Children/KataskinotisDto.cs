@@ -1,13 +1,6 @@
 ﻿namespace StelexarasApp.Library.Dtos.People.Children;
 
-public class KataskinotisDtoBase : IPaidiDto
-{
-    public string FullName { get; set; } = default!;
-    public int Age { get; set; }
-    public bool SeAdeia { get; set; }
-    public string XwrosName { get; set; } = default!;
-    public Sex Sex { get; set; }
-}
+public class KataskinotisDtoBase : PaidiDtoBase { }
 
 public class CreateKataskinotisRequest : KataskinotisDtoBase { }
 

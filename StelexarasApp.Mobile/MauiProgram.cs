@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.Services.Mappers;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services;
 using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
@@ -14,16 +13,14 @@ using StelexarasApp.Mobile.Views;
 using StelexarasApp.Mobile.Views.PaidiaViews;
 using StelexarasApp.Mobile.ViewModels;
 using FluentValidation;
-using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Library.Models;
 using Microsoft.Extensions.Configuration;
 using StelexarasApp.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.DataProvider;
-using static StelexarasApp.DataAccess.ApiConstants;
-using Microsoft.Extensions.DependencyInjection;
-using StelexarasApp.Services.Services.IServices.People;
+using StelexarasApp.Services.Interfaces;
+using StelexarasApp.Services.Services.Children;
 
 namespace StelexarasApp.Mobile;
 
@@ -163,7 +160,7 @@ public static class MauiProgram
     {
         services.AddScoped<IDutyService, DutyService>();
         services.AddScoped<IStaffService, StaffService>();
-        services.AddScoped<IKataskinotisService, PaidiaService>();
+        services.AddScoped<IKataskinotisService, EkpaideuomenosService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<SignalrService>();

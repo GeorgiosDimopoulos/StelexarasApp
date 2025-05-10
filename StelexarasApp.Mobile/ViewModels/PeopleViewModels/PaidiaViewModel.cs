@@ -1,17 +1,15 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Services.Services.IServices;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class PaidiaViewModel : INotifyPropertyChanged
 {
-    private readonly IPaidiaService _peopleService;
+    private readonly IKataskinotisService _peopleService;
 
     public ObservableCollection<PaidiDto> PaidiaList { get; set; }
 
-    public PaidiaViewModel(IPaidiaService peopleService)
+    public PaidiaViewModel(IKataskinotisService peopleService)
     {
         _peopleService = peopleService;
         PaidiaList = [];

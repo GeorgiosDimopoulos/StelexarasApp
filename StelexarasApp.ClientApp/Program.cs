@@ -6,18 +6,19 @@ using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
-using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Services.Mappers;
-using StelexarasApp.Services.Services;
-using StelexarasApp.Services.Services.IServices;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Models.Logs;
 using FluentValidation;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Library.Models.Atoma.Children;
+using StelexarasApp.Services.Services.Children;
+using StelexarasApp.Library.Dtos.People.Staff;
+using StelexarasApp.Library.Dtos.People.Children;
+using StelexarasApp.Services.Interfaces.People.Children;
+using StelexarasApp.Services.Interfaces.People.Staff;
 
 namespace StelexarasApp.ClientApp;
 
@@ -35,7 +36,7 @@ class Program
 
         var mapper = ConfigureMapper();
 
-        var paidiService = serviceProvider.GetService<IPaidiaService>();
+        var paidiService = serviceProvider.GetService<IKataskinotisService>();
         var stelexiService = serviceProvider.GetService<IStaffService>();
         if (paidiService is null || stelexiService is null)
         {
@@ -47,7 +48,7 @@ class Program
         await HandlePersonCreation(choice, paidiService, stelexiService);
     }
 
-    private static async Task HandlePersonCreation(int choice, IPaidiaService paidiService, IStaffService stelexiService)
+    private static async Task HandlePersonCreation(int choice, IKataskinotisService paidiService, IStaffService stelexiService)
     {
         switch (choice)
         {
@@ -75,10 +76,10 @@ class Program
         }
     }
 
-    private static async Task CreatePaidi(IPaidiaService paidiService, int typeOfPaidi)
+    private static async Task CreatePaidi(IKataskinotisService paidiService, int typeOfPaidi)
     {
         var newPaidi = CreatePaidiFromUserInput(typeOfPaidi);
-        if (await paidiService.AddPaidiInService(newPaidi))
+        if (await paidiService.CreatePaidiInService(newPaidi))
         {
             await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Paidi created: {newPaidi.FullName}");
             Console.WriteLine("Paidi created");
@@ -125,7 +126,7 @@ class Program
     {
         var config = new MapperConfiguration(cfg =>
         {
-            cfg.AddProfile<MappingProfile>();
+            cfg.AddProfile<ExpenseMappingProfile>();
         });
 
         return config.CreateMapper();
@@ -148,10 +149,10 @@ class Program
         .AddDbContext<AppDbContext>()
         .AddLogging()
         .AddAutoMapper(typeof(Program))
-        .AddTransient<IValidator<PaidiDto>, PaidiValidator>()
+        .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()
         .AddTransient<IValidator<Duty>, DutyValidator>()
         .AddTransient<IValidator<IStelexosDto>, StelexosValidator>()
-        .AddScoped<IPaidiaService, PaidiaService>()
+        .AddScoped<IKataskinotisService, EkpaideuomenosService>()
         .AddScoped<IStaffRepository, StaffRepository>()
         .AddTransient<IStaffService, StaffService>()
         .AddScoped<IPaidiRepository, PaidiRepository>()
@@ -187,29 +188,26 @@ class Program
 
         return stelexosThesi switch
         {
-            Thesi.Omadarxis => new OmadarxisDto
+            Thesi.Omadarxis => new OmadarxisDtoBase
             {
                 FullName = fullName,
-                Age = age,
-                Thesi = stelexosThesi
+                Age = age
             },
-            Thesi.Koinotarxis => new KoinotarxisDto
+            Thesi.Koinotarxis => new KoinotarxisDtoBase
             {
                 FullName = fullName,
-                Age = age,
-                Thesi = stelexosThesi
+                Age = age
             },
-            Thesi.Tomearxis => new TomearxisDto
+            Thesi.Tomearxis => new TomearxisDtoBase
             {
                 FullName = fullName,
-                Age = age,
-                Thesi = stelexosThesi
+                Age = age
             },
             _ => throw new ArgumentException("Invalid Thesi value")
         };
     }
 
-    private static PaidiDto CreatePaidiFromUserInput(int typeOfPaidi) => new()
+    private static PaidiDtoBase CreatePaidiFromUserInput(int typeOfPaidi) => new()
     {
         FullName = GetPersonName(),
         Age = GetPersonAge(),

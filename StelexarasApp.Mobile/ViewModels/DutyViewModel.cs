@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using StelexarasApp.Library.Dtos;
-using StelexarasApp.Services.Services.IServices;
+using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.Mobile.ViewModels;
 

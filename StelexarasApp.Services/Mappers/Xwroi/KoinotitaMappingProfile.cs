@@ -21,7 +21,7 @@ public class KoinotitaMappingProfile : Profile
 
 
         CreateMap<Koinotita, KoinotitaResponse>()
-            .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom(src => src.Skines != null ? src.Skines.Count : 0))
+            .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom((src, dest) => src.Skines != null ? src.Skines.Count() : 0))
             .ForMember(dest => dest.TomeasName, opt => opt.MapFrom(src => src.Tomeas != null ? src.Tomeas.Name : string.Empty)); ;
     }
 }

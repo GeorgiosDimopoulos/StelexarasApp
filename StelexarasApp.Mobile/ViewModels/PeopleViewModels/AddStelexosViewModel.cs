@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Services.Services.IServices;
+﻿using StelexarasApp.Library.Models.Atoma.Staff;
 using System.Collections.ObjectModel;
 
 namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
