@@ -10,7 +10,5 @@ public class KoinotarxisMappingProfile : Profile
             .IncludeBase<IStelexosDto, IStelexos>()
             .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Name = src.XwrosName ?? string.Empty }))
             .ReverseMap();
-
-        HERE
     }
 }

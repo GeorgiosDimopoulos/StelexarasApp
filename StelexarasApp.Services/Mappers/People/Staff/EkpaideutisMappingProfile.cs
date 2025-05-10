@@ -9,6 +9,5 @@ public class EkpaideutisMappingProfile : Profile
         CreateMap<EkpaideutisDto, Ekpaideutis>()
                .IncludeBase<IStelexosDto, IStelexos>()
                .ReverseMap();
-        HERE
     }
 }

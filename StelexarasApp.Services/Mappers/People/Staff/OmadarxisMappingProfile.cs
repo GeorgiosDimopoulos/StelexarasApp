@@ -11,6 +11,5 @@ public class OmadarxisMappingProfile : Profile
             .IncludeBase<IStelexosDto, IStelexos>()
             .ForMember(dest => dest.Skini, opt => opt.MapFrom(src => new Skini { Name = src.XwrosName ?? string.Empty }))
             .ReverseMap();
-        HERE
     }
 }

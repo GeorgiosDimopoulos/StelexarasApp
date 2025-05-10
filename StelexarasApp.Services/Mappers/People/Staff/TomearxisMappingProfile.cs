@@ -10,7 +10,5 @@ public class TomearxisMappingProfile : Profile
             .IncludeBase<IStelexosDto, IStelexos>()
             .ForMember(dest => dest.Koinotarxes, opt => opt.Ignore())
             .ReverseMap();
-
-        HERE
     }
 }

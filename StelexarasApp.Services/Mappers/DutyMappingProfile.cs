@@ -3,15 +3,19 @@ using StelexarasApp.Library.Dtos;
 
 namespace StelexarasApp.Services.Mappers;
 
-public class MappingProfile : Profile
+public class OthersMappingProfiles : Profile
 {
-    public MappingProfile()
+    public OthersMappingProfiles()
     {
         CreateMap<CreateDutyRequest, Duty>()
             .ForMember(dest => dest.Date, opt => opt.Ignore())
             .ReverseMap();
 
-        CreateMap<CreateExpenseRequest, Expense>()
+        CreateMap<UpdateDutyRequest, Duty>()
+            .ForMember(dest => dest.Date, opt => opt.Ignore())
+            .ReverseMap();
+
+        CreateMap<DeleteDutyRequest, Duty>()
             .ForMember(dest => dest.Date, opt => opt.Ignore())
             .ReverseMap();
     }
