@@ -7,7 +7,11 @@ DATA:
 
 API:
 - split to 2 Swagger pages, so we will have Admins and normal-users (hide PUT DELETE and INSERT endpoints for normal users)
-- add Documentation info with class <summary> comments, like ///
+- add Swagger Documentation info in endpoints with comments, like:
+  /// <summary>
+  /// this is a Documentation
+  /// </summary>
+  /// <param name="client">Client</param>
 
 MOBILE:
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
