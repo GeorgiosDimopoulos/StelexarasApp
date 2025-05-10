@@ -4,8 +4,6 @@ using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Services.Services;
 using FluentValidation;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Library.Dtos.People.Staff;

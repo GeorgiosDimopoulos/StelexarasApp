@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Library.Dtos.Atoma;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Web.Controllers.WebControllers;
 
 namespace StelexarasApp.Tests.WebControllersTests;

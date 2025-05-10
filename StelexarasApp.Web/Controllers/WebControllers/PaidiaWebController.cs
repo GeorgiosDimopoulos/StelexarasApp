@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Models.Atoma.Children;
-using StelexarasApp.Services.Services.IServices;
 using System.Collections;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;
@@ -11,11 +9,11 @@ namespace StelexarasApp.Web.Controllers.WebControllers;
 [Route("PaidiaWeb")]
 public class PaidiaWebController : Controller
 {
-    private readonly IPaidiaService _paidiaService;
+    private readonly IKataskinotisService _paidiaService;
     private readonly ITeamsService _teamsService;
     private readonly ILogger<PaidiaWebController> _logger;
 
-    public PaidiaWebController(IPaidiaService paidiaService, ITeamsService teamsService, ILogger<PaidiaWebController> logger)
+    public PaidiaWebController(IKataskinotisService paidiaService, ITeamsService teamsService, ILogger<PaidiaWebController> logger)
     {
         _paidiaService = paidiaService;
         _teamsService = teamsService;

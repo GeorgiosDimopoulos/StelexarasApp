@@ -2,14 +2,13 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using StelexarasApp.Library.Models.Atoma.Children;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Web.Controllers.WebControllers;
 
 namespace StelexarasApp.Tests.WebControllersTests;
 
 public class PaidiaWebControllerTests
 {
-    private readonly Mock<IPaidiaService> _mockPaidiaService;
+    private readonly Mock<IKataskinotisService> _mockPaidiaService;
     private readonly Mock<ITeamsService> _mockTeamsService;
     private readonly PaidiaWebController _controller;
     private readonly Mock<ILogger<PaidiaWebController>> _mockLogger;
@@ -17,7 +16,7 @@ public class PaidiaWebControllerTests
     public PaidiaWebControllerTests()
     {
         _mockTeamsService = new Mock<ITeamsService>();
-        _mockPaidiaService = new Mock<IPaidiaService>();
+        _mockPaidiaService = new Mock<IKataskinotisService>();
         _mockLogger = new Mock<ILogger<PaidiaWebController>>();
         _controller = new PaidiaWebController(_mockPaidiaService.Object, _mockTeamsService.Object, _mockLogger.Object);
     }

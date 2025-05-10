@@ -3,8 +3,6 @@ using Moq;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Library.Models.Domi;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Library.Dtos.Domi;
-using StelexarasApp.Services.Services.IServices;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Library.Models.Atoma;
 

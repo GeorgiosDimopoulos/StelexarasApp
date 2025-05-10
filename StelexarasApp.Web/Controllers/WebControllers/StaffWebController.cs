@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Library.Dtos.Atoma;
 using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Services.Services.IServices;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;
 

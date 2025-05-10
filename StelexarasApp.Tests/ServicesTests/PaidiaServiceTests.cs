@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
 using Moq;
 using StelexarasApp.DataAccess;
-using StelexarasApp.Services.Services;
 using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Library.Dtos.Atoma;
 using FluentValidation;
 using StelexarasApp.Library.Models.Atoma.Children;
+using StelexarasApp.Services.Services.Children;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
 public class PaidiaServiceTests
 {
     private readonly Mock<IPaidiRepository> _mockPaidiRepository;
-    private readonly PaidiaService _paidiaService;
+    private readonly EkpaideuomenosService _paidiaService;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<AppDbContext> _mockDbContext;
     private readonly Mock<ILoggerFactory> _loggerFactory;
@@ -38,7 +37,7 @@ public class PaidiaServiceTests
         _paidiaService = new PaidiaService(
             _mockPaidiRepository.Object,
             _mockMapper.Object,
-            _loggerFactory.Object.CreateLogger<PaidiaService>(),
+            _loggerFactory.Object.CreateLogger<EkpaideuomenosService>(),
             _paidiValidatorMock.Object);
 
     }
