@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Services.Interfaces.People.Staff;
 
-namespace StelexarasApp.Web.Controllers.WebControllers;
+namespace StelexarasApp.Web.Controllers.WebControllers.Staff;
 
 [Route("StaffWeb")]
 public class StaffWebController : Controller
 {
-    private readonly IStaffService _staffService;
+    private readonly IStaffService<CreatedAtActionResult,> _staffService;
     private readonly ILogger<StaffWebController> _logger;
 
     public StaffWebController(IStaffService staffService, ILogger<StaffWebController> logger)

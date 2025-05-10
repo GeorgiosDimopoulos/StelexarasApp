@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;
 
@@ -32,7 +34,7 @@ public class KoinotitesWebController(ITeamsService koinotitaService, ILogger<Koi
     // POST: KoinotitaWeb/Create
     [HttpPost("Create")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(KoinotitaDto koinotita)
+    public async Task<IActionResult> Create(CreateKoinotitaRequest koinotita)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
