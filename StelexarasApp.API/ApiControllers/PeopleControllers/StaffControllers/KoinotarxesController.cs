@@ -5,14 +5,15 @@ namespace StelexarasApp.API.ApiControllers.PeopleControllers.StaffControllers;
 
 [ApiController]
 [Route("[controller]")]
-public class KoinotarxesController(IStaffService stelexiService) : ControllerBase
+public class KoinotarxesController(IKoinotarxisService koinotarxisService) : ControllerBase
 {
-    private readonly IStaffService _stelexiService = stelexiService;
+    private readonly IKoinotarxisService _koinotarxisService = koinotarxisService
+        ?? throw new ArgumentNullException(nameof(koinotarxisService));
 
     [HttpGet("Koinotarxes")]
     public async Task<ActionResult<IEnumerable<KoinotarxisDtoBase>>> GetKoinotarxes([FromQuery] KoinotarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetAllKoinotarxesInService(queryParameters);
+        var result = await _koinotarxisService.GetAllKoinotarxesInService(queryParameters);
         if (result is null)
             return NotFound();
 
@@ -20,9 +21,9 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     }
 
     [HttpGet("Koinotarxi/{id}")]
-    public async Task<ActionResult<Koinotarxis>> GetKoinotarxis(int id)
+    public async Task<ActionResult<Koinotarxis>> GetKoinotarxis(int id, KoinotarxisQueryParameters koinotarxisQueryParameters)
     {
-        var result = await _stelexiService.GetStelexosByIdInService(id);
+        var result = await _koinotarxisService.GetKoinotarxisByIdInService(id, koinotarxisQueryParameters);
         if (result is null)
             return NotFound();
 
@@ -32,7 +33,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     [HttpGet("KoinotarxesTomea/{name}")]
     public async Task<ActionResult<OmadarxisDtoBase>> GetKoinotarxesAnaTomea(string name, [FromQuery] KoinotarxisQueryParameters queryParameters)
     {
-        var result = await _stelexiService.GetKoinotarxesSeTomeaInService(name, queryParameters);
+        var result = await _koinotarxisService.GetKoinotarxesSeTomeaInService(name, queryParameters);
         if (result is null)
             return NotFound();
 
@@ -48,7 +49,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
             return BadRequest("Koinotarxis parameters cannot be null");
         }
 
-        var result = await _stelexiService.AddStelexosInService(koinotarxis);
+        var result = await _koinotarxisService.CreateKoinotarxisInService(koinotarxis);
 
         if (!result)
             return NotFound();
@@ -58,14 +59,14 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
 
     [Authorize]
     [HttpPut("Koinotarxi/{id}")]
-    public async Task<IActionResult> PutKoinotarxi([FromBody] KoinotarxisDtoBase koinotarxisDto, int id)
+    public async Task<IActionResult> PutKoinotarxi([FromBody] UpdateKoinotarxisRequest koinotarxisDto, int id)
     {
         if (koinotarxisDto == null)
         {
             return BadRequest("Koinotarxis cannot be null");
         }
 
-        var result = await _stelexiService.UpdateStelexosInService(id, koinotarxisDto);
+        var result = await _koinotarxisService.UpdateKoinotarxisInService(id, koinotarxisDto);
 
         if (!result)
             return NotFound();
@@ -77,7 +78,7 @@ public class KoinotarxesController(IStaffService stelexiService) : ControllerBas
     [HttpDelete("Koinotarxi/{id}")]
     public async Task<IActionResult> DeleteKoinotarxi(int id)
     {
-        var result = await _stelexiService.DeleteStelexosByIdInService(id);
+        var result = await koinotarxisService.DeleteKoinotarxisByIdInService(id);
 
         if (!result)
             return NotFound();
