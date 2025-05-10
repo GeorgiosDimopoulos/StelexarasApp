@@ -1,4 +1,4 @@
-﻿namespace StelexarasApp.Services.Services.IServices;
+﻿namespace StelexarasApp.Services.Services.IServices.People;
 
 public interface IStaffService
 {
