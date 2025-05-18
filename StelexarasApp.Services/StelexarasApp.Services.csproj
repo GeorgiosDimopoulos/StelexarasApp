@@ -19,8 +19,4 @@
     <ProjectReference Include="..\StelexarasApp.Library\StelexarasApp.Library.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mappers\People\Children\" />
-  </ItemGroup>
-
 </Project>

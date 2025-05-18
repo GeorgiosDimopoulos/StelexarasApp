@@ -1,26 +1,11 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.DataAccess.Repositories;
-using StelexarasApp.Services.Mappers;
-using StelexarasApp.Services.Services;
-using StelexarasApp.Services;
-using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
-using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
-using StelexarasApp.Mobile.Views.StaffViews;
-using StelexarasApp.Mobile.Views.TeamsViews;
-using StelexarasApp.Mobile.Views;
-using StelexarasApp.Mobile.Views.PaidiaViews;
-using StelexarasApp.Mobile.ViewModels;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Library.Models;
 using Microsoft.Extensions.Configuration;
-using StelexarasApp.DataAccess;
-using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess.DataProvider;
-using StelexarasApp.Services.Interfaces;
-using StelexarasApp.Services.Services.Children;
+using StelexarasApp.Services.Interfaces.People;
 
 namespace StelexarasApp.Mobile;
 
@@ -140,8 +125,8 @@ public static class MauiProgram
     private static void RegisterModels(IServiceCollection services)
     {
         //services.AddSingleton<DatabaseType>();
-        services.AddTransient<IValidator<IStelexosDto>, StelexosValidator>();
-        services.AddTransient<IValidator<PaidiDto>, PaidiValidator>();
+        services.AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>();
+        services.AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>();
         services.AddTransient<IValidator<Duty>, DutyValidator>();
         services.AddTransient<IValidator<Expense>, ExpenseValidator>();
     }
@@ -159,8 +144,8 @@ public static class MauiProgram
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<IDutyService, DutyService>();
-        services.AddScoped<IStaffService, StaffService>();
-        services.AddScoped<IKataskinotisService, EkpaideuomenosService>();
+        services.AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiService>();
+        services.AddScoped<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>, StaffService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<SignalrService>();

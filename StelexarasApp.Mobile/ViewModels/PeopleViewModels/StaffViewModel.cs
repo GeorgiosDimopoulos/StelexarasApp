@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.Dtos.People.Staff;
-using StelexarasApp.Services;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -8,16 +6,16 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class StaffViewModel : INotifyPropertyChanged
 {
-    private readonly IStaffService _staffService;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _staffService;
     private readonly IApiService _apiService;
 
-    public ObservableCollection<IStelexosDto> AllStaff { get; set; }
+    public ObservableCollection<StelexosResponse> AllStaff { get; set; }
 
-    public StaffViewModel(IStaffService staffService, IApiService apiService)
+    public StaffViewModel(IApiService apiService, IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> staffService)
     {
-        _apiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
         _staffService = staffService ?? throw new ArgumentNullException(nameof(staffService));
-        AllStaff = new ObservableCollection<IStelexosDto>();
+        _apiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
+        AllStaff = new ObservableCollection<StelexosResponse>();
         _ = LoadAllStaffAsync();
     }
 
@@ -27,7 +25,7 @@ public class StaffViewModel : INotifyPropertyChanged
         {
             AllStaff.Clear();
 
-            var allStaff = await _staffService.GetAllStaffInService(new()
+            var allStaff = await _staffService.GetStelexi(Thesi.None, string.Empty, new()
             {
                 IncludeXwros = true,
                 IncludeYpostelexi = true,
@@ -36,7 +34,7 @@ public class StaffViewModel : INotifyPropertyChanged
             if (allStaff == null)
                 return;
 
-            AllStaff = allStaff as ObservableCollection<IStelexosDto> ?? new ObservableCollection<IStelexosDto>(allStaff);
+            AllStaff = allStaff as ObservableCollection<StelexosResponse> ?? new ObservableCollection<StelexosResponse>(allStaff);
 
             // var allStaff = await _apiService.GetStelexi();
             //foreach (var stelexos in allStaff)
@@ -61,39 +59,40 @@ public class StaffViewModel : INotifyPropertyChanged
         }
     }
 
-    public async Task<IEnumerable<IStelexosDto>> GetAllStaff()
+    public async Task<IEnumerable<StelexosResponse>> GetAllStaff()
     {
-        return await _staffService.GetAllStaffInService(new());
+        return await _staffService.GetStelexi(Thesi.None, string.Empty, new());
     }
 
-    public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeKoinotita(KoinotitaDto koinotitaDto)
+    public async Task<IEnumerable<StelexosResponse>> GetOmadarxesSeKoinotita(KoinotitaDtoBase koinotitaDto)
     {
-        return await _staffService.GetOmadarxesSeKoinotitaInService(koinotitaDto.Name, new());
+        return await _staffService.GetStelexi(Thesi.Omadarxis, koinotitaDto.Name, new());
     }
 
-    public async Task<IEnumerable<KoinotarxisDto>> GetAllKoinotarxes()
+    public async Task<IEnumerable<StelexosResponse>> GetAllKoinotarxes()
     {
-        return await _staffService.GetAllKoinotarxesInService(new());
+        return await _staffService.GetStelexi(Thesi.Omadarxis, string.Empty, new());
     }
 
-    public async Task<IEnumerable<OmadarxisDto>> GetAllOmadarxes()
+    public async Task<IEnumerable<StelexosResponse>> GetAllOmadarxes()
     {
-        return await _staffService.GetAllOmadarxesInService(new());
+        return await _staffService.GetStelexi(Thesi.Omadarxis, string.Empty, new());
     }
 
-    public async Task<IEnumerable<TomearxisDto>> GetAllTomearxes()
+    public async Task<IEnumerable<StelexosResponse>> GetAllTomearxes()
     {
-        return await _staffService.GetAllTomearxesInService(new());
+        return await _staffService.GetStelexi(Thesi.Omadarxis, string.Empty, new());
     }
 
-    public async Task<IEnumerable<OmadarxisDto>> GetOmadarxesSeTomea(TomeasDto tomeasDto)
+    public async Task<IEnumerable<StelexosResponse>> GetOmadarxesSeTomea(TomeasDtoBase tomeasDto)
     {
-        return await _staffService.GetOmadarxesSeTomeaInService(tomeasDto.Name, new());
+        return await _staffService.GetStelexi(Thesi.Tomearxis, tomeasDto.Name, new());
+
     }
 
-    public async Task<IEnumerable<KoinotarxisDto>> GetKoinotarxesSeTomea(TomeasDto tomeasDto)
+    public async Task<IEnumerable<StelexosResponse>> GetKoinotarxesSeTomea(TomeasDtoBase tomeasDto)
     {
-        return await _staffService.GetKoinotarxesSeTomeaInService(tomeasDto.Name, new());
+        return await _staffService.GetStelexi(Thesi.Koinotarxis, tomeasDto.Name, new());
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

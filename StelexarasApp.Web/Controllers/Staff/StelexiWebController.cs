@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Library.Dtos.People.Staff;
 using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Services.Interfaces.People.Staff;
+using StelexarasApp.Services.Interfaces.People;
 
 namespace StelexarasApp.Web.Controllers.WebControllers.Staff;
 
 [Route("StaffWeb")]
-public class StaffWebController : Controller
+public class StelexiWebController : Controller
 {
-    private readonly IStaffService<CreatedAtActionResult,> _staffService;
-    private readonly ILogger<StaffWebController> _logger;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _staffService;
+    private readonly ILogger<StelexiWebController> _logger;
 
-    public StaffWebController(IStaffService staffService, ILogger<StaffWebController> logger)
+    public StelexiWebController(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> staffService, ILogger<StelexiWebController> logger)
     {
-        _staffService = staffService;
+        _staffService = staffService ?? throw new ArgumentNullException(nameof(staffService));
         _logger = logger;
     }
 
@@ -21,7 +22,7 @@ public class StaffWebController : Controller
     {
         try
         {
-            var staffList = await _staffService.GetAllStaffInService(new());
+            var staffList = await _staffService.GetStelexi(Thesi.None, string.Empty, new());
             if (staffList == null || !staffList.Any())
             {
                 _logger.LogWarning("No staff members found.");
@@ -32,7 +33,7 @@ public class StaffWebController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while fetching the staff list.");
-            ViewData["ErrorMessage"] = "An error occurred while fetching the staff list. Please try again later.";
+            ViewData ["ErrorMessage"] = "An error occurred while fetching the staff list. Please try again later.";
             return View("Error");
         }
     }
@@ -45,21 +46,45 @@ public class StaffWebController : Controller
     }
 
     // POST: StaffWeb/Create
-    [HttpPost("Create")]
+    [HttpPost("CreateOmadarxis")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("FullName,Position,Phone")] IStelexosDto staffDto)
+    public async Task<IActionResult> CreateOmadarxis([Bind("FullName,Position,Phone")] CreateStelexosRequest createStelexosRequest)
     {
         if (!ModelState.IsValid)
-            return View(staffDto);
+            return View(createStelexosRequest);
 
         try
         {
-            var result = await _staffService.AddStelexosInService(staffDto);
+            var result = await _staffService.CreateStelexos(createStelexosRequest, Thesi.Omadarxis);
             if (result)
                 return RedirectToAction(nameof(Index));
 
             ModelState.AddModelError("", "Failed to create staff member.");
-            return View(staffDto);
+            return View(createStelexosRequest);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while creating a new staff member.");
+            return View("Error", new { message = "An error occurred while creating a new staff member." });
+        }
+    }
+
+    // POST: StaffWeb/Create
+    [HttpPost("CreateKoinotarxis")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateKoinotarxis([Bind("FullName,Position,Phone")] CreateStelexosRequest createKoinotarxisRequest)
+    {
+        if (!ModelState.IsValid)
+            return View(createKoinotarxisRequest);
+
+        try
+        {
+            var result = await _staffService.CreateStelexos(createKoinotarxisRequest, Thesi.Koinotarxis);
+            if (result)
+                return RedirectToAction(nameof(Index));
+
+            ModelState.AddModelError("", "Failed to create staff member.");
+            return View(createKoinotarxisRequest);
         }
         catch (Exception ex)
         {
@@ -77,7 +102,7 @@ public class StaffWebController : Controller
 
         try
         {
-            var staffMember = await _staffService.GetStelexosByIdInService(id);
+            var staffMember = await _staffService.GetStelexosById(id, new());
             if (staffMember == null)
             {
                 _logger.LogWarning($"Staff member with ID {id} not found.");
@@ -94,14 +119,14 @@ public class StaffWebController : Controller
 
     // GET: StaffWeb/Delete/5
     [HttpGet("Delete/{id:int}")]
-    public async Task<IActionResult> Delete(int id, [FromQuery] Thesi? thesi)
+    public async Task<IActionResult> Delete(int id)
     {
         if (id <= 0)
             return BadRequest("Invalid staff ID.");
 
         try
         {
-            var staffMember = await _staffService.GetStelexosByIdInService(id);
+            var staffMember = await _staffService.DeleteStelexos(new DeleteStelexosRequest() { Id = id });
             if (staffMember == null)
             {
                 _logger.LogWarning($"Staff member with ID {id} not found.");

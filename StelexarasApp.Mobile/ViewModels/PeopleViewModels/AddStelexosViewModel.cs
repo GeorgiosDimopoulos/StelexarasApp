@@ -1,11 +1,10 @@
-﻿using StelexarasApp.Library.Models.Atoma.Staff;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class AddStelexosViewModel
 {
-    private readonly IStaffService _staffService;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _staffService;
     private readonly ITeamsService _teamsService;
 
     public ObservableCollection<string> ThesiOptions { get; set; }
@@ -14,13 +13,14 @@ public class AddStelexosViewModel
     public string PhoneNumber { get; set; } = string.Empty;
     public string XwrosName { get; set; } = string.Empty;
     public int Age { get; set; } = default!;
+    public Sex Sex { get; set; } = default!;
     public Command SaveCommand { get; }
 
-    public AddStelexosViewModel(IStaffService staffService, ITeamsService teamsService)
+    public AddStelexosViewModel(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> staffService, ITeamsService teamsService)
     {
-        _staffService = staffService ?? throw new ArgumentNullException(nameof(staffService));
-        _teamsService = teamsService ?? throw new ArgumentNullException(nameof(teamsService));
-        ThesiOptions = new ObservableCollection<string>(Enum.GetNames(typeof(Thesi)));
+        _staffService = staffService;
+        _teamsService = teamsService;
+        ThesiOptions = [.. Enum.GetNames(typeof(Thesi))];
         SaveCommand = new Command(OnSaveStelexos);
     }
 
@@ -29,44 +29,49 @@ public class AddStelexosViewModel
         if (!IsValidFullNameInput(FullName) || string.IsNullOrWhiteSpace(XwrosName) || string.IsNullOrWhiteSpace(PhoneNumber) || Age < 18)
             return false;
 
-        IStelexosDto newStelexosDto = Enum.Parse<Thesi>(SelectedThesi) switch
+        switch (Enum.Parse<Thesi>(SelectedThesi))
         {
-            Thesi.Omadarxis => new OmadarxisDto
-            {
-                FullName = FullName,
-                XwrosName = XwrosName,
-                Tel = PhoneNumber,
-                Age = Age,
-                Thesi = Thesi.Omadarxis,
-                //Sex = Sex
-            },
-            Thesi.Koinotarxis => new KoinotarxisDto
-            {
-                FullName = FullName,
-                XwrosName = XwrosName,
-                Tel = PhoneNumber,
-                Age = Age,
-                Thesi = Thesi.Koinotarxis,
-                //Sex = Sex
-            },
-            Thesi.Tomearxis => new TomearxisDto
-            {
-                FullName = FullName,
-                XwrosName = XwrosName,
-                Tel = PhoneNumber,
-                Age = Age,
-                Thesi = Thesi.Tomearxis,
-                //Sex = Sex
-            },
-            _ => throw new ArgumentException("Invalid Thesi value")
-        };
+            case Thesi.None:
+                await Application.Current.MainPage.DisplayAlert("ΣΦΆΛΜΑ", "Παρακαλώ επιλέξτε θέση", "OK");
+                return false;
+            case Thesi.Omadarxis:
+                var omadarxis = new CreateStelexosRequest
+                {
+                    FullName = FullName,
+                    XwrosName = XwrosName,
+                    Tel = PhoneNumber,
+                    Age = Age,
+                    Thesi = Thesi.Omadarxis,
+                    Sex = Sex
+                };
+                await _staffService.CreateStelexos(omadarxis, Thesi.Omadarxis);
+                break;
+            case Thesi.Koinotarxis:
+                var koinotarxis = new CreateStelexosRequest
+                {
+                    FullName = FullName,
+                    Thesi = Thesi.Koinotarxis,
+                    XwrosName = XwrosName,
+                    Tel = PhoneNumber,
+                    Age = Age,
+                    Sex = Sex
+                };
+                await _staffService.CreateStelexos(koinotarxis, Thesi.Koinotarxis);
+                break;
+            case Thesi.Tomearxis:
+                var tomearxis = new CreateStelexosRequest
+                {
+                    FullName = FullName,
+                    Thesi = Thesi.Tomearxis,
+                    XwrosName = XwrosName,
+                    Tel = PhoneNumber,
+                    Age = Age,
+                    Sex = Sex
+                };
+                await _staffService.CreateStelexos(tomearxis, Thesi.Tomearxis);
+                break;
+        }
 
-
-        bool isOkToBeAdded = await _teamsService.CheckStelexousXwroNameInService(newStelexosDto, XwrosName);
-        if (!isOkToBeAdded)
-            return false;
-
-        await _staffService.AddStelexosInService(newStelexosDto);
         return true;
     }
 

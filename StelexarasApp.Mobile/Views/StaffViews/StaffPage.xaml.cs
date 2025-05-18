@@ -1,15 +1,12 @@
-﻿using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
-
-namespace StelexarasApp.Mobile.Views.StaffViews;
+﻿namespace StelexarasApp.Mobile.Views.StaffViews;
 
 public partial class StaffPage : ContentPage
 {
-    private readonly IStaffService _personalService;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _personalService;
     private readonly ITeamsService _teamsService;
     private readonly StaffViewModel _personalViewModel;
 
-    public StaffPage(IStaffService personalService, ITeamsService teamsService, StaffViewModel personalViewModel)
+    public StaffPage(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> personalService, ITeamsService teamsService, StaffViewModel personalViewModel)
     {
         _personalService = personalService;
         _teamsService = teamsService;
@@ -22,9 +19,9 @@ public partial class StaffPage : ContentPage
     {
         if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
         {
-            var staffService = DependencyService.Get<IStaffService>();
+            var staffService = DependencyService.Get<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>>();
             int stelexosId = (e.CurrentSelection [0] as IStelexos)!.Id;
-            var selectedWorkerDto = e.CurrentSelection [0] as IStelexosDto;
+            var selectedWorkerDto = e.CurrentSelection [0] as StelexosDtoBase;
             if (selectedWorkerDto != null)
             {
                 var stelexosInfoPage = new StelexosInfoPage(staffService, selectedWorkerDto, stelexosId);

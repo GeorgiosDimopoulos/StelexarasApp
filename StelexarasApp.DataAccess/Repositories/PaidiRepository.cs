@@ -245,20 +245,41 @@ public class PaidiRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         return await _dbContext.Paidia.FirstAsync(p => p.Id == id);
     }
 
-    public async Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType type)
+    public async Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType? type)
     {
         if (_dbContext.Paidia == null)
             return null!;
 
         if (type == PaidiType.Kataskinotis)
             return await _dbContext.Paidia.Where(p => p.PaidiType == PaidiType.Kataskinotis).ToListAsync();
-        else
+        else if (type == PaidiType.Ekpaideuomenos)
             return await _dbContext.Paidia.Where(p => p.PaidiType == PaidiType.Ekpaideuomenos).ToListAsync();
+        else
+            return await _dbContext.Paidia.ToListAsync();
     }
 
-    public async Task<bool> SaveChangesInDb()
+    public async Task<IEnumerable<Paidi>> GetPaidiaInSkiniFromDb(string skiniName)
     {
-        var res = await _dbContext.SaveChangesAsync();
-        return res > 0;
+        var skini = await _dbContext.Skines
+            .Include(s => s.Paidia)
+            .FirstAsync(s => s.Name == skiniName);
+        return await _dbContext.Paidia.Where(p => p.SkiniId == skini.Id).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Paidi>> GetPaidiaInSxoliFromDb()
+    {
+        return await _dbContext.Paidia.Where(p => p.Age == 16).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaFromDb(string n)
+    {
+        var skines = await _dbContext.Skines
+            .Include(s => s.Paidia)
+            .FirstAsync(s => s.Koinotita.Name == n);
+        var paidia = await _dbContext.Paidia
+            .Include(p => p.Skini)
+            .Where(p => p.Skini.Koinotita.Name == n)
+            .ToListAsync();
+        return paidia;
     }
 }

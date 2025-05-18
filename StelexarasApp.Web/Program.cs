@@ -7,7 +7,6 @@ using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Services.Interfaces;
-using StelexarasApp.Services.Services.Children;
 
 var builder = WebApplication.CreateBuilder(args);
 

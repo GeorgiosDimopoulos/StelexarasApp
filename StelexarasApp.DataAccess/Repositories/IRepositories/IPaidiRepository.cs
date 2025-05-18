@@ -4,8 +4,6 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories;
 
 public interface IPaidiRepository
 {
-    Task<bool> SaveChangesInDb();
-
     Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId);
 
     Task<bool> AddPaidiInDb(Paidi paidi);
@@ -17,6 +15,8 @@ public interface IPaidiRepository
     Task<bool> UpdatePaidiInDb(Paidi paidi);
 
     Task<Paidi> GetPaidiByIdFromDb(int id);
-
-    Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType type);
+    Task<IEnumerable<Paidi>> GetPaidiaInSkiniFromDb(string n);
+    Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaFromDb(string n);
+    Task<IEnumerable<Paidi>> GetPaidiaInSxoliFromDb();
+    Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType? type);
 }

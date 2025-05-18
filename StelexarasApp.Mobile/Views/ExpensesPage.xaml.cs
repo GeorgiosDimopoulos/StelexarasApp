@@ -1,5 +1,4 @@
-﻿using StelexarasApp.Mobile.ViewModels;
-using StelexarasApp.Library.Models;
+﻿using StelexarasApp.Library.Models;
 namespace StelexarasApp.Mobile.Views
 {
     public partial class ExpensesPage : ContentPage

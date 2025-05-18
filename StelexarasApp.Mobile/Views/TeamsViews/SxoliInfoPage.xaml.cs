@@ -1,15 +1,11 @@
-﻿using StelexarasApp.Mobile.Views.PaidiaViews;
-using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
-using StelexarasApp.Library.Models.Atoma.Children;
-
-namespace StelexarasApp.Mobile.Views.TeamsViews;
+﻿namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class SxoliInfoPage : ContentPage
 {
     private readonly SxoliViewModel _sxoliViewModel;
-    private readonly IKataskinotisService _paidiaService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
 
-    public SxoliInfoPage(IKataskinotisService paidiaService, SxoliViewModel sxoliViewModel)
+    public SxoliInfoPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, SxoliViewModel sxoliViewModel)
     {
         InitializeComponent();
         _paidiaService = paidiaService ?? throw new ArgumentNullException(nameof(paidiaService));
@@ -20,7 +16,7 @@ public partial class SxoliInfoPage : ContentPage
     private async void PaidiButton_Clicked(object sender, EventArgs e)
     {
         var button = sender as Button;
-        var paidi = button?.CommandParameter as PaidiDto;
+        var paidi = button?.CommandParameter as PaidiResponse;
 
         if (paidi != null)
         {
@@ -31,9 +27,9 @@ public partial class SxoliInfoPage : ContentPage
 
     private async void AddEkpaideuomenos(object sender, EventArgs e)
     {
-        PaidiDto paidiDto = null;
+        CreatePaidiRequest paidi = null;
 
-        while (paidiDto == null)
+        while (paidi == null)
         {
             var fullName = await GetValidFullName();
             if (fullName == null)
@@ -42,7 +38,7 @@ public partial class SxoliInfoPage : ContentPage
             var age = await GetValidAge();
             var skiniName = await GetValidSkiniName();
 
-            paidiDto = new PaidiDto
+            paidi = new CreatePaidiRequest
             {
                 FullName = fullName,
                 Age = age,
@@ -52,7 +48,7 @@ public partial class SxoliInfoPage : ContentPage
             };
         }
 
-        if (await _sxoliViewModel.AddEkpaideuomenos(paidiDto))
+        if (await _sxoliViewModel.AddEkpaideuomenos(paidi))
             await DisplayAlert("ΠΡΟΣΘΗΚΗ", "Δημιουργηθηκε επιτυχώς νέο παιδί!", "OK");
     }
 

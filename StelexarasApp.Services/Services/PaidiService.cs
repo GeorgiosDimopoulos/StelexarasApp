@@ -2,19 +2,19 @@
 using Microsoft.Extensions.Logging;
 using FluentValidation;
 
-namespace StelexarasApp.Services.Services.Children;
+namespace StelexarasApp.Services.Services;
 
-public class KataskinotisService : IKataskinotisService
+public class PaidiService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>
 {
-    private readonly ILogger<EkpaideuomenosService> _logger;
-    private readonly IPaidiRepository? _paidiRepository;
-    private readonly IMapper? _mapper;
+    private readonly ILogger<PaidiService> _logger;
+    private readonly IPaidiRepository _paidiRepository;
+    private readonly IMapper _mapper;
     private readonly IValidator<PaidiDtoBase> _paidiValidator;
 
-    public KataskinotisService(
+    public PaidiService(
         IPaidiRepository paidiRepository,
         IMapper mapper,
-        ILogger<EkpaideuomenosService> logger,
+        ILogger<PaidiService> logger,
         IValidator<PaidiDtoBase> paidiValidator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -23,7 +23,7 @@ public class KataskinotisService : IKataskinotisService
         _paidiRepository = paidiRepository ?? throw new ArgumentNullException(nameof(paidiRepository));
     }
 
-    public async Task<bool> CreateKataskinotisInService(CreateKataskinotisRequest paidiDto)
+    public async Task<bool> CreatePaidiInService(CreatePaidiRequest paidiDto)
     {
         if (_paidiValidator == null || _mapper == null || _paidiRepository == null)
             return false;
@@ -47,7 +47,7 @@ public class KataskinotisService : IKataskinotisService
         }
     }
 
-    public async Task<bool> DeleteKataskinotisInService(DeleteKataskinotisRequest request)
+    public async Task<bool> DeletePaidiInService(DeletePaidiRequest request)
     {
         if (request.Id <= 0 || _mapper == null || _paidiRepository is null)
             return false;
@@ -59,23 +59,57 @@ public class KataskinotisService : IKataskinotisService
         return await _paidiRepository.DeletePaidiInDb(paidi);
     }
 
-    public async Task<IEnumerable<KataskinotisResponse>> GetKataskinotesInService()
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaInService(string koinotita)
     {
-        if (_mapper == null || _paidiRepository is null)
+        var paidia = await _paidiRepository.GetPaidiaInKoinotitaFromDb(koinotita);
+        if (paidia == null)
             return null!;
 
-        var paidia = await _paidiRepository.GetPaidiaFromDb(PaidiType.Kataskinotis);
+        var paidiaResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
+        if (paidiaResponse == null)
+            return null!;
+        return paidiaResponse;
+    }
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniInService(string skini)
+    {
+        var paidia = await _paidiRepository.GetPaidiaInSkiniFromDb(skini);
         if (paidia == null)
             return null!;
 
         var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
-        var kataskinotesResponse = _mapper.Map<IEnumerable<KataskinotisResponse>>(kataskinotes);
+        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
         if (kataskinotesResponse == null)
             return null!;
         return kataskinotesResponse;
     }
 
-    public async Task<KataskinotisResponse> GetKataskinotisByIdInService(int id)
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySxoliInService()
+    {
+        var paidia = await _paidiRepository.GetPaidiaInSxoliFromDb();
+        if (paidia == null)
+            return null!;
+
+        var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
+        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
+        if (kataskinotesResponse == null)
+            return null!;
+        return kataskinotesResponse;
+    }
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaInService(PaidiType? paidiType)
+    {
+        var paidia = await _paidiRepository.GetPaidiaFromDb(paidiType);
+        if (paidia == null)
+            return null!;
+
+        var paidiaresponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
+        if (paidiaresponse == null)
+            return null!;
+        return paidiaresponse;
+    }
+
+    public async Task<PaidiResponse> GetPaidiByIdInService(int id)
     {
         if (_mapper == null || _paidiRepository is null)
             return null!;
@@ -86,10 +120,10 @@ public class KataskinotisService : IKataskinotisService
         if (paidi is not Kataskinotis kataskinotis)
             return null!;
 
-        return _mapper.Map<KataskinotisResponse>(kataskinotis);
+        return _mapper.Map<PaidiResponse>(kataskinotis);
     }
 
-    public async Task<bool> MoveKataskinotisToNewSkiniInService(int paidiId, int newSkiniId)
+    public async Task<bool> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId)
     {
         if (paidiId <= 0 || newSkiniId <= 0 || _mapper == null || _paidiRepository is null)
             return false;
@@ -101,7 +135,7 @@ public class KataskinotisService : IKataskinotisService
         return true;
     }
 
-    public async Task<bool> UpdateKataskinotisInService(UpdateKataskinotisRequest paidiDto)
+    public async Task<bool> UpdatePaidiInService(UpdatePaidiRequest paidiDto)
     {
         var validationResult = _paidiValidator.Validate(paidiDto);
 

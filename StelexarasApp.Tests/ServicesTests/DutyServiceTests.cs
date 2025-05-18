@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Moq;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.Library.Dtos;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Services.Services;
 
@@ -23,7 +24,10 @@ public class DutyServiceTests
     public async Task AddDutyInService_ShouldReturnTrue()
     {
         // Arrange
-        var duty = new DutyDto { Id = 1, Name = "TestDuty" };
+        var duty = new CreateDutyRequest 
+        {
+            Name = "TestDuty"            
+        };
         _mockdutyRepository.Setup(m => m.AddDutyInDb(It.IsAny<Duty>())).ReturnsAsync(true);
 
         // Act
@@ -37,7 +41,7 @@ public class DutyServiceTests
     public async Task DeleteDutyInService_ShouldReturnTrue()
     {
         // Arrange
-        var duty = new DutyDto { Id = 1, Name = "TestDuty" };
+        var duty = new DeleteDutyRequest { Id = 1 };
         _mockdutyRepository.Setup(m => m.DeleteDutyInDb(It.IsAny<int>())).ReturnsAsync(true);
 
         // Act
@@ -70,7 +74,7 @@ public class DutyServiceTests
     public async Task UpdateDutyByIdInService()
     {
         // Arrange
-        var duty = new DutyDto { Id = 1, Name = "TestDuty" };
+        var duty = new UpdateDutyRequest { Id = 1, Name = "TestDuty" };
         _mockdutyRepository.Setup(m => m.UpdateDutyInDb(It.IsAny<string>(), It.IsAny<Duty>())).ReturnsAsync(true);
 
         // Act

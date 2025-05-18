@@ -1,16 +1,13 @@
-﻿using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
-
-namespace StelexarasApp.Mobile.Views.TeamsViews;
+﻿namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class TomeasInfoPage : ContentPage
 {
     private readonly TomeasViewModel _tomeasViewModel;
     private readonly KoinotitaViewModel _koinotitaViewModel;
-    private readonly IKataskinotisService _paidiaService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
     private readonly ITeamsService _teamsService;
 
-    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IKataskinotisService paidiaService)
+    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService)
     {
         InitializeComponent();
         _teamsService = teamsService;
@@ -24,8 +21,8 @@ public partial class TomeasInfoPage : ContentPage
     private async void KoinotitaButton_Clicked(object sender, EventArgs e)
     {
         var button = (Button)sender;
-        var koinotita = (Koinotita)button.BindingContext;
-        _koinotitaViewModel.Koinotita = koinotita;
+        var koinotita = (KoinotitaResponse)button.BindingContext;
+        _koinotitaViewModel.Koinotita = koinotita ?? new KoinotitaResponse();
         _ = Navigation.PushAsync(new KoinotitaInfoPage(_teamsService, _paidiaService, _koinotitaViewModel));
     }
 
@@ -40,12 +37,10 @@ public partial class TomeasInfoPage : ContentPage
         if (string.IsNullOrEmpty(koinotitaName))
             return;
 
-        var newKoinotita = new KoinotitaDto
+        var newKoinotita = new CreateKoinotitaRequest
         {
             TomeasName = _tomeasViewModel.TomeasNumber.ToString(),
-            Name = koinotitaName,
-            SkinesNumber = 0,
-
+            Name = koinotitaName
         };
 
         if(await _koinotitaViewModel.AddKoinotita(newKoinotita))

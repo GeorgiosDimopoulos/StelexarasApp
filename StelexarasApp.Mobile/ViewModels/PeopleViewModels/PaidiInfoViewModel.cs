@@ -5,14 +5,14 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 {
     public class PaidiInfoViewModel : INotifyPropertyChanged
     {
-        private readonly IKataskinotisService _paidiaService;
+        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
         private ICommand SavePaidiCommand { get; }
 
-        public PaidiDto PaidiDto { get; set; } = new PaidiDto();
+        public PaidiResponse PaidiDto { get; set; } = new PaidiResponse();
         public string SkiniName { get; set; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public PaidiInfoViewModel(PaidiDto paidiDto,IKataskinotisService peopleService, string skini)
+        public PaidiInfoViewModel(PaidiResponse paidiDto, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> peopleService, string skini)
         {
             PaidiDto = paidiDto;
             _paidiaService = peopleService;
@@ -22,7 +22,11 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 
         public async Task<bool> DeletePaidiAsync(int id)
         {
-            if (await _paidiaService.DeletePaidiInService(id))
+            var deletePaidiDto = new DeletePaidiRequest
+            {
+                Id = id
+            };
+            if (await _paidiaService.DeletePaidiInService(deletePaidiDto))
             {
                 StatusMessage = "Delete successful";
                 return true;
@@ -38,7 +42,14 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 
         public async Task<bool> OnSavePaidi()
         {
-            var result = await _paidiaService.UpdatePaidiInService(PaidiDto);
+            var paidiToUpdate = new UpdatePaidiRequest
+            {
+                Id = PaidiDto.Id,
+                FullName = PaidiDto.FullName,
+                Age = PaidiDto.Age,
+                SkiniName = SkiniName
+            };
+            var result = await _paidiaService.UpdatePaidiInService(paidiToUpdate);
             StatusMessage = result ? "Save successful" : "Save failed";
 
             if (result)

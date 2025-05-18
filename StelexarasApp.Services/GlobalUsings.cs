@@ -12,5 +12,4 @@ global using StelexarasApp.Library.Models.Atoma.Children;
 global using StelexarasApp.Library.Dtos.People.Children;
 global using StelexarasApp.Library.Dtos;
 global using StelexarasApp.Services.IServices;
-global using StelexarasApp.Services.Interfaces.People.Children;
-global using StelexarasApp.Services.Interfaces.People.Staff;
+global using StelexarasApp.Services.Interfaces.People;

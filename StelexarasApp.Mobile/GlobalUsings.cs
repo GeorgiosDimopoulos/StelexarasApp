@@ -1,1 +1,25 @@
-﻿
+﻿global using StelexarasApp.Library.Dtos;
+global using StelexarasApp.Services.Interfaces;
+global using StelexarasApp.Library.Models.Atoma.Staff;
+global using StelexarasApp.Library.Dtos.People.Children;
+global using StelexarasApp.DataAccess.Repositories.IRepositories;
+global using StelexarasApp.DataAccess.Repositories;
+global using StelexarasApp.Services.Mappers;
+global using StelexarasApp.Services.Services;
+global using StelexarasApp.Services;
+global using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
+global using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
+global using StelexarasApp.Mobile.Views.StaffViews;
+global using StelexarasApp.Mobile.Views.TeamsViews;
+global using StelexarasApp.Mobile.Views;
+global using StelexarasApp.Mobile.Views.PaidiaViews;
+global using StelexarasApp.Mobile.ViewModels;
+global using StelexarasApp.DataAccess;
+global using StelexarasApp.Library.Models.Domi;
+global using StelexarasApp.Library.Dtos.Domi;
+global using StelexarasApp.DataAccess.DataProvider;
+global using StelexarasApp.Services.Interfaces.People;
+global using StelexarasApp.Library.Dtos.People.Staff;
+global using StelexarasApp.Library.Models.Atoma.Children;
+global using StelexarasApp.Services.IServices;
+global using StelexarasApp.Library.Models.Atoma;

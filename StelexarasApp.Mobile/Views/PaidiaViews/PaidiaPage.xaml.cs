@@ -1,13 +1,11 @@
-﻿using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
-
-namespace StelexarasApp.Mobile.Views.PaidiaViews
+﻿namespace StelexarasApp.Mobile.Views.PaidiaViews
 {
     public partial class PaidiaPage : ContentPage
     {
-        private readonly IKataskinotisService _peopleService;
+        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _peopleService;
         private readonly PaidiaViewModel paidiaViewModel;
 
-        public PaidiaPage(IKataskinotisService peopleService)
+        public PaidiaPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> peopleService)
         {
             InitializeComponent();
             _peopleService = peopleService;
@@ -16,7 +14,7 @@ namespace StelexarasApp.Mobile.Views.PaidiaViews
 
         private void OnPaidiSelected(object sender, SelectionChangedEventArgs e)
         {
-            var selectedPaidi = e.CurrentSelection.FirstOrDefault() as PaidiDto;
+            var selectedPaidi = e.CurrentSelection.FirstOrDefault() as PaidiDtoBase;
             if (selectedPaidi != null)
             {
                 // ToDo: Handle the selection, e.g., navigate to a detail page

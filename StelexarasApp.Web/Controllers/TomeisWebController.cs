@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;
 
@@ -38,24 +40,24 @@ public class TomeisWebController : Controller
     // POST: TomeisWeb/Create
     [HttpPost("Create")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(TomeasDto tomeis)
+    public async Task<IActionResult> Create(CreateTomeasRequest tomeasReq)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         try
         {
-            var result = await _tomeisService.AddTomeasInService(tomeis);
+            var result = await _tomeisService.AddTomeasInService(tomeasReq);
             if (!result)
             {
-                _logger.LogWarning("Tomeis not created.");
-                return NotFound("Tomeis not created.");
+                _logger.LogWarning("Tomeas not created.");
+                return NotFound("Tomeas not created.");
             }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while creating Tomeis.");
+            _logger.LogError(ex, "An error occurred while creating Tomeas.");
             return View("Error");
         }
     }
@@ -84,14 +86,14 @@ public class TomeisWebController : Controller
     // POST: TomeisWeb/Edit/5
     [HttpPost("Edit/{id}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, TomeasDto tomeis)
+    public async Task<IActionResult> Edit(string id, UpdateTomeasRequest tomeas)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         try
         {
-            var result = await _tomeisService.UpdateTomeaInService(id, tomeis);
+            var result = await _tomeisService.UpdateTomeaInService(id, tomeas);
             if (!result)
             {
                 _logger.LogWarning("Tomeis not updated.");

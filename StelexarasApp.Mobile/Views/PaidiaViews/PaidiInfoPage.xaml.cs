@@ -1,23 +1,21 @@
-﻿using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
-
-namespace StelexarasApp.Mobile.Views.PaidiaViews
+﻿namespace StelexarasApp.Mobile.Views.PaidiaViews
 {
     public partial class PaidiInfoPage : ContentPage
     {
         private PaidiInfoViewModel? _paidiviewModel;
         private bool isSkiniPickerFilled = false;
         private bool isPaidiAdeiaFieldFilled = false;
-        private PaidiDto _paidiDto;
-        private SkiniDto _skini;
+        private PaidiResponse _paidiDto;
+        private SkiniDtoBase _skini;
         private bool isPaidiNameFilled = false;
         private bool isPaidiAgeFilled = false;
 
-        public PaidiInfoPage(IKataskinotisService peopleService, PaidiDto paidi)
+        public PaidiInfoPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> peopleService, PaidiResponse paidi)
         {
             InitializeComponent();
             _paidiDto = paidi;
             _paidiviewModel = new PaidiInfoViewModel(_paidiDto, peopleService, _paidiDto.SkiniName);
-            _skini = new SkiniDto();
+            _skini = new SkiniDtoBase();
             BindingContext = _paidiviewModel;
         }
 
@@ -79,7 +77,7 @@ namespace StelexarasApp.Mobile.Views.PaidiaViews
 
             try
             {
-                _skini = (SkiniDto)SkiniPicker.SelectedItem;
+                _skini = (SkiniDtoBase)SkiniPicker.SelectedItem;
                 SaveButton.IsEnabled = true;
             }
             catch (Exception ex)

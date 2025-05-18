@@ -14,7 +14,8 @@ using System.Text;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using StelexarasApp.Services.Interfaces;
-using StelexarasApp.Services.Services.Children;
+using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Interfaces.People;
 
 namespace StelexarasApp.API;
 
@@ -34,8 +35,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped<ITeamsRepository, TeamsRepository>();
 
-        services.AddScoped<IStaffService, StaffService>();
-        services.AddScoped<IKataskinotisService, EkpaideuomenosService>();
+        services.AddScoped<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>, StaffService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<IDutyService, DutyService>();
@@ -53,8 +53,8 @@ public static class ServiceCollectionExtensions
         services.AddFluentValidationAutoValidation();
 
         // Register Validators
-        services.AddTransient<IValidator<IStelexosDto>, StelexosValidator>();
-        services.AddTransient<IValidator<PaidiDto>, PaidiValidator>();
+        services.AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>();
+        services.AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>();
 
         // Add Controllers
         services.AddControllers();

@@ -16,18 +16,18 @@ public class PaidiValidator : AbstractValidator<PaidiDtoBase>
 
         RuleFor(user => user.PaidiType)
             .NotNull().WithMessage("PaidiType is required");
+        RuleFor(paidi => paidi.Age)
+                .NotEqual(6).WithMessage("Ekpaideuomenos must be 16 years old");
 
-        When(paidi => paidi.PaidiType == PaidiType.Kataskinotis,()=>
+        When(paidi => paidi.PaidiType == PaidiType.Kataskinotis, () =>
         {
             RuleFor(paidi => paidi.Age)
-                .GreaterThan(6).WithMessage("Kataskinotis must be older than 6 years old")
-                .LessThan(16).WithMessage("Kataskinotis must be younger than 16 years old");
+                .NotEqual(16).WithMessage("Kataskinotis must not be 16 years old");
         });
-
         When(paidi => paidi.PaidiType == PaidiType.Ekpaideuomenos, () =>
         {
             RuleFor(paidi => paidi.Age)
-                .NotEqual(6).WithMessage("Ekpaideuomenos must be 16 years old");
+                .Equal(16).WithMessage("Ekpaideuomenos must be 16 years old");
         });
     }
 }

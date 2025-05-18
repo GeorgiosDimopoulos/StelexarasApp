@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.Mobile.ViewModels;
 
@@ -7,7 +6,7 @@ public class DutyViewModel
 {
     private readonly IDutyService _dutyService;
 
-    public ObservableCollection<DutyDto> Duties { get; set; } = [];
+    public ObservableCollection<DutyDtoBase> Duties { get; set; } = [];
 
     // public Command<Duty> DeleteDutyCommand { get; }
     public DutyViewModel(IDutyService dutyService)
@@ -27,7 +26,7 @@ public class DutyViewModel
         return false;
     }
 
-    public async Task<bool> UpdateDuty(DutyDto duty, string dutyNewName)
+    public async Task<bool> UpdateDuty(UpdateDutyRequest duty, string dutyNewName)
     {
         if (dutyNewName == null)
             return false;
@@ -50,7 +49,7 @@ public class DutyViewModel
 
     public async Task<bool> AddDuty(string dutyName)
     {
-        var duty = new DutyDto
+        var duty = new CreateDutyRequest
         {
             Name = dutyName
         };

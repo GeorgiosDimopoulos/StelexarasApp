@@ -1,17 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using StelexarasApp.Services;
-using StelexarasApp.Mobile.Views.PaidiaViews;
-using StelexarasApp.Mobile.Views.StaffViews;
-using StelexarasApp.Mobile.Views.TeamsViews;
-using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.Mobile.Views;
 
 public partial class MainPage : ContentPage
 {
     private readonly IExpenseService _expenseService;
-    private readonly IStaffService _stelexiService;
-    private readonly IKataskinotisService _paidiaService;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _staffService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
     private readonly IDutyService _dutiesService;
     private readonly ITeamsService _teamsService;
     private readonly SignalrService _signalRService;
@@ -19,18 +14,18 @@ public partial class MainPage : ContentPage
     private HubConnection? _connection;
 
     public MainPage(
-        IStaffService peopleService,
         IDutyService dutyService,
-        IKataskinotisService paidiaService,
+        IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> staffService,
+        IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService,
         ITeamsService teamsService,
         IExpenseService expenseService,
         SignalrService signalRService,
         IServiceProvider serviceProvider)
     {
         InitializeComponent();
-        _dutiesService = dutyService;
-        _stelexiService = peopleService;
         _paidiaService = paidiaService;
+        _staffService = staffService;
+        _dutiesService = dutyService;
         _teamsService = teamsService;
         _expenseService = expenseService;
         _signalRService = signalRService;
@@ -94,7 +89,7 @@ public partial class MainPage : ContentPage
 
     private async void OnStaffButtonClicked(object sender, EventArgs e)
     {
-        var staffPage = ActivatorUtilities.CreateInstance<StaffPage>(_serviceProvider, _stelexiService);
+        var staffPage = ActivatorUtilities.CreateInstance<StaffPage>(_serviceProvider, _staffService);
         await Navigation.PushAsync(staffPage);
     }
 

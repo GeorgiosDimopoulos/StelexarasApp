@@ -6,4 +6,5 @@ global using StelexarasApp.API.Authorization;
 global using StelexarasApp.Library.Models;
 global using StelexarasApp.DataAccess.Helpers;
 global using StelexarasApp.Library.Models.Logs;
-global using StelexarasApp.Services.Interfaces.People.Staff;
+global using StelexarasApp.Library.Models.Atoma.Children;
+global using StelexarasApp.Library.Dtos.People.Children;

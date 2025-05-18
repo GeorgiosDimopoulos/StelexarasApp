@@ -1,39 +1,40 @@
-﻿using StelexarasApp.Library.Models.Domi;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 {
     public class KoinotitaViewModel : INotifyPropertyChanged
     {
-        private readonly IKataskinotisService _paidiaService;
+        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
         private readonly ITeamsService _teamsService;
         public ObservableCollection<string> Skines { get; set; }
-        public Koinotita? Koinotita { get; set; }
+        public KoinotitaResponse? Koinotita { get; set; }
 
-        public KoinotitaViewModel(IKataskinotisService paidiaService, ITeamsService teamsService)
+        public KoinotitaViewModel(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService)
         {
             _paidiaService = paidiaService;
             _teamsService = teamsService;
 
             Skines = [];
-            Koinotita = new Koinotita();
+            Koinotita = new KoinotitaResponse();
             LoadSkinesKoinotitas();
         }
 
-        public async Task<bool> AddPaidiAsync(string fullName, string skiniName, PaidiType paidiType)
+        public async Task<bool> AddPaidiAsync(string fullName, string skiniName, int age, Sex sex, PaidiType paidiType)
         {
             if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(skiniName))
             {
                 return false;
             }
 
-            var paidi = new PaidiDto
+            var paidi = new CreatePaidiRequest
             {
                 FullName = fullName,
-                PaidiType = PaidiType.Ekpaideuomenos,
+                SkiniName = skiniName,
+                Age = age,
+                SeAdeia = false,
+                Sex = sex,
             };
 
             if (paidiType == PaidiType.Ekpaideuomenos)
@@ -41,7 +42,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
                 paidi.PaidiType = PaidiType.Ekpaideuomenos;
             }
 
-            var result = await _paidiaService.AddPaidiInService(paidi);
+            var result = await _paidiaService.CreatePaidiInService(paidi);
 
             if (result)
             {
@@ -57,8 +58,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
             if (paidiId == null)
                 return false;
 
+            var paidiToDelete = new DeletePaidiRequest
+            {
+                Id = int.Parse(paidiId)
+            };
 
-            var result = await _paidiaService.DeletePaidiInService(int.Parse(paidiId));
+            var result = await _paidiaService.DeletePaidiInService(paidiToDelete);
             if (result)
             {
                 OnPropertyChanged(nameof(Skines));
@@ -82,7 +87,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public async Task<bool> AddKoinotita(KoinotitaDto koinotita)
+        public async Task<bool> AddKoinotita(CreateKoinotitaRequest koinotita)
         {
             bool result = await _teamsService.AddKoinotitaInService(koinotita);
             if (result)

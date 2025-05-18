@@ -14,7 +14,7 @@ public class AppDbContext : DbContext
     public virtual DbSet<Koinotarxis> Koinotarxes { get; set; }
     public virtual DbSet<Tomearxis> Tomearxes { get; set; }
     public DbSet<Ekpaideutis> Ekpaideutes { get; set; }
-    public DbSet<Paidi>? Paidia { get; set; }
+    public DbSet<Paidi> Paidia { get; set; }
 
     public DbSet<Koinotita> Koinotites { get; set; }
     public DbSet<Skini> Skines { get; set; }

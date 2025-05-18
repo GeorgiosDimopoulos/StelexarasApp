@@ -333,6 +333,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                 return await query.FirstOrDefaultAsync(e => e.FullName == name) ?? null!;
             }
 
+            // ToDo: implement it
             if (stelexosQueryParameters.IncludeXwros) 
             {
             }

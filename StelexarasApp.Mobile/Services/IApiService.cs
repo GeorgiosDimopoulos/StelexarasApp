@@ -1,6 +1,4 @@
-﻿using StelexarasApp.Library.Models.Atoma.Staff;
-
-namespace StelexarasApp.Services;
+﻿namespace StelexarasApp.Services;
 
 public interface IApiService
 {

@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess;
-using StelexarasApp.Mobile.Views;
 
 namespace StelexarasApp.Mobile;
 

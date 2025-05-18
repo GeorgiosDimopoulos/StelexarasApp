@@ -1,28 +1,23 @@
-using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
-
 namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class KoinotitaInfoPage : ContentPage
 {
-    private IKataskinotisService _paidiaService;
+    private IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
     private ITeamsService _teamsService;
-    private Koinotita MyKoinotita;
+    public KoinotitaResponse Koinotita { get; set; }
 
-    public KoinotitaDto Koinotita { get; set; }
-
-    public KoinotitaInfoPage(ITeamsService teamsService, IKataskinotisService paidiaService, KoinotitaViewModel koinotitaViewModel)
+    public KoinotitaInfoPage(ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, KoinotitaViewModel koinotitaViewModel)
     {
         InitializeComponent();
         _teamsService = teamsService;
         _paidiaService = paidiaService;
-        MyKoinotita = koinotitaViewModel.Koinotita;
+        Koinotita = koinotitaViewModel.Koinotita ?? new KoinotitaResponse();
     }
 
     private async void SkiniButton_Clicked(object sender, EventArgs e)
     {
         var button = sender as Button;
-        var skini = button?.CommandParameter as SkiniDto;
+        var skini = button?.CommandParameter as SkiniResponse;
 
         if (skini != null)
         {

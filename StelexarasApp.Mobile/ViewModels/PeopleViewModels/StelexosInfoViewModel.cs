@@ -7,11 +7,11 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
     public class StelexosInfoViewModel : INotifyPropertyChanged
     {
         private readonly int Id;
-        private readonly IStaffService _stelexiService;
+        private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _stelexiService;
         private readonly bool skiniIsChanged;
-        private IStelexosDto _stelexos;
-        
-        public IStelexosDto Stelexos
+        private StelexosDtoBase _stelexos;
+
+        public StelexosDtoBase Stelexos
         {
             get => _stelexos;
             set
@@ -28,7 +28,7 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
         public ICommand SaveStelexosCommand { get; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public StelexosInfoViewModel(IStelexosDto stelexos, int id, IStaffService stelexiService)
+        public StelexosInfoViewModel(StelexosDtoBase stelexos, int id, IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> stelexiService)
         {
             _stelexiService = stelexiService;
             skiniIsChanged = false;
@@ -39,7 +39,8 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 
         public async Task<bool> DeleteStelexos()
         {
-            return await _stelexiService.DeleteStelexosByIdInService(Id);
+            var request = new DeleteStelexosRequest { Id = Id };
+            return await _stelexiService.DeleteStelexos(request);
         }
 
         public async Task OnSaveStelexos()
@@ -47,7 +48,8 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
             if (skiniIsChanged)
                 await MoveOmadarxisToAnotherSkini();
 
-            var result = await _stelexiService.UpdateStelexosInService(Id, _stelexos);
+            var request = new UpdateStelexosRequest() { Id = Id };
+            var result = await _stelexiService.UpdateStelexos(Id, request);
             StatusMessage = result ? "Save successful" : "Save failed";
             OnPropertyChanged(nameof(Stelexos));
         }

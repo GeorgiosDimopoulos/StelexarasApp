@@ -1,14 +1,12 @@
-using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
-
 namespace StelexarasApp.Mobile.Views.StaffViews;
 
 public partial class AddStelexosPage : ContentPage
 {
-	private readonly IStaffService _staffService;
+	private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _staffService;
     private readonly ITeamsService _teamsService;
     private readonly AddStelexosViewModel _addStelexosViewModel;
     
-    public AddStelexosPage(IStaffService staffService, ITeamsService teamsService)
+    public AddStelexosPage(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> staffService, ITeamsService teamsService)
 	{
 		InitializeComponent();
         _staffService = staffService;

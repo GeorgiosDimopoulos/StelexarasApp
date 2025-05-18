@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
 using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.Services.Mappers;
@@ -14,12 +13,11 @@ using FluentValidation;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Library.Models.Atoma.Children;
-using StelexarasApp.Services.Services.Children;
-using StelexarasApp.Library.Dtos.People.Staff;
 using StelexarasApp.Library.Dtos.People.Children;
-using StelexarasApp.Services.Interfaces.People.Children;
-using StelexarasApp.Services.Interfaces.People.Staff;
-using StelexarasApp.Services.Services.Staff;
+using StelexarasApp.Services.Interfaces.People;
+using StelexarasApp.Library.Dtos.People.Staff;
+using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.ClientApp;
 
@@ -43,36 +41,28 @@ class Program
 
     private static async Task HandlePersonCreation(int choice, ServiceProvider serviceProvider)
     {
-        var paidiService = serviceProvider.GetService<IKataskinotisService>();
-        var ekpaideutisService = serviceProvider.GetService<IEkpaideutisService>();
-        var omadarxisService = serviceProvider.GetService<IOmadarxisService>();
-        var koinotarxisService = serviceProvider.GetService<IKoinotarxisService>();
-        var tomearxisService = serviceProvider.GetService<ITomearxisService>();
-
-        if (paidiService == null || ekpaideutisService == null || omadarxisService == null || koinotarxisService == null || tomearxisService == null)
-        {
-            Console.WriteLine("Error: Unable to resolve services.");
-            return;
-        }
+        var _paidiService = serviceProvider.GetService<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>>();
+        var _stelexiService = serviceProvider.GetService<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>>();
 
         switch (choice)
         {
             case 1:
-                await CreatePaidi(paidiService, 0);
+                await CreatePaidi(_paidiService, 0);
                 break;
             case 2:
-                await CreatePaidi(paidiService, 1);
+                await CreatePaidi(_paidiService, 1);
                 break;
             case 3:
-                var newOmadarxis = new CreateOmadarxisRequest()
+                var newOmadarxis = new CreateStelexosRequest()
                 {
                     Age = 0,
                     FullName = GetPersonName(),
+                    Thesi = Thesi.Omadarxis,
                     Sex = GetPersonSex(),
                     Tel = "123456789",
                     XwrosName = "Test Xwros",
                 };
-                if (await omadarxisService.CreateOmadarxisInService(newOmadarxis))
+                if (await _stelexiService.CreateStelexos(newOmadarxis, Thesi.Omadarxis))
                 {
                     await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newOmadarxis.FullName}");
                     Console.WriteLine("Stelexos created");
@@ -81,15 +71,16 @@ class Program
                     Console.WriteLine("Failed to create Stelexos.");
                 break;
             case 4:
-                var newKoinotarxis = new CreateKoinotarxisRequest()
+                var newKoinotarxis = new CreateStelexosRequest()
                 {
                     Age = 0,
                     FullName = GetPersonName(),
                     Sex = GetPersonSex(),
+                    Thesi = Thesi.Koinotarxis,
                     Tel = "123456789",
                     XwrosName = "Test Xwros",
                 };
-                if (await koinotarxisService.CreateKoinotarxisInService(newKoinotarxis))
+                if (await _stelexiService.CreateStelexos(newKoinotarxis, Thesi.Koinotarxis))
                 {
                     await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New koinotarxis created: {newKoinotarxis.FullName}");
                     Console.WriteLine("Stelexos created");
@@ -98,15 +89,16 @@ class Program
                     Console.WriteLine("Failed to create Stelexos.");
                 break;
             case 5:
-                var newTomearxis = new CreateTomearxisRequest()
+                var newTomearxis = new CreateStelexosRequest()
                 {
                     Age = 0,
                     FullName = GetPersonName(),
                     Sex = GetPersonSex(),
                     Tel = "123456789",
+                    Thesi = Thesi.Tomearxis,
                     XwrosName = "Test Xwros",
                 };
-                if (await tomearxisService.CreateTomearxisInService(newTomearxis))
+                if (await _stelexiService.CreateStelexos(newTomearxis, Thesi.Tomearxis))
                 {
                     await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newTomearxis.FullName}");
                     Console.WriteLine("Stelexos created");
@@ -115,7 +107,7 @@ class Program
                     Console.WriteLine("Failed to create Stelexos.");
                 break;
             case 6:
-                var newEkpaideutis = new CreateEkpaideutisRequest()
+                var newEkpaideutis = new CreateStelexosRequest()
                 {
                     Age = 0,
                     FullName = GetPersonName(),
@@ -123,7 +115,7 @@ class Program
                     Tel = "123456789",
                     XwrosName = "Test Xwros",
                 };
-                if (await ekpaideutisService.CreateEkpaideutisInService(newEkpaideutis))
+                if (await _stelexiService.CreateStelexos(newEkpaideutis, Thesi.Ekpaideutis))
                 {
                     await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New ekpaideutis created: {newEkpaideutis.FullName}");
                     Console.WriteLine("Stelexos created");
@@ -137,10 +129,10 @@ class Program
         }
     }
 
-    private static async Task CreatePaidi(IKataskinotisService paidiService, int typeOfPaidi)
+    private static async Task CreatePaidi(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiService, int typeOfPaidi)
     {
         var newPaidi = CreatePaidiFromUserInput(typeOfPaidi);
-        var createKataskinotisRequest = new CreateKataskinotisRequest()
+        var createKataskinotisRequest = new CreatePaidiRequest()
         {
             Age = newPaidi.Age,
             FullName = newPaidi.FullName,
@@ -150,7 +142,7 @@ class Program
             SkiniName = newPaidi.SkiniName
         };
 
-        if (await paidiService.CreateKataskinotisInService(createKataskinotisRequest))
+        if (await paidiService.CreatePaidiInService(createKataskinotisRequest))
         {
             await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Paidi created: {newPaidi.FullName}");
             Console.WriteLine("Paidi created");
@@ -208,16 +200,11 @@ class Program
         .AddDbContext<AppDbContext>()
         .AddLogging()
         .AddAutoMapper(typeof(Program))
-        .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()
         .AddTransient<IValidator<Duty>, DutyValidator>()
-        .AddTransient<IValidator<IStelexos>, StelexosValidator>()
-        .AddScoped<IKataskinotisService, KataskinotisService>()
-        .AddScoped<IEkpaideuomenosService, EkpaideuomenosService>()
+        .AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>()
+        .AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiService>()
         .AddScoped<IStaffRepository, StaffRepository>()
-        .AddTransient<IOmadarxisService, OmadarxisService>()
-        .AddTransient<IKoinotarxisService, KoinotarxisService>()
-        .AddTransient<ITomearxisService, TomearxisService>()
-        .AddTransient<IEkpaideutisService, EkpaideutisService>()
+        .AddTransient<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>, StaffService>()
         .AddScoped<IPaidiRepository, PaidiRepository>()
         .BuildServiceProvider();
 

@@ -1,12 +1,10 @@
-﻿using StelexarasApp.Mobile.ViewModels.PeopleViewModels;
-
-namespace StelexarasApp.Mobile.Views.StaffViews;
+﻿namespace StelexarasApp.Mobile.Views.StaffViews;
 
 public partial class StelexosInfoPage : ContentPage
 {
     private readonly StelexosInfoViewModel? _stelexosinfoViewModel;
 
-    public StelexosInfoPage(IStaffService stelexiService, IStelexosDto stelexos, int id)
+    public StelexosInfoPage(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> stelexiService, StelexosDtoBase stelexos, int id)
     {
         InitializeComponent();
 

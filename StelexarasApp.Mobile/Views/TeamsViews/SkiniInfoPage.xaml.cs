@@ -1,15 +1,11 @@
-﻿using StelexarasApp.Mobile.Views.PaidiaViews;
-using StelexarasApp.Mobile.ViewModels.TeamsViewModels;
-using StelexarasApp.Library.Models.Atoma.Children;
-
-namespace StelexarasApp.Mobile.Views.TeamsViews;
+﻿namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class SkiniInfoPage : ContentPage
 {
     private readonly SkiniViewModel _skiniViewModel;
-    private readonly IKataskinotisService _paidiaService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
 
-    public SkiniInfoPage(SkiniDto skini, IKataskinotisService paidiaService)
+    public SkiniInfoPage(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService)
     {
         InitializeComponent();
         _skiniViewModel = new SkiniViewModel(skini, paidiaService);
@@ -20,7 +16,7 @@ public partial class SkiniInfoPage : ContentPage
     {
         var button = sender as Button;
 
-        if (button?.CommandParameter is PaidiDto paidi)
+        if (button?.CommandParameter is PaidiResponse paidi)
         {
             var paidiPage = new PaidiInfoPage(_paidiaService, paidi);
             await Navigation.PushModalAsync(paidiPage);
@@ -29,26 +25,21 @@ public partial class SkiniInfoPage : ContentPage
 
     private async void OnAddPaidiClicked(object sender, EventArgs e)
     {
-        PaidiDto paidiDto = null;
+        var fullName = await GetValidFullName();
+        if (fullName == null)
+            return;
 
-        while (paidiDto == null)
+        var age = await GetValidAge();
+        var skiniName = await GetValidSkiniName();
+
+        var paidiDto = new CreatePaidiRequest
         {
-            var fullName = await GetValidFullName();
-            if (fullName == null) 
-                return;
-
-            var age = await GetValidAge();
-            var skiniName = await GetValidSkiniName();
-
-            paidiDto = new PaidiDto
-            {
-                FullName = fullName,
-                Age = age,
-                SkiniName = skiniName,
-                SeAdeia = false,
-                PaidiType = PaidiType.Kataskinotis
-            };
-        }
+            FullName = fullName,
+            Age = age,
+            SkiniName = skiniName,
+            SeAdeia = false,
+            PaidiType = PaidiType.Kataskinotis
+        };
 
         if (await _skiniViewModel.AddPaidiAsync(paidiDto))
             await DisplayAlert("ΠΡΟΣΘΗΚΗ", "Δημιουργηθηκε επιτυχώς νέο παιδί!", "OK");

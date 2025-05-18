@@ -1,7 +1,4 @@
-﻿using StelexarasApp.Mobile.ViewModels;
-using StelexarasApp.Services.Interfaces;
-
-namespace StelexarasApp.Mobile.Views;
+﻿namespace StelexarasApp.Mobile.Views;
 
 public partial class DutiesPage : ContentPage
 {
@@ -29,12 +26,12 @@ public partial class DutiesPage : ContentPage
         {
             await DisplayAlert("Λάθος Στοιχεία", ex.Message, "OK");
             return;
-        }        
+        }
     }
 
     private async void OnDutyTapped(object sender, SelectionChangedEventArgs e)
     {
-        var selectedDuty = e.CurrentSelection.FirstOrDefault() as DutyDto;
+        var selectedDuty = e.CurrentSelection.FirstOrDefault() as DutyDtoBase;
         if (selectedDuty == null)
             return;
 
@@ -59,11 +56,16 @@ public partial class DutiesPage : ContentPage
 
             case "Μετονομασία":
                 string newName = await DisplayPromptAsync("Μετονομασία", "Νέο όνομα υποχρέωσης:", "OK", "Ακύρωση", initialValue: selectedDuty.Name);
-                if (!string.IsNullOrEmpty(newName) && newName != selectedDuty.Name)
+                if (!string.IsNullOrEmpty(newName))
                 {
                     try
                     {
-                        await _viewModel.UpdateDuty(selectedDuty, newName);
+                        var updateDuty = new UpdateDutyRequest
+                        {
+                            Id = selectedDuty.Id,
+                            Name = newName
+                        };
+                        await _viewModel.UpdateDuty(updateDuty, newName);
                         await DisplayAlert("Επιτυχής Μετονομασία", "Η υποχρέωση μετονομάστηκε!", "OK");
                     }
                     catch (Exception ex)

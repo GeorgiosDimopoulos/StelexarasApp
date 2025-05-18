@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;
 
@@ -44,7 +46,7 @@ public class SkinesWebController(ITeamsService teamsService, ILogger<SkinesWebCo
     // POST: TeamsWeb/Create
     [ValidateAntiForgeryToken]
     [HttpPost("create")]
-    public async Task<IActionResult> Create(SkiniDto skini)
+    public async Task<IActionResult> Create(CreateSkiniRequest skini)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using StelexarasApp.Library.Dtos.People.Children;
 using StelexarasApp.Library.Models.Atoma.Children;
+using StelexarasApp.Services.Interfaces.People;
+using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Services;
 using System.Collections;
 
 namespace StelexarasApp.Web.Controllers.WebControllers;
@@ -9,11 +13,11 @@ namespace StelexarasApp.Web.Controllers.WebControllers;
 [Route("PaidiaWeb")]
 public class PaidiaWebController : Controller
 {
-    private readonly IKataskinotisService _paidiaService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
     private readonly ITeamsService _teamsService;
     private readonly ILogger<PaidiaWebController> _logger;
 
-    public PaidiaWebController(IKataskinotisService paidiaService, ITeamsService teamsService, ILogger<PaidiaWebController> logger)
+    public PaidiaWebController(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService, ILogger<PaidiaWebController> logger)
     {
         _paidiaService = paidiaService;
         _teamsService = teamsService;
@@ -50,7 +54,7 @@ public class PaidiaWebController : Controller
     {
         try
         {
-            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name");
+            ViewData ["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name");
             return View();
         }
         catch (Exception ex)
@@ -63,20 +67,20 @@ public class PaidiaWebController : Controller
     // POST: PaidiaWeb/Create
     [HttpPost("Create")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("FullName,Age,Sex,PaidiType,SkiniName")] PaidiDto paidi)
+    public async Task<IActionResult> Create([Bind("FullName,Age,Sex,PaidiType,SkiniName")] CreatePaidiRequest paidi)
     {
         try
         {
             if (ModelState.IsValid)
             {
-                var result = await _paidiaService.AddPaidiInService(paidi);
+                var result = await _paidiaService.CreatePaidiInService(paidi);
 
                 if (result)
                     return RedirectToAction(nameof(Index));
                 ModelState.AddModelError("", "An error occurred while adding the Paidi.");
             }
 
-            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
+            //ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
             return View(paidi);
         }
         catch (Exception ex)
@@ -99,7 +103,7 @@ public class PaidiaWebController : Controller
             if (paidi == null)
                 return NotFound();
 
-            ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
+            //ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
             return View(paidi);
         }
         catch (Exception ex)
@@ -112,7 +116,7 @@ public class PaidiaWebController : Controller
     // POST: PaidiaWeb/Edit/5
     [HttpPost("Edit")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("FullName,Id,Age,Sex,PaidiType,SkiniName")] PaidiDto paidi)
+    public async Task<IActionResult> Edit(int id, [Bind("FullName,Id,Age,Sex,PaidiType,SkiniName")] UpdatePaidiRequest paidi)
     {
         if (id != paidi.Id || paidi is null)
             return NotFound();
@@ -133,7 +137,7 @@ public class PaidiaWebController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
+        //ViewData["SkiniId"] = new SelectList((IEnumerable)_teamsService.GetAllSkinesInService(new()), "Id", "Name", paidi.SkiniId);
         return View(paidi);
     }
 
