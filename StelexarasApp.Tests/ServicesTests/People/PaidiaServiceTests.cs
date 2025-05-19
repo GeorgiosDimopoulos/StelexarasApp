@@ -5,40 +5,41 @@ using Microsoft.Extensions.Logging;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using FluentValidation;
 using StelexarasApp.Library.Models.Atoma.Children;
+using StelexarasApp.Library.Dtos.People.Children;
+using StelexarasApp.Services.Interfaces.People;
+using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.Tests.ServicesTests.People;
 
 public class PaidiaServiceTests
 {
     private readonly Mock<IPaidiRepository> _mockPaidiRepository;
-    private readonly EkpaideuomenosService ekpaideuomenosService;
+    private readonly PaidiService _paidiService;
     private readonly Mock<IMapper> _mockMapper;
-    private readonly Mock<AppDbContext> _mockDbContext;
     private readonly Mock<ILoggerFactory> _loggerFactory;
-    private readonly Mock<IValidator<EkpaideuomenosDtoBase>> _ekpaideuomenosValidatorMock;
-    private readonly Mock<IValidator<KataskinotisDtoBase>> _kataskinotisValidatorMock;
+    private readonly Mock<IValidator<IPaidiDto>> _paidiValidatorMock;
 
     public PaidiaServiceTests()
     {
-        _mockDbContext = new Mock<AppDbContext>();
         _loggerFactory = new Mock<ILoggerFactory>();
         _mockPaidiRepository = new Mock<IPaidiRepository>();
         _mockMapper = new Mock<IMapper>();
-        _ekpaideuomenosValidatorMock = new Mock<IValidator<EkpaideuomenosDtoBase>>();
+        _paidiValidatorMock = new Mock<IValidator<IPaidiDto>>();
+        _paidiService = new PaidiService(_mockPaidiRepository.Object, _mockMapper.Object, _loggerFactory.Object.CreateLogger<PaidiService>(), _paidiValidatorMock.Object);
 
-        _mockMapper.Setup(m => m.Map<Ekpaideuomenos>(It.IsAny<EkpaideuomenosDtoBase>()))
-          .Returns((EkpaideuomenosDtoBase dto) => new Ekpaideuomenos
+        _mockMapper.Setup(m => m.Map<Ekpaideuomenos>(It.IsAny<IPaidiDto>()))
+          .Returns((IPaidiDto dto) => new Ekpaideuomenos
           {
               FullName = dto.FullName,
               Age = dto.Age,
               PaidiType = dto.PaidiType
           });
 
-        ekpaideuomenosService = new EkpaideuomenosService(
+        _paidiService = new PaidiService(
             _mockPaidiRepository.Object,
             _mockMapper.Object,
-            _loggerFactory.Object.CreateLogger<EkpaideuomenosService>(),
-            _ekpaideuomenosValidatorMock.Object);
+            _loggerFactory.Object.CreateLogger<PaidiService>(),
+            _paidiValidatorMock.Object);
 
     }
 
@@ -46,15 +47,15 @@ public class PaidiaServiceTests
     public async Task AddEkpaideuomenos_ShouldReturnTrue_WhenSuccessful()
     {
         // Arrange
-        var paidiDto = new CreateEkpaideuomenosRequest { FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1" };
-        var paidi = new Paidi { Id = 1, FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos};
+        var paidiDto = new CreatePaidiRequest { FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1" };
+        var paidi = new Paidi { Id = 1, FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos };
 
         _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
         _mockPaidiRepository.Setup(repo => repo.AddPaidiInDb(paidi)).ReturnsAsync(true);
-        _ekpaideuomenosValidatorMock.Setup(v => v.Validate(paidiDto)).Returns(new FluentValidation.Results.ValidationResult());
+        _paidiValidatorMock.Setup(v => v.Validate(paidiDto)).Returns(new FluentValidation.Results.ValidationResult());
 
         // Act
-        var result = await ekpaideuomenosService.CreateEkpaideuomenosInService(paidiDto);
+        var result = await _paidiService.CreatePaidiInService(paidiDto);
 
         // Assert
         Assert.True(result);
@@ -78,7 +79,7 @@ public class PaidiaServiceTests
             .ReturnsAsync(expectedPaidia);
 
         // Act
-        var result = await ekpaideuomenosService.GetEkpaideuomenoiInService();
+        var result = await _paidiService.GetPaidiaBySxoliInService();
 
         // Assert
         Assert.Equal(expectedCount, result.Count());
@@ -91,7 +92,7 @@ public class PaidiaServiceTests
     [Fact]
     public async Task DeletePaidiShouldReturnOk()
     {
-        var paidiToDeleteRequest = new DeleteEkpaideuomenosRequest
+        var paidiToDeleteRequest = new DeletePaidiRequest
         {
             Id = 1
         };
@@ -107,7 +108,7 @@ public class PaidiaServiceTests
         _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id)).ReturnsAsync(paidiToDelete);
         _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete)).ReturnsAsync(true);
 
-        var result = await ekpaideuomenosService.DeleteEkpaideuomenosInService(paidiToDeleteRequest);
+        var result = await _paidiService.DeletePaidiInService(paidiToDeleteRequest);
 
         Assert.True(result);
         _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id), Times.Once);
@@ -131,7 +132,7 @@ public class PaidiaServiceTests
             .ReturnsAsync(expectedPaidi);
 
         // Act
-        var result = await ekpaideuomenosService.GetEkpaideuomenosByIdInService(paidiId);
+        var result = await _paidiService.GetPaidiByIdInService(paidiId);
 
         // Assert
         if (shouldExist)

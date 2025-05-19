@@ -7,6 +7,10 @@ using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Services.Interfaces;
+using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Interfaces.People;
+using StelexarasApp.Library.Dtos.People.Children;
+using StelexarasApp.Library.Dtos.People.Staff;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,8 +54,8 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddScoped<IStaffRepository, StaffRepository>();
     builder.Services.AddScoped<ITeamsRepository, TeamsRepository>();
 
-    builder.Services.AddScoped<IStaffService, StaffService>();
-    builder.Services.AddScoped<IKataskinotisService, EkpaideuomenosService>();
+    builder.Services.AddScoped<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>, StaffService>();
+    builder.Services.AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiService>();
     builder.Services.AddScoped<IExpenseService, ExpenseService>();
     builder.Services.AddScoped<ITeamsService, TeamsService>();
     builder.Services.AddScoped<IDutyService, DutyService>();
