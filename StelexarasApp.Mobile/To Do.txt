@@ -1,5 +1,6 @@
 DATA:
 - set possibility for the Ekpaideuomenos object to be Omadarxis at the same time
+  - maybe set Ekpaideuomenos as different Domain model, not as Paidi
   - set in the UI accordingly, who Ekpaideuomenos is Omadarxis daily
 - add Id in the Duty model and set it as Key, not the Name
 
@@ -21,6 +22,7 @@ MOBILE:
 OTHER:
 - Audit tool and relevant Models for logging and CRUD tracking
 - check again HealthChecks process
+- implement Refit logic in API layer in Controllers, Routes etc
 - SignalR and Hub, for real time communication (eg get notification if a user updates something)
   - IDisposable and IHostedService maybe
 
