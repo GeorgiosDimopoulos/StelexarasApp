@@ -8,7 +8,7 @@ using StelexarasApp.Library.Models.Atoma;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Library.Dtos.Domi;
 
-namespace StelexarasApp.Tests.ServicesTests.Teams;
+namespace StelexarasApp.Tests.ServicesTests;
 
 public class TeamsServiceTests
 {

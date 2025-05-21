@@ -22,7 +22,7 @@ namespace StelexarasApp.Library.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Paidi", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Children.Paidi", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,6 +222,9 @@ namespace StelexarasApp.Library.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Hlikia")
+                        .HasColumnType("int");
+
                     b.Property<int?>("KoinotarxisId")
                         .HasColumnType("int");
 
@@ -291,8 +294,7 @@ namespace StelexarasApp.Library.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("TomearxisId")
                         .HasColumnType("int");
@@ -343,7 +345,7 @@ namespace StelexarasApp.Library.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -355,7 +357,7 @@ namespace StelexarasApp.Library.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Paidi", b =>
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Children.Paidi", b =>
                 {
                     b.HasOne("StelexarasApp.Library.Models.Domi.Skini", "Skini")
                         .WithMany("Paidia")

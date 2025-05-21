@@ -3,7 +3,7 @@ using StelexarasApp.Library.Models;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Services.Services;
 
-namespace StelexarasApp.Services.Tests.ServicesTests;
+namespace StelexarasApp.Tests.ServicesTests;
 
 public class ExpensesServiceTests
 {
