@@ -11,5 +11,5 @@ public class Tomeas : Xwros
     public int? TomearxisId { get; set; }
     public Tomearxis? Tomearxis { get; set; } = null!;
 
-    public IEnumerable<Koinotita> Koinotites { get; set; } = [];
+    public List<Koinotita> Koinotites { get; set; } = [];
 }

@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using Moq;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Library.Dtos;
-using StelexarasApp.Library.Models;
-using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
@@ -24,9 +20,9 @@ public class DutyServiceTests
     public async Task AddDutyInService_ShouldReturnTrue()
     {
         // Arrange
-        var duty = new CreateDutyRequest 
+        var duty = new CreateDutyRequest
         {
-            Name = "TestDuty"            
+            Name = "TestDuty"
         };
         _mockdutyRepository.Setup(m => m.AddDutyInDb(It.IsAny<Duty>())).ReturnsAsync(true);
 
@@ -60,7 +56,10 @@ public class DutyServiceTests
             new() { Id = 1, Name = "TestDuty1" },
             new() { Id = 2, Name = "TestDuty2" }
         };
+
         _mockdutyRepository.Setup(m => m.GetDutiesFromDb()).ReturnsAsync(duties);
+        _mockMapper.Setup(m => m.Map<IEnumerable<DutyResponse>>(It.IsAny<IEnumerable<Duty>>()))
+            .Returns((IEnumerable<Duty> d) => d.Select(x => new DutyResponse { Id = x.Id, Name = x.Name }));
 
         // Act
         var result = await _dutyService.GetDutiesInService();

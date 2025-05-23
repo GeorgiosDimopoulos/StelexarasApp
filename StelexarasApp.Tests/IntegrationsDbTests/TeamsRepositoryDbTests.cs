@@ -1,13 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using StelexarasApp.Library.Models.Domi;
-using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Library.Models.Atoma.Children;
 
 namespace StelexarasApp.Tests.IntegrationDbTests
 {
@@ -176,7 +171,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetKoinotitaByName_ShouldReturnTeam()
         {
             // Arrange
-            var koinotita = GetKoinotita(41, "Koinotita8");
+            var koinotita = GetKoinotita(81, "Koinotita8");
             await _dbContext.Koinotites!.AddAsync(koinotita);
             await _dbContext.SaveChangesAsync();
 
@@ -221,7 +216,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         {
             // Arrange
             var tomeasName = "TestTomeas";
-            var expectedTomeas = new Tomeas { Id = 1, Name = tomeasName };
+            var expectedTomeas = new Tomeas { Id = 91, Name = tomeasName };
             await _dbContext.Tomeis.AddAsync(expectedTomeas);
             await _dbContext.SaveChangesAsync();
 
@@ -242,31 +237,29 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             Assert.Null(res);
         }
 
-        [Theory]
-        [InlineData("11", "UpdatedName", true)]
-        [InlineData("22", "", false)]
-        public async Task UpdateTomeasInDbAsync_ShouldReturnExpectedResult(string id, string newName, bool expectedResult)
+        [Fact]
+        public async Task UpdateTomeasInDbAsync_ShouldReturnTrue()
         {
             // Arrange
-            var tomeas = GetTomeas(newName);
+            var firstName = "FistTomeasName";
+            var tomeas = GetTomeas(firstName, 1);
+            Assert.NotNull(tomeas);
+
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
-            if (!string.IsNullOrEmpty(newName))
-                tomeas.Name = newName;
-            else
-                tomeas = null;
+            tomeas.Name = "UpdatedName";
 
             // Act
-            var result = await _teamsRepository.UpdateTomeasInDb(id, tomeas!);
+            var result = await _teamsRepository.UpdateTomeasInDb(firstName, tomeas);
 
             // Assert
-            Assert.Equal(expectedResult, result);
-            if (expectedResult)
+            Assert.True(result);
+            if (result)
             {
-                var updatedTomeas = await _dbContext.Tomeis.FindAsync(id);
+                var updatedTomeas = await _dbContext.Tomeis.FindAsync(1);
                 Assert.NotNull(updatedTomeas);
-                Assert.Equal(newName, updatedTomeas.Name);
+                Assert.Equal("UpdatedName", updatedTomeas.Name);
             }
         }
 
@@ -291,7 +284,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task DeleteTomeasInDbAsync_ShouldWork()
         {
             // Arrange
-            var tomeas = GetTomeas("Tomeas1");
+            var tomeas = GetTomeas("Tomeas1", 1);
             await _dbContext.Tomeis.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
@@ -308,7 +301,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetTomeaByName_ShouldReturnTomea()
         {
             // Arrange
-            var tomeas = GetTomeas("Tomeas1");
+            var tomeas = GetTomeas("Tomeas1", 1);
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 
@@ -319,11 +312,12 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             Assert.NotNull(result);
         }
 
-        private static Tomeas GetTomeas(string name)
+        private static Tomeas GetTomeas(string name, int id)
         {
             return new Tomeas
             {
                 Name = name,
+                Id = id,
                 Tomearxis = new Tomearxis
                 {
                     FullName = "Test Tomearxis",

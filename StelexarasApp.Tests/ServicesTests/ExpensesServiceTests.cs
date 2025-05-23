@@ -1,7 +1,4 @@
 ﻿using Moq;
-using StelexarasApp.Library.Models;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.Services.Services;
 
 namespace StelexarasApp.Tests.ServicesTests;
 

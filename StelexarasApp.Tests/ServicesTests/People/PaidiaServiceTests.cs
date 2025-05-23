@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using Moq;
-using StelexarasApp.DataAccess;
 using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
 using FluentValidation;
-using StelexarasApp.Library.Models.Atoma.Children;
-using StelexarasApp.Library.Dtos.People.Children;
-using StelexarasApp.Services.Interfaces.People;
-using StelexarasApp.Services.Services;
 
-namespace StelexarasApp.Tests.ServicesTests.People;
+namespace StelexarasApp.Tests.ServicesTests;
 
 public class PaidiaServiceTests
 {
@@ -62,30 +56,37 @@ public class PaidiaServiceTests
         _mockPaidiRepository.Verify(repo => repo.AddPaidiInDb(paidi), Times.Once);
     }
 
-    [Theory]
-    [InlineData(PaidiType.Kataskinotis, 2)]
-    [InlineData(PaidiType.Ekpaideuomenos, 2)]
-    public async Task GetPaidia_ShouldReturnPaidia(PaidiType paidiType, int expectedCount)
+    [Fact]
+    public async Task GetEkpaideuomenous_ShouldReturnThem()
     {
         // Arrange
         var expectedPaidia = new List<Paidi>
         {
-            new Paidi { Id = 1, FullName = "John Doe", Age = 30, PaidiType = paidiType },
-            new Paidi { Id = 2, FullName = "Jane Smith", Age = 25, PaidiType = paidiType }
-        }.Where(p => p.PaidiType == paidiType).ToList();
+            new Paidi { Id = 1, FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos },
+            new Paidi { Id = 2, FullName = "Jane Smith", Age = 16, PaidiType = PaidiType.Ekpaideuomenos }
+        }.Where(p => p.PaidiType == PaidiType.Ekpaideuomenos).ToList();
 
         _mockPaidiRepository
-            .Setup(repo => repo.GetPaidiaFromDb(paidiType))
+            .Setup(repo => repo.GetPaidiaInSxoliFromDb())
             .ReturnsAsync(expectedPaidia);
+
+        _mockMapper.Setup(m => m.Map<IEnumerable<PaidiResponse>>(It.IsAny<IEnumerable<Paidi>>()))
+            .Returns((IEnumerable<Paidi> paidia) => paidia.Select(p => new PaidiResponse
+            {
+                Id = p.Id,
+                FullName = p.FullName,
+                Age = p.Age,
+                PaidiType = p.PaidiType
+            }));
 
         // Act
         var result = await _paidiService.GetPaidiaBySxoliInService();
 
         // Assert
-        Assert.Equal(expectedCount, result.Count());
+        Assert.Equal(2, result.Count());
         foreach (var paidi in result)
         {
-            Assert.Equal(paidiType, paidi.PaidiType);
+            Assert.Equal(PaidiType.Ekpaideuomenos, paidi.PaidiType);
         }
     }
 
@@ -129,7 +130,15 @@ public class PaidiaServiceTests
         } : null;
 
         _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiId))
-            .ReturnsAsync(expectedPaidi);
+                            .ReturnsAsync(expectedPaidi);
+        _mockMapper.Setup(m => m.Map<PaidiResponse>(It.IsAny<Paidi>()))
+                   .Returns((Paidi p) => new PaidiResponse
+                   {
+                       Id = p.Id,
+                       FullName = p.FullName,
+                       Age = p.Age,
+                       PaidiType = p.PaidiType
+                   });
 
         // Act
         var result = await _paidiService.GetPaidiByIdInService(paidiId);

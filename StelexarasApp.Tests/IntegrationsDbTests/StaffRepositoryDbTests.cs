@@ -1,12 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.Library.Models.Domi;
 
 namespace StelexarasApp.Tests.IntegrationDbTests;
 
@@ -80,15 +76,16 @@ public class StaffRepositoryDbTests
             Sex = Sex.Male,
             Skini = new Skini
             {
-                Id = 11,
+                Id = 41,
                 Name = "TestSkini",
                 Koinotita = new Koinotita
                 {
-                    Id = 1,
+                    Id = 21,
                     Name = "TestKoinotita",
+                    Hlikia = HlikiaKoinotitas.Mikra,                    
                     Tomeas = new Tomeas
                     {
-                        Id = 1,
+                        Id = 31,
                         Name = "TestTomeas"
                     }
                 }

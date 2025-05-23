@@ -13,7 +13,7 @@ public class Koinotita : Xwros
 
     public Koinotarxis? Koinotarxis { get; set; }
     public Tomeas Tomeas { get; set; } = null!;
-    public IEnumerable<Skini>? Skines { get; set; }
+    public List<Skini>? Skines { get; set; }
 }
 
 public enum HlikiaKoinotitas

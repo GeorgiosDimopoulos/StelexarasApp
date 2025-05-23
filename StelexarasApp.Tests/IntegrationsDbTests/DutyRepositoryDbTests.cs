@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess;
-using StelexarasApp.Library.Models;
-using StelexarasApp.DataAccess.Repositories;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
 
 namespace StelexarasApp.Tests.IntegrationDbTests;
 
@@ -121,6 +117,8 @@ public class DutyRepositoryDbTests
     public async Task GetDutiesAsync_ShouldReturnAllDuties()
     {
         // Arrange
+
+        _dbContext.Duties.RemoveRange(_dbContext.Duties);
         var duty1 = new Duty { Name = "Duty 1", Date = DateTime.Now };
         var duty2 = new Duty { Name = "Duty 2", Date = DateTime.Now };
 

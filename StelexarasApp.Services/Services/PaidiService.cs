@@ -90,8 +90,7 @@ public class PaidiService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest
         if (paidia == null)
             return null!;
 
-        var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
-        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
+        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
         if (kataskinotesResponse == null)
             return null!;
         return kataskinotesResponse;
@@ -117,10 +116,8 @@ public class PaidiService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest
         Paidi paidi = await _paidiRepository.GetPaidiByIdFromDb(id);
         if (paidi == null)
             return null!;
-        if (paidi is not Kataskinotis kataskinotis)
-            return null!;
-
-        return _mapper.Map<PaidiResponse>(kataskinotis);
+        
+        return _mapper.Map<PaidiResponse>(paidi);
     }
 
     public async Task<bool> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId)

@@ -5,10 +5,6 @@ public interface IStaffRepository
     Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName, StelexosQueryParameters queryParameters);
     Task<IStelexos> GetStelexosByIdInDb(int id);
     Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi, StelexosQueryParameters stelexosQueryParameters);
-
-    //Task<bool> AddOmadarxiInDb(Omadarxis omadarxis);
-    //Task<bool> AddKoinotarxiInDb(Koinotarxis koinotarxis);
-    //Task<bool> AddTomearxiInDb(Tomearxis tomearxis);
     Task<bool> AddStelexosInDb(IStelexos stelexos);
 
     Task<bool> UpdateStelexosInDb(int id, IStelexos stelexos);

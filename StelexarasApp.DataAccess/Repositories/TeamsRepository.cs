@@ -250,17 +250,14 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> UpdateTomeasInDb(string id, Tomeas tomeas)
+        public async Task<bool> UpdateTomeasInDb(string n, Tomeas tomeas)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-            if (tomeas is null || _dbContext.Tomeis is null)
-                return false;
-
             try
             {
-                var existingTomeas = await _dbContext.Tomeis.FindAsync(id);
+                var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name.Equals(n));
                 if (existingTomeas == null)
                     return false;
 

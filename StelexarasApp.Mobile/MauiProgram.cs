@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using StelexarasApp.Services.Validators;
 using StelexarasApp.Library.Models;
 using Microsoft.Extensions.Configuration;
-using StelexarasApp.Services.Interfaces.People;
 
 namespace StelexarasApp.Mobile;
 
