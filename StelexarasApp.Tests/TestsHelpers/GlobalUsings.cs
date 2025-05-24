@@ -14,3 +14,4 @@ global using StelexarasApp.Library.Models;
 global using StelexarasApp.DataAccess;
 global using StelexarasApp.DataAccess.Repositories;
 global using StelexarasApp.Library.Dtos;
+global using StelexarasApp.Library.QueryParameters;

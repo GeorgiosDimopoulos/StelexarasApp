@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Moq;
 using FluentValidation;
-using StelexarasApp.Library.QueryParameters;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
@@ -10,14 +9,14 @@ public class StaffServiceTests
     private readonly Mock<IStaffRepository> _mockStelexiRepository;
     private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _stelexiService;
     private readonly Mock<IMapper> _mockMapper;
-    private readonly IValidator<StelexosDtoBase> _stelexosValidator;
+    private readonly Mock<IValidator<StelexosDtoBase>> _stelexosValidator;
 
     public StaffServiceTests()
     {
-        _stelexosValidator = new StelexosValidator();
+        _stelexosValidator = new Mock<IValidator<StelexosDtoBase>>();
         _mockStelexiRepository = new Mock<IStaffRepository>();
         _mockMapper = new Mock<IMapper>();
-        _stelexiService = new StaffService(_mockMapper.Object, _mockStelexiRepository.Object, _stelexosValidator);
+        _stelexiService = new StaffService(_mockMapper.Object, _mockStelexiRepository.Object, _stelexosValidator.Object);
     }
 
     [Fact]
@@ -70,7 +69,7 @@ public class StaffServiceTests
             Tel = "1234567890",
             Sex = Sex.Male,
             XwrosName = "TestXwros",
-            Thesi = thesi            
+            Thesi = thesi
         };
 
         IStelexos stelexos = null!;
@@ -466,35 +465,137 @@ public class StaffServiceTests
         _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName), Times.Once);
     }
 
-    [Fact]
-    public async Task UpdateStelexosInService_ShouldWork()
+    [Theory]
+    [InlineData(Thesi.Omadarxis)]
+    [InlineData(Thesi.Koinotarxis)]
+    [InlineData(Thesi.Tomearxis)]
+    [InlineData(Thesi.Ekpaideutis)]
+    public async Task UpdateStelexosInService_ShouldWork(Thesi thesi)
     {
         // Arrange
         var id = 1;
-        var stelexosDto = new UpdateStelexosRequest
+
+        var createStelexosRequest = new CreateStelexosRequest
         {
             FullName = "Test Name",
             Age = 30,
+            XwrosName = "TestXwros",
             Tel = "1234567890",
-        };
-        var stelexos = new Omadarxis
-        {
-            FullName = "Test Name",
-            Id = id,
-            Age = 30,
-            Tel = "1234567890",
-            Thesi = Thesi.Omadarxis
+            Thesi = thesi
         };
 
-        _mockMapper.Setup(m => m.Map<IStelexos>(stelexosDto)).Returns(stelexos);
-        _mockStelexiRepository.Setup(r => r.UpdateStelexosInDb(id, stelexos)).ReturnsAsync(true);
+        var updateStelexosRequest = new UpdateStelexosRequest
+        {
+            FullName = "Test Name",
+            Age = 30,
+            Tel = "1234567890",
+            XwrosName = "TestXwros",
+            Thesi = thesi,
+            Sex = Sex.Male
+        };
+
+        IStelexos stelexos = null!;
+        switch (thesi)
+        {
+            case Thesi.Omadarxis:
+                stelexos = new Omadarxis
+                {
+                    FullName = createStelexosRequest.FullName,
+                    Age = createStelexosRequest.Age,
+                    Tel = createStelexosRequest.Tel,
+                    Thesi = Thesi.Omadarxis,
+                    Id = id,
+                    Sex = Sex.Female,
+                    Skini = new Skini { Id = 1, Name = "TestSkini" },
+                    XwrosName = createStelexosRequest.XwrosName
+                };
+                _mockMapper.Setup(m => m.Map<Omadarxis>(createStelexosRequest))
+                           .Returns((Omadarxis)stelexos);
+                break;
+            case Thesi.Koinotarxis:
+                stelexos = new Koinotarxis
+                {
+                    FullName = createStelexosRequest.FullName,
+                    Age = createStelexosRequest.Age,
+                    Id = id,
+                    Tel = createStelexosRequest.Tel,
+                    Thesi = Thesi.Koinotarxis,
+                    XwrosName = createStelexosRequest.XwrosName,
+                    Sex = Sex.Female,
+                    Koinotita = new Koinotita { Name = "TestKoinotita" },
+                    Omadarxes = []
+                };
+                _mockMapper.Setup(m => m.Map<Koinotarxis>(createStelexosRequest))
+                           .Returns((Koinotarxis)stelexos);
+                break;
+            case Thesi.Tomearxis:
+                stelexos = new Tomearxis
+                {
+                    FullName = createStelexosRequest.FullName,
+                    Id = id,
+                    Age = createStelexosRequest.Age,
+                    Sex = Sex.Female,
+                    Tel = createStelexosRequest.Tel,
+                    Thesi = Thesi.Tomearxis,
+                    XwrosName = createStelexosRequest.XwrosName,
+                    Koinotarxes = [],
+                    Tomeas = new Tomeas { Name = "TestTomea" }
+                };
+                _mockMapper.Setup(m => m.Map<Tomearxis>(createStelexosRequest))
+                           .Returns((Tomearxis)stelexos);
+                break;
+            case Thesi.Ekpaideutis:
+                stelexos = new Ekpaideutis
+                {
+                    Id = id,
+                    FullName = createStelexosRequest.FullName,
+                    Age = createStelexosRequest.Age,
+                    Tel = createStelexosRequest.Tel,
+                    Thesi = Thesi.Ekpaideutis,
+                    Sex = Sex.Female,
+                    XwrosName = createStelexosRequest.XwrosName
+                };
+                _mockMapper.Setup(m => m.Map<Ekpaideutis>(createStelexosRequest))
+                           .Returns((Ekpaideutis)stelexos);
+                break;
+            default:
+                throw new ArgumentException("Invalid Thesi", nameof(thesi));
+        }
+        _mockStelexiRepository.Setup(r => r.AddStelexosInDb(It.Is<IStelexos>(s =>
+                                                                             s.FullName == createStelexosRequest.FullName &&
+                                                                             s.Age == createStelexosRequest.Age &&
+                                                                             s.Tel == createStelexosRequest.Tel &&
+                                                                             s.XwrosName == createStelexosRequest.XwrosName &&
+                                                                             s.Thesi == createStelexosRequest.Thesi)))
+                              .ReturnsAsync(true)
+                              .Verifiable();
+        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(id))
+                              .ReturnsAsync(stelexos);
+        _mockStelexiRepository.Setup(r => r.UpdateStelexosInDb(id, stelexos))
+                              .ReturnsAsync(true);
+
+        _mockMapper.Setup(m => m.Map<IStelexos>(createStelexosRequest))
+                   .Returns(stelexos);
+        _mockMapper.Setup(m => m.Map<IStelexos>(updateStelexosRequest))
+                   .Returns(stelexos);
+        _mockMapper.Setup(m => m.Map(updateStelexosRequest, stelexos))
+                   .Returns(stelexos);
+
+        _stelexosValidator.Setup(v => v.ValidateAsync(It.IsAny<StelexosDtoBase>(), default))
+                          .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
-        var result = await _stelexiService.UpdateStelexos(id, stelexosDto);
+        var additionResult = await _stelexiService.CreateStelexos(createStelexosRequest, createStelexosRequest.Thesi);
+
+        Assert.True(additionResult);
+
+        var updateResult = await _stelexiService.UpdateStelexos(id, updateStelexosRequest);
 
         // Assert
-        Assert.True(result);
+        Assert.True(updateResult);
         _mockStelexiRepository.Verify(r => r.UpdateStelexosInDb(id, stelexos), Times.Once);
-        _mockMapper.Verify(m => m.Map<IStelexos>(stelexosDto), Times.Once);
+        
+        _mockMapper.Verify(m => m.Map<IStelexos>(createStelexosRequest), Times.Once);        
+        _mockMapper.Verify(m => m.Map(updateStelexosRequest, stelexos), Times.Once);
     }
 }
