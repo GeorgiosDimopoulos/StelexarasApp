@@ -9,118 +9,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
     private readonly AppDbContext _dbContext = dbContext;
     private readonly ILogger<StaffRepository> _logger = loggerFactory.CreateLogger<StaffRepository>();
 
-    public async Task<bool> AddOmadarxiInDb(Omadarxis omadarxis)
-    {
-        if (omadarxis == null || omadarxis.Id <= 0 || omadarxis.Id > 100 || (int)omadarxis.Thesi > 4)
-            throw new ArgumentException(nameof(omadarxis), "Omadarxis cannot be null or its id negative or huge value!");
-        if (_dbContext.Omadarxes == null)
-            throw new InvalidOperationException("Omadarxes DbSet cannot be null");
-
-        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-        if (await _dbContext.Omadarxes.AnyAsync(s => s.Tel == omadarxis.Tel))
-            return false;
-        try
-        {
-            if (omadarxis.Skini == null || omadarxis.Skini.Koinotita == null || omadarxis.Skini.Koinotita.Tomeas == null)
-                throw new ArgumentException("Skini, Koinotita, and Tomeas must not be null.");
-
-            if (omadarxis.Thesi != Thesi.Omadarxis)
-                throw new InvalidOperationException($"Invalid Thesi for Tomearxis. Expected {Thesi.Omadarxis}, but got {omadarxis.Thesi}.");
-
-            var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(k => k.Name == omadarxis.Skini.Name);
-            if (existingSkini != null)
-                omadarxis.Skini = existingSkini;
-
-            var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name == omadarxis.Skini.Koinotita.Tomeas.Name);
-            if (existingTomeas != null)
-                omadarxis.Skini.Koinotita.Tomeas = existingTomeas;
-
-            _dbContext.Omadarxes!.Add(omadarxis);
-            await _dbContext.SaveChangesAsync();
-            if (transaction != null)
-                await transaction.CommitAsync();
-            return true;
-        }
-        catch (Exception ex)
-        {
-            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-            return false;
-        }
-    }
-
-    public async Task<bool> AddKoinotarxiInDb(Koinotarxis koinotarxis)
-    {
-        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-        if ((await _dbContext.Koinotarxes.FirstOrDefaultAsync(s => s.Tel == koinotarxis.Tel)) is not null || koinotarxis == null || _dbContext.Omadarxes is null)
-            return false;
-
-        try
-        {
-            if (koinotarxis.Thesi != Thesi.Koinotarxis)
-                throw new InvalidOperationException($"Invalid Thesi for Tomearxis. Expected {Thesi.Koinotarxis}, but got {koinotarxis.Thesi}.");
-
-            var existingKoinotita = await _dbContext.Koinotites.FirstOrDefaultAsync(k => k.Name == koinotarxis.Koinotita.Name);
-            if (existingKoinotita != null)
-                koinotarxis.Koinotita = existingKoinotita;
-
-            _dbContext.Koinotarxes!.Add(koinotarxis);
-            await _dbContext.SaveChangesAsync();
-            if (transaction != null)
-                await transaction.CommitAsync();
-            return true;
-        }
-        catch (DbUpdateException dbEx) when (dbEx.InnerException is SqlException sqlEx && sqlEx.Number == 2601)
-        {
-            _logger.LogError(dbEx, "{MethodName}, exception: {ExceptionMessage}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, dbEx.Message);
-            LogFileWriter.WriteToLog($"{dbEx.Message}, {dbEx.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
-            if (transaction != null)
-                await transaction.RollbackAsync();
-            return false;
-        }
-        catch (Exception ex)
-        {
-            if (transaction != null)
-                await transaction.RollbackAsync();
-            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-            return false;
-        }
-    }
-
-    public async Task<bool> AddTomearxiInDb(Tomearxis tomearxis)
-    {
-        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-        if ((await _dbContext.Tomearxes.FirstOrDefaultAsync(s => s.Tel == tomearxis.Tel)) is not null || tomearxis == null || _dbContext.Omadarxes is null)
-            return false;
-
-        if (tomearxis.Thesi != Thesi.Tomearxis)
-            throw new InvalidOperationException($"Invalid Thesi for Tomearxis. Expected {Thesi.Omadarxis}, but got {tomearxis.Thesi}.");
-
-        var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name.Equals(tomearxis.Tomeas.Name));
-        if (existingTomeas != null)
-            tomearxis.Tomeas = existingTomeas;
-        try
-        {
-            _dbContext.Tomearxes!.Add(tomearxis);
-            await _dbContext.SaveChangesAsync();
-            if (transaction != null)
-                await transaction.CommitAsync();
-            return true;
-        }
-        catch (Exception ex)
-        {
-            if (transaction != null)
-                await transaction.RollbackAsync();
-            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-            return false;
-        }
-    }
-
     public async Task<bool> DeleteStelexosInDb(int id)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
@@ -175,9 +63,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
     public async Task<IStelexos> GetStelexosByIdInDb(int id)
     {
-        if (_dbContext is null)
-            return null!;
-
         var omadarxis = await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.Id == id);
         if (omadarxis != null)
             return omadarxis;

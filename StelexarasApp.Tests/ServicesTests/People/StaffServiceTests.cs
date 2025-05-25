@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Moq;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
@@ -312,6 +313,8 @@ public class StaffServiceTests
 
         _mockMapper.Setup(m => m.Map<Omadarxis>(It.IsAny<CreateStelexosRequest>())).Returns(omadarxis);
         _mockStelexiRepository.Setup(r => r.AddStelexosInDb(It.IsAny<Omadarxis>())).ReturnsAsync(true);
+        _stelexosValidator.Setup(v => v.ValidateAsync(It.IsAny<StelexosDtoBase>(), default))
+                          .ReturnsAsync(new ValidationResult());
 
         // Act
         var result = await _stelexiService.CreateStelexos(omadarxisDto, Thesi.Omadarxis);
@@ -425,7 +428,6 @@ public class StaffServiceTests
             Skini = skini
         };
 
-        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(id)).ReturnsAsync(omadarxis);
         _mockStelexiRepository.Setup(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Name)).ReturnsAsync(true);
 
         // Act
@@ -433,7 +435,6 @@ public class StaffServiceTests
 
         // Assert
         Assert.True(result);
-        _mockStelexiRepository.Verify(r => r.GetStelexosByIdInDb(id), Times.Once);
         _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Name), Times.Once);
     }
 
@@ -450,10 +451,12 @@ public class StaffServiceTests
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
             Tel = "1234567890",
+            Age = 23,
+            Sex =Sex.Male,
+            XwrosName = "TestXwros",
             Skini = new Skini()
         };
 
-        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(omadarxisId)).ReturnsAsync(omadarxis);
         _mockStelexiRepository.Setup(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName)).ReturnsAsync(false);
 
         // Act
@@ -461,7 +464,6 @@ public class StaffServiceTests
 
         // Assert
         Assert.False(result);
-        _mockStelexiRepository.Verify(r => r.GetStelexosByIdInDb(omadarxisId), Times.Once);
         _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName), Times.Once);
     }
 

@@ -123,6 +123,7 @@ namespace StelexarasApp.Library.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("XwrosName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -165,6 +166,7 @@ namespace StelexarasApp.Library.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("XwrosName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -204,6 +206,7 @@ namespace StelexarasApp.Library.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("XwrosName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
