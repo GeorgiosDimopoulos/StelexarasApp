@@ -2,9 +2,9 @@
 
 public interface IStelexos : IPerson
 {
-    public string Tel { get; set; }
-    public Thesi Thesi { get; set; }
-    public string? XwrosName { get; set; }
+    string Tel { get; set; }
+    Thesi Thesi { get; set; }
+    string XwrosName { get; set; }
 }
 
 public enum Thesi

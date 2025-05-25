@@ -6,13 +6,12 @@ public class Koinotarxis : IStelexos
 {
     [Key]
     public int Id { get; set; }
-    [Required]
-    public Koinotita Koinotita { get; set; }
-    public IEnumerable<Omadarxis> Omadarxes { get; set; }
-    public required string FullName { get; set; }
-    public required string Tel { get; set; }
-    public required Thesi Thesi { get; set; } = Thesi.Koinotarxis;
-    public string? XwrosName { get; set; }
-    public required Sex Sex { get; set; }
-    public required int Age { get; set; }
+    public Koinotita Koinotita { get; set; } = default!;
+    public IEnumerable<Omadarxis> Omadarxes { get; set; } = default!;
+    public string FullName { get; set; } = string.Empty;
+    public string Tel { get; set; } = string.Empty;
+    public Thesi Thesi { get; set; } = Thesi.Koinotarxis;
+    public string XwrosName { get; set; } = string.Empty;
+    public Sex Sex { get; set; }
+    public int Age { get; set; }
 }

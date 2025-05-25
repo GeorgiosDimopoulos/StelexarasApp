@@ -4,10 +4,9 @@ namespace StelexarasApp.Library.Models.Atoma.Staff
 {
     public class Ekpaideutis : IStelexos
     {
-        public required string FullName { get; set; }
-
         [Key]
         public int Id { get; set; }
+        public string FullName { get; set; } = string.Empty;
         public int Age { get; set; }
         public Sex Sex { get; set; }
 

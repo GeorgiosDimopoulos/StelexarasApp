@@ -4,7 +4,7 @@ namespace StelexarasApp.Library.Models.Atoma.Children;
 
 public class Paidi : IPerson
 {
-    public required string FullName { get; set; }
+    public string FullName { get; set; } = string.Empty;
 
     [Key]
     public int Id { get; set; }
