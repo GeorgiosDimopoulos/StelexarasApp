@@ -23,7 +23,7 @@ public class DutyRepositoryDbTests
     public async Task AddDutyAsync_ShouldAddDuty()
     {
         // Arrange
-        var duty = new Duty { Name = "Test Duty", Date = DateTime.Now };
+        var duty = new Duty { Name = "Test Duty 1", Date = DateTime.Now };
 
         // Act
         var rest = await dutyRepository.AddDutyInDb(duty);
@@ -32,7 +32,7 @@ public class DutyRepositoryDbTests
         Assert.True(rest);
         var duties = await _dbContext.Duties.ToListAsync();
         Assert.Single(duties);
-        Assert.Equal("Test Duty", duties [0].Name);
+        Assert.Equal("Test Duty 1", duties [0].Name);
     }
 
     [Fact]

@@ -44,7 +44,7 @@ public class StaffRepositoryDbTests
         // Arrange
         var stelexos = new Omadarxis
         {
-            Id = 91,
+            Id = 96,
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
             Sex = Sex.Male,
@@ -85,7 +85,7 @@ public class StaffRepositoryDbTests
                     Hlikia = HlikiaKoinotitas.Mikra,                    
                     Tomeas = new Tomeas
                     {
-                        Id = 31,
+                        Id = 32,
                         Name = "TestTomeas"
                     }
                 }

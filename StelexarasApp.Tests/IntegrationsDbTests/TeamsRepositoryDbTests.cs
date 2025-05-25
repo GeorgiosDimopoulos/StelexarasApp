@@ -171,7 +171,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetKoinotitaByName_ShouldReturnTeam()
         {
             // Arrange
-            var koinotita = GetKoinotita(81, "Koinotita8");
+            var koinotita = GetKoinotita(81, "Koinotita 8");
             await _dbContext.Koinotites!.AddAsync(koinotita);
             await _dbContext.SaveChangesAsync();
 

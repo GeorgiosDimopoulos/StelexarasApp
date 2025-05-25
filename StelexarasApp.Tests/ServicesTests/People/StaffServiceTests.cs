@@ -451,7 +451,7 @@ public class StaffServiceTests
             Thesi = Thesi.Omadarxis,
             FullName = "Test Name",
             Tel = "1234567890",
-            Age = 23,
+            Age = 27,
             Sex =Sex.Male,
             XwrosName = "TestXwros",
             Skini = new Skini()

@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium.Chrome;
 
-namespace StelexarasApp.Tests.UiTests;
+namespace StelexarasApp.Tests.UITests;
 
 public class StaffPageUITests
 {
