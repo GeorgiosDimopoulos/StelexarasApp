@@ -4,8 +4,10 @@
     {
         public class ApiGroups
         {
-            public const string General = "General Api";
-            public const string Admin = "Admin Api";
+            public const string PublicInfo = "Public Api";
+            public const string AdminInfo = "Admin Api";
+            public const string AdminTitle = "Admin";
+            public const string PublicTitle = "Public";
         }
 
         public class VersionsGroups

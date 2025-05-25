@@ -1,4 +1,5 @@
 using StelexarasApp.API;
+using StelexarasApp.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +13,14 @@ var app = builder.Build();
 // Swagger UI configuration
 if (app.Environment.IsDevelopment())
 {
+    var adminTitle = ApiConstants.ApiGroups.AdminTitle.ToLower();
+
     app.UseSwagger();
     app.UseCors("AllowAll");
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"); // General
-        //c.SwaggerEndpoint("/swagger/v2/swagger.json", "API v2"); // Admin
+        c.SwaggerEndpoint($"/swagger/{adminTitle}/swagger.json", ApiConstants.ApiGroups.AdminInfo);
+        //c.SwaggerEndpoint("/swagger/v2/swagger.json", ApiConstants.ApiGroups.PublicInfo);
         c.RoutePrefix = "swagger";
     });
     app.UseDeveloperExceptionPage();

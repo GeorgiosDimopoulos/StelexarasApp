@@ -70,7 +70,12 @@ public static class ServiceCollectionExtensions
         {
             options.EnableAnnotations();
 
-            //AddVersioning(options);
+            // AddSwaggerAccessLevel(options);
+            options.SwaggerDoc("admin", new OpenApiInfo
+            {
+                Title = "Admin API",
+                Version = "v1"
+            });
 
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
@@ -134,54 +139,32 @@ public static class ServiceCollectionExtensions
                 };
             });
 
-        // Add Authorization
         services.AddAuthorization();
     }
 
-    private static void AddVersioning(SwaggerGenOptions options)
+    private static void AddSwaggerAccessLevel(SwaggerGenOptions options)
     {
-        options.SwaggerDoc(ApiConstants.VersionsGroups.v1, new() { Title = ApiConstants.VersionsGroups.v1, Version = ApiConstants.VersionsGroups.v1 });
-        options.SwaggerDoc(ApiConstants.VersionsGroups.v2, new() { Title = ApiConstants.VersionsGroups.v2, Version = ApiConstants.VersionsGroups.v2 });
+        options.SwaggerDoc(ApiConstants.ApiGroups.AdminTitle,
+                           new()
+                           {
+                               Title = ApiConstants.ApiGroups.AdminInfo,
+                               Version = ApiConstants.VersionsGroups.v1
+                           });
+        options.SwaggerDoc(ApiConstants.ApiGroups.PublicTitle,
+                           new()
+                           {
+                               Title = ApiConstants.ApiGroups.PublicInfo,
+                               Version = ApiConstants.VersionsGroups.v1
+                           });
 
         options.DocInclusionPredicate((docName, apiDesc) =>
         {
             if (!apiDesc.TryGetMethodInfo(out var methodInfo))
                 return false;
 
-            var tags = methodInfo
-                .GetCustomAttributes(true)
-                .OfType<SwaggerOperationAttribute>()
-                .SelectMany(attr => attr.Tags)
-                .ToList();
+            var groupName = apiDesc.GroupName;
 
-            if (docName.Equals("v1"))
-            {
-                // return tags.Contains("General API");
-                return apiDesc.GroupName == "v1";
-            }
-
-            if (docName.Equals("v2"))
-            {
-                // return tags.Contains("Admin API") || tags.Contains("General API");
-                return apiDesc.GroupName == "v2 API";
-            }
-
-            return false;
+            return docName == groupName;
         });
-
-        //services.AddApiVersioning(options =>
-        //{
-        //    options.ReportApiVersions = true;
-        //    options.AssumeDefaultVersionWhenUnspecified = true;
-        //    options.DefaultApiVersion = new ApiVersion(1, 0);
-        //    options.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
-        //                                            new HeaderApiVersionReader("x-api-version"),
-        //                                            new MediaTypeApiVersionReader("x-api-version"));
-        //});
-        //services.AddVersionedApiExplorer(options =>
-        //{
-        //    options.GroupNameFormat = "'v'VVV";
-        //    options.SubstituteApiVersionInUrl = true;
-        //});
     }
 }
