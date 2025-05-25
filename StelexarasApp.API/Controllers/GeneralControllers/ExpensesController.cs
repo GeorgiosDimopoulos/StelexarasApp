@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.Services.IServices;
 
-namespace StelexarasApp.API.ApiControllers.GeneralControllers;
+namespace StelexarasApp.API.Controllers.GeneralControllers;
 
 [ApiController]
 [Route("[controller]")]

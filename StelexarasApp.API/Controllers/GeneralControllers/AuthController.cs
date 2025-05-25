@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace StelexarasApp.API.ApiControllers.GeneralControllers;
+namespace StelexarasApp.API.Controllers.GeneralControllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -17,6 +18,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [SwaggerOperation(Tags = new [] { "Admin Endpoint" })]
     public async Task<IActionResult> GetAuthToken([FromQuery] LoginRequest request)
     {
         if (string.IsNullOrEmpty(request.Password))

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using StelexarasApp.Services.IServices;
 
-namespace StelexarasApp.API.ApiControllers.TeamsControllers;
+namespace StelexarasApp.API.Controllers.TeamsControllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using StelexarasApp.Services.Interfaces.People;
 
-namespace StelexarasApp.API.ApiControllers.PeopleControllers;
+namespace StelexarasApp.API.Controllers.PeopleControllers;
 
 [ApiController]
 [Route("[controller]")]
