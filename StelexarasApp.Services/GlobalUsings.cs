@@ -13,3 +13,4 @@ global using StelexarasApp.Library.Dtos.People.Children;
 global using StelexarasApp.Library.Dtos;
 global using StelexarasApp.Services.IServices;
 global using StelexarasApp.Services.Interfaces.People;
+global using StelexarasApp.Services.Interfaces;

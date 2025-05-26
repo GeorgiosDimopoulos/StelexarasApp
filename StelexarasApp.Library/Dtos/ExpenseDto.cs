@@ -8,9 +8,9 @@ public class ExpenseDtoBase
 
 public class CreateExpenseRequest : ExpenseDtoBase { }
 
-public class UpdateExpenseRequest : ExpenseDtoBase
+public class UpdateExpenseRequest : ExpenseDtoBase 
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 }
 
 public class DeleteExpenseRequest
