@@ -9,11 +9,12 @@ DATA ACCESS:
 
 API:
 - split to 2 Swagger pages, so we will have Admins and normal-users (hide PUT DELETE and INSERT endpoints for normal users)
-- add Swagger Documentation info in endpoints with comments, like:
+- add Swagger Documentation info in endpoints and theur parameters queries with comments, like:
   /// <summary>
   /// this is a Documentation
   /// </summary>
   /// <param name="client">Client</param>
+  - check https://github.com/tsgdigitalservices/lcc-mytsg/pull/232/files
 
 MOBILE:
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
