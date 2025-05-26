@@ -2,13 +2,15 @@
 
 public class DutyDtoBase
 {
-    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
 }
 
 public class CreateDutyRequest : DutyDtoBase { }
 
-public class UpdateDutyRequest : DutyDtoBase { }
+public class UpdateDutyRequest : DutyDtoBase 
+{
+    public int Id { get; init; }
+}
 
 public class DeleteDutyRequest
 {

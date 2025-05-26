@@ -30,7 +30,7 @@ namespace StelexarasApp.Mobile.Views
 
         private async void OnExpenseTapped(object sender, SelectionChangedEventArgs e)
         {
-            var selected= e.CurrentSelection.FirstOrDefault() as Expense;
+            var selected = e.CurrentSelection.FirstOrDefault() as ExpenseResponse;
             if (selected == null)
                 return;
 
@@ -59,7 +59,12 @@ namespace StelexarasApp.Mobile.Views
                     {
                         try
                         {
-                            await _viewModel.UpdateExpense(selected, newName);
+                            var updateExpenseRequest = new UpdateExpenseRequest
+                            {
+                                Id = selected.Id,
+                                Description = newName
+                            };
+                            await _viewModel.UpdateExpense(updateExpenseRequest, newName);
                             await DisplayAlert("Επιτυχής Μετονομασία", "To εξοδο μετονομάστηκε!", "OK");
                         }
                         catch (Exception ex)

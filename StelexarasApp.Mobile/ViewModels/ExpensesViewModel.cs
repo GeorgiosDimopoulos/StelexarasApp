@@ -9,15 +9,14 @@ namespace StelexarasApp.Mobile.ViewModels
     {
         private IExpenseService _expenseService = expenseService;
 
-        public ObservableCollection<Expense> Expenses { get; set; } = new ObservableCollection<Expense>();
+        public ObservableCollection<ExpenseResponse> Expenses { get; set; } = [];
         public string StatusMessage { get; set; } = string.Empty;
 
         public async void AddExpense(string name, int price)
         {
-            var result = await _expenseService.AddExpenseInService(new Expense
+            var result = await _expenseService.AddExpenseInService(new CreateExpenseRequest
             {
                 Description = name,
-                Date = DateTime.Today,
                 Amount = price
             });
 
@@ -27,7 +26,11 @@ namespace StelexarasApp.Mobile.ViewModels
 
         public async Task DeleteExpense(int id)
         {
-            await _expenseService.DeleteExpenseInService(id);
+            var deleteExpenseRequest = new DeleteExpenseRequest
+            {
+                Id = id
+            };
+            await _expenseService.DeleteExpenseInService(deleteExpenseRequest);
         }
 
         public async Task LoadExpensesAsync()
@@ -35,21 +38,30 @@ namespace StelexarasApp.Mobile.ViewModels
             var expenses = await _expenseService.GetExpensesInService();
             if (expenses is not null) 
             {
-                Expenses = new ObservableCollection<Expense>(expenses);
+                Expenses = [.. expenses];
                 StatusMessage = "Load successful";
             }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null!)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public async Task UpdateExpense(Expense selected, string newName)
+        public async Task UpdateExpense(UpdateExpenseRequest selected, string newName)
         {
             selected.Description = newName;
-            await _expenseService.UpdateExpenseInService(selected.Id, selected);
+            if (string.IsNullOrEmpty(newName) || newName == selected.Description)
+                return;
+
+            var updateExpenseRequest = new UpdateExpenseRequest
+            {
+                Id = selected.Id,
+                Description = selected.Description,
+                Amount = selected.Amount
+            };
+            await _expenseService.UpdateExpenseInService(selected);
         }
     } 
 }

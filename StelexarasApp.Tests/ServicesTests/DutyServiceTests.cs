@@ -38,10 +38,10 @@ public class DutyServiceTests
     {
         // Arrange
         var duty = new DeleteDutyRequest { Id = 1 };
-        _mockdutyRepository.Setup(m => m.DeleteDutyInDb(It.IsAny<int>())).ReturnsAsync(true);
+        _mockdutyRepository.Setup(m => m.DeleteDutyInDb(It.IsAny<Duty>())).ReturnsAsync(true);
 
         // Act
-        var result = await _dutyService.DeleteDutyInService(duty.Id);
+        var result = await _dutyService.DeleteDutyInService(duty);
 
         // Assert
         Assert.True(result);
@@ -74,10 +74,10 @@ public class DutyServiceTests
     {
         // Arrange
         var duty = new UpdateDutyRequest { Id = 1, Name = "TestDuty" };
-        _mockdutyRepository.Setup(m => m.UpdateDutyInDb(It.IsAny<string>(), It.IsAny<Duty>())).ReturnsAsync(true);
+        _mockdutyRepository.Setup(m => m.UpdateDutyInDb(It.IsAny<Duty>())).ReturnsAsync(true);
 
         // Act
-        var result = await _dutyService.UpdateDutyInService(duty.Name, duty);
+        var result = await _dutyService.UpdateDutyInService(duty);
 
         // Assert
         Assert.True(result);

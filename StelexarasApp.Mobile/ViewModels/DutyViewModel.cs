@@ -17,9 +17,9 @@ public class DutyViewModel
         LoadDuties();
     }
 
-    public async Task<bool> DeleteDuty(int id)
+    public async Task<bool> DeleteDuty(DeleteDutyRequest deleteDutyRequest)
     {
-        var result = await _dutyService.DeleteDutyInService(id);
+        var result = await _dutyService.DeleteDutyInService(deleteDutyRequest);
 
         if (result)
             return true;
@@ -31,7 +31,9 @@ public class DutyViewModel
         if (dutyNewName == null)
             return false;
 
-        var result = await _dutyService.UpdateDutyInService(dutyNewName, duty);
+        duty.Name = dutyNewName;
+
+        var result = await _dutyService.UpdateDutyInService(duty);
         if (result)
             return true;
 

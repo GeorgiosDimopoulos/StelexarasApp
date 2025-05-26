@@ -64,22 +64,19 @@ public class DutiesController : ControllerBase
         return Ok(dutyAdded);
     }
 
-    [HttpPut("Duty/{id}")]
-    public async Task<IActionResult> PutDuty(int id, [FromBody] UpdateDutyRequest duty)
+    [HttpPut("Duty")]
+    public async Task<IActionResult> PutDuty( [FromBody] UpdateDutyRequest duty)
     {
-        if (id != duty.Id)
-            return BadRequest();
-
-        var isUpdated = await _dutyService.UpdateDutyInService(duty.Name, duty);
+        var isUpdated = await _dutyService.UpdateDutyInService(duty);
         if (isUpdated == false)
             return NotFound();
         return Ok(isUpdated);
     }
 
-    [HttpDelete("Duty/{id}")]
-    public async Task<IActionResult> DeleteDuty(int id)
+    [HttpDelete("Duty/")]
+    public async Task<IActionResult> DeleteDuty(DeleteDutyRequest request)
     {
-        var isDeleted = await _dutyService.DeleteDutyInService(id);
+        var isDeleted = await _dutyService.DeleteDutyInService(request);
         if (isDeleted == false)
             return NotFound();
         return Ok(isDeleted);

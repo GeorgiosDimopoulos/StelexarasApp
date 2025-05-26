@@ -2,12 +2,10 @@
 {
     public interface IDutyRepository
     {
-        Task<bool> AddDutyInDb(Duty duty);
-        Task<bool> DeleteDutyInDb(int value);
-        Task<bool> UpdateDutyInDb(string name, Duty newDuty);
-
-        Task<Duty> GetDutyFromDb(int id);
-        //Task<Duty> GetDutyFromDbByName(string name);
         Task<IEnumerable<Duty>> GetDutiesFromDb();
+        Task<Duty> GetDutyFromDb(int id);
+        Task<bool> AddDutyInDb(Duty duty);
+        Task<bool> DeleteDutyInDb(Duty duty);
+        Task<bool> UpdateDutyInDb(Duty duty);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using StelexarasApp.Library.Models;
 
 namespace StelexarasApp.DataAccess.Repositories
 {
@@ -38,7 +39,7 @@ namespace StelexarasApp.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> DeleteDutyInDb(int value)
+        public async Task<bool> DeleteDutyInDb(Duty duty)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -48,7 +49,7 @@ namespace StelexarasApp.DataAccess.Repositories
                 if (_dbContext.Duties is null)
                     return false;
 
-                var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Id == value);
+                var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Id == duty.Id);
                 if (existingDuty == null)
                     return false;
 
@@ -72,7 +73,7 @@ namespace StelexarasApp.DataAccess.Repositories
         {
             if (_dbContext.Duties is null)
             {
-                return null;
+                return null!;
             }
 
             return await _dbContext.Duties.ToListAsync();
@@ -86,7 +87,7 @@ namespace StelexarasApp.DataAccess.Repositories
             return await _dbContext.Duties.FirstAsync(d => d.Id == id);
         }
 
-        public async Task<bool> UpdateDutyInDb(string name, Duty newDuty)
+        public async Task<bool> UpdateDutyInDb(Duty duty)
         {
             var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
             using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -98,14 +99,14 @@ namespace StelexarasApp.DataAccess.Repositories
                     return false;
                 }
 
-                var existingDuty = await _dbContext.Duties.FirstOrDefaultAsync(d => d.Name.Equals(name));
+                var existingDuty = await _dbContext.Duties.FindAsync(duty.Id);
                 if (existingDuty == null)
                 {
                     return false;
                 }
 
-                existingDuty.Name = newDuty.Name;
-                existingDuty.Date = newDuty.Date;
+                existingDuty.Name = duty.Name;
+                existingDuty.Date = duty.Date;
 
                 if (transaction != null)
                     await transaction.CommitAsync();

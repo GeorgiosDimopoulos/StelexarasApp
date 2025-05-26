@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using StelexarasApp.Services.Interfaces;
 
 namespace StelexarasApp.Services.Services;
 
 public class DutyService : IDutyService
 {
-    private readonly IDutyRepository? _dutyRepository;
+    private readonly IDutyRepository _dutyRepository;
     private readonly IMapper _mapper = default!;
 
     public DutyService(IDutyRepository dutyRepository, IMapper mapper)
@@ -37,26 +36,21 @@ public class DutyService : IDutyService
             return false;
         }
     }
-    public async Task<bool> DeleteDutyInService(int dutyId)
+    public async Task<bool> DeleteDutyInService(DeleteDutyRequest dutyDto)
     {
-        if (_dutyRepository is null)
-            throw new ArgumentException("Duty name or duty Repository cannot be null");
-        return await _dutyRepository.DeleteDutyInDb(dutyId);
+        var duty = _mapper.Map<Duty>(dutyDto);
+        return await _dutyRepository.DeleteDutyInDb(duty);
     }
 
-    public async Task<bool> UpdateDutyInService(string dutyName, UpdateDutyRequest updatedDutyDto)
+    public async Task<bool> UpdateDutyInService(UpdateDutyRequest updatedDutyDto)
     {
-        if (string.IsNullOrEmpty(dutyName) || updatedDutyDto is null || _dutyRepository is null)
-            throw new ArgumentException("Duty name or updated duty or duty Repository cannot be null");
         var updatedDuty = _mapper.Map<Duty>(updatedDutyDto);
 
-        return await _dutyRepository.UpdateDutyInDb(dutyName, updatedDuty);
+        return await _dutyRepository.UpdateDutyInDb(updatedDuty);
     }
 
     public async Task<IEnumerable<DutyResponse>> GetDutiesInService()
     {
-        if (_dutyRepository is null)
-            throw new ArgumentException("Duty Repository cannot be null");
         var duties = await _dutyRepository.GetDutiesFromDb();
         var dutiesDto = _mapper.Map<IEnumerable<DutyResponse>>(duties);
         return dutiesDto;
@@ -64,8 +58,6 @@ public class DutyService : IDutyService
 
     public async Task<DutyResponse> GetDutyByIdInService(int id)
     {
-        if (_dutyRepository is null)
-            throw new ArgumentException("Duty Repository cannot be null");
         var duty = await _dutyRepository.GetDutyFromDb(id);
         var dutyDto = _mapper.Map<DutyResponse>(duty);
         return dutyDto;

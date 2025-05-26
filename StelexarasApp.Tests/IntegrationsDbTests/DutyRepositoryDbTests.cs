@@ -54,7 +54,7 @@ public class DutyRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        await dutyRepository.DeleteDutyInDb(duty.Id);
+        await dutyRepository.DeleteDutyInDb(duty);
         var duties = await _dbContext.Duties.ToListAsync();
 
         // Assert
@@ -80,7 +80,7 @@ public class DutyRepositoryDbTests
         var updatedDuty = new Duty { Name = "Updated Duty" };
 
         // Act
-        await dutyRepository.UpdateDutyInDb(duty.Name, updatedDuty);
+        await dutyRepository.UpdateDutyInDb(updatedDuty);
         var result = await _dbContext.Duties.FindAsync(duty.Id);
 
         // Assert
@@ -94,7 +94,7 @@ public class DutyRepositoryDbTests
         var updatedDuty = new Duty { Name = "New Name", Id = -1 };
 
         // Act
-        var result = await dutyRepository.UpdateDutyInDb("randomName", updatedDuty);
+        var result = await dutyRepository.UpdateDutyInDb(updatedDuty);
 
         // Assert
         Assert.False(result);
@@ -107,7 +107,7 @@ public class DutyRepositoryDbTests
         var updatedDuty = new Duty { Name = "New Name", Id = 1 };
 
         // Act
-        var result = await dutyRepository.UpdateDutyInDb("randomName", updatedDuty);
+        var result = await dutyRepository.UpdateDutyInDb(updatedDuty);
 
         // Assert
         Assert.False(result);

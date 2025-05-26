@@ -2,12 +2,11 @@
 {
     public interface IExpenseService
     {
-        Task<bool> AddExpenseInService(Expense expense);
-        Task<bool> DeleteExpenseInService(int expenseId);
-        Task<bool> UpdateExpenseInService(int expenseId, Expense expense);
-        Task<IEnumerable<Expense>> GetExpensesInService();
-
+        Task<bool> AddExpenseInService(CreateExpenseRequest expense);
+        Task<bool> UpdateExpenseInService(UpdateExpenseRequest expense);
+        Task<IEnumerable<ExpenseResponse>> GetExpensesInService();
         Task<Expense> GetExpenseByIdInService(int expenseId);
         Task<bool> HasData();
+        Task<bool> DeleteExpenseInService(DeleteExpenseRequest deleteExpenseRequest);
     }
 }

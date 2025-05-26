@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StelexarasApp.Library.Dtos;
 using StelexarasApp.Library.Models;
 using StelexarasApp.Services.IServices;
 
@@ -38,7 +39,7 @@ public class ExpensesWebController(IExpenseService expenseService) : Controller
     // POST: ExpensesWeb/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Amount,Description,Date")] Expense expense)
+    public async Task<IActionResult> Create([Bind("Id,Amount,Description,Date")] CreateExpenseRequest expense)
     {
         if (ModelState.IsValid)
         {
@@ -64,18 +65,15 @@ public class ExpensesWebController(IExpenseService expenseService) : Controller
     }
 
     // POST: ExpensesWeb/Edit/5
-    [HttpPost("edit/{id:int}")]
+    [HttpPost("edit/")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Amount,Description,Date")] Expense expense)
+    public async Task<IActionResult> Edit([Bind("Id,Amount,Description,Date")] UpdateExpenseRequest expense)
     {
-        if (id != expense.Id)
-            return NotFound();
-
         if (ModelState.IsValid)
         {
             try
             {
-                var updateResult = await _expenseService.UpdateExpenseInService(id, expense);
+                var updateResult = await _expenseService.UpdateExpenseInService(expense);
                 if (updateResult)
                     return RedirectToAction(nameof(Index));
 

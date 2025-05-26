@@ -70,18 +70,17 @@ public class DutiesWebController : Controller
     // POST: DutiesWeb/Edit/5
     [HttpPost("edit/{id:int}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date")] UpdateDutyRequest duty)
+    public async Task<IActionResult> Edit([Bind("Id,Name,Date")] UpdateDutyRequest duty)
     {
         if (ModelState.IsValid)
         {
-            var existingDuty = await _dutyService.GetDutyByIdInService(id);
+            var existingDuty = await _dutyService.GetDutyByIdInService(duty.Id);
             if (existingDuty == null)
             {
-                return NotFound($"Duty with name {id} not found.");
+                return NotFound($"Duty with name {duty.Name} not found.");
             }
 
-            duty.Id = existingDuty.Id;
-            await _dutyService.UpdateDutyInService(duty.Name, duty);
+            await _dutyService.UpdateDutyInService(duty);
             return RedirectToAction(nameof(Index));
         }
 

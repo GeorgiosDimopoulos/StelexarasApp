@@ -31,7 +31,7 @@ public partial class DutiesPage : ContentPage
 
     private async void OnDutyTapped(object sender, SelectionChangedEventArgs e)
     {
-        var selectedDuty = e.CurrentSelection.FirstOrDefault() as DutyDtoBase;
+        var selectedDuty = e.CurrentSelection.FirstOrDefault() as DutyResponse;
         if (selectedDuty == null)
             return;
 
@@ -44,7 +44,11 @@ public partial class DutiesPage : ContentPage
                 {
                     try
                     {
-                        await _viewModel.DeleteDuty(selectedDuty.Id);
+                        var deleteDutyRequest = new DeleteDutyRequest
+                        {
+                            Id = selectedDuty.Id
+                        };
+                        await _viewModel.DeleteDuty(deleteDutyRequest);
                         await DisplayAlert("Επιτυχής Διαγραφή", "Διαγραφή υποχρέωσης!", "OK");
                     }
                     catch (Exception ex)
@@ -62,7 +66,6 @@ public partial class DutiesPage : ContentPage
                     {
                         var updateDuty = new UpdateDutyRequest
                         {
-                            Id = selectedDuty.Id,
                             Name = newName
                         };
                         await _viewModel.UpdateDuty(updateDuty, newName);
