@@ -3,9 +3,10 @@ DATA:
   - maybe set Ekpaideuomenos as different Domain model, not as Paidi
   - set in the UI accordingly, who Ekpaideuomenos is Omadarxis daily
 - add Id in the Duty model and set it as Key, not the Name
+- make all the DTOs models (responses and requests) "records"
 
 DATA ACCESS:
-- make classes "internal"
+- make classes "internal", keep methods public
 
 API:
 - split to 2 Swagger pages, so we will have Admins and normal-users (hide PUT DELETE and INSERT endpoints for normal users)
