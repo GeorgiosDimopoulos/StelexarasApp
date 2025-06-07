@@ -5,9 +5,6 @@ DATA:
 - add Id in the Duty model and set it as Key, not the Name
 - make all the DTOs models (responses and requests) "records"
 
-DATA ACCESS:
-- make classes "internal", keep methods public
-
 API:
 - split to 2 Swagger pages, so we will have Admins and normal-users (hide PUT DELETE and INSERT endpoints for normal users)
 - add Swagger Documentation info in endpoints and theur parameters queries with comments, like:
