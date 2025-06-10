@@ -7,7 +7,7 @@ namespace StelexarasApp.API.Controllers.PeopleControllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class PaidiaController : ControllerBase
+internal class PaidiaController : ControllerBase
 {
     private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiService;
 

@@ -2,7 +2,7 @@
 
 namespace StelexarasApp.Services.Validators;
 
-public class ExpenseValidator : AbstractValidator<Expense>
+public class ExpenseValidator : AbstractValidator<ExpenseDtoBase>
 {
     public ExpenseValidator()
     {

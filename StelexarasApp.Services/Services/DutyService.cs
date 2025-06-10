@@ -4,7 +4,7 @@ namespace StelexarasApp.Services.Services;
 
 public class DutyService : IDutyService
 {
-    private readonly IDutyRepository _dutyRepository;
+    private readonly IDutyRepository _dutyRepository = default!;
     private readonly IMapper _mapper = default!;
 
     public DutyService(IDutyRepository dutyRepository, IMapper mapper)

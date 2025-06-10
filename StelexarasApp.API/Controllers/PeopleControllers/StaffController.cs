@@ -5,7 +5,7 @@ namespace StelexarasApp.API.Controllers.PeopleControllers;
 
 [ApiController]
 [Route("[controller]")]
-public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> stelexiService) : ControllerBase
+internal class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> stelexiService) : ControllerBase
 {
     private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _stelexiService = stelexiService;
 

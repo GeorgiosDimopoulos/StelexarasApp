@@ -6,7 +6,7 @@ namespace StelexarasApp.API.Controllers.TeamsControllers;
 
 [ApiController]
 [Route("[controller]")]
-public class SkinesController(ITeamsService teamsService) : ControllerBase
+internal class SkinesController(ITeamsService teamsService) : ControllerBase
 {
     private readonly ITeamsService _teamsService = teamsService;
 
