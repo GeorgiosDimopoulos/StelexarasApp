@@ -18,6 +18,9 @@ using StelexarasApp.Services.Interfaces.People;
 using StelexarasApp.Library.Dtos.People.Staff;
 using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Services.Services;
+using StelexarasApp.Services.Interfaces;
+using StelexarasApp.Services.IServices;
+using StelexarasApp.Library.Dtos;
 
 namespace StelexarasApp.ClientApp;
 
@@ -200,12 +203,17 @@ class Program
         .AddDbContext<AppDbContext>()
         .AddLogging()
         .AddAutoMapper(typeof(Program))
-        .AddTransient<IValidator<Duty>, DutyValidator>()
+        .AddTransient<IValidator<DutyDtoBase>, DutyValidator>()
         .AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>()
+        .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()
         .AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiService>()
-        .AddScoped<IStaffRepository, StaffRepository>()
+        .AddScoped<IDutyService, DutyService>()
+        .AddScoped<IExpenseService, ExpenseService>()
+        .AddScoped<ITeamsService, TeamsService>()
         .AddTransient<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>, StaffService>()
+        .AddScoped<IStaffRepository, StaffRepository>()
         .AddScoped<IPaidiRepository, PaidiRepository>()
+        .AddSingleton<LogFileWriter>()
         .BuildServiceProvider();
 
     private static void ConfigureSignalRConnection()
@@ -293,3 +301,4 @@ class Program
         }
     }
 }
+

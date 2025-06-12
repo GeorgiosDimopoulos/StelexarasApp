@@ -126,8 +126,8 @@ public static class MauiProgram
         //services.AddSingleton<DatabaseType>();
         services.AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>();
         services.AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>();
-        services.AddTransient<IValidator<Duty>, DutyValidator>();
-        services.AddTransient<IValidator<Expense>, ExpenseValidator>();
+        services.AddTransient<IValidator<DutyDtoBase>, DutyValidator>();
+        services.AddTransient<IValidator<ExpenseDtoBase>, ExpenseValidator>();
     }
 
     private static void RegisterViewModels(IServiceCollection services)

@@ -2,7 +2,7 @@
 
 namespace StelexarasApp.Services.Validators;
 
-public class DutyValidator : AbstractValidator<Duty>
+public class DutyValidator : AbstractValidator<DutyDtoBase>
 {
     public DutyValidator()
     {

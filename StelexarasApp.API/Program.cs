@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using StelexarasApp.API;
 using StelexarasApp.DataAccess;
 
@@ -38,6 +40,16 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHealthChecks("/health");
+
+// Use Health Checks
+app.MapHealthChecks("/health", new HealthCheckOptions 
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+app.UseHealthChecksUI( options =>
+{
+    options.UIPath = "/health-ui";
+    options.ApiPath = "/health-api";
+});
 
 app.Run();
