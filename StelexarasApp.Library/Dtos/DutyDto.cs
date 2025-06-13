@@ -1,23 +1,23 @@
 ﻿namespace StelexarasApp.Library.Dtos;
 
-public class DutyDtoBase
+public record DutyDtoBase
 {
     public string Name { get; set; } = string.Empty;
 }
 
-public class CreateDutyRequest : DutyDtoBase { }
+public record CreateDutyRequest : DutyDtoBase { }
 
-public class UpdateDutyRequest : DutyDtoBase 
+public record UpdateDutyRequest : DutyDtoBase 
 {
     public int Id { get; init; }
 }
 
-public class DeleteDutyRequest
+public record DeleteDutyRequest
 {
     public int Id { get; set; }
 }
 
-public class DutyResponse : DutyDtoBase
+public record DutyResponse : DutyDtoBase
 {
     public int Id { get; set; }
 }
