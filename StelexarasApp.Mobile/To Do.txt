@@ -7,12 +7,7 @@ DATA:
 
 API:
 - split to 2 Swagger pages, so we will have Admins and normal-users (hide PUT DELETE and INSERT endpoints for normal users)
-- add Swagger Documentation info in endpoints and theur parameters queries with comments, like:
-  /// <summary>
-  /// this is a Documentation
-  /// </summary>
-  /// <param name="client">Client</param>
-  - check https://github.com/tsgdigitalservices/lcc-mytsg/pull/232/files
+- add Swagger Documentation info in endpoints and theur parameters queries with comments
 
 MOBILE:
 - add SplasScreen and SplashScreenActivity in MAUI Android layer
@@ -20,7 +15,8 @@ MOBILE:
 
 OTHER:
 - Audit tool and relevant Models for logging and CRUD tracking
-- check again HealthChecks process
+- expand HealthChecks UI process
+- implement Redis Cache memoric, firstly in DataAccess
 - implement Refit logic in API layer in Controllers, Routes etc
 - SignalR and Hub, for real time communication (eg get notification if a user updates something)
   - IDisposable and IHostedService maybe
