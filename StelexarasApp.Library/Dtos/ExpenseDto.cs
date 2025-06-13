@@ -1,24 +1,24 @@
 ﻿namespace StelexarasApp.Library.Dtos;
 
-public class ExpenseDtoBase
+public record ExpenseDtoBase
 {
     public double Amount { get; set; }
     public string Description { get; set; } = string.Empty;
 }
 
-public class CreateExpenseRequest : ExpenseDtoBase { }
+public record CreateExpenseRequest : ExpenseDtoBase { }
 
-public class UpdateExpenseRequest : ExpenseDtoBase 
+public record UpdateExpenseRequest : ExpenseDtoBase 
 {
     public int Id { get; init; }
 }
 
-public class DeleteExpenseRequest
+public record DeleteExpenseRequest
 {
     public int Id { get; set; }
 }
 
-public class ExpenseResponse : ExpenseDtoBase
+public record ExpenseResponse : ExpenseDtoBase
 {
     public int Id { get; set; }
 }

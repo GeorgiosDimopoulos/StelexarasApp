@@ -1,6 +1,6 @@
 ﻿namespace StelexarasApp.Library.Dtos.People.Staff;
 
-public class StelexosDtoBase : IStelexosDto
+public record StelexosDtoBase : IStelexosDto
 {
     public string FullName { get; set; } = string.Empty;
     public int Age { get; set; }
@@ -10,19 +10,19 @@ public class StelexosDtoBase : IStelexosDto
     public Thesi Thesi { get; set; } = Thesi.None;
 }
 
-public class CreateStelexosRequest : StelexosDtoBase { }
+public record CreateStelexosRequest : StelexosDtoBase { }
 
-public class UpdateStelexosRequest : StelexosDtoBase
+public record UpdateStelexosRequest : StelexosDtoBase
 {
     public int Id { get; set; }
 }
 
-public class DeleteStelexosRequest
+public record DeleteStelexosRequest
 {
     public int Id { get; set; }
 }
 
-public class StelexosResponse : StelexosDtoBase
+public record StelexosResponse : StelexosDtoBase
 {
     public int Id { get; set; }
 }

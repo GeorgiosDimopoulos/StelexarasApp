@@ -1,7 +1,7 @@
 ﻿
 namespace StelexarasApp.Library.Dtos.People.Children;
 
-public class PaidiDtoBase : IPaidiDto
+public record PaidiDtoBase : IPaidiDto
 {
     public string FullName { get; set; } = string.Empty;
     public int Age { get; set; }
@@ -11,19 +11,19 @@ public class PaidiDtoBase : IPaidiDto
     public PaidiType PaidiType { get; set; }
 }
 
-public class CreatePaidiRequest : PaidiDtoBase { }
+public record CreatePaidiRequest : PaidiDtoBase { }
 
-public class UpdatePaidiRequest : PaidiDtoBase
+public record UpdatePaidiRequest : PaidiDtoBase
 {
     public int Id { get; set; }
 }
 
-public class DeletePaidiRequest
+public record DeletePaidiRequest
 {
     public int Id { get; set; }
 }
 
-public class PaidiResponse : PaidiDtoBase
+public record PaidiResponse : PaidiDtoBase
 {
     public int Id { get; set; }
 }

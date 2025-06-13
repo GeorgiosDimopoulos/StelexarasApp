@@ -1,21 +1,21 @@
 ﻿namespace StelexarasApp.Library.Dtos.Domi;
 
-public class KoinotitaDtoBase : IXwrosDto
+public record KoinotitaDtoBase : IXwrosDto
 {
     public string Name { get; set; } = string.Empty;
     public string TomeasName { get; set; } = string.Empty;
 }
 
-public class CreateKoinotitaRequest : KoinotitaDtoBase { }
+public record CreateKoinotitaRequest : KoinotitaDtoBase;
 
-public class UpdateKoinotitaRequest : KoinotitaDtoBase { }
+public record UpdateKoinotitaRequest : KoinotitaDtoBase;
 
-public class DeleteKoinotitaRequest
+public record DeleteKoinotitaRequest
 {
     public string Name { get; set; } = string.Empty;
 }
 
-public class KoinotitaResponse : KoinotitaDtoBase
+public record KoinotitaResponse : KoinotitaDtoBase
 {
     public int SkinesNumber { get; set; }
 }
