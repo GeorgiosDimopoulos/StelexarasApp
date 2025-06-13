@@ -6,7 +6,7 @@ namespace StelexarasApp.API.Controllers.GeneralControllers;
 
 [ApiController]
 [Route("api/[controller]")]
-internal class AuthController : ControllerBase
+public class AuthController : ControllerBase
 {
     private IAuthTokenProvider _authTokenProvider;
     private readonly IConfiguration _configuration;
@@ -17,6 +17,11 @@ internal class AuthController : ControllerBase
         _configuration = configuration;
     }
 
+    /// <summary>
+    ///  Authenticates a user and returns a JWT token if the password is correct
+    /// </summary>
+    /// <param name="request">The authentication request containing password.</param>
+    /// <returns>JWT token + expiration if OK, l, or an error result</returns>
     [HttpPost("login")]
     [SwaggerOperation(Tags = new [] { "Admin Endpoint" })]
     public async Task<IActionResult> GetAuthToken([FromQuery] LoginRequest request)

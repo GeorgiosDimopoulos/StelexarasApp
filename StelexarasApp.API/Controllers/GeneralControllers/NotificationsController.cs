@@ -5,7 +5,7 @@ namespace StelexarasApp.API.Controllers.GeneralControllers;
 
 [Route("api/[controller]")]
 [ApiController]
-internal class NotificationsController : ControllerBase
+public class NotificationsController : ControllerBase
 {
     private readonly IHubContext<MyHub> _hubContext;
 

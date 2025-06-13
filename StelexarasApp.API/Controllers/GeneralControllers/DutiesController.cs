@@ -8,7 +8,7 @@ namespace StelexarasApp.API.Controllers.GeneralControllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-internal class DutiesController : ControllerBase
+public class DutiesController : ControllerBase
 {
     private readonly IDutyService _dutyService;
 

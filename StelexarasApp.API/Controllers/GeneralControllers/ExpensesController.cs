@@ -9,7 +9,7 @@ namespace StelexarasApp.API.Controllers.GeneralControllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-internal class ExpensesController : ControllerBase
+public class ExpensesController : ControllerBase
 {
     private readonly IExpenseService _expenseService;
 
