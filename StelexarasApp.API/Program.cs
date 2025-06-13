@@ -21,8 +21,9 @@ if (app.Environment.IsDevelopment())
     app.UseCors("AllowAll");
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint($"/swagger/{adminTitle}/swagger.json", ApiConstants.ApiGroups.AdminInfo);
-        //c.SwaggerEndpoint("/swagger/v2/swagger.json", ApiConstants.ApiGroups.PublicInfo);
+        // c.SwaggerEndpoint($"/swagger/{adminTitle}/swagger.json", ApiConstants.ApiGroups.AdminInfo);
+        // c.SwaggerEndpoint("/swagger/v2/swagger.json", ApiConstants.ApiGroups.PublicInfo);
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"); 
         c.RoutePrefix = "swagger";
     });
     app.UseDeveloperExceptionPage();
@@ -42,11 +43,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Use Health Checks
-app.MapHealthChecks("/health", new HealthCheckOptions 
+app.MapHealthChecks("/health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
-app.UseHealthChecksUI( options =>
+app.UseHealthChecksUI(options =>
 {
     options.UIPath = "/health-ui";
     options.ApiPath = "/health-api";

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using StelexarasApp.Services.Interfaces;
 using StelexarasApp.Services.IServices;
@@ -73,9 +72,9 @@ public static class ServiceCollectionExtensions
             options.EnableAnnotations();
 
             // AddSwaggerAccessLevel(options);
-            options.SwaggerDoc("admin", new OpenApiInfo
+            options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Admin API",
+                Title = "API",
                 Version = "v1"
             });
 
@@ -104,6 +103,13 @@ public static class ServiceCollectionExtensions
                     Array.Empty<string>()
                 }
             });
+
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+            {
+                options.IncludeXmlComments(xmlPath);
+            }
         });
 
         // Configure Authentication
