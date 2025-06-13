@@ -15,7 +15,8 @@ MOBILE:
 
 OTHER:
 - Audit tool and relevant Models for logging and CRUD tracking
-- check again HealthChecks process
+- expand HealthChecks UI process
+- implement Redis Cache memoric, firstly in DataAccess
 - implement Refit logic in API layer in Controllers, Routes etc
 - SignalR and Hub, for real time communication (eg get notification if a user updates something)
   - IDisposable and IHostedService maybe
