@@ -17,7 +17,7 @@ using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Interfaces.People;
 using StelexarasApp.Library.Dtos;
 
-namespace StelexarasApp.API;
+namespace StelexarasApp.API.Helpers;
 
 public static class ServiceCollectionExtensions
 {
