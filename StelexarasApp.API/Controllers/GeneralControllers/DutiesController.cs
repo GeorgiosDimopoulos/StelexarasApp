@@ -17,6 +17,10 @@ public class DutiesController : ControllerBase
         _dutyService = dutyService;
     }
 
+    /// <summary>
+    ///  Get all the current duties
+    /// </summary>
+    /// <returns>JWT token + expiration if OK, l, or an error result</returns>
     [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<DutyResponse>>> GetDuties()
