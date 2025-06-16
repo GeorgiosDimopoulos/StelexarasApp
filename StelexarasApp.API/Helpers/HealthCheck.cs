@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace StelexarasApp.API.Helpers;
 
@@ -30,5 +31,10 @@ public static class HealthCheck
             opt.SetApiMaxActiveRequests(1); //api requests concurrency
             opt.AddHealthCheckEndpoint("feedback api", "/health");
         }).AddInMemoryStorage();
+
+        services.AddHealthChecks()
+                .AddUrlGroup(new Uri("https://localhost:44362/swagger/index.html"),
+                             name: "Swagger Feedback API",
+                             failureStatus: HealthStatus.Unhealthy);
     }
 }
