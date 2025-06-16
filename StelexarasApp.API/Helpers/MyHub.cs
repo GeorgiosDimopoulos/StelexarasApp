@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace StelexarasApp.API;
+namespace StelexarasApp.API.Helpers;
 
 public class MyHub : Hub
 {
