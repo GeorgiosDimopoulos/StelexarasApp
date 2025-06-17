@@ -12,17 +12,17 @@ namespace StelexarasApp.DataAccess.Repositories
         {
             try
             {
-                var query = _dbContext.Koinotites!.AsQueryable();
+                var koinotites = _dbContext.Koinotites!.AsQueryable();
                 if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
                 {
-                    query = query.Include(k => k.Skines);
+                    koinotites = koinotites.Include(k => k.Skines);
                 }
                 if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes)
                 {
-                    query = query.Include(k => k.Skines)!.ThenInclude(s => s.Omadarxis);
+                    koinotites = koinotites.Include(k => k.Skines)!.ThenInclude(s => s.Omadarxis);
                 }
 
-                return await query.ToListAsync();
+                return await koinotites.ToListAsync();
             }
             catch (Exception ex)
             {

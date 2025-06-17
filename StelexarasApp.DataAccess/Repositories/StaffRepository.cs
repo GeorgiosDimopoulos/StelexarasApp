@@ -1,6 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace StelexarasApp.DataAccess.Repositories;
 
@@ -40,17 +40,17 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName, StelexosQueryParameters queryParameters)
+    public async Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName, StelexosQueryParameters? queryParameters)
     {
         try
         {
             return thesi switch
             {
-                Thesi.Omadarxis => xwrosName != null ? await GetOmadarxesAnaXwro(xwrosName) : [],
-                Thesi.Koinotarxis => xwrosName != null ? await GetKoinotarxesAnaXwro(xwrosName) : [],
-                Thesi.Tomearxis => await _dbContext.Tomearxes!.ToListAsync(),
-                Thesi.None => throw new NotImplementedException(),
+                Thesi.Omadarxis => await GetOmadarxesAnaXwro(xwrosName, queryParameters as OmadarxisQueryParameters ?? throw new ArgumentNullException(nameof(TomearxisQueryParameters))),
+                Thesi.Koinotarxis => await GetKoinotarxesAnaXwro(xwrosName, queryParameters as KoinotarxisQueryParameters ?? throw new ArgumentNullException(nameof(TomearxisQueryParameters))),
+                Thesi.Tomearxis => await GetTomearxes(queryParameters as TomearxisQueryParameters ?? throw new ArgumentNullException(nameof(TomearxisQueryParameters))),
                 Thesi.Ekpaideutis => await _dbContext.Ekpaideutes!.ToListAsync(),
+                Thesi.None => throw new NotImplementedException(),
                 _ => throw new NotImplementedException(),
             };
         }
@@ -60,6 +60,8 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             return [];
         }
     }
+
+
 
     public async Task<IStelexos> GetStelexosByIdInDb(int id)
     {
@@ -219,7 +221,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             }
 
             // ToDo: implement it
-            if (stelexosQueryParameters.IncludeXwros) 
+            if (stelexosQueryParameters.IncludeXwros)
             {
             }
 
@@ -239,28 +241,71 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string xwrosName)
+    private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string? xwrosName, OmadarxisQueryParameters omadarxisQueryParameters)
     {
-        if (string.IsNullOrEmpty(xwrosName))
-            return await _dbContext.Omadarxes.ToListAsync();
+        var omadarxes = _dbContext.Omadarxes.AsQueryable();
+
+        if (omadarxisQueryParameters.IncludePaidia && string.IsNullOrWhiteSpace(xwrosName))
+            return await omadarxes.Include(om => om.Skini.Paidia).ToListAsync();
+
+        if (string.IsNullOrWhiteSpace(xwrosName))
+            return await omadarxes.ToListAsync();
+
+        if (omadarxisQueryParameters.IncludePaidia)
+        {
+            omadarxes = omadarxes.Include(om => om.Skini.Paidia);
+        }
+        if (omadarxisQueryParameters.IncludeXwros)
+        {
+            omadarxes = omadarxes.Include(om => om.Skini);
+        }
 
         var isXwrosAnKoinotita = await _dbContext.Koinotites!.AnyAsync(k => k.Name.Equals(xwrosName));
         if (isXwrosAnKoinotita)
-            return await GetOmadarxesAnaKoinotita(xwrosName);
+        {
+            return await omadarxes.Where(om => om.Skini.Koinotita.Name.Equals(xwrosName))
+                                  .ToListAsync();
+        }
         else
         {
-            var isXwrosATomeas = _dbContext.Tomeis!.Any(t => t.Name.Equals(xwrosName));
+            var isXwrosATomeas = await _dbContext.Tomeis!.AnyAsync(t => t.Name.Equals(xwrosName));
             if (isXwrosATomeas)
-                return await GetOmadarxesAnaTomea(xwrosName);
+            {
+                return await omadarxes.Where(sk => sk.Skini.Koinotita.Tomeas.Name.Equals(xwrosName))
+                                      .ToListAsync();
+            }
         }
 
         return await _dbContext.Omadarxes.ToListAsync();
     }
 
-    private async Task<IEnumerable<Koinotarxis>> GetKoinotarxesAnaXwro(string xwrosName)
+    private async Task<IEnumerable<Ekpaideutis>> GetTomearxes(TomearxisQueryParameters tomearxisQueryParameters)
     {
-        if (_dbContext.Koinotarxes == null | !_dbContext.Koinotarxes!.Any())
+        if (_dbContext.Ekpaideutes == null || !_dbContext.Ekpaideutes.Any())
             return null!;
+
+        if (tomearxisQueryParameters.IncludeXwros)
+        {
+            _dbContext.Ekpaideutes.Include(t => t.XwrosName);
+        }
+
+        return await _dbContext.Ekpaideutes!.ToListAsync();
+    }
+
+    private async Task<IEnumerable<Koinotarxis>> GetKoinotarxesAnaXwro(string? xwrosName, KoinotarxisQueryParameters koinotarxisQueryParameters)
+    {
+        if (_dbContext.Koinotarxes == null || !_dbContext.Koinotarxes!.Any())
+            return null!;
+
+        if (koinotarxisQueryParameters.IncludeXwros)
+        {
+            _dbContext.Koinotarxes.Include(k => k.XwrosName);
+        }
+        if (koinotarxisQueryParameters.IncludeTomeas)
+        {
+            _dbContext.Koinotarxes.Include(k => k.Koinotita.Tomeas);
+        }
+
         if (string.IsNullOrEmpty(xwrosName))
         {
             var allKoinotarxes = await _dbContext.Koinotarxes!.ToListAsync();
@@ -272,20 +317,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             return await GetKoinotarxesAnaTomea(xwrosName);
         else
             return null!;
-    }
-
-    private async Task<List<Omadarxis>> GetOmadarxesAnaKoinotita(string? name)
-    {
-        if (string.IsNullOrEmpty(name))
-            return await _dbContext.Omadarxes!.ToListAsync();
-        return await _dbContext.Skines!.Where(k => k.Koinotita.Name == name).Select(k => k.Omadarxis!).ToListAsync();
-    }
-
-    private async Task<List<Omadarxis>> GetOmadarxesAnaTomea(string? name)
-    {
-        if (string.IsNullOrEmpty(name))
-            return await _dbContext.Omadarxes!.ToListAsync();
-        return await _dbContext.Skines!.Where(sk => sk.Koinotita.Tomeas.Name == name).Select(k => k.Omadarxis!).ToListAsync();
     }
 
     private async Task<List<Koinotarxis>> GetKoinotarxesAnaTomea(string? tomeasName)
