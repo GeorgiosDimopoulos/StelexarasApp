@@ -1,486 +1,533 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace StelexarasApp.DataAccess.Repositories
-{
-    public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFactory) : ITeamsRepository
-    {
-        private readonly AppDbContext _dbContext = appDbContext;
-        private readonly ILogger<TeamsRepository> _logger = loggerFactory.CreateLogger<TeamsRepository>();
+namespace StelexarasApp.DataAccess.Repositories;
 
-        public async Task<IEnumerable<Koinotita>> GetKoinotitesInDb(KoinotitaQueryParameters? koinotitaQueryParameters)
+public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFactory) : ITeamsRepository
+{
+    private readonly AppDbContext _dbContext = appDbContext;
+    private readonly ILogger<TeamsRepository> _logger = loggerFactory.CreateLogger<TeamsRepository>();
+
+    public async Task<IEnumerable<Koinotita>> GetKoinotitesInDb(KoinotitaQueryParameters? koinotitaQueryParameters)
+    {
+        try
         {
-            try
+            var koinotites = _dbContext.Koinotites!.AsQueryable();
+            if (koinotitaQueryParameters is not null)
             {
-                var koinotites = _dbContext.Koinotites!.AsQueryable();
-                if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
+                if (koinotitaQueryParameters.IncludeSkines)
                 {
                     koinotites = koinotites.Include(k => k.Skines);
                 }
-                if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes)
+                if (koinotitaQueryParameters.IncludeOmadarxes)
                 {
                     koinotites = koinotites.Include(k => k.Skines)!.ThenInclude(s => s.Omadarxis);
                 }
-
-                return await koinotites.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
-                LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
-                return null!;
-            }
-        }
-
-        public async Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(KoinotitaQueryParameters? koinotitaQueryParameters, int tomeaId)
-        {
-            try
-            {
-                var query = _dbContext.Koinotites!.AsQueryable();
-                if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
+                if (koinotitaQueryParameters.IncludeStelexos)
                 {
-                    query = query.Include(k => k.Skines);
+                    koinotites = koinotites.Include(k => k.Koinotarxis);
                 }
-                if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes)
-                {
-                    query = query.Include(k => k.Skines)!.ThenInclude(s => s.Omadarxis);
-                }
-                return await _dbContext.Koinotites!.Include(k => k.Tomeas).Where(k => k.Tomeas.Id == tomeaId).ToListAsync();
             }
-            catch (Exception ex)
-            {
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return null!;
-            }
+
+            return await koinotites.ToListAsync();
         }
-
-        public async Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters? skiniQueryParameters)
+        catch (Exception ex)
         {
-            try
-            {
-                var query = _dbContext.Skines!.AsQueryable();
-                if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
-                {
-                    query = query.Include(s => s.Paidia);
-                }
-                return await query.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return null!;
-            }
+            _logger.LogError($"{System.Reflection.MethodBase.GetCurrentMethod()!.Name}, exception: " + ex.Message);
+            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return null!;
         }
+    }
 
-        public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInDb(SkiniQueryParameters? skiniQueryParameters, string koinotitaName)
+    public async Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(KoinotitaQueryParameters? koinotitaQueryParameters, int tomeaId)
+    {
+        try
         {
-            try
+            var koinotites = _dbContext.Koinotites!.AsQueryable();
+            if (koinotitaQueryParameters is not null)
             {
-                var query = _dbContext.Skines!.Where(sk => sk.Koinotita.Name.Equals(koinotitaName)).AsQueryable();
-                if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+                if (koinotitaQueryParameters.IncludeSkines)
                 {
-                    query = query.Include(s => s.Paidia);
+                    koinotites = koinotites.Include(k => k.Skines);
                 }
-                return await query.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return null!;
-            }
-        }
-
-        public async Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb(SkiniQueryParameters? skiniQueryParameters)
-        {
-            try
-            {
-                var query = _dbContext.Skines.Where(s => s.Koinotita.Name == "Ipiros").AsQueryable();
-                if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+                if (koinotitaQueryParameters.IncludeStelexos)
                 {
-                    query = query.Include(s => s.Paidia);
+                    koinotites = koinotites.Include(k => k.Koinotarxis);
                 }
-                return await query.ToListAsync();
+                if (koinotitaQueryParameters.IncludeOmadarxes)
+                {
+                    koinotites = koinotites.Include(k => k.Skines)!.ThenInclude(s => s.Omadarxis);
+                }
             }
-            catch (Exception ex)
-            {
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return null!;
-            }
+
+            return await koinotites.Include(k => k.Tomeas).Where(k => k.Tomeas.Id == tomeaId).ToListAsync();
         }
-
-        public async Task<Skini> GetSkiniByNameInDb(SkiniQueryParameters? skiniQueryParameters, string name)
+        catch (Exception ex)
         {
-            var query = _dbContext.Skines.AsQueryable();
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
+        }
+    }
 
+    public async Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters? skiniQueryParameters)
+    {
+        try
+        {
+            var skines = _dbContext.Skines!.AsQueryable();
             if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
             {
-                query = query.Include(s => s.Paidia);
+                skines = skines.Include(s => s.Paidia);
             }
+            if (skiniQueryParameters is not null && skiniQueryParameters.IncludeStelexos)
+            {
+                skines = skines.Include(s => s.Omadarxis);
+            }
+            return await skines.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
+        }
+    }
 
-            return query.FirstOrDefault(s => s.Name == name) ?? new Skini();
+    public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInDb(SkiniQueryParameters? skiniQueryParameters, string koinotitaName)
+    {
+        try
+        {
+            var skines = _dbContext.Skines!.Where(sk => sk.Koinotita.Name.Equals(koinotitaName)).AsQueryable();
+            if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+            {
+                skines = skines.Include(s => s.Paidia);
+            }
+            if (skiniQueryParameters is not null && skiniQueryParameters.IncludeStelexos)
+            {
+                skines = skines.Include(s => s.Omadarxis);
+            }
+            return await skines.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
+        }
+    }
+
+    public async Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb(SkiniQueryParameters? skiniQueryParameters)
+    {
+        try
+        {
+            var skines = _dbContext.Skines.Where(s => s.Koinotita.Name == "Ipiros").AsQueryable();
+            if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+            {
+                skines = skines.Include(s => s.Paidia);
+            }
+            return await skines.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
+        }
+    }
+
+    public async Task<Skini> GetSkiniByNameInDb(SkiniQueryParameters? skiniQueryParameters, string name)
+    {
+        var skines = _dbContext.Skines.AsQueryable();
+
+        if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+        {
+            skines = skines.Include(s => s.Paidia);
+        }
+        if (skiniQueryParameters is not null && skiniQueryParameters.IncludeStelexos)
+        {
+            skines = skines.Include(s => s.Omadarxis);
         }
 
-        public async Task<IEnumerable<Tomeas>> GetTomeisInDb(TomeasQueryParameters? tomeasQueryParameters)
+        return await skines.FirstOrDefaultAsync(s => s.Name == name) ?? new Skini();
+    }
+
+    public async Task<IEnumerable<Tomeas>> GetTomeisInDb(TomeasQueryParameters? tomeasQueryParameters)
+    {
+        try
         {
-            try
+            var tomeis = _dbContext.Tomeis!.AsQueryable();
+            if (tomeasQueryParameters is not null)
             {
-                var query = _dbContext.Tomeis!.AsQueryable();
-                if (tomeasQueryParameters is not null && tomeasQueryParameters.IncludeKoinotites)
+                if (tomeasQueryParameters.IncludeStelexos)
                 {
-                    query = query.Include(t => t.Koinotites);
+                    tomeis = tomeis.Include(t => t.Tomearxis);
+                }
+                if (tomeasQueryParameters.IncludeKoinotites)
+                {
+                    tomeis = tomeis.Include(t => t.Koinotites);
                 }
                 if (tomeasQueryParameters.IncludeOmadarxes)
                 {
-                    query = query.Include(t => t.Koinotites).ThenInclude(k => k.Skines)!.ThenInclude(sk => sk.Omadarxis);
+                    tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Skines)!.ThenInclude(sk => sk.Omadarxis);
                 }
                 if (tomeasQueryParameters.IncludeKoinotarxes)
                 {
-                    query = query.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
+                    tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
                 }
-                return query.ToList();
             }
-            catch (Exception ex)
-            {
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return null!;
-            }
+            return await tomeis.ToListAsync();
         }
-
-        public async Task<Koinotita> GetKoinotitaByNameInDb(KoinotitaQueryParameters? koinotitaQueryParameters, string name)
+        catch (Exception ex)
         {
-            var query = _dbContext.Koinotites!.AsQueryable();
-            if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
-            {
-                query = query.Include(k => k.Skines);
-            }
-            return await query.FirstOrDefaultAsync(k => k.Name == name) ?? new Koinotita();
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
         }
+    }
 
-        public async Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? tomeasQueryParameters, string name)
+    public async Task<Koinotita> GetKoinotitaByNameInDb(KoinotitaQueryParameters? koinotitaQueryParameters, string name)
+    {
+        var koinotites = _dbContext.Koinotites!.AsQueryable();
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
         {
-            var query = _dbContext.Tomeis!.AsQueryable();
-            if (tomeasQueryParameters.IncludeKoinotites)
-            {
-                query = query.Include(t => t.Koinotites);
-            }
-            if (tomeasQueryParameters.IncludeKoinotarxes)
-            {
-                query = query.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
-            }
-            if (tomeasQueryParameters.IncludeOmadarxes)
-            {
-                query = query.Include(t => t.Koinotites).ThenInclude(k => k.Skines)!.ThenInclude(sk => sk.Omadarxis);
-            }
-            if (string.IsNullOrEmpty(name) || _dbContext.Tomeis is null)
-                return null!;
-
-            return await query.FirstOrDefaultAsync(t => t.Name == name) ?? new Tomeas();
+            koinotites = koinotites.Include(k => k.Skines);
         }
-
-        public async Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita)
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeStelexos)
         {
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-            if (koinotita is null || _dbContext.Koinotites is null)
-                return false;
-            try
-            {
-                var existingKoinotita = await _dbContext.Koinotites.FindAsync(id);
-                if (existingKoinotita == null)
-                    return false;
-
-                existingKoinotita.Name = koinotita.Name;
-                existingKoinotita.Tomeas = koinotita.Tomeas;
-                existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
-                existingKoinotita.Skines = koinotita.Skines;
-
-                _dbContext.Koinotites.Update(existingKoinotita);
-                await _dbContext.SaveChangesAsync();
-                if (transaction != null)
-                {
-                    await transaction.CommitAsync();
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return false;
-            }
+            koinotites = koinotites.Include(k => k.Skines);
         }
-
-        public async Task<bool> UpdateSkiniInDb(int id, Skini skini)
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes)
         {
-
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-            if (skini is null || _dbContext.Skines is null)
-                return false;
-
-            try
-            {
-                var existingSkini = await _dbContext.Skines.FindAsync(id);
-                if (existingSkini == null)
-                    return false;
-
-                existingSkini.Name = skini.Name;
-                existingSkini.Koinotita = skini.Koinotita;
-                existingSkini.Omadarxis = skini.Omadarxis;
-                existingSkini.Paidia = skini.Paidia;
-
-                _dbContext.Skines.Update(existingSkini);
-                await _dbContext.SaveChangesAsync();
-                if (transaction != null)
-                {
-                    await transaction.CommitAsync();
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return false;
-            }
+            koinotites = koinotites.Include(k => k.Skines.Select(sk => sk.Omadarxis));
         }
+        return await koinotites.FirstOrDefaultAsync(k => k.Name == name) ?? new Koinotita();
+    }
 
-        public async Task<bool> UpdateTomeasInDb(string n, Tomeas tomeas)
+    public async Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? tomeasQueryParameters, string name)
+    {
+        var tomeis = _dbContext.Tomeis!.AsQueryable();
+        if (tomeasQueryParameters is null)
+            return new Tomeas();
+        if (tomeasQueryParameters.IncludeStelexos)
         {
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name.Equals(n));
-                if (existingTomeas == null)
-                    return false;
-
-                existingTomeas.Name = tomeas.Name;
-                existingTomeas.Koinotites = tomeas.Koinotites;
-                existingTomeas.Tomearxis = tomeas.Tomearxis;
-
-                _dbContext.Tomeis.Update(existingTomeas);
-                await _dbContext.SaveChangesAsync();
-                if (transaction != null)
-                {
-                    await transaction.CommitAsync();
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return false;
-            }
+            tomeis = tomeis.Include(t => t.Tomearxis);
         }
-
-        public async Task<bool> DeleteKoinotitaInDb(int id)
+        if (tomeasQueryParameters.IncludeKoinotites)
         {
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-            if (id == 0 || _dbContext.Koinotites is null)
-                return false;
-
-            try
-            {
-                var koinotita = _dbContext.Koinotites.FirstOrDefault(k => k.Id.Equals(id));
-                if (koinotita == null)
-                    return false;
-
-                _dbContext.Koinotites.Remove(koinotita);
-                await _dbContext.SaveChangesAsync();
-
-                if (transaction != null)
-                {
-                    await transaction.CommitAsync();
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return false;
-            }
+            tomeis = tomeis.Include(t => t.Koinotites);
         }
-
-        public async Task<bool> DeleteSkiniInDb(int skiniId)
+        if (tomeasQueryParameters.IncludeKoinotarxes)
         {
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                if (skiniId <= 0 || _dbContext.Skines is null)
-                    return false;
-
-                var skini = await _dbContext.Skines.FindAsync(skiniId);
-                if (skini == null)
-                    return false;
-
-                _dbContext.Skines.Remove(skini);
-                await _dbContext.SaveChangesAsync();
-
-                if (transaction != null)
-                {
-                    await transaction.CommitAsync();
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return false;
-            }
+            tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
         }
-
-        public async Task<bool> DeleteTomeasInDb(string n)
+        if (tomeasQueryParameters.IncludeOmadarxes)
         {
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                if (_dbContext.Tomeis is null)
-                    return false;
-
-                var tomeas = _dbContext.Tomeis.FirstOrDefault(t => t.Name.Equals(n));
-                if (tomeas == null)
-                    return false;
-
-                _dbContext.Tomeis.Remove(tomeas);
-                await _dbContext.SaveChangesAsync();
-
-                if (transaction != null)
-                    await transaction.CommitAsync();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return false;
-            }
+            tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Skines)!.ThenInclude(sk => sk.Omadarxis);
         }
+        if (string.IsNullOrEmpty(name) || _dbContext.Tomeis is null)
+            return null!;
 
-        public async Task<bool> AddSkiniInDb(Skini skini)
+        return await tomeis.FirstOrDefaultAsync(t => t.Name == name) ?? new Tomeas();
+    }
+
+    public async Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        if (koinotita is null || _dbContext.Koinotites is null)
+            return false;
+        try
         {
-            if (skini == null || skini.Koinotita == null || skini.Koinotita.Tomeas == null || skini.Id <= 0 || (await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || _dbContext.Skines is null)
+            var existingKoinotita = await _dbContext.Koinotites.FindAsync(id);
+            if (existingKoinotita == null)
                 return false;
 
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+            existingKoinotita.Name = koinotita.Name;
+            existingKoinotita.Tomeas = koinotita.Tomeas;
+            existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
+            existingKoinotita.Skines = koinotita.Skines;
 
-            try
+            _dbContext.Koinotites.Update(existingKoinotita);
+            await _dbContext.SaveChangesAsync();
+            if (transaction != null)
             {
-                var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name == skini.Koinotita.Tomeas.Name);
-                if (existingTomeas != null)
-                    skini.Koinotita.Tomeas = existingTomeas;
-
-                var existingKoinotita = await _dbContext.Koinotites.FirstOrDefaultAsync(t => t.Name == skini.Koinotita.Name);
-                if (existingKoinotita != null)
-                    skini.Koinotita = existingKoinotita;
-
-                await _dbContext.Skines.AddAsync(skini);
-                await _dbContext.SaveChangesAsync();
-
-                if (transaction != null)
-                    await transaction.CommitAsync();
-                return true;
+                await transaction.CommitAsync();
             }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return false;
-            }
+            return true;
         }
-
-        public async Task<bool> AddKoinotitaInDb(Koinotita koinotita)
+        catch (Exception ex)
         {
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                if (koinotita is null || _dbContext.Koinotites is null || (await _dbContext.Koinotites.FirstOrDefaultAsync(s => s.Name == koinotita.Name)) is not null)
-                    return false;
-
-                await _dbContext.Koinotites.AddAsync(koinotita);
-                await _dbContext.SaveChangesAsync();
-
-                if (transaction != null)
-                    await transaction.CommitAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-                return false;
-            }
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
         }
+    }
 
-        public async Task<bool> AddTomeasInDb(Tomeas tomeas)
+    public async Task<bool> UpdateSkiniInDb(int id, Skini skini)
+    {
+
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        if (skini is null || _dbContext.Skines is null)
+            return false;
+
+        try
         {
-            var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-            using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                if ((await _dbContext.Tomeis.FirstOrDefaultAsync(s => s.Name == tomeas.Name)) is not null || tomeas is null || _dbContext.Tomeis is null)
-                    return false;
-
-                var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Name == tomeas.Name);
-                if (existingTomeas != null)
-                    return false;
-
-                await _dbContext.Tomeis.AddAsync(tomeas);
-                await _dbContext.SaveChangesAsync();
-
-                if (transaction != null)
-                    await transaction.CommitAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-                ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            var existingSkini = await _dbContext.Skines.FindAsync(id);
+            if (existingSkini == null)
                 return false;
+
+            existingSkini.Name = skini.Name;
+            existingSkini.Koinotita = skini.Koinotita;
+            existingSkini.Omadarxis = skini.Omadarxis;
+            existingSkini.Paidia = skini.Paidia;
+
+            _dbContext.Skines.Update(existingSkini);
+            await _dbContext.SaveChangesAsync();
+            if (transaction != null)
+            {
+                await transaction.CommitAsync();
             }
+            return true;
         }
-
-        public Task<bool> HasData()
+        catch (Exception ex)
         {
-            if (_dbContext is null)
-                return Task.FromResult(false);
+            if (transaction != null)
+                await transaction.RollbackAsync();
 
-            if (!GetSkinesInDb(new()).Result.Any() &&
-                    !GetKoinotitesAnaTomeaInDb(new(), 2).Result.Any() &&
-                    !GetKoinotitesAnaTomeaInDb(new(), 1).Result.Any())
-                return Task.FromResult(false);
-            return Task.FromResult(true);
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
         }
+    }
+
+    public async Task<bool> UpdateTomeasInDb(string n, Tomeas tomeas)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name.Equals(n));
+            if (existingTomeas == null)
+                return false;
+
+            existingTomeas.Name = tomeas.Name;
+            existingTomeas.Koinotites = tomeas.Koinotites;
+            existingTomeas.Tomearxis = tomeas.Tomearxis;
+
+            _dbContext.Tomeis.Update(existingTomeas);
+            await _dbContext.SaveChangesAsync();
+            if (transaction != null)
+            {
+                await transaction.CommitAsync();
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteKoinotitaInDb(int id)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        if (id == 0 || _dbContext.Koinotites is null)
+            return false;
+
+        try
+        {
+            var koinotita = _dbContext.Koinotites.FirstOrDefault(k => k.Id.Equals(id));
+            if (koinotita == null)
+                return false;
+
+            _dbContext.Koinotites.Remove(koinotita);
+            await _dbContext.SaveChangesAsync();
+
+            if (transaction != null)
+            {
+                await transaction.CommitAsync();
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteSkiniInDb(int skiniId)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            if (skiniId <= 0 || _dbContext.Skines is null)
+                return false;
+
+            var skini = await _dbContext.Skines.FindAsync(skiniId);
+            if (skini == null)
+                return false;
+
+            _dbContext.Skines.Remove(skini);
+            await _dbContext.SaveChangesAsync();
+
+            if (transaction != null)
+            {
+                await transaction.CommitAsync();
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteTomeasInDb(string n)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            if (_dbContext.Tomeis is null)
+                return false;
+
+            var tomeas = _dbContext.Tomeis.FirstOrDefault(t => t.Name.Equals(n));
+            if (tomeas == null)
+                return false;
+
+            _dbContext.Tomeis.Remove(tomeas);
+            await _dbContext.SaveChangesAsync();
+
+            if (transaction != null)
+                await transaction.CommitAsync();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
+        }
+    }
+
+    public async Task<bool> AddSkiniInDb(Skini skini)
+    {
+        if (skini == null || skini.Koinotita == null || skini.Koinotita.Tomeas == null || skini.Id <= 0 || (await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || _dbContext.Skines is null)
+            return false;
+
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(t => t.Name == skini.Koinotita.Tomeas.Name);
+            if (existingTomeas != null)
+                skini.Koinotita.Tomeas = existingTomeas;
+
+            var existingKoinotita = await _dbContext.Koinotites.FirstOrDefaultAsync(t => t.Name == skini.Koinotita.Name);
+            if (existingKoinotita != null)
+                skini.Koinotita = existingKoinotita;
+
+            await _dbContext.Skines.AddAsync(skini);
+            await _dbContext.SaveChangesAsync();
+
+            if (transaction != null)
+                await transaction.CommitAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
+        }
+    }
+
+    public async Task<bool> AddKoinotitaInDb(Koinotita koinotita)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            if (koinotita is null || _dbContext.Koinotites is null || (await _dbContext.Koinotites.FirstOrDefaultAsync(s => s.Name == koinotita.Name)) is not null)
+                return false;
+
+            await _dbContext.Koinotites.AddAsync(koinotita);
+            await _dbContext.SaveChangesAsync();
+
+            if (transaction != null)
+                await transaction.CommitAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
+        }
+    }
+
+    public async Task<bool> AddTomeasInDb(Tomeas tomeas)
+    {
+        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            if ((await _dbContext.Tomeis.FirstOrDefaultAsync(s => s.Name == tomeas.Name)) is not null || tomeas is null || _dbContext.Tomeis is null)
+                return false;
+
+            var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Name == tomeas.Name);
+            if (existingTomeas != null)
+                return false;
+
+            await _dbContext.Tomeis.AddAsync(tomeas);
+            await _dbContext.SaveChangesAsync();
+
+            if (transaction != null)
+                await transaction.CommitAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return false;
+        }
+    }
+
+    public Task<bool> HasData()
+    {
+        if (_dbContext is null)
+            return Task.FromResult(false);
+
+        if (!GetSkinesInDb(new()).Result.Any() &&
+                !GetKoinotitesAnaTomeaInDb(new(), 2).Result.Any() &&
+                !GetKoinotitesAnaTomeaInDb(new(), 1).Result.Any())
+            return Task.FromResult(false);
+        return Task.FromResult(true);
     }
 }
