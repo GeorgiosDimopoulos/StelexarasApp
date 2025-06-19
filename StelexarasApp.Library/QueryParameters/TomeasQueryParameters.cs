@@ -1,6 +1,6 @@
 ﻿namespace StelexarasApp.Library.QueryParameters
 {
-    public class TomeasQueryParameters
+    public class TomeasQueryParameters : XwrosQueryParameters
     {
         public bool IncludeKoinotarxes { get; set; } = false;
         public bool IncludeKoinotites { get; set; } = false;
