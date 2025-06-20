@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StelexarasApp.Library.QueryParameters.Domi;
 
 namespace StelexarasApp.Services.Services;
 

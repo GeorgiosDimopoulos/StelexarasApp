@@ -2,6 +2,7 @@
 using Moq;
 using FluentValidation;
 using FluentValidation.Results;
+using StelexarasApp.Library.QueryParameters.People;
 
 namespace StelexarasApp.Tests.ServicesTests;
 

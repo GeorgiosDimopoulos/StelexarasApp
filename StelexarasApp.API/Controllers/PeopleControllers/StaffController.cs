@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Services.Interfaces.People;
 
 namespace StelexarasApp.API.Controllers.PeopleControllers;
 
@@ -64,7 +63,7 @@ public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexos
     }
 
     [HttpGet("Koinotarxes")]
-    public async Task<ActionResult<StelexosDtoBase>> GetKoinotarxes(string name, OmadarxisQueryParameters stelexosQueryParameters)
+    public async Task<ActionResult<StelexosDtoBase>> GetKoinotarxes(string name, KoinotarxisQueryParameters stelexosQueryParameters)
     {
         var result = await _stelexiService.GetStelexi(Thesi.Koinotarxis, name, stelexosQueryParameters);
         if (result is null)
@@ -118,18 +117,18 @@ public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexos
     }
 
     [HttpGet("Tomearxes")]
-    public async Task<ActionResult<StelexosDtoBase>> GetTomearxes(string name, OmadarxisQueryParameters stelexosQueryParameters)
+    public async Task<ActionResult<StelexosDtoBase>> GetTomearxes(TomearxisQueryParameters stelexosQueryParameters)
     {
-        var result = await _stelexiService.GetStelexi(Thesi.Tomearxis, name, stelexosQueryParameters);
+        var result = await _stelexiService.GetStelexi(Thesi.Tomearxis, string.Empty, stelexosQueryParameters);
         if (result is null)
             return NotFound();
         return Ok(result);
     }
 
     [HttpGet("TomearxisByName")]
-    public async Task<ActionResult<StelexosDtoBase>> GetTomearxisByName(string name)
+    public async Task<ActionResult<StelexosDtoBase>> GetTomearxisByName(string name, TomearxisQueryParameters stelexosQueryParameters)
     {
-        var result = await _stelexiService.GetStelexosByName(Thesi.Tomearxis, name, new());
+        var result = await _stelexiService.GetStelexosByName(Thesi.Tomearxis, name, stelexosQueryParameters);
         if (result is null)
             return NotFound();
         return Ok(result);
@@ -172,9 +171,9 @@ public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexos
     }
 
     [HttpGet("Ekpaideutis")]
-    public async Task<ActionResult<StelexosDtoBase>> GetEkpaideutis(string name, OmadarxisQueryParameters stelexosQueryParameters)
+    public async Task<ActionResult<StelexosDtoBase>> GetEkpaideutis(string name)
     {
-        var result = await _stelexiService.GetStelexi(Thesi.Ekpaideutis, name, stelexosQueryParameters);
+        var result = await _stelexiService.GetStelexi(Thesi.Ekpaideutis, name, null!);
         if (result is null)
             return NotFound();
         return Ok(result);
