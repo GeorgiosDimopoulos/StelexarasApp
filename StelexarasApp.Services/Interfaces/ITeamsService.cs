@@ -1,4 +1,6 @@
-﻿namespace StelexarasApp.Services.IServices;
+﻿using StelexarasApp.Library.QueryParameters.Domi;
+
+namespace StelexarasApp.Services.IServices;
 
 public interface ITeamsService
 {

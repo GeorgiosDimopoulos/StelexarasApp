@@ -1,7 +1,8 @@
-﻿namespace StelexarasApp.Library.QueryParameters;
+﻿namespace StelexarasApp.Library.QueryParameters.People;
 
 public class KoinotarxisQueryParameters : StelexosQueryParameters
 {
     public bool IncludeSkines { get; set; } = false;
     public bool IncludeOmadarxes { get; set; } = false;
+    public bool IncludeTomeas { get; set; } = false;
 }
