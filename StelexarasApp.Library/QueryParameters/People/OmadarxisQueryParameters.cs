@@ -1,4 +1,4 @@
-﻿namespace StelexarasApp.Library.QueryParameters;
+﻿namespace StelexarasApp.Library.QueryParameters.People;
 
 public class OmadarxisQueryParameters : StelexosQueryParameters
 {

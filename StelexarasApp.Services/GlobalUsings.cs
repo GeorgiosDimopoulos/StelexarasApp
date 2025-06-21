@@ -14,3 +14,4 @@ global using StelexarasApp.Library.Dtos;
 global using StelexarasApp.Services.IServices;
 global using StelexarasApp.Services.Interfaces.People;
 global using StelexarasApp.Services.Interfaces;
+global using StelexarasApp.Library.QueryParameters.People;

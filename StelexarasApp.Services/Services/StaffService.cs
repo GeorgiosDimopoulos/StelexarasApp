@@ -70,7 +70,7 @@ public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosR
         return await _stelexiRepository.DeleteStelexosInDb(id.Id);
     }
 
-    public async Task<IEnumerable<StelexosResponse>> GetStelexi(Thesi thesi, string? xwros, StelexosQueryParameters stelexosQueryParameters)
+    public async Task<IEnumerable<StelexosResponse>> GetStelexi(Thesi thesi, string? xwros, StelexosQueryParameters? stelexosQueryParameters)
     {
         var stelexosInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(thesi, xwros, stelexosQueryParameters);
         if (stelexosInDb is null)
