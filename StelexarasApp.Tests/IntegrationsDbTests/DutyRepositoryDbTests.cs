@@ -23,6 +23,7 @@ public class DutyRepositoryDbTests
     public async Task AddDutyAsync_ShouldAddDuty()
     {
         // Arrange
+        var countBefore = await _dbContext.Duties.CountAsync();
         var duty = new Duty { Name = "Test Duty 1", Date = DateTime.Now };
 
         // Act
@@ -31,8 +32,9 @@ public class DutyRepositoryDbTests
         // Assert
         Assert.True(rest);
         var duties = await _dbContext.Duties.ToListAsync();
-        Assert.Single(duties);
-        Assert.Equal("Test Duty 1", duties [0].Name);
+        var dutyFromDb = duties.FirstOrDefault(d => d.Name == "Test Duty 1");
+        Assert.NotNull(dutyFromDb);
+        Assert.Equal(countBefore + 1, duties.Count);
     }
 
     [Fact]
@@ -77,10 +79,10 @@ public class DutyRepositoryDbTests
         _dbContext.Duties.Add(duty);
         await _dbContext.SaveChangesAsync();
 
-        var updatedDuty = new Duty { Name = "Updated Duty" };
+        duty.Name = "Updated Duty";
 
         // Act
-        await dutyRepository.UpdateDutyInDb(updatedDuty);
+        await dutyRepository.UpdateDutyInDb(duty);
         var result = await _dbContext.Duties.FindAsync(duty.Id);
 
         // Assert

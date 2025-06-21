@@ -153,7 +153,7 @@ public class ExpenseRepositoryDbTests
     {
         _dbContext.Expenses.AddRange(
             new Expense { Id = 92, Description = "ExpenseTest1", Amount = 100 },
-            new Expense { Id = 23, Description = "ExpenseTest1", Amount = 200 }
+            new Expense { Id = 24, Description = "ExpenseTest1", Amount = 200 }
         );
         await _dbContext.SaveChangesAsync();
 

@@ -71,6 +71,7 @@ public class ExpenseService : IExpenseService
         {
             _validator.ValidateAndThrow(updateExpenseRequest);
             var expense = _mapper.Map<Expense>(updateExpenseRequest);
+            
             if (expense.Amount <= 0 || string.IsNullOrEmpty(expense.Description) || _expenseRepository is null)
                 return false;
             return await _expenseRepository.UpdateExpenseInDb(expense.Id, expense);
