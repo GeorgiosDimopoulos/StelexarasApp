@@ -1,15 +1,17 @@
 services:
   api:
     build:
-      context: ./StelexarasApp.API
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: StelexarasApp.API/Dockerfile
     ports:
-      - "8080:80"
+      - "8080:8080"
     restart: always
     networks:
       - app-network
     depends_on:
       - db
+    environment:
+      ASPNETCORE_URLS: http://+:8080
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
@@ -22,8 +24,8 @@ services:
 
   frontend:
     build:
-      context: ./StelexarasApp.Web
-      dockerfile: Dockerfile
+      dockerfile: ./StelexarasApp.Web/Dockerfile
+      context: .
     ports:
       - "3000:80"
     restart: always

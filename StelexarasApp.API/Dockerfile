@@ -1,26 +1,26 @@
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
-# This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["StelexarasApp.API.csproj", "./"]
-RUN dotnet restore "./StelexarasApp.API/StelexarasApp.API.csproj"
-COPY . .
-WORKDIR "/src"
-RUN dotnet build "./StelexarasApp.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+COPY StelexarasApp.API/StelexarasApp.API.csproj StelexarasApp.API/
+COPY StelexarasApp.Services/StelexarasApp.Services.csproj StelexarasApp.Services/
+COPY StelexarasApp.DataAccess/StelexarasApp.DataAccess.csproj StelexarasApp.DataAccess/
+COPY StelexarasApp.Library/StelexarasApp.Library.csproj StelexarasApp.Library/
+
+RUN dotnet restore StelexarasApp.API/StelexarasApp.API.csproj
+COPY . .
+
+WORKDIR /src/StelexarasApp.API
+RUN dotnet build StelexarasApp.API.csproj -c $BUILD_CONFIGURATION -o /app/build --no-restore
+
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./StelexarasApp.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish StelexarasApp.API.csproj -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
