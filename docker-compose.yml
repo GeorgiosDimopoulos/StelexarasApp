@@ -42,8 +42,25 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
     restart: always
+  heimdall:    
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    ports:
+      - "8090:80"
+      - "8443:443"
+    networks:
+      - app-network
+    volumes:
+      - ./heimdall/config:/config
 networks:
   app-network:
-    driver: bridge
+    driver: bridge    
 volumes:
   portainer_data:
+    # heimdall_config:# comment it if you prefer a unnamed volume
+  
