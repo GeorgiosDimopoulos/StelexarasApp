@@ -29,11 +29,13 @@ public static class HealthCheck
             opt.SetEvaluationTimeInSeconds(10); //time in seconds between check
             opt.MaximumHistoryEntriesPerEndpoint(60); //maximum history of checks
             opt.SetApiMaxActiveRequests(1); //api requests concurrency
-            opt.AddHealthCheckEndpoint("feedback api", "/health");
+            
+            // opt.AddHealthCheckEndpoint("feedback api", "/health");
+            opt.AddHealthCheckEndpoint("feedback api", "http://localhost:8080/health");
         }).AddInMemoryStorage();
 
         services.AddHealthChecks()
-                .AddUrlGroup(new Uri("https://localhost:44362/swagger/index.html"),
+                .AddUrlGroup(new Uri("https://localhost:8080/swagger/index.html"),
                              name: "Swagger Feedback API",
                              failureStatus: HealthStatus.Unhealthy);
     }

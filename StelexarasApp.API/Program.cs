@@ -12,6 +12,11 @@ builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 
+if (!app.Environment.IsEnvironment("Docker"))
+{
+    app.UseHttpsRedirection();
+}
+
 // Swagger UI configuration
 if (app.Environment.IsDevelopment())
 {

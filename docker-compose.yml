@@ -11,7 +11,8 @@ services:
     depends_on:
       - db
     environment:
-      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_URLS: "8080"
+      ASPNETCORE_ENVIRONMENT: Docker
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:

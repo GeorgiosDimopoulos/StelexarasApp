@@ -14,7 +14,6 @@ using System.Text;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using StelexarasApp.Services.Interfaces;
 using StelexarasApp.Services.IServices;
-using StelexarasApp.Services.Interfaces.People;
 using StelexarasApp.Library.Dtos;
 
 namespace StelexarasApp.API.Helpers;
