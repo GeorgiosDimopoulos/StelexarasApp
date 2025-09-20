@@ -26,8 +26,12 @@ services:
 
   frontend:
     build:
-      dockerfile: ./StelexarasApp.Web/Dockerfile
       context: .
+      dockerfile: ./StelexarasApp.Web/Dockerfile      
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: "80"
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=lore3389!;TrustServerCertificate=True"
     ports:
       - "3000:80"
     restart: always

@@ -29,15 +29,21 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 
 // Map default MVC routes
+app.MapControllers();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=KoinotitaWeb}/{action=Index}/{id?}");
+app.MapRazorPages();
 
 app.Run();
 
@@ -64,6 +70,7 @@ void ConfigureServices(WebApplicationBuilder builder)
 
     // Add MVC services
     builder.Services.AddControllersWithViews();
+    builder.Services.AddRazorPages();
 
     // Add FluentValidation
     builder.Services.AddValidatorsFromAssemblyContaining<StelexosValidator>();
