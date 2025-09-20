@@ -1,5 +1,6 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using StelexarasApp.API.Helpers;
 using StelexarasApp.DataAccess;
 
@@ -12,13 +13,21 @@ builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 
-if (!app.Environment.IsEnvironment("Docker"))
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
+var isDocker = app.Environment.IsEnvironment("Docker");
+
+if (!isDocker)
 {
     app.UseHttpsRedirection();
 }
 
 // Swagger UI configuration
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || isDocker)
 {
     var adminTitle = ApiConstants.ApiGroups.AdminTitle.ToLower();
 

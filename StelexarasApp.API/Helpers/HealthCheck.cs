@@ -35,7 +35,7 @@ public static class HealthCheck
         }).AddInMemoryStorage();
 
         services.AddHealthChecks()
-                .AddUrlGroup(new Uri("https://localhost:8080/swagger/index.html"),
+                .AddUrlGroup(new Uri("http://localhost:8080/swagger/index.html"),
                              name: "Swagger Feedback API",
                              failureStatus: HealthStatus.Unhealthy);
     }

@@ -3,20 +3,21 @@ services:
     build:
       context: .
       dockerfile: StelexarasApp.API/Dockerfile
-    ports:
-      - "8080:8080"
     restart: always
     networks:
       - app-network
     depends_on:
       - db
     environment:
-      ASPNETCORE_URLS: "8080"
       ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=lore3389!;TrustServerCertificate=True"
+    ports:
+      - "8080:8080"
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      SA_PASSWORD: "SA_PASSWORD"
+      SA_PASSWORD: "lore3389!"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
