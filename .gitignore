@@ -94,3 +94,4 @@ TestResults/
 *.coverage
 /venv
 /Logs/applicationLogs.txt
+/StelexarasApp.Application/wwwroot/lib/bootstrap/dist

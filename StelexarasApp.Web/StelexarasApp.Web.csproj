@@ -35,8 +35,4 @@
 		<None Include="Views\SkinesWeb\Create.cshtml" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Pages\Paidia\" />
-	</ItemGroup>
-
 </Project>

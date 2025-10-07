@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diagrams", "Diagrams", "{02
 		DomiStructure.drawio = DomiStructure.drawio
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StelexarasApp.Application", "StelexarasApp.Application\StelexarasApp.Application.csproj", "{1C6A21E5-B682-4A24-847B-B9D4FCF9D7DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{BFD4F7C1-7B56-4BAB-9659-E2E5E9FBFEEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFD4F7C1-7B56-4BAB-9659-E2E5E9FBFEEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFD4F7C1-7B56-4BAB-9659-E2E5E9FBFEEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C6A21E5-B682-4A24-847B-B9D4FCF9D7DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C6A21E5-B682-4A24-847B-B9D4FCF9D7DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C6A21E5-B682-4A24-847B-B9D4FCF9D7DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C6A21E5-B682-4A24-847B-B9D4FCF9D7DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
