@@ -127,7 +127,7 @@ public class StelexiWebController : Controller
         try
         {
             var staffMember = await _staffService.DeleteStelexos(new DeleteStelexosRequest() { Id = id });
-            if (staffMember == null)
+            if (staffMember == false)
             {
                 _logger.LogWarning($"Staff member with ID {id} not found.");
                 return NotFound("Staff member not found.");

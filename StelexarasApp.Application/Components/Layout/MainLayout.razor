@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using StelexarasApp.Application.Components.Pages
+
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar">
@@ -11,7 +13,14 @@
         </div>
 
         <article class="content px-4">
-            @Body
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <Teams />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <Children />
+                </MudItem>
+            </MudGrid>
         </article>
     </main>
 </div>

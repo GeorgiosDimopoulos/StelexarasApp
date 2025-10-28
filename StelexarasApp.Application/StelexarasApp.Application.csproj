@@ -6,4 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="Components\Pages\_Host.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Components\Pages\_Host.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="8.13.0" />
+  </ItemGroup>
+
 </Project>
