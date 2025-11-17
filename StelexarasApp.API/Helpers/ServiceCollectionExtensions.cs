@@ -9,7 +9,6 @@ using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Text;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using StelexarasApp.Services.Interfaces;

@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using Xunit;
 
 namespace StelexarasApp.Tests.UITests
 {

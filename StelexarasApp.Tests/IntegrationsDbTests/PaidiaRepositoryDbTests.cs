@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace StelexarasApp.Tests.IntegrationDbTests;

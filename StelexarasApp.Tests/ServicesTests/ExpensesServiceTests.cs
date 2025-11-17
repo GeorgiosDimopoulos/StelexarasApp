@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Castle.Core.Logging;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
-using StelexarasApp.Library.Dtos;
 namespace StelexarasApp.Tests.ServicesTests;
 
 public class ExpensesServiceTests

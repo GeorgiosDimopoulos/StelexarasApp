@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using StelexarasApp.DataAccess;
-using StelexarasApp.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 

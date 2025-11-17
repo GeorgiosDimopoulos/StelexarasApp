@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using StelexarasApp.Services.Interfaces.People;
 
 namespace StelexarasApp.API.Controllers.PeopleControllers;
 
