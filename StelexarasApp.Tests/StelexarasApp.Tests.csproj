@@ -37,8 +37,4 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\StelexarasApp.Web\StelexarasApp.Web.csproj" />
-  </ItemGroup>
-
 </Project>
