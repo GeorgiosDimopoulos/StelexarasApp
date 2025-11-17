@@ -22,15 +22,20 @@
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.11" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="Selenium.Support" Version="4.24.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.24.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="128.0.6613.11900" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StelexarasApp.DataAccess\StelexarasApp.DataAccess.csproj" />
+    <ProjectReference Include="..\StelexarasApp.Services\StelexarasApp.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,10 +1,14 @@
-﻿<HeadContent>
+﻿@using Microsoft.AspNetCore.Components.Web
+@using MudBlazor
+<HeadContent>
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="app.css" rel="stylesheet" />
+    <HeadOutlet />
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 </HeadContent>
 
-<MudThemeProvider />
-<MudDialogProvider />
-<MudSnackbarProvider />
-
-<Routes />
+<MudThemeProvider>
+    <MudDialogProvider />
+    <MudSnackbarProvider />
+    <Routes @layout MainLayout />
+</MudThemeProvider>
