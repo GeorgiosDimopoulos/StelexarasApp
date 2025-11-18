@@ -1,11 +1,17 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<MudGrid Style="height:100vh;">
+    <MudItem xs="6">
+        <MudPaper Class="d-flex justify-center align-center"
+                  Style="height:100%; background-color:aliceblue;">
+            PLACES
+        </MudPaper>
+    </MudItem>
 
-<MudContainer>
-    <MudText Typo="Typo.h3" GutterBottom="true">Welcome to StelexarasApp.Application!</MudText>
-    <MudGrid>
-        <MudItem xs="6" Style="width: 100%; background-color:aliceblue">PLACES</MudItem>
-        <MudItem xs="6" Style="width: 100%; background-color:lightgreen">PEOPLE</MudItem>
-    </MudGrid>
-</MudContainer>
+    <MudItem xs="6">
+        <MudPaper Class="d-flex justify-center align-center"
+                  Style="height:100%; background-color:lightgreen;">
+            PEOPLE
+        </MudPaper>
+    </MudItem>
+</MudGrid>

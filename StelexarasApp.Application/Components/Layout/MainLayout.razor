@@ -1,27 +1,13 @@
-﻿@using Microsoft.AspNetCore.Components.Web
-@using MudBlazor
+﻿@using MudBlazor
+@inherits LayoutComponentBase
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="/" />
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-    <HeadOutlet />
-
-    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
-    <link href="app.css" rel="stylesheet" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-</head>
-<body>
-    <MudThemeProvider />
-    <MudDialogProvider />
-    <MudSnackbarProvider />
-
-    <Routes />
-
-    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
-    <script src="_framework/blazor.web.js"></script>
-</body>
-</html>
+<div class="page">
+    <main>
+        @Body
+    </main>
+</div>
