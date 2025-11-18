@@ -1,5 +1,4 @@
-﻿using StelexarasApp.Library.Models;
-namespace StelexarasApp.Mobile.Views
+﻿namespace StelexarasApp.Mobile.Views
 {
     public partial class ExpensesPage : ContentPage
     {

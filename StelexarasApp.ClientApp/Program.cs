@@ -11,7 +11,6 @@ using StelexarasApp.DataAccess.Helpers;
 using StelexarasApp.Library.Models.Logs;
 using FluentValidation;
 using StelexarasApp.Services.Validators;
-using StelexarasApp.Library.Models;
 using StelexarasApp.Library.Models.Atoma.Children;
 using StelexarasApp.Library.Dtos.People.Children;
 using StelexarasApp.Services.Interfaces.People;

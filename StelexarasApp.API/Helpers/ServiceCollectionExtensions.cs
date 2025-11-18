@@ -9,12 +9,12 @@ using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Text;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using StelexarasApp.Services.Interfaces;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Library.Dtos;
+using Microsoft.OpenApi.Models;
 
 namespace StelexarasApp.API.Helpers;
 
@@ -68,9 +68,6 @@ public static class ServiceCollectionExtensions
 
         services.AddSwaggerGen(options =>
         {
-            options.EnableAnnotations();
-
-            // AddSwaggerAccessLevel(options);
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "API",
@@ -92,7 +89,7 @@ public static class ServiceCollectionExtensions
 
                 {
                     new OpenApiSecurityScheme
-                    {
+                    {                        
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,

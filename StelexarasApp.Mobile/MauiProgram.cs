@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.Services.Validators;
-using StelexarasApp.Library.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace StelexarasApp.Mobile;

@@ -1,32 +1,27 @@
-﻿@using StelexarasApp.Application.Components.Pages
+﻿@using Microsoft.AspNetCore.Components.Web
+@using MudBlazor
 
-@inherits LayoutComponentBase
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <HeadOutlet />
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="app.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+</head>
+<body>
+    <MudThemeProvider />
+    <MudDialogProvider />
+    <MudSnackbarProvider />
 
-        <article class="content px-4">
-            <MudGrid>
-                <MudItem xs="12" sm="6">
-                    <Teams />
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    <Children />
-                </MudItem>
-            </MudGrid>
-        </article>
-    </main>
-</div>
+    <Routes />
 
-<div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
-</div>
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+    <script src="_framework/blazor.web.js"></script>
+</body>
+</html>
