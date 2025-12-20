@@ -1,17 +1,80 @@
 ﻿@page "/"
+@inject NavigationManager Navigation
 
-<MudGrid Style="height:100vh;">
-    <MudItem xs="6">
-        <MudPaper Class="d-flex justify-center align-center"
-                  Style="height:100%; background-color:aliceblue;">
-            PLACES
-        </MudPaper>
-    </MudItem>
+<div style="min-height:100vh;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(153, 216, 220, 0.35) 0%, rgba(153, 216, 220, 0.00) 45%),
+                radial-gradient(circle at 80% 90%, rgba(153, 216, 220, 0.25) 0%, rgba(153, 216, 220, 0.00) 50%),
+                linear-gradient(180deg, #ffffff 0%, #f3f5f7 100%);">
+    <MudGrid Style="min-height:100vh; padding:16px;" Spacing="0">
 
-    <MudItem xs="6">
-        <MudPaper Class="d-flex justify-center align-center"
-                  Style="height:100%; background-color:lightgreen;">
-            PEOPLE
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+        <MudItem xs="12" md="6" Style="height:45vh; padding:5px;">
+            <MudPaper Elevation="6"
+                      Class="d-flex justify-center align-center"
+                      Style=" height:100%; border-radius:16px; overflow:hidden;
+                              background:
+                                  linear-gradient(rgba(240, 245, 247, 0.35), rgba(140, 206, 214, 0.70)),
+                                  linear-gradient(rgba(255,255,255,0.15), rgba(0,0,0,0.08)),
+                                  url('images/pool.jpg') center/cover no-repeat;
+                                  background-blend-mode: normal, soft-light, luminosity;">
+                <MudButton Color="Color.Dark" Variant="Variant.Filled" Style="color:white;" OnClick="NavigateTo">
+                    ΧΩΡΟΙ
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" md="6" Style="height:45vh; padding:5px;">
+            <MudPaper Elevation="6"
+                      Class="d-flex justify-center align-center"
+                      Style=" height:100%; border-radius:16px; overflow:hidden;
+                              background:
+                                  linear-gradient(rgba(240, 245, 247, 0.35), rgba(140, 206, 214, 0.70)),
+                                  linear-gradient(rgba(255,255,255,0.15), rgba(0,0,0,0.08)),
+                                  url('images/guard.jpg') center/cover no-repeat;
+                                  background-blend-mode: normal, soft-light, luminosity;">
+                <MudButton Color="Color.Dark" Variant="Variant.Filled" Style="color:white;" OnClick="@(() => Navigation.NavigateTo("/stelexi"))">
+                    ΣΤΕΛΕΧΗ
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+        
+        <MudItem xs="12" md="6" Style="height:45vh; padding:5px;">
+            <MudPaper Elevation="6"
+                      Class="d-flex justify-center align-center"
+                      Style=" height:100%; border-radius:16px; overflow:hidden;
+                              background:
+                                  linear-gradient(rgba(240, 245, 247, 0.35), rgba(140, 206, 214, 0.70)),
+                                  linear-gradient(rgba(255,255,255,0.15), rgba(0,0,0,0.08)),
+                                  url('images/kids.jpg') center/cover no-repeat;
+                                  background-blend-mode: normal, soft-light, luminosity;">
+                <MudButton Color="Color.Dark" Variant="Variant.Filled" Style="color:white;" OnClick="@(() => Navigation.NavigateTo("/paidia"))">
+                    ΚΑΤΑΣΚΗΝΩΤΕΣ
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" md="6" Style="height:45vh; padding:5px;">
+            <MudPaper Elevation="6"
+                      Class="d-flex justify-center align-center"
+                      Style=" height:100%; border-radius:16px; overflow:hidden;
+                              background:
+                                  linear-gradient(rgba(240, 245, 247, 0.35), rgba(140, 206, 214, 0.70)),
+                                  linear-gradient(rgba(255,255,255,0.15), rgba(0,0,0,0.08)),
+                                  url('images/eot.jpg') center/cover no-repeat;
+                                  background-blend-mode: normal, soft-light, luminosity;">
+                <MudButton Color="Color.Dark" Variant="Variant.Filled" Style="color:white;" OnClick="@(() => Navigation.NavigateTo("/sxoli"))">
+                    ΕΚΠΑΙΔΕΥΟΜΕΝΟΙ
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
+</div>
+
+
+@code {
+    private async Task NavigateTo()
+    {
+        Console.WriteLine("Navigating to /spaces");
+    }
+}
