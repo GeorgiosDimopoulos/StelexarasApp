@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="8.13.0" />
+    <PackageReference Include="Refit" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StelexarasApp.API\StelexarasApp.API.csproj" />
+    <ProjectReference Include="..\StelexarasApp.Library\StelexarasApp.Library.csproj" />
   </ItemGroup>
 
 </Project>
