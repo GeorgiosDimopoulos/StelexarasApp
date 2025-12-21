@@ -95,3 +95,4 @@ TestResults/
 /venv
 /Logs/applicationLogs.txt
 /StelexarasApp.Application/wwwroot/lib/bootstrap/dist
+/StelexarasApp.Application/Components/Pages/Children.razor
