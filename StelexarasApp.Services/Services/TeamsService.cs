@@ -59,11 +59,11 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         }
         catch
         {
-            return new List<SkiniResponse>();
+            return [];
         }
     }
 
-    public async Task<SkiniResponse> GetSkiniByNameInService(SkiniQueryParameters skiniQueryParameters, string name)
+    public async Task<SkiniResponse> GetSkiniByNameInService(SkiniQueryParameters? skiniQueryParameters, string name)
     {
         var skini = await _teamsRepository.GetSkiniByNameInDb(skiniQueryParameters, name);
         return _mapper.Map<SkiniResponse>(skini);
@@ -75,19 +75,19 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return _mapper.Map<IEnumerable<SkiniResponse>>(skines);
     }
 
-    public async Task<IEnumerable<SkiniResponse>> GetSkinesEkpaideuomenonInService(SkiniQueryParameters skiniQueryParameters)
+    public async Task<IEnumerable<SkiniResponse>> GetSkinesEkpaideuomenonInService(SkiniQueryParameters? skiniQueryParameters)
     {
         var skines = await _teamsRepository.GetSkinesEkpaideuomenonInDb(skiniQueryParameters);
         return _mapper.Map<IEnumerable<SkiniResponse>>(skines);
     }
 
-    public async Task<IEnumerable<KoinotitaResponse>> GetAllKoinotitesInService(KoinotitaQueryParameters koinotitaQueryParameters)
+    public async Task<IEnumerable<KoinotitaResponse>> GetAllKoinotitesInService(KoinotitaQueryParameters? koinotitaQueryParameters)
     {
         var koinotitaInDb = await _teamsRepository.GetKoinotitesInDb(koinotitaQueryParameters);
         return _mapper.Map<IEnumerable<KoinotitaResponse>>(koinotitaInDb);
     }
 
-    public async Task<IEnumerable<KoinotitaResponse>> GetKoinotitesAnaTomeaInService(KoinotitaQueryParameters koinotitaQueryParameters, int tomeaId)
+    public async Task<IEnumerable<KoinotitaResponse>> GetKoinotitesAnaTomeaInService(KoinotitaQueryParameters? koinotitaQueryParameters, int tomeaId)
     {
         var koinotitaInDb = await _teamsRepository.GetKoinotitesAnaTomeaInDb(koinotitaQueryParameters, tomeaId);
         return _mapper.Map<IEnumerable<KoinotitaResponse>>(koinotitaInDb);
@@ -99,7 +99,7 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return _mapper.Map<IEnumerable<TomeasResponse>>(tomeisInDb);
     }
 
-    public async Task<KoinotitaResponse> GetKoinotitaByNameInService(KoinotitaQueryParameters koinotitaQueryParameters, string name)
+    public async Task<KoinotitaResponse> GetKoinotitaByNameInService(KoinotitaQueryParameters? koinotitaQueryParameters, string name)
     {
         var skini = await _teamsRepository.GetKoinotitaByNameInDb(koinotitaQueryParameters, name);
         return _mapper.Map<KoinotitaResponse>(skini);

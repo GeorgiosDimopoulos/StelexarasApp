@@ -35,7 +35,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPost("Skini")]
-    public async Task<IActionResult> PostSkini([FromBody] CreateSkiniRequest skiniDto)
+    public async Task<IActionResult> PostSkini([FromQuery] CreateSkiniRequest skiniDto)
     {
         var result = await _teamsService.AddSkiniInService(skiniDto);
 
