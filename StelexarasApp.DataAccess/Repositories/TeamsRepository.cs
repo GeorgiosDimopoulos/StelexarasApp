@@ -13,7 +13,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
     {
         try
         {
-            var koinotites = _dbContext.Koinotites!.AsQueryable();
+            var koinotites = _dbContext.Koinotites.AsQueryable();
             if (koinotitaQueryParameters is not null)
             {
                 if (koinotitaQueryParameters.IncludeSkines)
@@ -497,7 +497,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
 
         try
         {
-            if ((await _dbContext.Tomeis.FirstOrDefaultAsync(s => s.Name == tomeas.Name)) is not null || tomeas is null || _dbContext.Tomeis is null)
+            if (tomeas is null)
                 return false;
 
             var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(k => k.Name == tomeas.Name);

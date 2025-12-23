@@ -45,4 +45,8 @@
       <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\AppDb\" />
+  </ItemGroup>
 </Project>
