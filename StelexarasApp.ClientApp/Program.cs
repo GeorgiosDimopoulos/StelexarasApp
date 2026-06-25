@@ -20,6 +20,7 @@ using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Interfaces;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Library.Dtos;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace StelexarasApp.ClientApp;
 
@@ -180,7 +181,7 @@ class Program
         var config = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<ExpenseMappingProfile>();
-        });
+        }, NullLoggerFactory.Instance);
 
         return config.CreateMapper();
     }

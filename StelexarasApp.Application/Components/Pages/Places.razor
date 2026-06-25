@@ -1,8 +1,17 @@
 ﻿@page "/xwroi"
+@using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
 
-<MudGrid Style="height:calc(100vh - 10vh); padding:16px;" Spacing="2">
-    <MudItem xs="4" Style="height:100%;">
+<MudGrid Style="height:calc(100vh - 10vh); padding:16px;" Spacing="2" @ref="grid">
+    <MudList T="KoinotitaResponse">
+        @foreach (var k in koinotites)
+        {
+            <MudListItem Style="height:100%; border-radius:16px; overflow:hidden; color:white; background-color:#87CBD3">
+                @k.Name
+            </MudListItem>
+        }
+    </MudList>
+    @* <MudItem xs="4" Style="height:100%;">
         <MudButton FullWidth="true" Href="/atomeas"
                    Style="height:100%; border-radius:16px; overflow:hidden; color:white; background-color:#87CBD3">
             Α ΤΟΜΕΑΣ
@@ -19,10 +28,19 @@
                    Style="height:100%; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
             ΣΧΟΛΗ
         </MudButton>
-    </MudItem>
+    </MudItem> *@
 </MudGrid>
 
 @code
 {
-    private List<TomeasResponse> Xwroi = default!;
+    private MudGrid grid = default!;
+    private List<KoinotitaResponse> koinotites = new();
+
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    [Inject] private IKoinotitesApi KoinotitesApi { get; set; } = default!;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        koinotites = await KoinotitesApi.GetKoinotitesAsync();
+    }
 }

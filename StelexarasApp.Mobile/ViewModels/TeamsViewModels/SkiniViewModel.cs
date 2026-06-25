@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -17,7 +18,7 @@ public class SkiniViewModel : INotifyPropertyChanged
         {
             cfg.CreateMap<SkiniResponse, Skini>();
             cfg.CreateMap<PaidiResponse, Paidi>();
-        }).CreateMapper();
+        }, NullLoggerFactory.Instance).CreateMapper();
 
         this.Skini = mapper.Map<Skini>(skini);
         _paidiaService = paidiaService;
