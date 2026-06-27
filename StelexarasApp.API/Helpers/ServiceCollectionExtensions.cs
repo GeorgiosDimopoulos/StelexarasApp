@@ -42,7 +42,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthTokenProvider, AuthTokenProvider>();
 
         // Add AutoMapper
-        services.AddAutoMapper(typeof(ExpenseMappingProfile).Assembly);
+        services.AddAutoMapper(cfg => { }, typeof(ExpenseMappingProfile).Assembly);
 
         // Add DbContext
         services.AddDbContext<AppDbContext>(options =>

@@ -28,7 +28,7 @@ class Program
 {
     private static HubConnection connection = null!;
 
-    private static async Task Main(string [] args)
+    private static async Task Main(string[] args)
     {
         ConfigureSignalRConnection();
 
@@ -202,7 +202,7 @@ class Program
     private static ServiceProvider ConfigureServices() => new ServiceCollection()
         .AddDbContext<AppDbContext>()
         .AddLogging()
-        .AddAutoMapper(typeof(Program))
+        .AddAutoMapper(cfg => { }, typeof(Program).Assembly)
         .AddTransient<IValidator<DutyDtoBase>, DutyValidator>()
         .AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>()
         .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()

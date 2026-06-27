@@ -41,7 +41,7 @@ public static class MauiProgram
             loggingBuilder.AddDebug();
         });
 
-        services.AddAutoMapper(typeof(ExpenseMappingProfile));
+        services.AddAutoMapper(cfg => { }, typeof(ExpenseMappingProfile).Assembly);
         //services.AddSingleton<ApiConstants.DatabaseType>(provider => ApiConstants.DatabaseType.SQLite);
 
         RegisterModels(services);

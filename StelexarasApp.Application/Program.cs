@@ -2,6 +2,7 @@ using MudBlazor.Services;
 using Refit;
 using StelexarasApp.Application.ApiClients;
 using StelexarasApp.Application.Components;
+using StelexarasApp.Services.Mappers.Teams;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddMudServices();
 
 builder.Services.AddRefitClient<IKoinotitesApi>().ConfigureHttpClient(c => c.BaseAddress = new Uri("http://localhost:5010")); // or 7049
+builder.Services.AddAutoMapper(cfg => { }, typeof(SkiniMappingProfile).Assembly);
 
 var app = builder.Build();
 
@@ -25,7 +27,6 @@ app.UseHttpsRedirection();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Run();
