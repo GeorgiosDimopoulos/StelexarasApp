@@ -41,8 +41,8 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.11" />
 		<PackageReference Include="Microsoft.OpenApi" Version="1.6.25" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.11" />
-		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.ios" Version="2.1.11" />
+		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
+		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.ios" Version="3.50.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.6" />

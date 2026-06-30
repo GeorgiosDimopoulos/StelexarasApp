@@ -93,8 +93,8 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.82" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.71" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.11" />
-		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.ios" Version="2.1.11" />
+		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
+		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.ios" Version="3.50.3" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
@@ -162,7 +162,7 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
 	  <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.android">
-	    <Version>2.1.11</Version>
+		<Version>3.50.3</Version>
 	  </PackageReference>
 	</ItemGroup>
 

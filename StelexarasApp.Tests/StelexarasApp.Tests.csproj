@@ -31,8 +31,8 @@
     <PackageReference Include="Selenium.Support" Version="4.24.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.24.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="128.0.6613.11900" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.11" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.ios" Version="2.1.11" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.ios" Version="3.50.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
