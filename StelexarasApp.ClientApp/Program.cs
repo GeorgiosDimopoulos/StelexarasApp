@@ -16,6 +16,7 @@ using StelexarasApp.Library.Dtos.People.Children;
 using StelexarasApp.Services.Interfaces.People;
 using StelexarasApp.Library.Dtos.People.Staff;
 using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Services.Mappers.Teams;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Interfaces;
 using StelexarasApp.Services.IServices;
@@ -35,7 +36,7 @@ class Program
 
         await StartSignalRConnection();
 
-        var mapper = ConfigureMapper();
+        var mapper = serviceProvider.GetRequiredService<IMapper>();
 
         int choice = GetPersonTypeChoice();
         await HandlePersonCreation(choice, serviceProvider);
@@ -175,16 +176,6 @@ class Program
         return choice;
     }
 
-    private static IMapper ConfigureMapper()
-    {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<ExpenseMappingProfile>();
-        });
-
-        return config.CreateMapper();
-    }
-
     private static async Task StartSignalRConnection()
     {
         try
@@ -201,7 +192,8 @@ class Program
     private static ServiceProvider ConfigureServices() => new ServiceCollection()
         .AddDbContext<AppDbContext>()
         .AddLogging()
-        .AddAutoMapper(typeof(Program))
+        //.AddAutoMapper(typeof(Program))
+        .AddAutoMapper(cfg => cfg.AddProfile<ExpenseMappingProfile>())
         .AddTransient<IValidator<DutyDtoBase>, DutyValidator>()
         .AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>()
         .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()
