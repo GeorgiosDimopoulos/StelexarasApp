@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.Services.Validators;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using StelexarasApp.Mobile.Factories;
+using StelexarasApp.Services.Validators;
 
 namespace StelexarasApp.Mobile;
 
@@ -21,16 +22,12 @@ public static class MauiProgram
 
         ConfigureServices(builder.Services);
 
-        builder.UseMauiApp<App>().UseMauiCommunityToolkit();
-
-        var serviceProvider = builder.Services.BuildServiceProvider();
-        App.ServiceProvider = serviceProvider;
-
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
-        return builder.Build();
+        var app = builder.Build();
+        App.ServiceProvider = app.Services;
+        return app;
     }
 
     private static void ConfigureServices(IServiceCollection services)
@@ -41,7 +38,9 @@ public static class MauiProgram
             loggingBuilder.AddDebug();
         });
 
-        services.AddAutoMapper(cfg => cfg.AddMaps(typeof(ExpenseMappingProfile).Assembly));
+        services.AddAutoMapper(cfg => { }, typeof(ExpenseMappingProfile).Assembly);
+
+        services.AddSingleton<IPageFactory, PageFactory>();
         //services.AddSingleton<ApiConstants.DatabaseType>(provider => ApiConstants.DatabaseType.SQLite);
 
         RegisterModels(services);

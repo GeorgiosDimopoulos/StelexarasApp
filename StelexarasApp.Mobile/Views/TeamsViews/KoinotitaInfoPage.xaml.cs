@@ -1,4 +1,4 @@
-using AutoMapper;
+using StelexarasApp.Mobile.Factories;
 
 namespace StelexarasApp.Mobile.Views.TeamsViews;
 
@@ -6,19 +6,23 @@ public partial class KoinotitaInfoPage : ContentPage
 {
     private IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
     private ITeamsService _teamsService;
-    public KoinotitaResponse Koinotita { get; set; }
-    private IMapper _mapper;
+    private IPageFactory _pageFactory;
 
-    public KoinotitaInfoPage(ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, KoinotitaViewModel koinotitaViewModel, IMapper mapper)
+    public KoinotitaResponse Koinotita { get; set; }
+    
+    public KoinotitaInfoPage(ITeamsService teamsService,
+        IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService,
+        KoinotitaViewModel koinotitaViewModel,
+        IPageFactory pageFactory)
     {
         InitializeComponent();
         _teamsService = teamsService;
 
         _paidiaService = paidiaService;
-        _mapper = mapper;
+        _pageFactory = pageFactory;
         Koinotita = koinotitaViewModel.Koinotita ?? new KoinotitaResponse();
     }
-
+     
     private async void SkiniButton_Clicked(object sender, EventArgs e)
     {
         var button = sender as Button;
@@ -26,7 +30,7 @@ public partial class KoinotitaInfoPage : ContentPage
 
         if (skini != null)
         {
-            var skiniPage = new SkiniInfoPage(skini, _paidiaService, _mapper);
+            var skiniPage = _pageFactory.Create<SkiniInfoPage>(skini);
             await Navigation.PushModalAsync(skiniPage);
         }
     }

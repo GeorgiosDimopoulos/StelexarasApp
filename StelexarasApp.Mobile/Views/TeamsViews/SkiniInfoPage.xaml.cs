@@ -10,7 +10,9 @@ public partial class SkiniInfoPage : ContentPage
     public SkiniInfoPage(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, IMapper mapper)
     {
         InitializeComponent();
+        
         _skiniViewModel = new SkiniViewModel(skini, paidiaService, mapper);
+        BindingContext = _skiniViewModel;
         _paidiaService = paidiaService;
     }
 
