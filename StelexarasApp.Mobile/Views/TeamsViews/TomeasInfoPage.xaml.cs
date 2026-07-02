@@ -1,4 +1,6 @@
-﻿namespace StelexarasApp.Mobile.Views.TeamsViews;
+﻿using AutoMapper;
+
+namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class TomeasInfoPage : ContentPage
 {
@@ -6,13 +8,15 @@ public partial class TomeasInfoPage : ContentPage
     private readonly KoinotitaViewModel _koinotitaViewModel;
     private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
     private readonly ITeamsService _teamsService;
+    private readonly IMapper _mapper;
 
-    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService)
+    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, IMapper mapper)
     {
         InitializeComponent();
         _teamsService = teamsService;
         _paidiaService = paidiaService;
         _tomeasViewModel = tomeasViewModel;
+        _mapper = mapper;
         _koinotitaViewModel = koinotitaViewModel;
         Title = "Τομέας: " + _tomeasViewModel.TomeasNumber.ToString();
         BindingContext = _tomeasViewModel;
@@ -23,7 +27,7 @@ public partial class TomeasInfoPage : ContentPage
         var button = (Button)sender;
         var koinotita = (KoinotitaResponse)button.BindingContext;
         _koinotitaViewModel.Koinotita = koinotita ?? new KoinotitaResponse();
-        _ = Navigation.PushAsync(new KoinotitaInfoPage(_teamsService, _paidiaService, _koinotitaViewModel));
+        _ = Navigation.PushAsync(new KoinotitaInfoPage(_teamsService, _paidiaService, _koinotitaViewModel, _mapper));
     }
 
     private async void OnAddKoinotitaClicked(object sender, EventArgs e)

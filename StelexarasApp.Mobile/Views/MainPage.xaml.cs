@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace StelexarasApp.Mobile.Views;
 
@@ -12,6 +13,7 @@ public partial class MainPage : ContentPage
     private readonly SignalrService _signalRService;
     private readonly IServiceProvider _serviceProvider;
     private HubConnection? _connection;
+    private readonly IMapper _mapper;
 
     public MainPage(
         IDutyService dutyService,
@@ -20,11 +22,14 @@ public partial class MainPage : ContentPage
         ITeamsService teamsService,
         IExpenseService expenseService,
         SignalrService signalRService,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IMapper mapper)
     {
         InitializeComponent();
+
         _paidiaService = paidiaService;
         _staffService = staffService;
+        _mapper = mapper;
         _dutiesService = dutyService;
         _teamsService = teamsService;
         _expenseService = expenseService;
@@ -85,7 +90,7 @@ public partial class MainPage : ContentPage
     }
 
     private async void OnExpensesButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new ExpensesPage(_expenseService));
-    private async void OnTeamsPageButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new GeneralTeamsPage(_paidiaService, _teamsService));
+    private async void OnTeamsPageButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new GeneralTeamsPage(_paidiaService, _teamsService, _mapper));
 
     private async void OnStaffButtonClicked(object sender, EventArgs e)
     {

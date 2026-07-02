@@ -11,14 +11,9 @@ public class SkiniViewModel : INotifyPropertyChanged
 
     public Skini Skini { get; set; }
 
-    public SkiniViewModel(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService)
+    public SkiniViewModel(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, IMapper mapper)
     {
-        mapper = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<SkiniResponse, Skini>();
-            cfg.CreateMap<PaidiResponse, Paidi>();
-        }).CreateMapper();
-
+        this.mapper = mapper;
         this.Skini = mapper.Map<Skini>(skini);
         _paidiaService = paidiaService;
     }

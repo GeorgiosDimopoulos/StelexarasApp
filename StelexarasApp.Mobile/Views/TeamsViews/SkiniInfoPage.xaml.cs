@@ -1,14 +1,16 @@
-﻿namespace StelexarasApp.Mobile.Views.TeamsViews;
+﻿using AutoMapper;
+
+namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class SkiniInfoPage : ContentPage
 {
     private readonly SkiniViewModel _skiniViewModel;
     private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
-
-    public SkiniInfoPage(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService)
+    
+    public SkiniInfoPage(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, IMapper mapper)
     {
         InitializeComponent();
-        _skiniViewModel = new SkiniViewModel(skini, paidiaService);
+        _skiniViewModel = new SkiniViewModel(skini, paidiaService, mapper);
         _paidiaService = paidiaService;
     }
 
