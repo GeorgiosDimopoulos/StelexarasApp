@@ -1,5 +1,4 @@
-﻿using FluentValidation.AspNetCore;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.DataAccess.Repositories;
@@ -14,7 +13,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using StelexarasApp.Services.Interfaces;
 using StelexarasApp.Services.IServices;
 using StelexarasApp.Library.Dtos;
-using Microsoft.OpenApi.Models;
+using FluentValidation.AspNetCore;
+using Microsoft.OpenApi;
 
 namespace StelexarasApp.API.Helpers;
 
@@ -62,7 +62,7 @@ public static class ServiceCollectionExtensions
     public static void ConfigureJwtAuthenticationAndSwagger(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection("Jwt") ?? throw new Exception("Jwt section is missing in appsettings.json");
-        var key = jwtSettings ["Key"] ?? throw new Exception("JWT Key is missing in appsettings.json");
+        var key = jwtSettings["Key"] ?? throw new Exception("JWT Key is missing in appsettings.json");
         var keyBytes = Encoding.ASCII.GetBytes(key);
 
         services.AddSwaggerGen(options =>
@@ -83,20 +83,17 @@ public static class ServiceCollectionExtensions
                 Description = "Enter only the JWT token. The 'Bearer' prefix will be added automatically."
             });
 
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-
-                {
-                    new OpenApiSecurityScheme
-                    {                        
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
+                Name = "Authorization",
+                Description = "JWT Authorization header using the Bearer scheme.",
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+            });
+            options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("Bearer", document)] = []
             });
 
             var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -133,10 +130,10 @@ public static class ServiceCollectionExtensions
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
-                    ValidIssuer = jwtSettings ["Issuer"],
-                    ValidateIssuer = !string.IsNullOrEmpty(jwtSettings ["Issuer"]),
-                    ValidAudience = jwtSettings ["Audience"],
-                    ValidateAudience = !string.IsNullOrEmpty(jwtSettings ["Audience"]),
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidateIssuer = !string.IsNullOrEmpty(jwtSettings["Issuer"]),
+                    ValidAudience = jwtSettings["Audience"],
+                    ValidateAudience = !string.IsNullOrEmpty(jwtSettings["Audience"]),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };

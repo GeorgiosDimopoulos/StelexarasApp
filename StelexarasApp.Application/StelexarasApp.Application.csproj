@@ -11,8 +11,10 @@
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="FluentResults" Version="4.0.0" />
     <PackageReference Include="KubernetesClient" Version="19.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
     <PackageReference Include="MudBlazor" Version="8.13.0" />
-    <PackageReference Include="Refit" Version="9.0.2" />
+    <PackageReference Include="Refit" Version="13.1.0" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.11" />
   </ItemGroup>
 
   <ItemGroup>
