@@ -1,0 +1,34 @@
+﻿@page "/xwroi"
+@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.Domi
+
+@inject IKoinotitesApi KoinotitesApi
+@inject IDialogService DialogService
+
+<h1 style="text-align:center; padding-block-start:20px">ΚΟΙΝΟΤΗΤΕΣ</h1>
+
+<MudStack Style="height:calc(100vh - 10vh)"
+          Justify="Justify.Center"
+          AlignItems="AlignItems.Center"
+          Spacing="2">
+    @foreach (var koinotita in Koinotites)
+    {
+        <MudButton Href="@($"/koinotites/{koinotita.Name}")">
+            @koinotita.Name
+        </MudButton>
+    }
+    <MudButton Href="/sxoli"
+               Style="height:40px; padding:30px;width:400px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+        ΣΧΟΛΗ
+    </MudButton>
+</MudStack>
+
+@code
+{
+    private List<KoinotitaResponse> Koinotites = new List<KoinotitaResponse>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Koinotites = await KoinotitesApi.GetKoinotitesAsync();
+    }
+}

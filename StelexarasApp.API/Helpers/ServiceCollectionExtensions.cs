@@ -83,14 +83,14 @@ public static class ServiceCollectionExtensions
                 Description = "Enter only the JWT token. The 'Bearer' prefix will be added automatically."
             });
 
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Name = "Authorization",
-                Description = "JWT Authorization header using the Bearer scheme.",
-                Type = SecuritySchemeType.Http,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-            });
+            //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            //{
+            //    Name = "Authorization",
+            //    Description = "JWT Authorization header using the Bearer scheme.",
+            //    Type = SecuritySchemeType.Http,
+            //    Scheme = "Bearer",
+            //    BearerFormat = "JWT",
+            //});
             options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
             {
                 [new OpenApiSecuritySchemeReference("Bearer", document)] = []

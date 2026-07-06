@@ -1,10 +1,25 @@
 using MudBlazor.Services;
+using Refit;
+using StelexarasApp.Application.ApiClients;
 using StelexarasApp.Application.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddMudServices();
+
+var apiBaseUrl = builder.Configuration["ApiBaseUrl"];
+if (string.IsNullOrEmpty(apiBaseUrl))
+{
+    throw new InvalidOperationException("ApiBaseUrl configuration is missing.");
+}
+
+builder.Services.AddRefitClient<IKoinotitesApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
+builder.Services.AddRefitClient<ITomeisApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
+builder.Services.AddRefitClient<ISkinesApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
 
 var app = builder.Build();
 
