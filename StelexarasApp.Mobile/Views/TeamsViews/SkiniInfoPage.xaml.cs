@@ -6,11 +6,11 @@ public partial class SkiniInfoPage : ContentPage
 {
     private readonly SkiniViewModel _skiniViewModel;
     private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
-    
+
     public SkiniInfoPage(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, IMapper mapper)
     {
         InitializeComponent();
-        
+
         _skiniViewModel = new SkiniViewModel(skini, paidiaService, mapper);
         BindingContext = _skiniViewModel;
         _paidiaService = paidiaService;

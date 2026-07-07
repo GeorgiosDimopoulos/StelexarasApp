@@ -7,7 +7,7 @@ public record DutyDtoBase
 
 public record CreateDutyRequest : DutyDtoBase { }
 
-public record UpdateDutyRequest : DutyDtoBase 
+public record UpdateDutyRequest : DutyDtoBase
 {
     public int Id { get; init; }
 }

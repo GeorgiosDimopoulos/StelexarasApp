@@ -20,8 +20,8 @@ public partial class StaffPage : ContentPage
         if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
         {
             var staffService = DependencyService.Get<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>>();
-            int stelexosId = (e.CurrentSelection [0] as IStelexos)!.Id;
-            var selectedWorkerDto = e.CurrentSelection [0] as StelexosDtoBase;
+            int stelexosId = (e.CurrentSelection[0] as IStelexos)!.Id;
+            var selectedWorkerDto = e.CurrentSelection[0] as StelexosDtoBase;
             if (selectedWorkerDto != null)
             {
                 var stelexosInfoPage = new StelexosInfoPage(staffService, selectedWorkerDto, stelexosId);

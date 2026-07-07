@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 
 namespace StelexarasApp.Services.Services;
 
@@ -116,7 +116,7 @@ public class PaidiService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest
         Paidi paidi = await _paidiRepository.GetPaidiByIdFromDb(id);
         if (paidi == null)
             return null!;
-        
+
         return _mapper.Map<PaidiResponse>(paidi);
     }
 

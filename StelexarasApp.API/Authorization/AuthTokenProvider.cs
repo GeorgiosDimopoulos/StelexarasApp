@@ -26,7 +26,7 @@ public class AuthTokenProvider : IAuthTokenProvider
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
 
         var jwtSettings = _configuration.GetSection("Jwt") ?? throw new Exception("Jwt section is missing in appsettings.json");
-        var userKey = jwtSettings ["Key"] ?? string.Empty;
+        var userKey = jwtSettings["Key"] ?? string.Empty;
         if (userKey.Length < 16)
         {
             userKey = userKey.PadRight(16);
@@ -35,7 +35,7 @@ public class AuthTokenProvider : IAuthTokenProvider
         var userKeyBytes = Encoding.UTF8.GetBytes(userKey);
         var securityKey = new SymmetricSecurityKey(userKeyBytes);
 
-        var claims = new []
+        var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, userKey),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -43,8 +43,8 @@ public class AuthTokenProvider : IAuthTokenProvider
 
         // var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256); 
         var token = new JwtSecurityToken(
-            issuer: jwtSettings ["Issuer"],
-            audience: jwtSettings ["Audience"],
+            issuer: jwtSettings["Issuer"],
+            audience: jwtSettings["Audience"],
             claims: claims,
             expires: expiration,
             signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)

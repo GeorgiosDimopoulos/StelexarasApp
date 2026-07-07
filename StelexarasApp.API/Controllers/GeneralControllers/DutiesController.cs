@@ -69,7 +69,7 @@ public class DutiesController : ControllerBase
     }
 
     [HttpPut("Duty")]
-    public async Task<IActionResult> PutDuty( [FromBody] UpdateDutyRequest duty)
+    public async Task<IActionResult> PutDuty([FromBody] UpdateDutyRequest duty)
     {
         var isUpdated = await _dutyService.UpdateDutyInService(duty);
         if (isUpdated == false)
@@ -78,7 +78,7 @@ public class DutiesController : ControllerBase
     }
 
     [HttpDelete("Duty/")]
-    public async Task<IActionResult> DeleteDuty([FromQuery]DeleteDutyRequest request)
+    public async Task<IActionResult> DeleteDuty([FromQuery] DeleteDutyRequest request)
     {
         var isDeleted = await _dutyService.DeleteDutyInService(request);
         if (isDeleted == false)

@@ -60,7 +60,7 @@ public class LogFileWriter
     }
 
 
-    public static string [] ReadLogs()
+    public static string[] ReadLogs()
     {
         try
         {
@@ -75,7 +75,7 @@ public class LogFileWriter
             }
 
             string logFilePath = LogFilePath;
-            string [] logMessages = File.ReadAllLines(logFilePath);
+            string[] logMessages = File.ReadAllLines(logFilePath);
             return logMessages;
         }
         catch (Exception ex)

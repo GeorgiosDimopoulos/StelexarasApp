@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace StelexarasApp.Tests.IntegrationDbTests;
 
@@ -10,7 +9,7 @@ public class PaidiaRepositoryDbTests
     private readonly IPaidiRepository _paidiRepository;
     private readonly AppDbContext _dbContext;
     private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-    
+
     public PaidiaRepositoryDbTests()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
@@ -141,9 +140,9 @@ public class PaidiaRepositoryDbTests
     public async Task UpdatePaidiInDb_ShouldReturnExpectedResult(int id, string newName, bool expectedResult)
     {
         // Arrange
-        var paidi = new Paidi 
-        {            
-            Id  = id,
+        var paidi = new Paidi
+        {
+            Id = id,
             FullName = "New Paidi",
             Age = 10,
             PaidiType = PaidiType.Kataskinotis,

@@ -11,7 +11,7 @@ namespace StelexarasApp.LogsDashboard.Views;
 /// </summary>
 public partial class ErrorsLogsWindow : Window
 {
-    public ErrorLogEntry [] ErrorLogEntries { get; set; }
+    public ErrorLogEntry[] ErrorLogEntries { get; set; }
 
     public ErrorsLogsWindow()
     {
@@ -34,17 +34,17 @@ public partial class ErrorsLogsWindow : Window
         }
 
         var logsStrg = LogFileWriter.ReadLogs();
-        ErrorLogEntries = new ErrorLogEntry [logsStrg.Length];
+        ErrorLogEntries = new ErrorLogEntry[logsStrg.Length];
 
         for (int i = 0; i < logsStrg.Length; i++)
         {
-            var log = logsStrg [i].Split(',');
-            ErrorLogEntries [i] = new ErrorLogEntry
+            var log = logsStrg[i].Split(',');
+            ErrorLogEntries[i] = new ErrorLogEntry
             {
-                ErrorType = GetLogEntryType(log [0]),
-                MethodName = log [1],
-                Message = log [2],
-                Timestamp = DateTime.Parse(log [3])
+                ErrorType = GetLogEntryType(log[0]),
+                MethodName = log[1],
+                Message = log[2],
+                Timestamp = DateTime.Parse(log[3])
             };
         }
     }

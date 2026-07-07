@@ -2,5 +2,5 @@
 
 public class SkiniQueryParameters : XwrosQueryParameters
 {
-    public bool IncludePaidia{ get; set; } = false;
+    public bool IncludePaidia { get; set; } = false;
 }

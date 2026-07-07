@@ -9,7 +9,7 @@ namespace StelexarasApp.LogsDashboard.Views;
 /// </summary>
 public partial class CRUDLogsWindow : Window
 {
-    public CrudLogEntry [] CrudLogEntries { get; set; }
+    public CrudLogEntry[] CrudLogEntries { get; set; }
 
     public CRUDLogsWindow()
     {
@@ -31,17 +31,17 @@ public partial class CRUDLogsWindow : Window
             LogsDataGrid.ItemsSource = null;
         }
         var logsStrg = LogFileWriter.ReadLogs();
-        CrudLogEntries = new CrudLogEntry [logsStrg.Length];
+        CrudLogEntries = new CrudLogEntry[logsStrg.Length];
 
         for (int i = 0; i < logsStrg.Length; i++)
         {
-            var log = logsStrg [i].Split(',');
-            CrudLogEntries [i] = new CrudLogEntry
+            var log = logsStrg[i].Split(',');
+            CrudLogEntries[i] = new CrudLogEntry
             {
-                CrudType = GetLogEntryType(log [0]),
-                MethodName = log [1],
-                Message = log [2],
-                Timestamp = DateTime.Parse(log [3])
+                CrudType = GetLogEntryType(log[0]),
+                MethodName = log[1],
+                Message = log[2],
+                Timestamp = DateTime.Parse(log[3])
             };
         }
     }

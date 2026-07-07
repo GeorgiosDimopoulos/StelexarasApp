@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.SignalR.Client;
 using StelexarasApp.Mobile.Factories;
 
 namespace StelexarasApp.Mobile.Views;

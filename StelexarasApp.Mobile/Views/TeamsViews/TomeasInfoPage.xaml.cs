@@ -48,7 +48,7 @@ public partial class TomeasInfoPage : ContentPage
             Name = koinotitaName
         };
 
-        if(await _koinotitaViewModel.AddKoinotita(newKoinotita))
+        if (await _koinotitaViewModel.AddKoinotita(newKoinotita))
             await DisplayAlert("ΠΡΟΣΘΗΚΗ", "Δημιουργηθηκε επιτυχώς νέα κοινότητα!", "OK");
         else
             await DisplayAlert("ΠΡΟΣΘΗΚΗ", "Αποτυχία δημιουργίας νέας κοινότητας!", "OK");

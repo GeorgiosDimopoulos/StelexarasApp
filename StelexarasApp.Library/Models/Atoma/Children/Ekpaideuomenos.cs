@@ -1,3 +1,3 @@
 ﻿namespace StelexarasApp.Library.Models.Atoma.Children;
 
-public class Ekpaideuomenos: Paidi { }
+public class Ekpaideuomenos : Paidi { }

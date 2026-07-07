@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace StelexarasApp.Tests.IntegrationDbTests;
 
@@ -80,7 +80,7 @@ public class StaffRepositoryDbTests
                 {
                     Id = 21,
                     Name = "TestKoinotita",
-                    Hlikia = HlikiaKoinotitas.Mikra,                    
+                    Hlikia = HlikiaKoinotitas.Mikra,
                     Tomeas = new Tomeas
                     {
                         Id = 32,

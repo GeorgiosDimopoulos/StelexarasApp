@@ -23,13 +23,13 @@ public class AuthController : ControllerBase
     /// <param name="request">The authentication request containing password.</param>
     /// <returns>JWT token + expiration if OK, l, or an error result</returns>
     [HttpPost("login")]
-    [SwaggerOperation(Tags = new [] { "Admin Endpoint" })]
+    [SwaggerOperation(Tags = new[] { "Admin Endpoint" })]
     public async Task<IActionResult> GetAuthToken([FromQuery] LoginRequest request)
     {
         if (string.IsNullOrEmpty(request.Password))
             return BadRequest();
 
-        var password = _configuration ["Jwt:Key"];
+        var password = _configuration["Jwt:Key"];
         if (request.Password.Equals(password))
         {
             var token = await _authTokenProvider.GetJwtToken(request.Password);

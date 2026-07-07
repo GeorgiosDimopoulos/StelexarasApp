@@ -15,7 +15,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
         {
             _teamsService = teamsService;
             _paidiaService = paidiaService;
-            TomeasNumber  = tomeasNumber.ToString();
+            TomeasNumber = tomeasNumber.ToString();
             _ = LoadKoinotites(tomeasNumber);
         }
 

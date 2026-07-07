@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Moq;
-using Microsoft.Extensions.Logging;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace StelexarasApp.Tests.ServicesTests;
 

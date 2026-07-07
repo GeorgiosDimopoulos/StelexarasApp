@@ -1,10 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Data;
 using Microsoft.Extensions.Logging;
-using Microsoft.Data.Sqlite;
+using System.Data;
 
 namespace StelexarasApp.DataAccess.DataProvider;
 
@@ -143,7 +143,7 @@ public class DataProvider : IDataProvider
                 _logger.LogInformation("\nTables in the database:");
                 foreach (DataRow row in schema.Rows)
                 {
-                    Console.WriteLine(row ["TABLE_NAME"]);
+                    Console.WriteLine(row["TABLE_NAME"]);
                 }
                 return true;
             }

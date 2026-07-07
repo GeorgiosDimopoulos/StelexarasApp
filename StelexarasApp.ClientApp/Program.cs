@@ -1,26 +1,25 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using StelexarasApp.DataAccess;
-using StelexarasApp.Library.Models.Atoma;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.DataAccess.Repositories;
-using StelexarasApp.Services.Mappers;
-using System.Text.RegularExpressions;
 using StelexarasApp.DataAccess.Helpers;
-using StelexarasApp.Library.Models.Logs;
-using FluentValidation;
-using StelexarasApp.Services.Validators;
-using StelexarasApp.Library.Models.Atoma.Children;
-using StelexarasApp.Library.Dtos.People.Children;
-using StelexarasApp.Services.Interfaces.People;
-using StelexarasApp.Library.Dtos.People.Staff;
-using StelexarasApp.Library.Models.Atoma.Staff;
-using StelexarasApp.Services.Mappers.Teams;
-using StelexarasApp.Services.Services;
-using StelexarasApp.Services.Interfaces;
-using StelexarasApp.Services.IServices;
+using StelexarasApp.DataAccess.Repositories;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Library.Dtos;
+using StelexarasApp.Library.Dtos.People.Children;
+using StelexarasApp.Library.Dtos.People.Staff;
+using StelexarasApp.Library.Models.Atoma;
+using StelexarasApp.Library.Models.Atoma.Children;
+using StelexarasApp.Library.Models.Atoma.Staff;
+using StelexarasApp.Library.Models.Logs;
+using StelexarasApp.Services.Interfaces;
+using StelexarasApp.Services.Interfaces.People;
+using StelexarasApp.Services.IServices;
+using StelexarasApp.Services.Mappers;
+using StelexarasApp.Services.Services;
+using StelexarasApp.Services.Validators;
+using System.Text.RegularExpressions;
 
 namespace StelexarasApp.ClientApp;
 
@@ -28,7 +27,7 @@ class Program
 {
     private static HubConnection connection = null!;
 
-    private static async Task Main(string [] args)
+    private static async Task Main(string[] args)
     {
         ConfigureSignalRConnection();
 

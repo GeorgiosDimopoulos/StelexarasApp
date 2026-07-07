@@ -9,7 +9,7 @@ public partial class KoinotitaInfoPage : ContentPage
     private IPageFactory _pageFactory;
 
     public KoinotitaResponse Koinotita { get; set; }
-    
+
     public KoinotitaInfoPage(ITeamsService teamsService,
         IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService,
         KoinotitaViewModel koinotitaViewModel,
@@ -22,7 +22,7 @@ public partial class KoinotitaInfoPage : ContentPage
         _pageFactory = pageFactory;
         Koinotita = koinotitaViewModel.Koinotita ?? new KoinotitaResponse();
     }
-     
+
     private async void SkiniButton_Clicked(object sender, EventArgs e)
     {
         var button = sender as Button;

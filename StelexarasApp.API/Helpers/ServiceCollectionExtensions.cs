@@ -1,20 +1,20 @@
 ﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.DataAccess.Repositories.IRepositories;
-using StelexarasApp.DataAccess.Repositories;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using StelexarasApp.DataAccess;
+using StelexarasApp.DataAccess.Repositories;
+using StelexarasApp.DataAccess.Repositories.IRepositories;
+using StelexarasApp.Library.Dtos;
+using StelexarasApp.Services.Interfaces;
+using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Validators;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using StelexarasApp.Services.Interfaces;
-using StelexarasApp.Services.IServices;
-using StelexarasApp.Library.Dtos;
-using FluentValidation.AspNetCore;
-using Microsoft.OpenApi;
+using System.Text;
 
 namespace StelexarasApp.API.Helpers;
 

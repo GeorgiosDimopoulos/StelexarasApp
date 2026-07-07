@@ -35,7 +35,7 @@ namespace StelexarasApp.Mobile.ViewModels
         public async Task LoadExpensesAsync()
         {
             var expenses = await _expenseService.GetExpensesInService();
-            if (expenses is not null) 
+            if (expenses is not null)
             {
                 Expenses = [.. expenses];
                 StatusMessage = "Load successful";
@@ -62,5 +62,5 @@ namespace StelexarasApp.Mobile.ViewModels
             };
             await _expenseService.UpdateExpenseInService(selected);
         }
-    } 
+    }
 }

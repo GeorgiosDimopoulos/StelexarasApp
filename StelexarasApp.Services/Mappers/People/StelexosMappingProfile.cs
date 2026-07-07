@@ -19,7 +19,7 @@ public class StelexosMappingProfile : Profile
         CreateMap<StelexosResponse, Omadarxis>()
             .IncludeBase<StelexosDtoBase, Omadarxis>()
             .ReverseMap();
-        
+
         CreateMap<StelexosDtoBase, Koinotarxis>().ReverseMap();
 
         CreateMap<CreateStelexosRequest, Koinotarxis>()

@@ -79,6 +79,6 @@ public partial class DutiesPage : ContentPage
                 break;
         }
 
-    ((CollectionView)sender).SelectedItem = null;
+        ((CollectionView)sender).SelectedItem = null;
     }
 }

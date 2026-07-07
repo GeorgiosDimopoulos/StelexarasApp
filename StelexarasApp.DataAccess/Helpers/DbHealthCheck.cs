@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace StelexarasApp.DataAccess.Helpers;
+
 public class DbHealthCheck : IHealthCheck
 {
     private readonly AppDbContext _dbContext;

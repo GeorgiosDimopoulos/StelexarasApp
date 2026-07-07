@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment() || isDocker)
     {
         // c.SwaggerEndpoint($"/swagger/{adminTitle}/swagger.json", ApiConstants.ApiGroups.AdminInfo);
         // c.SwaggerEndpoint("/swagger/v2/swagger.json", ApiConstants.ApiGroups.PublicInfo);
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"); 
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
         c.RoutePrefix = "swagger";
     });
     app.UseDeveloperExceptionPage();

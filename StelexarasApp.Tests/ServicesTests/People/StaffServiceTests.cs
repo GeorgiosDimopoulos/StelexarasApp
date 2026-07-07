@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Moq;
 using FluentValidation;
 using FluentValidation.Results;
+using Moq;
 using StelexarasApp.Library.QueryParameters.People;
 
 namespace StelexarasApp.Tests.ServicesTests;
@@ -453,7 +453,7 @@ public class StaffServiceTests
             FullName = "Test Name",
             Tel = "1234567890",
             Age = 27,
-            Sex =Sex.Male,
+            Sex = Sex.Male,
             XwrosName = "TestXwros",
             Skini = new Skini()
         };
@@ -597,8 +597,8 @@ public class StaffServiceTests
         // Assert
         Assert.True(updateResult);
         _mockStelexiRepository.Verify(r => r.UpdateStelexosInDb(id, stelexos), Times.Once);
-        
-        _mockMapper.Verify(m => m.Map<IStelexos>(createStelexosRequest), Times.Once);        
+
+        _mockMapper.Verify(m => m.Map<IStelexos>(createStelexosRequest), Times.Once);
         _mockMapper.Verify(m => m.Map(updateStelexosRequest, stelexos), Times.Once);
     }
 }

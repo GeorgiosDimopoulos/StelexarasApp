@@ -2,5 +2,5 @@
 
 public class XwrosQueryParameters
 {
-    public bool IncludeStelexos {  get; set; }
+    public bool IncludeStelexos { get; set; }
 }

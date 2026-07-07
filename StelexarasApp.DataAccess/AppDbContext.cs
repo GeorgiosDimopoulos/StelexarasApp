@@ -40,9 +40,9 @@ public class AppDbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             ConnectionString = $"Server=(LocalDb)\\MSSQLLocalDB;Database=TYPET;TrustServerCertificate=True;Trusted_Connection=True;";
-            optionsBuilder.UseSqlServer(ConnectionString).LogTo(Console.WriteLine, new [] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
+            optionsBuilder.UseSqlServer(ConnectionString).LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.LogTo(Console.WriteLine, new [] { DbLoggerCategory.Database.Command.Name });
+            optionsBuilder.LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name });
         }
 #else
         if (!optionsBuilder.IsConfigured)
@@ -113,7 +113,7 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Skini>()
            .HasOne(sk => sk.Koinotita)
-           .WithMany(k=> k.Skines)
+           .WithMany(k => k.Skines)
            .OnDelete(DeleteBehavior.Restrict);
 
         // To-Do: do i need these below?

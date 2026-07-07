@@ -6,7 +6,7 @@ public static class HealthCheck
 {
     public static void ConfigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration ["ConnectionStrings:DefaultConnection"];
+        var connectionString = configuration["ConnectionStrings:DefaultConnection"];
         if (string.IsNullOrEmpty(connectionString))
         {
             throw new ArgumentNullException(nameof(connectionString), "The connection string 'ConnectionStrings:DefaultConnection' cannot be null or empty.");
@@ -28,7 +28,7 @@ public static class HealthCheck
             opt.SetEvaluationTimeInSeconds(10); //time in seconds between check
             opt.MaximumHistoryEntriesPerEndpoint(60); //maximum history of checks
             opt.SetApiMaxActiveRequests(1); //api requests concurrency
-            
+
             // opt.AddHealthCheckEndpoint("feedback api", "/health");
             opt.AddHealthCheckEndpoint("feedback api", "http://localhost:8080/health");
         }).AddInMemoryStorage();

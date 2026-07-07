@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 
 namespace StelexarasApp.DataAccess.Helpers
-{    
+{
     public static class DataChecksAndConverters // : IValueConverter
     {
         //public static bool IsValidFullNameInput(string input)

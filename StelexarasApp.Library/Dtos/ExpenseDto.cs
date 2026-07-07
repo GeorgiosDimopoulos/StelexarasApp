@@ -8,7 +8,7 @@ public record ExpenseDtoBase
 
 public record CreateExpenseRequest : ExpenseDtoBase { }
 
-public record UpdateExpenseRequest : ExpenseDtoBase 
+public record UpdateExpenseRequest : ExpenseDtoBase
 {
     public int Id { get; init; }
 }
