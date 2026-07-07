@@ -11,19 +11,22 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: "8080"
-      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=lore3389!;TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=Lore3389!;TrustServerCertificate=True"
     ports:
       - "8080:8080"
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      SA_PASSWORD: "lore3389!"
+    container_name: stelexaras-sqlserver
+    environment:      
       ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Lore3389!"
+      MSSQL_PID: "Developer"
     ports:
       - "1433:1433"
     networks:
       - app-network
-
+    volumes:
+    - sqlserver_data:/var/opt/mssql
   frontend:
     build:
       context: .
@@ -31,7 +34,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: "80"
-      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=lore3389!;TrustServerCertificate=True"
+      ApiBaseUrl: "http://api:8080"
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=Lore3389!;TrustServerCertificate=True"
     ports:
       - "3000:80"
     restart: always
@@ -68,5 +72,6 @@ networks:
     driver: bridge    
 volumes:
   portainer_data:
+  sqlserver_data:
     # heimdall_config:# comment it if you prefer a unnamed volume
   
