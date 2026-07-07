@@ -27,7 +27,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./StelexarasApp.Web/Dockerfile      
+      dockerfile: ./StelexarasApp.Application/Dockerfile      
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: "80"

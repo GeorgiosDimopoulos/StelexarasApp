@@ -2,6 +2,7 @@
 global using StelexarasApp.Library.Dtos.People.Staff;
 global using StelexarasApp.Library.Models.Atoma.Staff;
 global using StelexarasApp.API.Authorization;
+global using StelexarasApp.API.Helpers;
 global using StelexarasApp.Library.Models;
 global using StelexarasApp.DataAccess.Helpers;
 global using StelexarasApp.Library.Models.Logs;

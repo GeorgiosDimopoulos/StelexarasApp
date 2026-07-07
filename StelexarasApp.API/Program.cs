@@ -1,7 +1,6 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
-using StelexarasApp.API.Helpers;
 using StelexarasApp.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
