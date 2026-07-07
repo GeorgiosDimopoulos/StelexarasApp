@@ -53,6 +53,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGet("/", () => Results.Redirect("/swagger"));
 app.MapControllers();
 
 // Use Health Checks

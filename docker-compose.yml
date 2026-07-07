@@ -35,7 +35,6 @@ services:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: "80"
       ApiBaseUrl: "http://api:8080"
-      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=Lore3389!;TrustServerCertificate=True"
     ports:
       - "3000:80"
     restart: always
@@ -62,7 +61,6 @@ services:
       - TZ=Europe/Berlin
     ports:
       - "8090:80"
-      - "8443:443"
     networks:
       - app-network
     volumes:
