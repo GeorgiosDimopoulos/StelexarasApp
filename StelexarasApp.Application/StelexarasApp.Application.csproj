@@ -15,7 +15,7 @@
     <PackageReference Include="MudBlazor" Version="8.13.0" />
     <PackageReference Include="Refit" Version="13.1.0" />
     <PackageReference Include="Refit.HttpClientFactory" Version="13.1.0" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.11" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
   </ItemGroup>
 
   <ItemGroup>
