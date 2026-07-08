@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.API.Controllers.TeamsControllers;
 
@@ -10,30 +9,56 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
 {
     private readonly ITeamsService _teamsService = teamsService;
 
+    /// <remarks>
+    /// To get the koinotarxes,just IncludeStelexos
+    /// </remarks>
     [HttpGet("Koinotites")]
-    public async Task<ActionResult<IEnumerable<KoinotitaResponse>>> GetKoinotites()
+    public async Task<ActionResult<IEnumerable<KoinotitaResponse>>> GetKoinotites([FromQuery] KoinotitaQueryParameters koinotitaQueryParameters)
     {
-        var result = await _teamsService.GetAllKoinotitesInService(new());
+        var result = await _teamsService.GetAllKoinotitesInService(koinotitaQueryParameters);
 
         if (result is null)
             return NotFound();
         return Ok(result);
     }
 
+
+    /// <remarks>
+    /// To get the koinotarxi, just IncludeStelexos
+    /// </remarks>
+    [HttpGet("Koinotita/{name}")]
+    public async Task<ActionResult<KoinotitaResponse>> GetKoinotitaByName(string name, [FromQuery] KoinotitaQueryParameters koinotitaQueryParameters)
+    {
+        var result = await _teamsService.GetKoinotitaByNameInService(koinotitaQueryParameters, name);
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
+    }
+
+    /// <remarks>
+    /// To get the koinotarxes,just IncludeStelexos
+    /// </remarks>
     [AllowAnonymous]
-    [HttpGet("Koinotites/{tomeaId}")]
-    public async Task<ActionResult<IEnumerable<KoinotitaResponse>>> GetKoinotitesByTomea(int tomeaId)
+    [HttpGet("Koinotites/{tomeaId}/Koinotites")]
+    public async Task<ActionResult<IEnumerable<KoinotitaResponse>>> GetKoinotitesByTomea(int tomeaId, [FromQuery] KoinotitaQueryParameters koinotitaQueryParameters)
     {
-        var result = await _teamsService.GetKoinotitesAnaTomeaInService(new(), tomeaId);
+        var result = await _teamsService.GetKoinotitesAnaTomeaInService(koinotitaQueryParameters, tomeaId);
 
         if (result is null)
             return NotFound();
         return Ok(result);
     }
 
+    /// <remarks>
+    /// For tomeasName, write only A or B
+    /// </remarks>    
+    /// <param name="koinotitaDto"></param>
+    /// <returns></returns>
     [Authorize]
     [HttpPost("Koinotita")]
-    public async Task<ActionResult<bool>> PostKoinotita([FromBody] CreateKoinotitaRequest koinotitaDto)
+    public async Task<ActionResult<bool>> PostKoinotita([FromQuery] CreateKoinotitaRequest koinotitaDto)
     {
         var result = await _teamsService.AddKoinotitaInService(koinotitaDto);
 
@@ -62,17 +87,6 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
         var result = await _teamsService.UpdateKoinotitaInService(id, koinotitaDto);
 
         if (!result)
-            return NotFound();
-
-        return Ok(result);
-    }
-
-    [HttpGet("Koinotita/{name}")]
-    public async Task<ActionResult<KoinotitaResponse>> GetKoinotita(string name)
-    {
-        var result = await _teamsService.GetKoinotitaByNameInService(new(), name);
-
-        if (result is null)
             return NotFound();
 
         return Ok(result);

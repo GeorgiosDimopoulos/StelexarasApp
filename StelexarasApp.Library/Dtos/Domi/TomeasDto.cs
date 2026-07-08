@@ -14,4 +14,6 @@ public record DeleteTomeasRequest : TomeasDtoBase { }
 public record TomeasResponse : TomeasDtoBase
 {
     public int KoinotitesNumber { get; set; }
+
+    public IEnumerable<KoinotitaResponse> Koinotites { get; set; } = [];
 }

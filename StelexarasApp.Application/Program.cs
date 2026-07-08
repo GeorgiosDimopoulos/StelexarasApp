@@ -4,6 +4,7 @@ using StelexarasApp.Application.ApiClients;
 using StelexarasApp.Application.Components;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseStaticWebAssets();
 
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddMudServices();

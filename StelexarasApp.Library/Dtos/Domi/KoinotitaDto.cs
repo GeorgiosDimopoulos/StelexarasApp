@@ -1,8 +1,14 @@
-﻿namespace StelexarasApp.Library.Dtos.Domi;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StelexarasApp.Library.Dtos.Domi;
 
 public record KoinotitaDtoBase : IXwrosDto
 {
+    [Required]
     public string Name { get; set; } = string.Empty;
+
+    [RegularExpression("^[AB]$", ErrorMessage = "TomeasName must be only A or B.")]
+    [Required]
     public string TomeasName { get; set; } = string.Empty;
 }
 

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Library.QueryParameters.Domi;
-using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.API.Controllers.TeamsControllers;
 
@@ -11,6 +9,9 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
 {
     private readonly ITeamsService _teamsService = teamsService;
 
+    /// <remarks>
+    /// To get the tomearxi,just IncludeStelexos
+    /// </remarks>        
     [HttpGet("Tomeis")]
     public async Task<ActionResult<IEnumerable<TomeasResponse>>> GetTomeis([FromQuery] TomeasQueryParameters queryParameters)
     {
@@ -21,6 +22,9 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    /// <remarks>
+    /// To get the tomearxi,just IncludeStelexos
+    /// </remarks>        
     [HttpGet("Tomea/{name}")]
     public async Task<ActionResult<TomeasResponse>> GetTomea(string name, [FromQuery] TomeasQueryParameters queryParameters)
     {

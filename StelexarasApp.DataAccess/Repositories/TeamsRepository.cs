@@ -13,7 +13,9 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
     {
         try
         {
-            var koinotites = _dbContext.Koinotites.AsQueryable();
+            var koinotites = _dbContext.Koinotites.Include(k => k.Tomeas)
+                                                  .AsQueryable();
+
             if (koinotitaQueryParameters is not null)
             {
                 if (koinotitaQueryParameters.IncludeSkines)
@@ -162,11 +164,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
                 if (tomeasQueryParameters.IncludeKoinotites)
                 {
                     tomeis = tomeis.Include(t => t.Koinotites);
-                }
-                if (tomeasQueryParameters.IncludeOmadarxes)
-                {
-                    tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Skines)!.ThenInclude(sk => sk.Omadarxis);
-                }
+                }                
                 if (tomeasQueryParameters.IncludeKoinotarxes)
                 {
                     tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
@@ -215,10 +213,6 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         if (tomeasQueryParameters.IncludeKoinotarxes)
         {
             tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
-        }
-        if (tomeasQueryParameters.IncludeOmadarxes)
-        {
-            tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Skines)!.ThenInclude(sk => sk.Omadarxis);
         }
         if (string.IsNullOrEmpty(name) || _dbContext.Tomeis is null)
             return null!;

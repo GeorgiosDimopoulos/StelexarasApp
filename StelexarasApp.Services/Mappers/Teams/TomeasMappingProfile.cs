@@ -18,6 +18,7 @@ public class TomeasMappingProfile : Profile
             .ForMember(dest => dest.Koinotites, opt => opt.Ignore());
 
         CreateMap<Tomeas, TomeasResponse>()
+            .ForMember(dest => dest.Koinotites, opt => opt.MapFrom(src => src.Koinotites))
             .ForMember(dest => dest.KoinotitesNumber, opt => opt.MapFrom((src, dest) => src.Koinotites != null ? src.Koinotites.Count() : 0));
     }
 }

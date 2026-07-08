@@ -10,3 +10,5 @@ global using StelexarasApp.Library.Models.Atoma.Staff;
 global using StelexarasApp.Library.Models.Logs;
 global using StelexarasApp.Library.QueryParameters.People;
 global using StelexarasApp.Services.Interfaces.People;
+global using StelexarasApp.Library.QueryParameters.Domi;
+global using StelexarasApp.Services.IServices;
