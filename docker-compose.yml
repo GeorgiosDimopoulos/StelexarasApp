@@ -71,5 +71,3 @@ networks:
 volumes:
   portainer_data:
   sqlserver_data:
-    # heimdall_config:# comment it if you prefer a unnamed volume
-  

@@ -13,7 +13,7 @@ public record DeleteTomeasRequest : TomeasDtoBase { }
 
 public record TomeasResponse : TomeasDtoBase
 {
+    public int Id { get; set; }
     public int KoinotitesNumber { get; set; }
-
     public IEnumerable<KoinotitaResponse> Koinotites { get; set; } = [];
 }

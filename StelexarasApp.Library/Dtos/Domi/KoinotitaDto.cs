@@ -23,5 +23,6 @@ public record DeleteKoinotitaRequest
 
 public record KoinotitaResponse : KoinotitaDtoBase
 {
+    public int Id { get; set; }
     public int SkinesNumber { get; set; }
 }

@@ -32,6 +32,8 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
                 }
             }
 
+            var koinotitesNumber = koinotites.Count();
+
             return await koinotites.ToListAsync();
         }
         catch (Exception ex)
@@ -164,7 +166,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
                 if (tomeasQueryParameters.IncludeKoinotites)
                 {
                     tomeis = tomeis.Include(t => t.Koinotites);
-                }                
+                }
                 if (tomeasQueryParameters.IncludeKoinotarxes)
                 {
                     tomeis = tomeis.Include(t => t.Koinotites).ThenInclude(k => k.Koinotarxis);
@@ -190,9 +192,13 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         {
             koinotites = koinotites.Include(k => k.Skines);
         }
-        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes)
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeKoinotarxis)
         {
-            koinotites = koinotites.Include(k => k.Skines.Select(sk => sk.Omadarxis));
+            koinotites = koinotites.Include(k => k.Koinotarxis);
+        }
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes && koinotites.Select(k => k.Skines).Any())
+        {
+            koinotites = koinotites.Include(k => k.Skines!.Select(sk => sk.Omadarxis));
         }
         return await koinotites.FirstOrDefaultAsync(k => k.Name == name) ?? new Koinotita();
     }

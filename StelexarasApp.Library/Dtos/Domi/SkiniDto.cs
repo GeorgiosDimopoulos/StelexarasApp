@@ -18,5 +18,6 @@ public record DeleteSkiniRequest
 
 public record SkiniResponse : SkiniDtoBase
 {
+    public int Id { get; set; }
     public int? PaidiaNumber { get; set; }
 }
