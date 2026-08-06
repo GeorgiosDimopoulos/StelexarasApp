@@ -5,23 +5,41 @@
 @inject IKoinotitesApi KoinotitesApi
 @inject IDialogService DialogService
 
-<h1 style="text-align:center; padding-block-start:20px">ΚΟΙΝΟΤΗΤΕΣ</h1>
-
-<MudStack Style="height:calc(100vh - 10vh)"
-          Justify="Justify.Center"
-          AlignItems="AlignItems.Center"
-          Spacing="2">
-    @foreach (var koinotita in Koinotites)
-    {
-        <MudButton Href="@($"/koinotites/{koinotita.Name}")">
-            @koinotita.Name
+<h1 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΚΟΙΝΟΤΗΤΕΣ</h1>
+<MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
+    <MudItem xs="12" sm="4">
+        <h1 style="text-align:center">Α ΤΟΜΕΑΣ</h1>
+        <MudStack Justify="Justify.Center"
+                  AlignItems="AlignItems.Center"
+                  Spacing="10">
+            @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Equals("A")).OrderBy(k => k.Name))
+            {
+                <MudButton Href="@($"/koinotites/{koinotita.Name}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+                    @koinotita.Name
+                </MudButton>
+            }
+        </MudStack>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <h1 style="text-align:center">B ΤΟΜΕΑΣ</h1>
+        <MudStack Justify="Justify.Center"
+                  AlignItems="AlignItems.Center"
+                  Spacing="10">
+            @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Equals("B")).OrderBy(k => k.Name))
+            {
+                <MudButton Href="@($"/koinotites/{koinotita.Name}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+                    @koinotita.Name
+                </MudButton>
+            }
+        </MudStack>
+    </MudItem>
+    <MudItem xs="12" sm="4" Style="height:100%; padding: 50px">
+        <MudButton Href="/sxoli"
+                   Style="height:100%; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+            ΣΧΟΛΗ
         </MudButton>
-    }
-    <MudButton Href="/sxoli"
-               Style="height:40px; padding:30px;width:400px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-        ΣΧΟΛΗ
-    </MudButton>
-</MudStack>
+    </MudItem>
+</MudGrid>
 
 @code
 {

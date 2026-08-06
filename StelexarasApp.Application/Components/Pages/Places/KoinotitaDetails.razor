@@ -1,0 +1,35 @@
+﻿@page "/koinotites/{Name}"
+@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.Domi
+
+@inject ISkinesApi SkinesApi
+@inject IDialogService DialogService
+
+<h1 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΣΚΗΝΕΣ</h1>
+
+<MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
+    <MudItem xs="12" sm="4">
+        <h1 style="text-align:center">Α ΤΟΜΕΑΣ</h1>
+        <MudStack Justify="Justify.Center"
+                  AlignItems="AlignItems.Center"
+                  Spacing="10">
+            @foreach (var sk in Skines.Where(k => k.KoinotitaName.Equals(Name)))
+            {
+                <MudButton Href="@($"/skines/{sk.Name}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+                    @sk.Name
+                </MudButton>
+            }
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = string.Empty;
+    private List<SkiniResponse> Skines = new List<SkiniResponse>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Skines = await SkinesApi.GetSkinesAsync(new());
+    }
+}
