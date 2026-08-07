@@ -1,4 +1,42 @@
-﻿@page "/skini"
+﻿@page "/skines"
+
+@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.Domi
+@using StelexarasApp.Library.Dtos.People.Children
+
+@inject ISkinesApi SkinesApi
+@inject IDialogService DialogService
+
+<h1 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΣΚΗΝΕΣ</h1>
+
+<MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
+    <MudItem xs="12" sm="4">
+        <h1 style="text-align:center">@Name</h1>
+        <MudStack Justify="Justify.Center"
+                  AlignItems="AlignItems.Center"
+                  Spacing="10">
+            @foreach (var p in Paidia)
+            {
+                <MudButton Href="@($"/skines/{p.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+                    @p.FullName
+                </MudButton>
+            }
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = string.Empty;
+    private SkiniResponse Skini = new SkiniResponse();
+    private List<PaidiResponse> Paidia = new List<PaidiResponse>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Skini = await SkinesApi.GetSkini(Name, new());
+    }
+}
+
 
 <MudText Typo="Typo.h4">SKINI</MudText>
 

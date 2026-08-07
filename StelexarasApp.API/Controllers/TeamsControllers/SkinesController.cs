@@ -69,10 +69,21 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Skines/{koinotitaName}")]
-    public async Task<ActionResult<IEnumerable<SkiniResponse>>> GetSkinesByKoinotita(string koinotitaName)
+    [HttpGet("Skines/ByKoinotitaName/{koinotitaName}")]
+    public async Task<ActionResult<IEnumerable<SkiniResponse>>> GetSkinesByKoinotitaName(string koinotitaName)
     {
-        var result = await _teamsService.GetSkinesAnaKoinotitaInService(new(), koinotitaName);
+        var result = await _teamsService.GetSkinesAnaKoinotitaNameInService(new(), koinotitaName);
+
+        if (result is null)
+            return NotFound();
+        return Ok(result);
+    }
+
+
+    [HttpGet("Skines/ByKoinotitaId/{koinotitaId:int}")]
+    public async Task<ActionResult<IEnumerable<SkiniResponse>>> GetSkinesByKoinotitaId(int koinotitaId)
+    {
+        var result = await _teamsService.GetSkinesAnaKoinotitaIdInService(new(), koinotitaId);
 
         if (result is null)
             return NotFound();

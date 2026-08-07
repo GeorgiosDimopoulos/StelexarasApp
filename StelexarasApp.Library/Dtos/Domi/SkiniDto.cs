@@ -20,4 +20,5 @@ public record SkiniResponse : SkiniDtoBase
 {
     public int Id { get; set; }
     public int? PaidiaNumber { get; set; }
+    public int KoinotitaId { get; set; }
 }

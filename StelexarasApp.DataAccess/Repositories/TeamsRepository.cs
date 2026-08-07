@@ -96,7 +96,29 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         }
     }
 
-    public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInDb(SkiniQueryParameters? skiniQueryParameters, string koinotitaName)
+    public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaIdInDb(SkiniQueryParameters? skiniQueryParameters, int koinotitaId)
+    {
+        try
+        {
+            var skines = _dbContext.Skines!.Where(sk => sk.Koinotita.Id == koinotitaId).AsQueryable();
+            if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+            {
+                skines = skines.Include(s => s.Paidia);
+            }
+            if (skiniQueryParameters is not null && skiniQueryParameters.IncludeStelexos)
+            {
+                skines = skines.Include(s => s.Omadarxis);
+            }
+            return await skines.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
+        }
+    }
+
+    public async Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaNameInDb(SkiniQueryParameters? skiniQueryParameters, string koinotitaName)
     {
         try
         {

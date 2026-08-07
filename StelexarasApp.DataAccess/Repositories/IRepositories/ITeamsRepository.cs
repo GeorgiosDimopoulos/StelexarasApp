@@ -18,7 +18,8 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
         Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? parameters, string name);
         Task<Koinotita> GetKoinotitaByNameInDb(KoinotitaQueryParameters? parameters, string name);
 
-        Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaInDb(SkiniQueryParameters? parameters, string Koinotitaname);
+        Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaNameInDb(SkiniQueryParameters? parameters, string Koinotitaname);
+        Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaIdInDb(SkiniQueryParameters? parameters, int id);
         Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(KoinotitaQueryParameters? parameters, int tomeaId);
         Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb(SkiniQueryParameters? parameters);
 

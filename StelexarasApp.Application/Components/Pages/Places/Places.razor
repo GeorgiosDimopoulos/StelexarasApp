@@ -14,7 +14,7 @@
                   Spacing="10">
             @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Equals("A")).OrderBy(k => k.Name))
             {
-                <MudButton Href="@($"/koinotites/{koinotita.Name}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+                <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
                     @koinotita.Name
                 </MudButton>
             }
@@ -27,7 +27,7 @@
                   Spacing="10">
             @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Equals("B")).OrderBy(k => k.Name))
             {
-                <MudButton Href="@($"/koinotites/{koinotita.Name}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+                <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
                     @koinotita.Name
                 </MudButton>
             }

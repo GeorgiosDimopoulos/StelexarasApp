@@ -21,8 +21,11 @@ public interface ISkinesApi
     [Put("Skines//Skini/{id}")]
     Task PutSkini(int id, [Body] UpdateSkiniRequest skiniDto);
 
-    [Get("/Skines/Skines/{koinotitaName}")]
-    Task<List<SkiniResponse>> GetSkinesByKoinotitaAsync(string koinotitaName);
+    [Get("/Skines/Skines/ByKoinotitaName/{koinotitaName}")]
+    Task<List<SkiniResponse>> GetSkinesByKoinotitaNameAsync(string koinotitaName);
+
+    [Get("/Skines/Skines/ByKoinotitaId/{koinotitaId}")]
+    Task<List<SkiniResponse>> GetSkinesByKoinotitaIdAsync(int koinotitaId);
 
     [Get("/Skines/SkinesEkpaideuomenon")]
     Task<List<SkiniResponse>> GetSkinesEkpaideuomenonAsync();
