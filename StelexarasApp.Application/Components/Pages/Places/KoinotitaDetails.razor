@@ -13,7 +13,7 @@
         <MudStack Justify="Justify.Center"
                   AlignItems="AlignItems.Center"
                   Spacing="10">
-            @foreach (var sk in Skines.Where(k => k.KoinotitaId == KoinotitaId))
+            @foreach (var sk in Skines)
             {
                 <MudButton Href="@($"/skines/{sk.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
                     @sk.Name
@@ -28,9 +28,17 @@
     public int KoinotitaId { get; set; }
 
     private List<SkiniResponse> Skines = new();
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
-        Skines = await SkinesApi.GetSkinesAsync(new());
+        try
+        {
+            Skines = await SkinesApi.GetSkinesByKoinotitaIdAsync(KoinotitaId);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to load skines: {ex.Message}";
+        }
     }
 }

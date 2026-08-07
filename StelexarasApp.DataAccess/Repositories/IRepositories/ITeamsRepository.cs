@@ -1,4 +1,5 @@
-﻿using StelexarasApp.Library.QueryParameters.Domi;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using StelexarasApp.Library.QueryParameters.Domi;
 
 namespace StelexarasApp.DataAccess.Repositories.IRepositories
 {
@@ -15,8 +16,10 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
         Task<IEnumerable<Tomeas>> GetTomeisInDb(TomeasQueryParameters? parameters);
 
         Task<Skini> GetSkiniByNameInDb(SkiniQueryParameters? parameters, string name);
+        Task<Skini> GetSkiniByIdInDb(SkiniQueryParameters? parameters, int id);
         Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? parameters, string name);
         Task<Koinotita> GetKoinotitaByNameInDb(KoinotitaQueryParameters? parameters, string name);
+        Task<Koinotita> GetKoinotitaByIdInDb(int id, KoinotitaQueryParameters? parameters);
 
         Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaNameInDb(SkiniQueryParameters? parameters, string Koinotitaname);
         Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaIdInDb(SkiniQueryParameters? parameters, int id);

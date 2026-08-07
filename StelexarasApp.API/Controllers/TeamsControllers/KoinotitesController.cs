@@ -38,6 +38,20 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     }
 
     /// <remarks>
+    /// To get the koinotarxi, just IncludeStelexos
+    /// </remarks>
+    [HttpGet("Koinotita/{id:int}")]
+    public async Task<ActionResult<KoinotitaResponse>> GetKoinotitaById(int id, [FromQuery] KoinotitaQueryParameters koinotitaQueryParameters)
+    {
+        var result = await _teamsService.GetKoinotitaByIdInService(id, koinotitaQueryParameters);
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
+    }
+
+    /// <remarks>
     /// To get the koinotarxes,just IncludeStelexos
     /// </remarks>
     [AllowAnonymous]

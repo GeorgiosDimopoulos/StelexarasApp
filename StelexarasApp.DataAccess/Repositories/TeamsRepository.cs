@@ -158,6 +158,22 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         }
     }
 
+    public async Task<Skini> GetSkiniByIdInDb(SkiniQueryParameters? skiniQueryParameters, int id)
+    {
+        var skines = _dbContext.Skines.AsQueryable();
+
+        if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
+        {
+            skines = skines.Include(s => s.Paidia);
+        }
+        if (skiniQueryParameters is not null && skiniQueryParameters.IncludeStelexos)
+        {
+            skines = skines.Include(s => s.Omadarxis);
+        }
+
+        return await skines.FirstOrDefaultAsync(s => s.Id == id) ?? new Skini();
+    }
+
     public async Task<Skini> GetSkiniByNameInDb(SkiniQueryParameters? skiniQueryParameters, string name)
     {
         var skines = _dbContext.Skines.AsQueryable();
@@ -223,6 +239,28 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             koinotites = koinotites.Include(k => k.Skines!.Select(sk => sk.Omadarxis));
         }
         return await koinotites.FirstOrDefaultAsync(k => k.Name == name) ?? new Koinotita();
+    }
+
+    public async Task<Koinotita> GetKoinotitaByIdInDb(int id, KoinotitaQueryParameters? koinotitaQueryParameters)
+    {
+        var koinotites = _dbContext.Koinotites!.AsQueryable();
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeSkines)
+        {
+            koinotites = koinotites.Include(k => k.Skines);
+        }
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeStelexos)
+        {
+            koinotites = koinotites.Include(k => k.Skines);
+        }
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeKoinotarxis)
+        {
+            koinotites = koinotites.Include(k => k.Koinotarxis);
+        }
+        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes && koinotites.Select(k => k.Skines).Any())
+        {
+            koinotites = koinotites.Include(k => k.Skines!.Select(sk => sk.Omadarxis));
+        }
+        return await koinotites.FirstOrDefaultAsync(k => k.Id == id) ?? new Koinotita();
     }
 
     public async Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? tomeasQueryParameters, string name)

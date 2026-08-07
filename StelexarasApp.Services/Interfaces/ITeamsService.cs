@@ -18,14 +18,16 @@ public interface ITeamsService
     Task<bool> UpdateTomeaInService(string id, UpdateTomeasRequest tomeas);
 
     Task<IEnumerable<SkiniResponse>> GetAllSkinesInService(SkiniQueryParameters? skiniQueryParameters);
-    Task<IEnumerable<KoinotitaResponse>> GetAllKoinotitesInService(KoinotitaQueryParameters? koinotitaQueryParameters);
-    Task<IEnumerable<TomeasResponse>> GetAllTomeisInService(TomeasQueryParameters tomeasQueryParameters);
     Task<IEnumerable<SkiniResponse>> GetSkinesAnaKoinotitaNameInService(SkiniQueryParameters? skiniQueryParameters, string name);
-    Task<IEnumerable<SkiniResponse>> GetSkinesAnaKoinotitaIdInService(SkiniQueryParameters? skiniQueryParameters, int id); 
-    Task<IEnumerable<KoinotitaResponse>> GetKoinotitesAnaTomeaInService(KoinotitaQueryParameters? koinotitaQueryParameters, int name);
-    Task<SkiniResponse> GetSkiniByNameInService(SkiniQueryParameters? skiniQueryParameters, string name);
-    Task<KoinotitaResponse> GetKoinotitaByNameInService(KoinotitaQueryParameters? koinotitaQueryParameters, string name);
-    Task<TomeasResponse> GetTomeaByNameInService(TomeasQueryParameters? tomeasQueryParameters, string name);
-
+    Task<IEnumerable<SkiniResponse>> GetSkinesAnaKoinotitaIdInService(SkiniQueryParameters? skiniQueryParameters, int id);
     Task<IEnumerable<SkiniResponse>> GetSkinesEkpaideuomenonInService(SkiniQueryParameters? skiniQueryParameters);
+    Task<SkiniResponse> GetSkiniByNameInService(SkiniQueryParameters? skiniQueryParameters, string name);
+
+    Task<IEnumerable<KoinotitaResponse>> GetAllKoinotitesInService(KoinotitaQueryParameters? koinotitaQueryParameters);
+    Task<IEnumerable<KoinotitaResponse>> GetKoinotitesAnaTomeaInService(KoinotitaQueryParameters? koinotitaQueryParameters, int id);
+    Task<KoinotitaResponse> GetKoinotitaByIdInService(int id, KoinotitaQueryParameters koinotitaQueryParameters);
+    Task<KoinotitaResponse> GetKoinotitaByNameInService(KoinotitaQueryParameters? koinotitaQueryParameters, string name);
+
+    Task<IEnumerable<TomeasResponse>> GetAllTomeisInService(TomeasQueryParameters tomeasQueryParameters);
+    Task<TomeasResponse> GetTomeaByNameInService(TomeasQueryParameters? tomeasQueryParameters, string name);
 }
