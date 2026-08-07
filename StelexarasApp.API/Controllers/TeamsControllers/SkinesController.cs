@@ -22,8 +22,19 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("Skini/{id:int}")]
+    public async Task<ActionResult<SkiniResponse>> GetSkini([FromQuery] SkiniQueryParameters parameters, int id)
+    {
+        var result = await _teamsService.GetSkiniByIdInService(parameters, id);
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
+    }
+
     [HttpGet("Skini/{name}")]
-    public async Task<ActionResult<SkiniResponse>> GetSkini([FromQuery] SkiniQueryParameters parameters, string name)
+    public async Task<ActionResult<SkiniResponse>> GetSkiniByName([FromQuery] SkiniQueryParameters parameters, string name)
     {
         var result = await _teamsService.GetSkiniByNameInService(parameters, name);
 

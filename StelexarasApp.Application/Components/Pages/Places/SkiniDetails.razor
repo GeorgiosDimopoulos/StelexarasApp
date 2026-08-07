@@ -11,7 +11,7 @@
 
 <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
     <MudItem xs="12" sm="4">
-        <h1 style="text-align:center">@Name</h1>
+        <h1 style="text-align:center">@Id</h1>
         <MudStack Justify="Justify.Center"
                   AlignItems="AlignItems.Center"
                   Spacing="10">
@@ -27,13 +27,13 @@
 
 @code {
     [Parameter]
-    public string Name { get; set; } = string.Empty;
+    public int Id { get; set; }
     private SkiniResponse Skini = new SkiniResponse();
     private List<PaidiResponse> Paidia = new List<PaidiResponse>();
 
     protected override async Task OnInitializedAsync()
     {
-        Skini = await SkinesApi.GetSkini(Name, new());
+        Skini = await SkinesApi.GetSkini(Id, new());
     }
 }
 

@@ -69,6 +69,12 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return _mapper.Map<SkiniResponse>(skini);
     }
 
+    public async Task<SkiniResponse> GetSkiniByIdInService(SkiniQueryParameters? skiniQueryParameters, int id)
+    {
+        var skini = await _teamsRepository.GetSkiniByIdInDb(skiniQueryParameters, id);
+        return _mapper.Map<SkiniResponse>(skini);
+    }
+    
     public async Task<KoinotitaResponse> GetKoinotitaByIdInService(int id, KoinotitaQueryParameters koinotitaQueryParameters)
     {
         var skini = await _teamsRepository.GetKoinotitaByIdInDb(id, koinotitaQueryParameters);
