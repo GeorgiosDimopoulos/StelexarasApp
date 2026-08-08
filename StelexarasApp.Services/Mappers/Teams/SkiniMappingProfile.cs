@@ -11,16 +11,16 @@ public class SkiniMappingProfile : Profile
           .ForMember(dest => dest.Omadarxis, opt => opt.Ignore())
           .ForMember(dest => dest.Paidia, opt => opt.Ignore())
           .ForMember(dest => dest.OmadarxisId, opt => opt.Ignore())
-          .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Name = src.KoinotitaName ?? string.Empty }));
+          .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId }));
 
         CreateMap<UpdateSkiniRequest, Skini>()
             .ForMember(dest => dest.Omadarxis, opt => opt.Ignore())
             .ForMember(dest => dest.Paidia, opt => opt.Ignore())
             .ForMember(dest => dest.OmadarxisId, opt => opt.Ignore())
-            .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Name = src.KoinotitaName ?? string.Empty }));
+            .ForMember(dest => dest.Koinotita, opt => opt.MapFrom(src => new Koinotita { Id = src.KoinotitaId }));
 
         CreateMap<Skini, SkiniResponse>()
             .ForMember(dest => dest.PaidiaNumber, opt => opt.MapFrom(src => src.Paidia != null ? src.Paidia.Count : 0))
-            .ForMember(dest => dest.KoinotitaName, opt => opt.MapFrom(src => src.Koinotita != null ? src.Koinotita.Name : string.Empty));
+            .ForMember(dest => dest.KoinotitaId, opt => opt.MapFrom(src => src.Koinotita != null ? src.Koinotita.Id : 0));
     }
 }

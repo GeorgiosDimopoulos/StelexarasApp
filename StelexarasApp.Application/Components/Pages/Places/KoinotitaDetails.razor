@@ -3,13 +3,14 @@
 @using StelexarasApp.Library.Dtos.Domi
 
 @inject ISkinesApi SkinesApi
+@inject IKoinotitesApi KoinotitesApi
 @inject IDialogService DialogService
 
 <h1 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΣΚΗΝΕΣ</h1>
+<h1 style="text-align:center">@KoinotitaName</h1>
 
 <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
     <MudItem xs="12" sm="4">
-        <h1 style="text-align:center">@KoinotitaId</h1>
         <MudStack Justify="Justify.Center"
                   AlignItems="AlignItems.Center"
                   Spacing="10">
@@ -26,8 +27,9 @@
 @code {
     [Parameter]
     public int KoinotitaId { get; set; }
+    public string KoinotitaName { get; set; } = string.Empty;
 
-    private List<SkiniResponse> Skines = new();
+    private List<SkiniResponse> Skines { get; set; } = new();
     private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
@@ -35,6 +37,7 @@
         try
         {
             Skines = await SkinesApi.GetSkinesByKoinotitaIdAsync(KoinotitaId);
+            KoinotitaName = (await KoinotitesApi.GetKoinotitaById(KoinotitaId)).Name;
         }
         catch (Exception ex)
         {

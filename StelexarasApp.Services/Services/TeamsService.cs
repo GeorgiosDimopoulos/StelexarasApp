@@ -12,7 +12,7 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
     {
         try
         {
-            if (skiniDto is null || string.IsNullOrEmpty(skiniDto.Name) || string.IsNullOrEmpty(skiniDto.KoinotitaName))
+            if (skiniDto is null || string.IsNullOrEmpty(skiniDto.Name) || skiniDto.KoinotitaId == 0)
                 return false;
 
             var skini = _mapper.Map<Skini>(skiniDto);

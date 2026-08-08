@@ -11,8 +11,11 @@ public interface IKoinotitesApi
     [Get("/Koinotites/Koinotites/{tomeaId}")]
     Task<List<KoinotitaResponse>> GetKoinotitesByTomeaAsync(int tomeaId);
 
-    [Get("/Koinotites/Koinotita/{name}")]
-    Task<KoinotitaResponse> GetKoinotita(string name);
+    [Get("/Koinotites/Koinotita/ByName/{name}")]
+    Task<KoinotitaResponse> GetKoinotitaByName(string name);
+
+    [Get("/Koinotites/Koinotita/ById/{id}")]
+    Task<KoinotitaResponse> GetKoinotitaById(int id);
 
     [Post("/Koinotites/Koinotita")]
     Task<bool> PostKoinotita([Body] CreateKoinotitaRequest dto);

@@ -26,7 +26,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     /// <remarks>
     /// To get the koinotarxi, just IncludeStelexos
     /// </remarks>
-    [HttpGet("Koinotita/{name}")]
+    [HttpGet("Koinotita/ByName/{name}")]
     public async Task<ActionResult<KoinotitaResponse>> GetKoinotitaByName(string name, [FromQuery] KoinotitaQueryParameters koinotitaQueryParameters)
     {
         var result = await _teamsService.GetKoinotitaByNameInService(koinotitaQueryParameters, name);
@@ -40,7 +40,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     /// <remarks>
     /// To get the koinotarxi, just IncludeStelexos
     /// </remarks>
-    [HttpGet("Koinotita/{id:int}")]
+    [HttpGet("Koinotita/ById/{id:int}")]
     public async Task<ActionResult<KoinotitaResponse>> GetKoinotitaById(int id, [FromQuery] KoinotitaQueryParameters koinotitaQueryParameters)
     {
         var result = await _teamsService.GetKoinotitaByIdInService(id, koinotitaQueryParameters);

@@ -20,7 +20,7 @@ public class TeamsServiceTests
     public async Task AddSkiniInService_ShouldReturnTrue()
     {
         // Arrange
-        var team = new CreateSkiniRequest { Name = "TestTeam", KoinotitaName = "KoinotitaName", Sex = Sex.Female };
+        var team = new CreateSkiniRequest { Name = "TestTeam", KoinotitaId = 1, Sex = Sex.Female };
         _mockdteamsRepository.Setup(m => m.AddSkiniInDb(It.IsAny<Skini>())).ReturnsAsync(true);
 
         // Act
