@@ -32,7 +32,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Skini = await SkinesApi.GetSkini(Id, new());
-        Paidia = await PaidiaApi.GetPaidiaBySkiniId(Id, new());
+        Skini = await SkinesApi.GetSkiniById(SkiniId, new());
+        Paidia = await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new());
     }
 }

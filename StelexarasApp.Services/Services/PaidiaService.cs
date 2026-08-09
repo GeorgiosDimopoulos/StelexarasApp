@@ -4,17 +4,17 @@ using Microsoft.Extensions.Logging;
 
 namespace StelexarasApp.Services.Services;
 
-public class PaidiService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>
+public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>
 {
-    private readonly ILogger<PaidiService> _logger;
-    private readonly IPaidiRepository _paidiRepository;
+    private readonly ILogger<PaidiaService> _logger;
+    private readonly IPaidiaRepository _paidiRepository;
     private readonly IMapper _mapper;
     private readonly IValidator<PaidiDtoBase> _paidiValidator;
 
-    public PaidiService(
-        IPaidiRepository paidiRepository,
+    public PaidiaService(
+        IPaidiaRepository paidiRepository,
         IMapper mapper,
-        ILogger<PaidiService> logger,
+        ILogger<PaidiaService> logger,
         IValidator<PaidiDtoBase> paidiValidator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -84,6 +84,19 @@ public class PaidiService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest
         return kataskinotesResponse;
     }
 
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniIdInService(int skiniId)
+    {
+        var paidia = await _paidiRepository.GetPaidiaInSkiniIdFromDb(skiniId);
+        if (paidia == null)
+            return null!;
+
+        var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
+        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
+        if (kataskinotesResponse == null)
+            return null!;
+        return kataskinotesResponse;
+    }
+    
     public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySxoliInService()
     {
         var paidia = await _paidiRepository.GetPaidiaInSxoliFromDb();

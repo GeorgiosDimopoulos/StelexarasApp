@@ -6,7 +6,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests;
 
 public class PaidiaRepositoryDbTests
 {
-    private readonly IPaidiRepository _paidiRepository;
+    private readonly IPaidiaRepository _paidiRepository;
     private readonly AppDbContext _dbContext;
     private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
@@ -17,7 +17,7 @@ public class PaidiaRepositoryDbTests
            .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
            .Options;
         _dbContext = new AppDbContext(options);
-        _paidiRepository = new PaidiRepository(_dbContext, loggerFactory);
+        _paidiRepository = new PaidiaRepository(_dbContext, loggerFactory);
     }
 
     [Theory]

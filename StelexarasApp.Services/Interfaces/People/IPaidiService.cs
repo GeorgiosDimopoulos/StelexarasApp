@@ -8,6 +8,7 @@ public interface IPaidiService<TCreate, TUpdate, TDelete, TResponse>
     Task<TResponse> GetPaidiByIdInService(int id);
     Task<IEnumerable<TResponse>> GetPaidiaInService(PaidiType? paidiType);
     Task<IEnumerable<TResponse>> GetPaidiaBySkiniInService(string skini);
+    Task<IEnumerable<TResponse>> GetPaidiaBySkiniIdInService(int skiniId);
     Task<IEnumerable<TResponse>> GetPaidiaByKoinotitaInService(string koinotita);
     Task<IEnumerable<TResponse>> GetPaidiaBySxoliInService();
 }

@@ -196,13 +196,13 @@ class Program
         .AddTransient<IValidator<DutyDtoBase>, DutyValidator>()
         .AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>()
         .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()
-        .AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiService>()
+        .AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiaService>()
         .AddScoped<IDutyService, DutyService>()
         .AddScoped<IExpenseService, ExpenseService>()
         .AddScoped<ITeamsService, TeamsService>()
         .AddTransient<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>, StaffService>()
         .AddScoped<IStaffRepository, StaffRepository>()
-        .AddScoped<IPaidiRepository, PaidiRepository>()
+        .AddScoped<IPaidiaRepository, PaidiaRepository>()
         .AddSingleton<LogFileWriter>()
         .BuildServiceProvider();
 

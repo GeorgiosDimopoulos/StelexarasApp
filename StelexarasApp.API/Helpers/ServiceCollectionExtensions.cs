@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
         services.AddHealthChecksUI().AddInMemoryStorage();
 
         // Register Repositories and Services used by API
-        services.AddScoped<IPaidiRepository, PaidiRepository>();
+        services.AddScoped<IPaidiaRepository, PaidiaRepository>();
         services.AddScoped<IExpenseRepository, ExpenseRepository>();
         services.AddScoped<IDutyRepository, DutyRepository>();
         services.AddScoped<IStaffRepository, StaffRepository>();

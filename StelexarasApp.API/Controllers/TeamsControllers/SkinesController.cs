@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StelexarasApp.Library.QueryParameters.Domi;
-using StelexarasApp.Services.IServices;
 
 namespace StelexarasApp.API.Controllers.TeamsControllers;
 
@@ -23,7 +21,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpGet("Skini/{id:int}")]
-    public async Task<ActionResult<SkiniResponse>> GetSkini([FromQuery] SkiniQueryParameters parameters, int id)
+    public async Task<ActionResult<SkiniResponse>> GetSkiniById([FromQuery] SkiniQueryParameters parameters, int id)
     {
         var result = await _teamsService.GetSkiniByIdInService(parameters, id);
 

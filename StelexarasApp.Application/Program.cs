@@ -21,6 +21,8 @@ builder.Services.AddRefitClient<ITomeisApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
 builder.Services.AddRefitClient<ISkinesApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
+builder.Services.AddRefitClient<IPaidiaApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
 
 var app = builder.Build();
 

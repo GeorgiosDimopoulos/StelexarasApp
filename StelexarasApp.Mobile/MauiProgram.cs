@@ -113,7 +113,7 @@ public static class MauiProgram
     private static void RegisterRepositories(IServiceCollection services)
     {
         services.AddScoped<IStaffRepository, StaffRepository>();
-        services.AddScoped<IPaidiRepository, PaidiRepository>();
+        services.AddScoped<IPaidiaRepository, PaidiaRepository>();
         services.AddScoped<ITeamsRepository, TeamsRepository>();
         services.AddScoped<IExpenseRepository, ExpenseRepository>();
         services.AddScoped<IDutyRepository, DutyRepository>();
@@ -141,7 +141,7 @@ public static class MauiProgram
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<IDutyService, DutyService>();
-        services.AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiService>();
+        services.AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiaService>();
         services.AddScoped<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>, StaffService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();

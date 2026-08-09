@@ -1,6 +1,6 @@
 ﻿namespace StelexarasApp.DataAccess.Repositories.IRepositories;
 
-public interface IPaidiRepository
+public interface IPaidiaRepository
 {
     Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId);
 
@@ -14,6 +14,7 @@ public interface IPaidiRepository
 
     Task<Paidi> GetPaidiByIdFromDb(int id);
     Task<IEnumerable<Paidi>> GetPaidiaInSkiniFromDb(string n);
+    Task<IEnumerable<Paidi>> GetPaidiaInSkiniIdFromDb(int id); 
     Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaFromDb(string n);
     Task<IEnumerable<Paidi>> GetPaidiaInSxoliFromDb();
     Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType? type);

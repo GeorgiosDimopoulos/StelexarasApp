@@ -7,8 +7,8 @@ namespace StelexarasApp.Tests.ServicesTests;
 
 public class PaidiaServiceTests
 {
-    private readonly Mock<IPaidiRepository> _mockPaidiRepository;
-    private readonly PaidiService _paidiService;
+    private readonly Mock<IPaidiaRepository> _mockPaidiRepository;
+    private readonly PaidiaService _paidiService;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<ILoggerFactory> _loggerFactory;
     private readonly Mock<IValidator<IPaidiDto>> _paidiValidatorMock;
@@ -16,10 +16,10 @@ public class PaidiaServiceTests
     public PaidiaServiceTests()
     {
         _loggerFactory = new Mock<ILoggerFactory>();
-        _mockPaidiRepository = new Mock<IPaidiRepository>();
+        _mockPaidiRepository = new Mock<IPaidiaRepository>();
         _mockMapper = new Mock<IMapper>();
         _paidiValidatorMock = new Mock<IValidator<IPaidiDto>>();
-        _paidiService = new PaidiService(_mockPaidiRepository.Object, _mockMapper.Object, _loggerFactory.Object.CreateLogger<PaidiService>(), _paidiValidatorMock.Object);
+        _paidiService = new PaidiaService(_mockPaidiRepository.Object, _mockMapper.Object, _loggerFactory.Object.CreateLogger<PaidiaService>(), _paidiValidatorMock.Object);
 
         _mockMapper.Setup(m => m.Map<Ekpaideuomenos>(It.IsAny<IPaidiDto>()))
           .Returns((IPaidiDto dto) => new Ekpaideuomenos
@@ -29,10 +29,10 @@ public class PaidiaServiceTests
               PaidiType = dto.PaidiType
           });
 
-        _paidiService = new PaidiService(
+        _paidiService = new PaidiaService(
             _mockPaidiRepository.Object,
             _mockMapper.Object,
-            _loggerFactory.Object.CreateLogger<PaidiService>(),
+            _loggerFactory.Object.CreateLogger<PaidiaService>(),
             _paidiValidatorMock.Object);
 
     }

@@ -38,6 +38,20 @@ public class PaidiaController : ControllerBase
         return paidi;
     }
 
+    [HttpGet("Paidi/BySkiniId/{id}")]
+    public async Task<ActionResult<PaidiResponse>> GetPaidiaBySkiniId(int id)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var paidia = await _paidiService.GetPaidiaBySkiniIdInService(id);
+        if (paidia == null)
+            return NotFound();
+
+        return Ok(paidia);
+    }
+
+    
     [Authorize]
     [HttpPost("Paidi")]
     public async Task<ActionResult<Paidi>> PostKataskinotis([FromBody] CreatePaidiRequest createPaidiRequest)
