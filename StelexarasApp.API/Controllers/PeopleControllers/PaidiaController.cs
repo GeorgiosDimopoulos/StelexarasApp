@@ -5,7 +5,6 @@ namespace StelexarasApp.API.Controllers.PeopleControllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
 public class PaidiaController : ControllerBase
 {
     private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiService;
@@ -15,7 +14,7 @@ public class PaidiaController : ControllerBase
         _paidiService = paidiService;
     }
 
-    [HttpGet("Paidia")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<Kataskinotis>>> GetKataskinotes()
     {
         if (!ModelState.IsValid)
@@ -25,7 +24,7 @@ public class PaidiaController : ControllerBase
         return Ok(paidia);
     }
 
-    [HttpGet("Paidi/{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<PaidiResponse>> GetPaidi(int id)
     {
         if (!ModelState.IsValid)
@@ -38,7 +37,7 @@ public class PaidiaController : ControllerBase
         return paidi;
     }
 
-    [HttpGet("Paidi/BySkiniId/{id}")]
+    [HttpGet("BySkiniId/{id:int}")]
     public async Task<ActionResult<PaidiResponse>> GetPaidiaBySkiniId(int id)
     {
         if (!ModelState.IsValid)
@@ -51,9 +50,9 @@ public class PaidiaController : ControllerBase
         return Ok(paidia);
     }
 
-    
+
     [Authorize]
-    [HttpPost("Paidi")]
+    [HttpPost]
     public async Task<ActionResult<Paidi>> PostKataskinotis([FromBody] CreatePaidiRequest createPaidiRequest)
     {
         if (!ModelState.IsValid)
@@ -68,8 +67,8 @@ public class PaidiaController : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("Paidi/{id}")]
-    public async Task<IActionResult> PutKataskinotis(int id, UpdatePaidiRequest request)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> PutKataskinotis(int id, [FromBody] UpdatePaidiRequest request)
     {
         request.Id = id;
         var result = await _paidiService.UpdatePaidiInService(request);
@@ -81,13 +80,13 @@ public class PaidiaController : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteKataskinotis(DeletePaidiRequest request)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteKataskinotis(int id)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var result = await _paidiService.DeletePaidiInService(request);
+        var result = await _paidiService.DeletePaidiInService(new DeletePaidiRequest { Id = id });
         if (!result)
             return NotFound();
         return Ok(result);

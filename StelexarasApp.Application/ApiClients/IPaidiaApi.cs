@@ -6,24 +6,24 @@ namespace StelexarasApp.Application.ApiClients;
 
 public interface IPaidiaApi
 {
-    [Get("/Paidia/Paidia")]
+    [Get("/Paidia")]
     Task<List<PaidiResponse>> GetPaidiaAsync([Query] PaidiQueryParameters paidiQueryParameters);
 
-    [Get("/Paidia/Paidi/{name}")]
-    Task<PaidiResponse> GetPaidi(string name, [Query] PaidiQueryParameters paidiQueryParameters);
+    [Get("/Paidia/{id}")]
+    Task<PaidiResponse> GetPaidi(int id, [Query] PaidiQueryParameters paidiQueryParameters);
 
     [Get("/Paidia/Koinotita/{name}")]
     Task<List<PaidiResponse>> GetPaidiaByKoinotitaName(string name, [Query] PaidiQueryParameters paidiQueryParameters);
 
-    [Get("/Paidia/Skini/{id}")]
+    [Get("/Paidia/BySkiniId/{id}")]
     Task<List<PaidiResponse>> GetPaidiaBySkiniId(int id, [Query] PaidiQueryParameters paidiQueryParameters);
 
-    [Post("/Paidia/Paidi")]
-    Task<PaidiResponse> PostPaidi([Query] CreatePaidiRequest paidiDto);
+    [Post("/Paidia")]
+    Task<PaidiResponse> PostPaidi([Body] CreatePaidiRequest paidiDto);
 
-    [Delete("/Paidia/Paidi/{name}")]
-    Task DeletePaidi(string name);
+    [Delete("/Paidia/{id}")]
+    Task DeletePaidi(int id);
 
-    [Put("/Paidia/Paidi/{name}")]
-    Task PutPaidi(string name, [Body] UpdatePaidiRequest paidiDto);
+    [Put("/Paidia/{id}")]
+    Task PutPaidi(int id, [Body] UpdatePaidiRequest paidiDto);
 }
