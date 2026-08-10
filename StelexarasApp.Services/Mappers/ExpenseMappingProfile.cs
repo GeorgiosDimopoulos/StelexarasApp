@@ -12,10 +12,6 @@ public class ExpenseMappingProfile : Profile
         CreateMap<UpdateExpenseRequest, Expense>()
             .ForMember(dest => dest.Date, opt => opt.Ignore());
 
-        CreateMap<DeleteExpenseRequest, Expense>()
-            .ForMember(dest => dest.Date, opt => opt.Ignore())
-            .ReverseMap();
-
         CreateMap<Expense, ExpenseResponse>()
             .ReverseMap();
     }

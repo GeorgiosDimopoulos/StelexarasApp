@@ -12,10 +12,6 @@ public class OthersMappingProfiles : Profile
         CreateMap<UpdateDutyRequest, Duty>()
             .ForMember(dest => dest.Date, opt => opt.Ignore());
 
-        CreateMap<DeleteDutyRequest, Duty>()
-            .ForMember(dest => dest.Date, opt => opt.Ignore())
-            .ReverseMap();
-
         CreateMap<DutyResponse, Duty>()
             .ForMember(dest => dest.Date, opt => opt.Ignore())
             .ReverseMap();

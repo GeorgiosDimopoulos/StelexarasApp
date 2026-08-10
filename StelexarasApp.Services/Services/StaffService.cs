@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace StelexarasApp.Services.Services;
 
-public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>
+public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse>
 {
     private readonly IStaffRepository _stelexiRepository;
     private readonly IMapper _mapper;

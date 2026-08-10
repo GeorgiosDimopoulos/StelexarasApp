@@ -14,8 +14,6 @@ public class StelexosMappingProfile : Profile
         CreateMap<UpdateStelexosRequest, Omadarxis>()
             .IncludeBase<StelexosDtoBase, Omadarxis>();
 
-        CreateMap<DeleteStelexosRequest, Omadarxis>();
-
         CreateMap<StelexosResponse, Omadarxis>()
             .IncludeBase<StelexosDtoBase, Omadarxis>()
             .ReverseMap();
@@ -27,8 +25,6 @@ public class StelexosMappingProfile : Profile
 
         CreateMap<UpdateStelexosRequest, Koinotarxis>()
             .IncludeBase<StelexosDtoBase, Koinotarxis>();
-
-        CreateMap<DeleteStelexosRequest, Koinotarxis>();
 
         CreateMap<StelexosResponse, Koinotarxis>()
             .IncludeBase<StelexosDtoBase, Koinotarxis>()
@@ -42,8 +38,6 @@ public class StelexosMappingProfile : Profile
         CreateMap<UpdateStelexosRequest, Tomearxis>()
             .IncludeBase<StelexosDtoBase, Tomearxis>();
 
-        CreateMap<DeleteStelexosRequest, Tomearxis>();
-
         CreateMap<StelexosResponse, Tomearxis>()
             .IncludeBase<StelexosDtoBase, Tomearxis>()
             .ReverseMap();
@@ -55,8 +49,6 @@ public class StelexosMappingProfile : Profile
 
         CreateMap<UpdateStelexosRequest, Ekpaideutis>()
             .IncludeBase<StelexosDtoBase, Ekpaideutis>();
-
-        CreateMap<DeleteStelexosRequest, Ekpaideutis>();
 
         CreateMap<StelexosResponse, Ekpaideutis>()
             .IncludeBase<StelexosDtoBase, Ekpaideutis>()
