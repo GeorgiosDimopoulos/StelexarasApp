@@ -1,5 +1,44 @@
-﻿<h3>Add Paidi</h3>
+﻿@using StelexarasApp.Library.Dtos.People.Children
+
+@inherits ComponentBase
+
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+
+<h3>Add Paidi</h3>
+<MudDialog>
+	<DialogContent>
+		<MudForm Spacing="2">
+			<MudTextField @bind-Value="res.FullName" Label="Name" />
+			<MudNumericField @bind-Value="res.Age" Label="Age" />
+			<MudNumericField @bind-Value="res.Sex" Label="Fulo" />
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Cancel</MudButton>
+		<MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Save</MudButton>
+	</DialogActions>
+</MudDialog>
+
 
 @code {
+	private PaidiResponse res = new();
+	private CreatePaidiRequest req = new();
+	[CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
+	protected async override void OnParametersSet()
+	{
+		await Task.Delay(500);
+	}
+
+	private void Cancel(MouseEventArgs args)
+	{
+		Dialog?.Close(DialogResult.Ok(res));
+	}
+
+	private async Task Save(MouseEventArgs _)
+	{
+		
+	}
 }
