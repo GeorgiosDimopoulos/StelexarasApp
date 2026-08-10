@@ -10,11 +10,11 @@
         private bool isPaidiNameFilled = false;
         private bool isPaidiAgeFilled = false;
 
-        public PaidiInfoPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> peopleService, PaidiResponse paidi)
+        public PaidiInfoPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService, PaidiResponse paidi)
         {
             InitializeComponent();
             _paidiDto = paidi;
-            _paidiviewModel = new PaidiInfoViewModel(_paidiDto, peopleService, _paidiDto.SkiniName);
+            _paidiviewModel = new PaidiInfoViewModel(_paidiDto, peopleService, _paidiDto.SkiniName ?? string.Empty);
             _skini = new SkiniDtoBase();
             BindingContext = _paidiviewModel;
         }

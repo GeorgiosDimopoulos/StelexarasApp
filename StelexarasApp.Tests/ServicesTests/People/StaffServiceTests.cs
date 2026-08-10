@@ -9,7 +9,7 @@ namespace StelexarasApp.Tests.ServicesTests;
 public class StaffServiceTests
 {
     private readonly Mock<IStaffRepository> _mockStelexiRepository;
-    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _stelexiService;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _stelexiService;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<IValidator<StelexosDtoBase>> _stelexosValidator;
 
@@ -335,7 +335,7 @@ public class StaffServiceTests
         _mockStelexiRepository.Setup(r => r.DeleteStelexosInDb(id)).ReturnsAsync(true);
 
         // Act
-        var result = await _stelexiService.DeleteStelexos(new DeleteStelexosRequest() { Id = id });
+        var result = await _stelexiService.DeleteStelexos(id);
 
         // Assert
         Assert.True(result);

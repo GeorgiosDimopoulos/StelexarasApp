@@ -44,11 +44,7 @@ public partial class DutiesPage : ContentPage
                 {
                     try
                     {
-                        var deleteDutyRequest = new DeleteDutyRequest
-                        {
-                            Id = selectedDuty.Id
-                        };
-                        await _viewModel.DeleteDuty(deleteDutyRequest);
+                        await _viewModel.DeleteDuty(selectedDuty.Id);
                         await DisplayAlert("Επιτυχής Διαγραφή", "Διαγραφή υποχρέωσης!", "OK");
                     }
                     catch (Exception ex)

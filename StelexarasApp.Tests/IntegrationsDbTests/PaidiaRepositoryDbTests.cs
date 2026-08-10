@@ -61,7 +61,7 @@ public class PaidiaRepositoryDbTests
         }
 
         // Act
-        var result = await _paidiRepository.DeletePaidiInDb(paidi);
+        var result = await _paidiRepository.DeletePaidiInDb(id);
 
         // Assert
         Assert.Equal(expectedResult, result);

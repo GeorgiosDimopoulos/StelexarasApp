@@ -8,11 +8,11 @@ public partial class GeneralTeamsPage : ContentPage
     private readonly TomeasViewModel _tomeas1ViewModel;
     private readonly KoinotitaViewModel _koinotitaViewModel;
     private readonly SxoliViewModel _sxoliViewModel;
-    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
     private readonly ITeamsService _teamsService;
     private readonly IPageFactory pageFactory;
 
-    public GeneralTeamsPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService, IPageFactory pageFactory)
+    public GeneralTeamsPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService, IPageFactory pageFactory)
     {
         InitializeComponent();
         _paidiaService = paidiaService ?? throw new ArgumentNullException(nameof(paidiaService));

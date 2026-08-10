@@ -6,12 +6,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 {
     public class KoinotitaViewModel : INotifyPropertyChanged
     {
-        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
+        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
         private readonly ITeamsService _teamsService;
         public ObservableCollection<string> Skines { get; set; }
         public KoinotitaResponse? Koinotita { get; set; }
 
-        public KoinotitaViewModel(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService)
+        public KoinotitaViewModel(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService)
         {
             _paidiaService = paidiaService;
             _teamsService = teamsService;
@@ -58,12 +58,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
             if (paidiId == null)
                 return false;
 
-            var paidiToDelete = new DeletePaidiRequest
-            {
-                Id = int.Parse(paidiId)
-            };
-
-            var result = await _paidiaService.DeletePaidiInService(paidiToDelete);
+            var result = await _paidiaService.DeletePaidiInService(int.Parse(paidiId));
             if (result)
             {
                 OnPropertyChanged(nameof(Skines));

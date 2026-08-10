@@ -91,10 +91,9 @@ public class ExpensesServiceTests
         // Arrange
         var expense = new Expense { Id = 1, Description = "TestExpense", Date = DateTime.Now, Amount = 100 };
         _mockexpenseRepository.Setup(m => m.GetExpenseByIdInDb(It.IsAny<int>())).ReturnsAsync(expense);
-        var expenseDeleteRequest = new DeleteExpenseRequest { Id = expense.Id };
-
+        
         // Act
-        var result = await _expenseService.DeleteExpenseInService(expenseDeleteRequest);
+        var result = await _expenseService.DeleteExpenseInService(expense.Id);
 
         // Assert
         Assert.True(result);

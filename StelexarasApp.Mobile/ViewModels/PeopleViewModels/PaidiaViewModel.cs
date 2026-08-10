@@ -5,11 +5,11 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class PaidiaViewModel : INotifyPropertyChanged
 {
-    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> kataskinotisService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> kataskinotisService;
 
     public ObservableCollection<PaidiDtoBase> PaidiaList { get; set; }
 
-    public PaidiaViewModel(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> peopleService)
+    public PaidiaViewModel(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService)
     {
         kataskinotisService = peopleService;
         PaidiaList = [];

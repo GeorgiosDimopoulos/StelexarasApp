@@ -6,14 +6,12 @@ public partial class TomeasInfoPage : ContentPage
 {
     private readonly TomeasViewModel _tomeasViewModel;
     private readonly KoinotitaViewModel _koinotitaViewModel;
-    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
-    private readonly ITeamsService _teamsService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
     private readonly IPageFactory _pageFactory;
 
-    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, IPageFactory pageFactory)
+    public TomeasInfoPage(TomeasViewModel tomeasViewModel, KoinotitaViewModel koinotitaViewModel, ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, IPageFactory pageFactory)
     {
         InitializeComponent();
-        _teamsService = teamsService;
         _paidiaService = paidiaService;
         _tomeasViewModel = tomeasViewModel;
         _koinotitaViewModel = koinotitaViewModel;

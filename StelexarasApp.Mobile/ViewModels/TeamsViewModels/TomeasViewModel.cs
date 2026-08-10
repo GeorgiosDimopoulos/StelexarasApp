@@ -6,12 +6,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
     public class TomeasViewModel : INotifyPropertyChanged
     {
         private readonly ITeamsService _teamsService;
-        private IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
+        private IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
 
         public List<KoinotitaDtoBase>? Koinotites { get; set; }
         public string TomeasNumber { get; set; }
 
-        public TomeasViewModel(int tomeasNumber, ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService)
+        public TomeasViewModel(int tomeasNumber, ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService)
         {
             _teamsService = teamsService;
             _paidiaService = paidiaService;

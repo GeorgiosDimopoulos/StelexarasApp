@@ -5,14 +5,14 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 {
     public class PaidiInfoViewModel : INotifyPropertyChanged
     {
-        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
+        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
         private ICommand SavePaidiCommand { get; }
 
         public PaidiResponse PaidiDto { get; set; } = new PaidiResponse();
         public string SkiniName { get; set; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public PaidiInfoViewModel(PaidiResponse paidiDto, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> peopleService, string skini)
+        public PaidiInfoViewModel(PaidiResponse paidiDto, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService, string skini)
         {
             PaidiDto = paidiDto;
             _paidiaService = peopleService;
@@ -22,11 +22,7 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 
         public async Task<bool> DeletePaidiAsync(int id)
         {
-            var deletePaidiDto = new DeletePaidiRequest
-            {
-                Id = id
-            };
-            if (await _paidiaService.DeletePaidiInService(deletePaidiDto))
+            if (await _paidiaService.DeletePaidiInService(id))
             {
                 StatusMessage = "Delete successful";
                 return true;

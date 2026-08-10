@@ -6,10 +6,10 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
     public class SxoliViewModel : INotifyPropertyChanged
     {
         private readonly ITeamsService _teamsService;
-        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
+        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
         public List<string> SkinesNames { get; set; }
 
-        public SxoliViewModel(ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService)
+        public SxoliViewModel(ITeamsService teamsService, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService)
         {
             _teamsService = teamsService;
             _paidiaService = paidiaService;

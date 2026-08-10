@@ -7,7 +7,7 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
     public class StelexosInfoViewModel : INotifyPropertyChanged
     {
         private readonly int Id;
-        private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _stelexiService;
+        private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _stelexiService;
         private readonly bool skiniIsChanged;
         private StelexosDtoBase _stelexos;
 
@@ -28,7 +28,7 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
         public ICommand SaveStelexosCommand { get; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public StelexosInfoViewModel(StelexosDtoBase stelexos, int id, IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> stelexiService)
+        public StelexosInfoViewModel(StelexosDtoBase stelexos, int id, IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> stelexiService)
         {
             _stelexiService = stelexiService;
             skiniIsChanged = false;
@@ -39,8 +39,7 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 
         public async Task<bool> DeleteStelexos()
         {
-            var request = new DeleteStelexosRequest { Id = Id };
-            return await _stelexiService.DeleteStelexos(request);
+            return await _stelexiService.DeleteStelexos(Id);
         }
 
         public async Task OnSaveStelexos()

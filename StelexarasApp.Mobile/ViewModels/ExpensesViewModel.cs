@@ -25,11 +25,7 @@ namespace StelexarasApp.Mobile.ViewModels
 
         public async Task DeleteExpense(int id)
         {
-            var deleteExpenseRequest = new DeleteExpenseRequest
-            {
-                Id = id
-            };
-            await _expenseService.DeleteExpenseInService(deleteExpenseRequest);
+            await _expenseService.DeleteExpenseInService(id);
         }
 
         public async Task LoadExpensesAsync()

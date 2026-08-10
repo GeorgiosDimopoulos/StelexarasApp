@@ -56,7 +56,7 @@ public class DutyRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        await dutyRepository.DeleteDutyInDb(duty);
+        await dutyRepository.DeleteDutyInDb(duty.Id);
         var duties = await _dbContext.Duties.ToListAsync();
 
         // Assert

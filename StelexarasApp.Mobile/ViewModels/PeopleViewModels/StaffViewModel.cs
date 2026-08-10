@@ -6,12 +6,12 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class StaffViewModel : INotifyPropertyChanged
 {
-    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _staffService;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _staffService;
     private readonly IApiService _apiService;
 
     public ObservableCollection<StelexosResponse> AllStaff { get; set; }
 
-    public StaffViewModel(IApiService apiService, IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> staffService)
+    public StaffViewModel(IApiService apiService, IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> staffService)
     {
         _staffService = staffService ?? throw new ArgumentNullException(nameof(staffService));
         _apiService = apiService ?? throw new ArgumentNullException(nameof(apiService));

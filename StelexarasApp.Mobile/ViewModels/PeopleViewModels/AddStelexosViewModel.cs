@@ -4,7 +4,7 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class AddStelexosViewModel
 {
-    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _staffService;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _staffService;
     private readonly ITeamsService _teamsService;
 
     public ObservableCollection<string> ThesiOptions { get; set; }
@@ -16,7 +16,7 @@ public class AddStelexosViewModel
     public Sex Sex { get; set; } = default!;
     public Command SaveCommand { get; }
 
-    public AddStelexosViewModel(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> staffService, ITeamsService teamsService)
+    public AddStelexosViewModel(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> staffService, ITeamsService teamsService)
     {
         _staffService = staffService;
         _teamsService = teamsService;

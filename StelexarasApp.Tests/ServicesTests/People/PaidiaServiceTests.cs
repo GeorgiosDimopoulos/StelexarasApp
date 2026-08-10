@@ -93,11 +93,6 @@ public class PaidiaServiceTests
     [Fact]
     public async Task DeletePaidiShouldReturnOk()
     {
-        var paidiToDeleteRequest = new DeletePaidiRequest
-        {
-            Id = 1
-        };
-
         var paidiToDelete = new Paidi
         {
             Id = 1,
@@ -107,13 +102,13 @@ public class PaidiaServiceTests
         };
 
         _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id)).ReturnsAsync(paidiToDelete);
-        _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete)).ReturnsAsync(true);
+        _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete.Id)).ReturnsAsync(true);
 
-        var result = await _paidiService.DeletePaidiInService(paidiToDeleteRequest);
+        var result = await _paidiService.DeletePaidiInService(paidiToDelete.Id);
 
         Assert.True(result);
         _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id), Times.Once);
-        _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete.Id), Times.Once);
     }
 
     [Theory]

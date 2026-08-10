@@ -17,9 +17,9 @@ public class DutyViewModel
         LoadDuties();
     }
 
-    public async Task<bool> DeleteDuty(DeleteDutyRequest deleteDutyRequest)
+    public async Task<bool> DeleteDuty(int dutyId)
     {
-        var result = await _dutyService.DeleteDutyInService(deleteDutyRequest);
+        var result = await _dutyService.DeleteDutyInService(dutyId);
 
         if (result)
             return true;

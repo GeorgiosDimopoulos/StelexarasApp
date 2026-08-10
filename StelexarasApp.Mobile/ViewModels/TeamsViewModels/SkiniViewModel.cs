@@ -6,12 +6,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels;
 
 public class SkiniViewModel : INotifyPropertyChanged
 {
-    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiaService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
     private readonly IMapper mapper;
 
     public Skini Skini { get; set; }
 
-    public SkiniViewModel(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiaService, IMapper mapper)
+    public SkiniViewModel(SkiniResponse skini, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, IMapper mapper)
     {
         this.mapper = mapper;
         this.Skini = mapper.Map<Skini>(skini);

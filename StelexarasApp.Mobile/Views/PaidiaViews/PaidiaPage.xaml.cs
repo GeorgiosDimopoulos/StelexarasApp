@@ -2,10 +2,10 @@
 {
     public partial class PaidiaPage : ContentPage
     {
-        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _peopleService;
+        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _peopleService;
         private readonly PaidiaViewModel paidiaViewModel;
 
-        public PaidiaPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> peopleService)
+        public PaidiaPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService)
         {
             InitializeComponent();
             _peopleService = peopleService;
