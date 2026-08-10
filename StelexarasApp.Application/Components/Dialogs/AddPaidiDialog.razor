@@ -1,44 +1,49 @@
 ﻿@using StelexarasApp.Library.Dtos.People.Children
+@using StelexarasApp.Library.Models.Atoma
 
 @inherits ComponentBase
 
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 
-<MudDialog>
-	<DialogContent>
-		<MudForm Spacing="2">
-			<MudTextField @bind-Value="req.FullName" Label="Όνομα" />
-			<MudTextField @bind-Value="req.FullName" Label="Επίθετο" />
-			<MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
-			<MudSelect @bind-Value="req.Sex" Label="Φύλο" />
-			<MudSwitch @bind-Value="req.SeAdeia" Label="Σε Αδεία;" />
-		</MudForm>
-	</DialogContent>
-	<DialogActions>
-		<MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Cancel</MudButton>
-		<MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Save</MudButton>
-	</DialogActions>
+<MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
+    <DialogContent>
+        <MudForm Spacing="2">
+            <MudTextField @bind-Value="req.FullName" Label="Όνομα" />
+            <MudTextField @bind-Value="req.FullName" Label="Επίθετο" />
+            <MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
+            <MudSelect T="Sex" @bind-Value="req.Sex" Label="Φύλο">
+                @foreach (var sex in Enum.GetValues<Sex>())
+                {
+                    <MudSelectItem T="Sex" Value="sex">@sex</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSwitch @bind-Value="req.SeAdeia" Label="Σε Αδεία;" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Ακύρωση</MudButton>
+        <MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Αποθήκευση</MudButton>
+    </DialogActions>
 </MudDialog>
 
-
 @code {
-	private CreatePaidiRequest req = new();
-	
-	[CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
+    private CreatePaidiRequest req = new();
 
-	protected async override void OnParametersSet()
-	{
-		await Task.Delay(500);
-	}
+    [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
-	private void Cancel(MouseEventArgs args)
-	{
-		Dialog?.Close(DialogResult.Ok(req));
-	}
+    protected async override void OnParametersSet()
+    {
+        await Task.Delay(500);
+    }
 
-	private async Task Save(MouseEventArgs _)
-	{
-		
-	}
+    private void Cancel(MouseEventArgs args)
+    {
+        Dialog?.Close(DialogResult.Ok(req));
+    }
+
+    private async Task Save(MouseEventArgs _)
+    {
+
+    }
 }

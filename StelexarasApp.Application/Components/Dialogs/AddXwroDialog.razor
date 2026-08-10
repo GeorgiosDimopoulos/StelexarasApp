@@ -5,16 +5,21 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 
-<MudDialog>
+<MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
     <DialogContent>
         <MudForm Spacing="2">
             <MudTextField @bind-Value="req.Name" Label="Όνομα" />
-            <MudSelect @bind-Value="req.XwrosType" Label="Είδος Χώρου" />
+            <MudSelect T="XwrosType" @bind-Value="req.XwrosType" Label="Είδος Χώρου">
+                @foreach (var xwrosType in Enum.GetValues<XwrosType>())
+                {
+                    <MudSelectItem T="XwrosType" Value="xwrosType">@xwrosType</MudSelectItem>
+                }
+            </MudSelect>
         </MudForm>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Save</MudButton>
+        <MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Ακύρωση</MudButton>
+        <MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Αποθήκευση</MudButton>
     </DialogActions>
 </MudDialog>
 
