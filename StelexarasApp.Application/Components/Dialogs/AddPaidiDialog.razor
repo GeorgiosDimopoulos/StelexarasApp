@@ -1,10 +1,12 @@
-﻿@using StelexarasApp.Library.Dtos.People.Children
+﻿@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.People.Children
 @using StelexarasApp.Library.Models.Atoma
 
 @inherits ComponentBase
 
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
+@inject IPaidiaApi PaidiaApi
 
 <MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
     <DialogContent>
@@ -44,6 +46,26 @@
 
     private async Task Save(MouseEventArgs _)
     {
+        var newPaidiRequest = new CreatePaidiRequest
+        {
+            FullName = req.FullName,
+            Age = req.Age,
+            Sex = req.Sex,
+            PaidiType = req.PaidiType,
+            SeAdeia = req.SeAdeia,            
+            SkiniName = req.SkiniName
+        };
 
+        var result = await PaidiaApi.PostPaidi(newPaidiRequest);
+        if (result == null)
+        {
+            Snackbar.Add("Σφάλμα κατά την αποθήκευση του παιδιού.", Severity.Error);
+            return;
+        }
+        else
+        {
+            Snackbar.Add("Το παιδι αποθηκεύτηκε επιτυχώς.", Severity.Success);
+            Dialog?.Close(DialogResult.Ok(newPaidiRequest));
+        }
     }
 }

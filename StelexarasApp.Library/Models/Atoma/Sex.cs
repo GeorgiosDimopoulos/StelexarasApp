@@ -1,8 +1,13 @@
-﻿namespace StelexarasApp.Library.Models.Atoma
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StelexarasApp.Library.Models.Atoma
 {
-    public enum Sex
+    public enum Sex        
     {
+        [Display(Name = "Γυναίκα")]
         Female,
+
+        [Display(Name = "Άνδρας")]
         Male
     }
 }

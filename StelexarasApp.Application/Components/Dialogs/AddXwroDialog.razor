@@ -1,9 +1,14 @@
-﻿@using StelexarasApp.Library.Dtos.Domi
+﻿@using System.ComponentModel.DataAnnotations
+@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.Domi
 
 @inherits ComponentBase
 
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
+@inject IKoinotitesApi KoinotitesApi
+@inject ITomeisApi TomeisApi
+@inject ISkinesApi SkinesApi
 
 <MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
     <DialogContent>
@@ -43,27 +48,71 @@
         switch (req.XwrosType)
         {
             case XwrosType.Skini:
-                var skini = new SkiniDtoBase
+                var skini = new CreateSkiniRequest
                 {
                     Name = req.Name,
-                    KoinotitaId = req.KoinotitaId ?? 0
+                    KoinotitaId = req.KoinotitaId ?? 0,
+                    // Sex = Sex.Male
                 };
+
+                var result = await SkinesApi.PostSkini(skini);
+                if (result == null)
+                {
+                    Snackbar.Add("Σφάλμα κατά την αποθήκευση της σκηνής.", Severity.Error);
+                    return;
+                }
+                else
+                {
+                    Snackbar.Add("Η σκηνή αποθηκεύτηκε επιτυχώς.", Severity.Success);
+
+                    Dialog?.Close(DialogResult.Ok(result));
+                }
+
                 Dialog?.Close(DialogResult.Ok(skini));
                 break;
             case XwrosType.Koinotita:
-                var koinotita = new KoinotitaDtoBase
+                var koinotita = new CreateKoinotitaRequest
                 {
                     Name = req.Name,
                     TomeasName = req.Tomeasname ?? string.Empty
                 };
+
+                var kresult = await KoinotitesApi.PostKoinotita(koinotita);
+                if (kresult == false)
+                {
+                    Snackbar.Add("Σφάλμα κατά την αποθήκευση της κοινότητας.", Severity.Error);
+                    return;
+                }
+                else
+                {
+                    Snackbar.Add("Η κοινότητα αποθηκεύτηκε επιτυχώς.", Severity.Success);
+
+                    Dialog?.Close(DialogResult.Ok(kresult));
+                }
+
                 Dialog?.Close(DialogResult.Ok(koinotita));
                 break;
             case XwrosType.Tomeas:
-                var tomeas = new TomeasDtoBase
+                var tomeas = new CreateTomeasRequest
                 {
                     Name = req.Name
+
                 };
-                Dialog?.Close(DialogResult.Ok(tomeas));
+
+                var tresult = await TomeisApi.PostTomea(tomeas);
+                if (tresult == null)
+                {
+                    Snackbar.Add("Σφάλμα κατά την αποθήκευση του τομέα.", Severity.Error);
+                    return;
+                }
+                else
+                {
+                    Snackbar.Add("Ο τομέας αποθηκεύτηκε επιτυχώς.", Severity.Success);
+
+                    Dialog?.Close(DialogResult.Ok(tresult));
+                }
+
+                Dialog?.Close(DialogResult.Ok(tresult));
                 break;
         }
     }
@@ -79,8 +128,13 @@
 
     public enum XwrosType
     {
+        [Display(Name = "Σκηνή")]
         Skini,
+
+        [Display(Name = "Κοινότητα")]
         Koinotita,
+
+        [Display(Name = "Τομέας")]
         Tomeas
     }
 }

@@ -1,52 +1,73 @@
-﻿@using StelexarasApp.Library.Dtos.People.Staff
+﻿@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.People.Staff
 @using StelexarasApp.Library.Models.Atoma
 
 @inherits ComponentBase
 
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
+@inject IStelexiApi StelexiApi
 
 <MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
-	<DialogContent>
-		<MudForm Spacing="2">
-			<MudTextField @bind-Value="req.FullName" Label="Όνομα" />
-			<MudTextField @bind-Value="req.FullName" Label="Επίθετο" />
-			<MudNumericField @bind-Value="req.Age" Label="Ηλικία" />			
-			<MudSelect T="Sex" @bind-Value="req.Sex" Label="Φύλο">
-				@foreach (var sex in Enum.GetValues<Sex>())
-				{
-					<MudSelectItem T="Sex" Value="sex">@sex</MudSelectItem>
-				}
-			</MudSelect>
-			<MudNumericField @bind-Value="req.XwrosName" Label="Χώρος" />
-			<MudSwitch @bind-Value="req.Thesi" Label="Θέση" />
-			<MudNumericField @bind-Value="req.Tel" Label="Τηλέφωνο" />
-		</MudForm>
-	</DialogContent>
-	<DialogActions>
-		<MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Ακύρωση</MudButton>
-		<MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Αποθήκευση</MudButton>
-	</DialogActions>
+    <DialogContent>
+        <MudForm Spacing="2">
+            <MudTextField @bind-Value="req.FullName" Label="Όνομα" />
+            <MudTextField @bind-Value="req.FullName" Label="Επίθετο" />
+            <MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
+            <MudSelect T="Sex" @bind-Value="req.Sex" Label="Φύλο">
+                @foreach (var sex in Enum.GetValues<Sex>())
+                {
+                    <MudSelectItem T="Sex" Value="sex">@sex</MudSelectItem>
+                }
+            </MudSelect>
+            <MudTextField @bind-Value="req.XwrosName" Label="Χώρος" />
+            @* <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" /> *@
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Ακύρωση</MudButton>
+        <MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Αποθήκευση</MudButton>
+    </DialogActions>
 </MudDialog>
 
 
 @code {
-	private CreateStelexosRequest req = new();
+    private CreateStelexosRequest req = new();
 
-	[CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
+    [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
-	protected async override void OnParametersSet()
-	{
-		await Task.Delay(500);
-	}
+    protected async override void OnParametersSet()
+    {
+        await Task.Delay(500);
+    }
 
-	private void Cancel(MouseEventArgs args)
-	{
-		Dialog?.Close(DialogResult.Ok(req));
-	}
+    private void Cancel(MouseEventArgs args)
+    {
+        Dialog?.Close(DialogResult.Ok(req));
+    }
 
-	private async Task Save(MouseEventArgs _)
-	{
+    private async Task Save(MouseEventArgs _)
+    {
+        var newStelexosRequest = new CreateStelexosRequest
+        {
+            FullName = req.FullName,
+            Age = req.Age,
+            Sex = req.Sex,
+            Tel = req.Tel,
+            XwrosName = req.XwrosName,
+            Thesi = req.Thesi            
+        };
 
-	}
+        var result = await StelexiApi.PostStelexos(newStelexosRequest);
+        if (result == null)
+        {
+            Snackbar.Add("Σφάλμα κατά την αποθήκευση του στελέχους.", Severity.Error);
+            return;
+        }
+        else
+        {
+            Snackbar.Add("Το στέλεχος αποθηκεύτηκε επιτυχώς.", Severity.Success);
+            Dialog?.Close(DialogResult.Ok(newStelexosRequest));
+        }
+    }
 }
