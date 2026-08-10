@@ -64,7 +64,7 @@ class Program
                     Tel = "123456789",
                     XwrosName = "Test Xwros",
                 };
-                if (await _stelexiService.CreateStelexos(newOmadarxis, Thesi.Omadarxis))
+                if (await _stelexiService.CreateStelexos(newOmadarxis))
                 {
                     await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newOmadarxis.FullName}");
                     Console.WriteLine("Stelexos created");
@@ -82,7 +82,7 @@ class Program
                     Tel = "123456789",
                     XwrosName = "Test Xwros",
                 };
-                if (await _stelexiService.CreateStelexos(newKoinotarxis, Thesi.Koinotarxis))
+                if (await _stelexiService.CreateStelexos(newKoinotarxis))
                 {
                     await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New koinotarxis created: {newKoinotarxis.FullName}");
                     Console.WriteLine("Stelexos created");
@@ -100,7 +100,7 @@ class Program
                     Thesi = Thesi.Tomearxis,
                     XwrosName = "Test Xwros",
                 };
-                if (await _stelexiService.CreateStelexos(newTomearxis, Thesi.Tomearxis))
+                if (await _stelexiService.CreateStelexos(newTomearxis))
                 {
                     await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newTomearxis.FullName}");
                     Console.WriteLine("Stelexos created");
@@ -117,7 +117,7 @@ class Program
                     Tel = "123456789",
                     XwrosName = "Test Xwros",
                 };
-                if (await _stelexiService.CreateStelexos(newEkpaideutis, Thesi.Ekpaideutis))
+                if (await _stelexiService.CreateStelexos(newEkpaideutis))
                 {
                     await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New ekpaideutis created: {newEkpaideutis.FullName}");
                     Console.WriteLine("Stelexos created");

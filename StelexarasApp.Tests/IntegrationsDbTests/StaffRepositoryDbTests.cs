@@ -154,7 +154,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Omadarxis, string.Empty, new());
+        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(string.Empty, new());
 
         // Assert
         Assert.NotNull(result);
@@ -171,7 +171,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(Thesi.Koinotarxis, string.Empty, new());
+        var result = await _stelexiRepository.GetStelexoiAnaXwroInDb(string.Empty, new());
 
         // Assert
         Assert.NotNull(result);

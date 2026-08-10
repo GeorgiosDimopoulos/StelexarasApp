@@ -16,7 +16,7 @@ public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosR
         _stelexiRepository = stelexiRepository;
     }
 
-    public async Task<bool> CreateStelexos(CreateStelexosRequest stelexosDto, Thesi thesi)
+    public async Task<bool> CreateStelexos(CreateStelexosRequest stelexosDto)
     {
         try
         {
@@ -70,9 +70,9 @@ public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosR
         return await _stelexiRepository.DeleteStelexosInDb(id);
     }
 
-    public async Task<IEnumerable<StelexosResponse>> GetStelexi(Thesi thesi, string? xwros, StelexosQueryParameters? stelexosQueryParameters)
+    public async Task<IEnumerable<StelexosResponse>> GetStelexi(string? xwros, StelexosQueryParameters? stelexosQueryParameters)
     {
-        var stelexosInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(thesi, xwros, stelexosQueryParameters);
+        var stelexosInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(xwros, stelexosQueryParameters);
         if (stelexosInDb is null)
             return null!;
         var stelexosInService = _mapper.Map<IEnumerable<StelexosResponse>>(stelexosInDb);
@@ -89,9 +89,9 @@ public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosR
         return stelexosInService;
     }
 
-    public async Task<StelexosResponse> GetStelexosByName(Thesi thesi, string n, StelexosQueryParameters stelexosQueryParameters)
+    public async Task<StelexosResponse> GetStelexosByName(string n, StelexosQueryParameters stelexosQueryParameters)
     {
-        var stelexosInDb = await _stelexiRepository.GetStelexosByNameInDb(n, thesi, stelexosQueryParameters);
+        var stelexosInDb = await _stelexiRepository.GetStelexosByNameInDb(n, stelexosQueryParameters);
         if (stelexosInDb is null)
             return null!;
 

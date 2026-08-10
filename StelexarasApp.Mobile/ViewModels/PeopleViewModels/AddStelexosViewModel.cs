@@ -44,7 +44,7 @@ public class AddStelexosViewModel
                     Thesi = Thesi.Omadarxis,
                     Sex = Sex
                 };
-                await _staffService.CreateStelexos(omadarxis, Thesi.Omadarxis);
+                await _staffService.CreateStelexos(omadarxis);
                 break;
             case Thesi.Koinotarxis:
                 var koinotarxis = new CreateStelexosRequest
@@ -56,7 +56,7 @@ public class AddStelexosViewModel
                     Age = Age,
                     Sex = Sex
                 };
-                await _staffService.CreateStelexos(koinotarxis, Thesi.Koinotarxis);
+                await _staffService.CreateStelexos(koinotarxis);
                 break;
             case Thesi.Tomearxis:
                 var tomearxis = new CreateStelexosRequest
@@ -68,7 +68,7 @@ public class AddStelexosViewModel
                     Age = Age,
                     Sex = Sex
                 };
-                await _staffService.CreateStelexos(tomearxis, Thesi.Tomearxis);
+                await _staffService.CreateStelexos(tomearxis);
                 break;
         }
 

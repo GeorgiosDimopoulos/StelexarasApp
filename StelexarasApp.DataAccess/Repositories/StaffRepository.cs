@@ -39,19 +39,16 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(Thesi thesi, string? xwrosName, StelexosQueryParameters? queryParameters)
+    public async Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(string? xwrosName, StelexosQueryParameters? queryParameters)
     {
         try
         {
-            return thesi switch
-            {
-                Thesi.Omadarxis => await GetOmadarxesAnaXwro(xwrosName, queryParameters as OmadarxisQueryParameters ?? throw new ArgumentNullException(nameof(TomearxisQueryParameters))),
-                Thesi.Koinotarxis => await GetKoinotarxesAnaXwro(xwrosName, queryParameters as KoinotarxisQueryParameters ?? throw new ArgumentNullException(nameof(TomearxisQueryParameters))),
-                Thesi.Tomearxis => await GetTomearxes(queryParameters as TomearxisQueryParameters ?? throw new ArgumentNullException(nameof(TomearxisQueryParameters))),
-                Thesi.Ekpaideutis => await _dbContext.Ekpaideutes!.ToListAsync(),
-                Thesi.None => throw new NotImplementedException(),
-                _ => throw new NotImplementedException(),
-            };
+            var stelexi = (await GetOmadarxesAnaXwro(xwrosName, queryParameters as OmadarxisQueryParameters)).Cast<IStelexos>();
+            stelexi = stelexi.Concat(await GetKoinotarxesAnaXwro(xwrosName, queryParameters as KoinotarxisQueryParameters ?? throw new ArgumentNullException(nameof(TomearxisQueryParameters)))).ToList();
+            stelexi = stelexi.Concat(await GetTomearxes(queryParameters as TomearxisQueryParameters ?? throw new ArgumentNullException(nameof(TomearxisQueryParameters)))).ToList();
+            stelexi = stelexi.Concat(await _dbContext.Ekpaideutes!.ToListAsync()).ToList();
+
+            return stelexi;
         }
         catch (Exception ex)
         {
@@ -204,34 +201,22 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IStelexos> GetStelexosByNameInDb(string name, Thesi? thesi, StelexosQueryParameters stelexosQueryParameters)
+    public async Task<IStelexos> GetStelexosByNameInDb(string name, StelexosQueryParameters stelexosQueryParameters)
     {
         try
         {
-            if (string.IsNullOrEmpty(name) || thesi is null)
+            if (string.IsNullOrEmpty(name))
                 return null!;
-
-            if (thesi == Thesi.None)
-            {
-                IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
-                    .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
-                    .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
-                return await query.FirstOrDefaultAsync(e => e.FullName == name) ?? null!;
-            }
 
             // ToDo: implement it
             if (stelexosQueryParameters.IncludeXwros)
             {
             }
 
-            return thesi switch
-            {
-                Thesi.Omadarxis => await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.FullName == name) ?? null!,
-                Thesi.Koinotarxis => await _dbContext.Koinotarxes!.FirstOrDefaultAsync(k => k.FullName == name) ?? null!,
-                Thesi.Tomearxis => await _dbContext.Tomearxes!.FirstOrDefaultAsync(t => t.FullName == name) ?? null!,
-                Thesi.Ekpaideutis => await _dbContext.Ekpaideutes!.FirstOrDefaultAsync(t => t.FullName == name) ?? null!,
-                _ => throw new ArgumentOutOfRangeException(nameof(thesi), thesi, null)
-            };
+            IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
+                    .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
+                    .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
+            return await query.FirstOrDefaultAsync(e => e.FullName == name) ?? null!;
         }
         catch (Exception ex)
         {
