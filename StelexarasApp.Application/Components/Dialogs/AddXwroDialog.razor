@@ -1,6 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
+@using StelexarasApp.Library.Models.Atoma
 
 @inherits ComponentBase
 
@@ -17,9 +18,34 @@
             <MudSelect T="XwrosType" @bind-Value="req.XwrosType" Label="Είδος Χώρου">
                 @foreach (var xwrosType in Enum.GetValues<XwrosType>())
                 {
-                    <MudSelectItem T="XwrosType" Value="xwrosType">@xwrosType</MudSelectItem>
+                    <MudSelectItem T="XwrosType" Value="xwrosType">
+                        @GetDisplayName(xwrosType)
+                    </MudSelectItem>
                 }
             </MudSelect>
+            @if (req.XwrosType == XwrosType.Skini)
+            {
+                <MudSelect T="int?" Label="Κοινότητα" @bind-Value="req.KoinotitaId">
+                    @foreach (var koinotita in koinotites)
+                    {
+                        <MudSelectItem T="int?" Value="@((int?)koinotita.Id)">
+                            @koinotita.Name
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+            }
+
+            @if (req.XwrosType == XwrosType.Koinotita)
+            {
+                <MudSelect T="string" Label="Τομέας" @bind-Value="req.Tomeasname">
+                    @foreach (var tomeas in tomeis)
+                    {
+                        <MudSelectItem T="string" Value="@(tomeas.Name)">
+                            @tomeas.Name
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+            }
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -30,12 +56,17 @@
 
 @code {
     private AddXwrosModel req = new();
+    private List<KoinotitaResponse> koinotites = new();
+    private List<TomeasResponse> tomeis = new();
 
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
     protected async override void OnParametersSet()
     {
         await Task.Delay(500);
+
+        koinotites = await KoinotitesApi.GetKoinotitesAsync();
+        tomeis = await TomeisApi.GetTomeisAsync(new());
     }
 
     private void Cancel(MouseEventArgs args)
@@ -52,7 +83,7 @@
                 {
                     Name = req.Name,
                     KoinotitaId = req.KoinotitaId ?? 0,
-                    // Sex = Sex.Male
+                    Sex = Sex.Male // ToDo: change it
                 };
 
                 var result = await SkinesApi.PostSkini(skini);
@@ -136,5 +167,12 @@
 
         [Display(Name = "Τομέας")]
         Tomeas
+    }
+
+    private string GetDisplayName(Enum type)
+    {
+        var member = type.GetType().GetMember(type.ToString()).First();
+        var displayAttribute = member.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+        return displayAttribute?.Name ?? type.ToString();
     }
 }

@@ -9,12 +9,12 @@ using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Library.Dtos;
 using StelexarasApp.Services.Interfaces;
-using StelexarasApp.Services.IServices;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
 using StelexarasApp.Services.Validators;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace StelexarasApp.API.Helpers;
 
@@ -57,7 +57,10 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IValidator<ExpenseDtoBase>, ExpenseValidator>();
 
         // Add Controllers
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
     }
 
     public static void ConfigureJwtAuthenticationAndSwagger(this IServiceCollection services, IConfiguration configuration)

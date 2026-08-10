@@ -48,8 +48,6 @@ public class PaidiaController : ControllerBase
         return Ok(paidia);
     }
 
-
-    [Authorize]
     [HttpPost]
     public async Task<ActionResult<Paidi>> PostKataskinotis([FromBody] CreatePaidiRequest createPaidiRequest)
     {

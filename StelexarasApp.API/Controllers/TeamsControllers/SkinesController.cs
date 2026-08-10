@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace StelexarasApp.API.Controllers.TeamsControllers;
 
@@ -42,19 +41,17 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpPost("Skini")]
-    public async Task<IActionResult> PostSkini([FromQuery] CreateSkiniRequest skiniDto)
+    public async Task<IActionResult> PostSkini([FromBody] CreateSkiniRequest skiniDto)
     {
         var result = await _teamsService.AddSkiniInService(skiniDto);
 
         if (!result)
             return NotFound();
 
-        return Ok(result);
+        return Ok(true);
     }
 
-    [Authorize]
     [HttpPut("Skini/{id}")]
     public async Task<IActionResult> PutSkini(int id, [FromBody] UpdateSkiniRequest skiniDto)
     {
@@ -66,7 +63,6 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpDelete("Skini/{id}")]
     public async Task<IActionResult> DeleteSkini(int id)
     {
