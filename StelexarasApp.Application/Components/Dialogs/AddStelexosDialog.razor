@@ -1,4 +1,5 @@
-﻿@using StelexarasApp.Application.ApiClients
+﻿@using System.ComponentModel.DataAnnotations
+@using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.People.Staff
 @using StelexarasApp.Library.Models.Atoma
 
@@ -8,7 +9,7 @@
 @inject NavigationManager Navigation
 @inject IStelexiApi StelexiApi
 
-<MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
+<MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
         <MudForm Spacing="2">
             <MudTextField @bind-Value="req.FullName" Label="Όνομα" />
@@ -17,7 +18,9 @@
             <MudSelect T="Sex" @bind-Value="req.Sex" Label="Φύλο">
                 @foreach (var sex in Enum.GetValues<Sex>())
                 {
-                    <MudSelectItem T="Sex" Value="sex">@sex</MudSelectItem>
+                    <MudSelectItem T="Sex" Value="sex">
+                        @GetDisplayName(sex)
+                    </MudSelectItem>
                 }
             </MudSelect>
             <MudTextField @bind-Value="req.XwrosName" Label="Χώρος" />
@@ -55,7 +58,7 @@
             Sex = req.Sex,
             Tel = req.Tel,
             XwrosName = req.XwrosName,
-            Thesi = req.Thesi            
+            Thesi = req.Thesi
         };
 
         var result = await StelexiApi.PostStelexos(newStelexosRequest);
@@ -69,5 +72,12 @@
             Snackbar.Add("Το στέλεχος αποθηκεύτηκε επιτυχώς.", Severity.Success);
             Dialog?.Close(DialogResult.Ok(newStelexosRequest));
         }
+    }
+
+    private string GetDisplayName(Enum sex)
+    {
+        var member = sex.GetType().GetMember(sex.ToString()).First();
+        var displayAttribute = member.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute; 
+        return displayAttribute?.Name ?? sex.ToString();
     }
 }

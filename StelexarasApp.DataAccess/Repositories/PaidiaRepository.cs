@@ -250,7 +250,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         }
     }
 
-    public async Task<bool> DeletePaidiInDb(Paidi paidi)
+    public async Task<bool> DeletePaidiInDb(int id)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -260,10 +260,10 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
 
         try
         {
-            if (paidi.Id <= 0)
+            if (id <= 0)
                 return false;
 
-            var existingPaidi = await _dbContext.Paidia.FindAsync(paidi.Id);
+            var existingPaidi = await _dbContext.Paidia.FindAsync(id);
 
             if (existingPaidi != null)
             {

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace StelexarasApp.Services.Services;
 
-public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>
+public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>
 {
     private readonly ILogger<PaidiaService> _logger;
     private readonly IPaidiaRepository _paidiRepository;
@@ -47,16 +47,16 @@ public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiReques
         }
     }
 
-    public async Task<bool> DeletePaidiInService(DeletePaidiRequest request)
+    public async Task<bool> DeletePaidiInService(int id)
     {
-        if (request.Id <= 0 || _mapper == null || _paidiRepository is null)
+        if (_mapper == null || _paidiRepository is null)
             return false;
 
-        var paidi = await _paidiRepository.GetPaidiByIdFromDb(request.Id);
+        var paidi = await _paidiRepository.GetPaidiByIdFromDb(id);
         if (paidi == null)
             return false;
 
-        return await _paidiRepository.DeletePaidiInDb(paidi);
+        return await _paidiRepository.DeletePaidiInDb(id);
     }
 
     public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaInService(string koinotita)

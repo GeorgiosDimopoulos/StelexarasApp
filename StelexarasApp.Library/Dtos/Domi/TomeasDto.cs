@@ -9,8 +9,6 @@ public record CreateTomeasRequest : TomeasDtoBase { }
 
 public record UpdateTomeasRequest : TomeasDtoBase { }
 
-public record DeleteTomeasRequest : TomeasDtoBase { }
-
 public record TomeasResponse : TomeasDtoBase
 {
     public int Id { get; set; }

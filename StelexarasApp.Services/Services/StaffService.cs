@@ -65,9 +65,9 @@ public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosR
         }
     }
 
-    public async Task<bool> DeleteStelexos(DeleteStelexosRequest id)
+    public async Task<bool> DeleteStelexos(int id)
     {
-        return await _stelexiRepository.DeleteStelexosInDb(id.Id);
+        return await _stelexiRepository.DeleteStelexosInDb(id);
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetStelexi(Thesi thesi, string? xwros, StelexosQueryParameters? stelexosQueryParameters)

@@ -47,12 +47,11 @@ public class ExpenseService : IExpenseService
         return await _expenseRepository.AddExpenseInDb(expense);
     }
 
-    public async Task<bool> DeleteExpenseInService(DeleteExpenseRequest expenseRequest)
+    public async Task<bool> DeleteExpenseInService(int id)
     {
         try
         {
-            var expense = _mapper.Map<Expense>(expenseRequest);
-            return await _expenseRepository.DeleteExpenseInDb(expense.Id);
+            return await _expenseRepository.DeleteExpenseInDb(id);
         }
         catch (Exception ex)
         {

@@ -13,11 +13,6 @@ public record UpdateExpenseRequest : ExpenseDtoBase
     public int Id { get; init; }
 }
 
-public record DeleteExpenseRequest
-{
-    public int Id { get; set; }
-}
-
 public record ExpenseResponse : ExpenseDtoBase
 {
     public int Id { get; set; }

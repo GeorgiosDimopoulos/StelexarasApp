@@ -12,11 +12,6 @@ public record UpdateDutyRequest : DutyDtoBase
     public int Id { get; init; }
 }
 
-public record DeleteDutyRequest
-{
-    public int Id { get; set; }
-}
-
 public record DutyResponse : DutyDtoBase
 {
     public int Id { get; set; }

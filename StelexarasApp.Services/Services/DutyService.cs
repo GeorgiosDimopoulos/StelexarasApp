@@ -36,10 +36,10 @@ public class DutyService : IDutyService
             return false;
         }
     }
-    public async Task<bool> DeleteDutyInService(DeleteDutyRequest dutyDto)
+    
+    public async Task<bool> DeleteDutyInService(int id)
     {
-        var duty = _mapper.Map<Duty>(dutyDto);
-        return await _dutyRepository.DeleteDutyInDb(duty);
+        return await _dutyRepository.DeleteDutyInDb(id);
     }
 
     public async Task<bool> UpdateDutyInService(UpdateDutyRequest updatedDutyDto)

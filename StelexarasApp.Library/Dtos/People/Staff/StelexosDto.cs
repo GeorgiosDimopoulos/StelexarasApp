@@ -17,11 +17,6 @@ public record UpdateStelexosRequest : StelexosDtoBase
     public int Id { get; set; }
 }
 
-public record DeleteStelexosRequest
-{
-    public int Id { get; set; }
-}
-
 public record StelexosResponse : StelexosDtoBase
 {
     public int Id { get; set; }

@@ -18,11 +18,6 @@ public record UpdatePaidiRequest : PaidiDtoBase
     public int Id { get; set; }
 }
 
-public record DeletePaidiRequest
-{
-    public int Id { get; set; }
-}
-
 public record PaidiResponse : PaidiDtoBase
 {
     public int Id { get; set; }

@@ -7,6 +7,6 @@
         Task<IEnumerable<ExpenseResponse>> GetExpensesInService();
         Task<Expense> GetExpenseByIdInService(int expenseId);
         Task<bool> HasData();
-        Task<bool> DeleteExpenseInService(DeleteExpenseRequest deleteExpenseRequest);
+        Task<bool> DeleteExpenseInService(int id);
     }
 }

@@ -11,11 +11,6 @@ public record CreateSkiniRequest : SkiniDtoBase { }
 
 public record UpdateSkiniRequest : SkiniDtoBase { }
 
-public record DeleteSkiniRequest
-{
-    public int Id { get; set; }
-}
-
 public record SkiniResponse : SkiniDtoBase
 {
     public int Id { get; set; }
