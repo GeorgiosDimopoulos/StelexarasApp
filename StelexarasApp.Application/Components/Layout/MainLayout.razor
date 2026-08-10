@@ -1,6 +1,8 @@
 ﻿@using MudBlazor
 @inherits LayoutComponentBase
 
+@inject IDialogService DialogService
+
 <MudThemeProvider />
 <MudPopoverProvider />
 <MudDialogProvider />
@@ -17,8 +19,12 @@
                 <MudAutocomplete T="string" Label="Search..." Variant="Variant.Outlined" ShowProgressIndicator="true" />
             </div>
             <div style="display:flex; gap:12px; align-items:center;">
-                <MudButton Variant="Variant.Text">Help</MudButton>
-                <MudButton Variant="Variant.Text">Contact</MudButton>
+                <MudButton Href="/help" Variant="Variant.Text">Βοήθεια</MudButton>
+                <MudMenu Label="Προσθήκη" StartIcon="@Icons.Material.Filled.Add">
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPaidi">Προσθήκη παιδιού</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddStelexos">Προσθήκη στελέχους</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPlace">Προσθήκη χώρου</MudMenuItem>
+                </MudMenu>
             </div>
         </div>
         @Body
@@ -30,3 +36,20 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    private async Task AddPaidi()
+    {
+        await DialogService.ShowAsync<AddPaidiDialog>("Προσθήκη Παιδιού");
+    }
+
+    private async Task AddStelexos()
+    {
+        await DialogService.ShowAsync<AddStelexosDialog>("Προσθήκη Στελέχους");
+    }
+
+    private async Task AddPlace()
+    {
+        await DialogService.ShowAsync<AddXwroDialog>("Προσθήκη Χώρου");
+    }
+}

@@ -87,16 +87,12 @@ public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiReques
     public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniIdInService(int skiniId)
     {
         var paidia = await _paidiRepository.GetPaidiaInSkiniIdFromDb(skiniId);
-        if (paidia == null)
-            return null!;
-
         var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
         var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
-        if (kataskinotesResponse == null)
-            return null!;
+
         return kataskinotesResponse;
     }
-    
+
     public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySxoliInService()
     {
         var paidia = await _paidiRepository.GetPaidiaInSxoliFromDb();

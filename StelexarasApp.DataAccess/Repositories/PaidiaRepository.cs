@@ -10,10 +10,6 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
 
     public async Task<IEnumerable<Paidi>> GetPaidiaInSkiniIdFromDb(int id)
     {
-        if (_dbContext.Paidia is null || _dbContext.Paidia.Count() == 0)
-        {
-            return null!;
-        }
         return await _dbContext.Paidia.Where(p => p.SkiniId == id).ToListAsync();
     }
 

@@ -44,8 +44,6 @@ public class PaidiaController : ControllerBase
             return BadRequest(ModelState);
 
         var paidia = await _paidiService.GetPaidiaBySkiniIdInService(id);
-        if (paidia == null)
-            return NotFound();
 
         return Ok(paidia);
     }
