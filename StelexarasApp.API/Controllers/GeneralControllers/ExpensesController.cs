@@ -75,12 +75,12 @@ public class ExpensesController : ControllerBase
     }
 
     [HttpDelete("Expense")]
-    public async Task<IActionResult> DeleteExpense(DeleteExpenseRequest deleteExpenseRequest)
+    public async Task<IActionResult> DeleteExpense(int id)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var result = await _expenseService.DeleteExpenseInService(deleteExpenseRequest);
+        var result = await _expenseService.DeleteExpenseInService(id);
         if (!result)
             return NotFound();
         return Ok(result);

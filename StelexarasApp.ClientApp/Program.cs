@@ -43,8 +43,8 @@ class Program
 
     private static async Task HandlePersonCreation(int choice, ServiceProvider serviceProvider)
     {
-        var _paidiService = serviceProvider.GetService<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>>();
-        var _stelexiService = serviceProvider.GetService<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>>();
+        var _paidiService = serviceProvider.GetService<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>>();
+        var _stelexiService = serviceProvider.GetService<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse>>();
 
         switch (choice)
         {
@@ -131,7 +131,7 @@ class Program
         }
     }
 
-    private static async Task CreatePaidi(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiService, int typeOfPaidi)
+    private static async Task CreatePaidi(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiService, int typeOfPaidi)
     {
         var newPaidi = CreatePaidiFromUserInput(typeOfPaidi);
         var createKataskinotisRequest = new CreatePaidiRequest()
@@ -196,11 +196,11 @@ class Program
         .AddTransient<IValidator<DutyDtoBase>, DutyValidator>()
         .AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>()
         .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()
-        .AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse>, PaidiaService>()
+        .AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>, PaidiaService>()
         .AddScoped<IDutyService, DutyService>()
         .AddScoped<IExpenseService, ExpenseService>()
         .AddScoped<ITeamsService, TeamsService>()
-        .AddTransient<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse>, StaffService>()
+        .AddTransient<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse>, StaffService>()
         .AddScoped<IStaffRepository, StaffRepository>()
         .AddScoped<IPaidiaRepository, PaidiaRepository>()
         .AddSingleton<LogFileWriter>()

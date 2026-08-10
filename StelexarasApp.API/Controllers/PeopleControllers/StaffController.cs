@@ -4,9 +4,9 @@ namespace StelexarasApp.API.Controllers.PeopleControllers;
 
 [ApiController]
 [Route("[controller]")]
-public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> stelexiService) : ControllerBase
+public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> stelexiService) : ControllerBase
 {
-    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, DeleteStelexosRequest, StelexosResponse> _stelexiService = stelexiService;
+    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _stelexiService = stelexiService;
 
     [HttpGet("Omadarxes")]
     public async Task<ActionResult<StelexosDtoBase>> GetOmadarxes(string name, OmadarxisQueryParameters stelexosQueryParameters)
@@ -54,9 +54,9 @@ public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexos
     }
 
     [HttpDelete("Omadarxis")]
-    public async Task<ActionResult<bool>> DeleteOmadarxis([FromBody] DeleteStelexosRequest request)
+    public async Task<ActionResult<bool>> DeleteOmadarxis(int id)
     {
-        var result = await _stelexiService.DeleteStelexos(request);
+        var result = await _stelexiService.DeleteStelexos(id);
         if (!result)
             return BadRequest();
         return Ok(result);
@@ -108,9 +108,9 @@ public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexos
     }
 
     [HttpDelete("Koinotarxis")]
-    public async Task<ActionResult<bool>> DeleteKoinotarxis([FromBody] DeleteStelexosRequest request)
+    public async Task<ActionResult<bool>> DeleteKoinotarxis(int id)
     {
-        var result = await _stelexiService.DeleteStelexos(request);
+        var result = await _stelexiService.DeleteStelexos(id);
         if (!result)
             return BadRequest();
         return Ok(result);
@@ -162,9 +162,9 @@ public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexos
     }
 
     [HttpDelete("Tomearxis")]
-    public async Task<ActionResult<bool>> DeleteTomearxis([FromBody] DeleteStelexosRequest request)
+    public async Task<ActionResult<bool>> DeleteTomearxis(int id)
     {
-        var result = await _stelexiService.DeleteStelexos(request);
+        var result = await _stelexiService.DeleteStelexos(id);
         if (!result)
             return BadRequest();
         return Ok(result);
@@ -216,9 +216,9 @@ public class StaffController(IStaffService<CreateStelexosRequest, UpdateStelexos
     }
 
     [HttpDelete("Ekpaideutis")]
-    public async Task<ActionResult<bool>> DeleteEkpaideutis([FromBody] DeleteStelexosRequest request)
+    public async Task<ActionResult<bool>> DeleteEkpaideutis(int id)
     {
-        var result = await _stelexiService.DeleteStelexos(request);
+        var result = await _stelexiService.DeleteStelexos(id);
         if (!result)
             return BadRequest();
         return Ok(result);

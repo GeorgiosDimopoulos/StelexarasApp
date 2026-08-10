@@ -7,9 +7,9 @@ namespace StelexarasApp.API.Controllers.PeopleControllers;
 [Route("[controller]")]
 public class PaidiaController : ControllerBase
 {
-    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> _paidiService;
+    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiService;
 
-    public PaidiaController(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, DeletePaidiRequest, PaidiResponse> paidiService)
+    public PaidiaController(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiService)
     {
         _paidiService = paidiService;
     }
@@ -84,7 +84,7 @@ public class PaidiaController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var result = await _paidiService.DeletePaidiInService(new DeletePaidiRequest { Id = id });
+        var result = await _paidiService.DeletePaidiInService(id);
         if (!result)
             return NotFound();
         return Ok(result);

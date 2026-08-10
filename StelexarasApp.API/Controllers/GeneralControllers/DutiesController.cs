@@ -78,9 +78,9 @@ public class DutiesController : ControllerBase
     }
 
     [HttpDelete("Duty/")]
-    public async Task<IActionResult> DeleteDuty([FromQuery] DeleteDutyRequest request)
+    public async Task<IActionResult> DeleteDuty(int id)
     {
-        var isDeleted = await _dutyService.DeleteDutyInService(request);
+        var isDeleted = await _dutyService.DeleteDutyInService(id);
         if (isDeleted == false)
             return NotFound();
         return Ok(isDeleted);
