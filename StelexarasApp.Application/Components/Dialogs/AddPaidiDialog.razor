@@ -5,14 +5,14 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 
-
-<h3>Add Paidi</h3>
 <MudDialog>
 	<DialogContent>
 		<MudForm Spacing="2">
-			<MudTextField @bind-Value="res.FullName" Label="Name" />
-			<MudNumericField @bind-Value="res.Age" Label="Age" />
-			<MudNumericField @bind-Value="res.Sex" Label="Fulo" />
+			<MudTextField @bind-Value="req.FullName" Label="Όνομα" />
+			<MudTextField @bind-Value="req.FullName" Label="Επίθετο" />
+			<MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
+			<MudSelect @bind-Value="req.Sex" Label="Φύλο" />
+			<MudSwitch @bind-Value="req.SeAdeia" Label="Σε Αδεία;" />
 		</MudForm>
 	</DialogContent>
 	<DialogActions>
@@ -23,8 +23,8 @@
 
 
 @code {
-	private PaidiResponse res = new();
 	private CreatePaidiRequest req = new();
+	
 	[CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
 	protected async override void OnParametersSet()
@@ -34,7 +34,7 @@
 
 	private void Cancel(MouseEventArgs args)
 	{
-		Dialog?.Close(DialogResult.Ok(res));
+		Dialog?.Close(DialogResult.Ok(req));
 	}
 
 	private async Task Save(MouseEventArgs _)

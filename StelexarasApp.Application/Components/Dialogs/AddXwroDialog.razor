@@ -1,5 +1,81 @@
-﻿<h3>Component</h3>
+﻿@using StelexarasApp.Library.Dtos.Domi
+
+@inherits ComponentBase
+
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Spacing="2">
+            <MudTextField @bind-Value="req.Name" Label="Όνομα" />
+            <MudSelect @bind-Value="req.XwrosType" Label="Είδος Χώρου" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Save</MudButton>
+    </DialogActions>
+</MudDialog>
 
 @code {
+    private AddXwrosModel req = new();
 
+    [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
+
+    protected async override void OnParametersSet()
+    {
+        await Task.Delay(500);
+    }
+
+    private void Cancel(MouseEventArgs args)
+    {
+        Dialog?.Close(DialogResult.Ok(req));
+    }
+
+    private async Task Save(MouseEventArgs _)
+    {
+        switch (req.XwrosType)
+        {
+            case XwrosType.Skini:
+                var skini = new SkiniDtoBase
+                {
+                    Name = req.Name,
+                    KoinotitaId = req.KoinotitaId ?? 0
+                };
+                Dialog?.Close(DialogResult.Ok(skini));
+                break;
+            case XwrosType.Koinotita:
+                var koinotita = new KoinotitaDtoBase
+                {
+                    Name = req.Name,
+                    TomeasName = req.Tomeasname ?? string.Empty
+                };
+                Dialog?.Close(DialogResult.Ok(koinotita));
+                break;
+            case XwrosType.Tomeas:
+                var tomeas = new TomeasDtoBase
+                {
+                    Name = req.Name
+                };
+                Dialog?.Close(DialogResult.Ok(tomeas));
+                break;
+        }
+    }
+
+    public class AddXwrosModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public XwrosType XwrosType { get; set; }
+
+        public string? Tomeasname { get; set; }
+        public int? KoinotitaId { get; set; }
+    }
+
+    public enum XwrosType
+    {
+        Skini,
+        Koinotita,
+        Tomeas
+    }
 }

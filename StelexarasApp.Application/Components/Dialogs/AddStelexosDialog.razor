@@ -1,5 +1,46 @@
-﻿<h3>Add Stelexos</h3>
+﻿@using StelexarasApp.Library.Dtos.People.Staff
+
+@inherits ComponentBase
+
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<MudDialog>
+	<DialogContent>
+		<MudForm Spacing="2">
+			<MudTextField @bind-Value="req.FullName" Label="Όνομα" />
+			<MudTextField @bind-Value="req.FullName" Label="Επίθετο" />
+			<MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
+			<MudNumericField @bind-Value="req.XwrosName" Label="Χώρος" />
+			<MudSelect @bind-Value="req.Sex" Label="Φύλο" />
+			<MudSwitch @bind-Value="req.Thesi" Label="Θέση" />
+			<MudNumericField @bind-Value="req.Tel" Label="Τηλέφωνο" />
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Cancel</MudButton>
+		<MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Save</MudButton>
+	</DialogActions>
+</MudDialog>
+
 
 @code {
+	private CreateStelexosRequest req = new();
 
+	[CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
+
+	protected async override void OnParametersSet()
+	{
+		await Task.Delay(500);
+	}
+
+	private void Cancel(MouseEventArgs args)
+	{
+		Dialog?.Close(DialogResult.Ok(req));
+	}
+
+	private async Task Save(MouseEventArgs _)
+	{
+
+	}
 }
