@@ -1,7 +1,10 @@
 ﻿@using MudBlazor
+@using Microsoft.AspNetCore.Components
+
 @inherits LayoutComponentBase
 
 @inject IDialogService DialogService
+@inject NavigationManager NavigationManager
 
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -40,16 +43,34 @@
 @code {
     private async Task AddPaidi()
     {
-        await DialogService.ShowAsync<AddPaidiDialog>("Προσθήκη Παιδιού");
+        var dialog = await DialogService.ShowAsync<AddPaidiDialog>("Προσθήκη Παιδιού");
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private async Task AddStelexos()
     {
-        await DialogService.ShowAsync<AddStelexosDialog>("Προσθήκη Στελέχους");
+        var dialog = await DialogService.ShowAsync<AddStelexosDialog>("Προσθήκη Στελέχους");
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private async Task AddPlace()
     {
-        await DialogService.ShowAsync<AddXwroDialog>("Προσθήκη Χώρου");
+        var dialog = await DialogService.ShowAsync<AddXwroDialog>("Προσθήκη Χώρου");
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 }

@@ -14,8 +14,8 @@
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
         <MudForm Spacing="2">
-            <MudTextField @bind-Value="req.Name" Label="Όνομα" />
-            <MudSelect T="XwrosType" @bind-Value="req.XwrosType" Label="Είδος Χώρου">
+            <MudTextField @bind-Value="model.Name" Label="Όνομα" />
+            <MudSelect T="XwrosType" @bind-Value="model.XwrosType" Label="Είδος Χώρου">
                 @foreach (var xwrosType in Enum.GetValues<XwrosType>())
                 {
                     <MudSelectItem T="XwrosType" Value="xwrosType">
@@ -23,9 +23,9 @@
                     </MudSelectItem>
                 }
             </MudSelect>
-            @if (req.XwrosType == XwrosType.Skini)
+            @if (model.XwrosType == XwrosType.Skini)
             {
-                <MudSelect T="int?" Label="Κοινότητα" @bind-Value="req.KoinotitaId">
+                <MudSelect T="int?" Label="Κοινότητα" @bind-Value="model.KoinotitaId">
                     @foreach (var koinotita in koinotites)
                     {
                         <MudSelectItem T="int?" Value="@((int?)koinotita.Id)">
@@ -35,9 +35,9 @@
                 </MudSelect>
             }
 
-            @if (req.XwrosType == XwrosType.Koinotita)
+            @if (model.XwrosType == XwrosType.Koinotita)
             {
-                <MudSelect T="string" Label="Τομέας" @bind-Value="req.Tomeasname">
+                <MudSelect T="string" Label="Τομέας" @bind-Value="model.Tomeasname">
                     @foreach (var tomeas in tomeis)
                     {
                         <MudSelectItem T="string" Value="@(tomeas.Name)">
@@ -55,7 +55,7 @@
 </MudDialog>
 
 @code {
-    private AddXwrosModel req = new();
+    private AddXwrosModel model = new();
     private List<KoinotitaResponse> koinotites = new();
     private List<TomeasResponse> tomeis = new();
 
@@ -71,23 +71,23 @@
 
     private void Cancel(MouseEventArgs args)
     {
-        Dialog?.Close(DialogResult.Ok(req));
+        Dialog?.Close(DialogResult.Ok(model));
     }
 
     private async Task Save(MouseEventArgs _)
     {
-        switch (req.XwrosType)
+        switch (model.XwrosType)
         {
             case XwrosType.Skini:
                 var skini = new CreateSkiniRequest
                 {
-                    Name = req.Name,
-                    KoinotitaId = req.KoinotitaId ?? 0,
-                    Sex = Sex.Male // ToDo: change it
+                    Name = model.Name,
+                    KoinotitaId = model.KoinotitaId ?? 0,
+                    Sex = model.Sex
                 };
 
                 var result = await SkinesApi.PostSkini(skini);
-                if (result == null)
+                if (result == false)
                 {
                     Snackbar.Add("Σφάλμα κατά την αποθήκευση της σκηνής.", Severity.Error);
                     return;
@@ -104,8 +104,8 @@
             case XwrosType.Koinotita:
                 var koinotita = new CreateKoinotitaRequest
                 {
-                    Name = req.Name,
-                    TomeasName = req.Tomeasname ?? string.Empty
+                    Name = model.Name,
+                    TomeasName = model.Tomeasname ?? string.Empty
                 };
 
                 var kresult = await KoinotitesApi.PostKoinotita(koinotita);
@@ -126,7 +126,7 @@
             case XwrosType.Tomeas:
                 var tomeas = new CreateTomeasRequest
                 {
-                    Name = req.Name
+                    Name = model.Name
 
                 };
 
@@ -152,7 +152,7 @@
     {
         public string Name { get; set; } = string.Empty;
         public XwrosType XwrosType { get; set; }
-
+        public Sex Sex { get; set; }
         public string? Tomeasname { get; set; }
         public int? KoinotitaId { get; set; }
     }

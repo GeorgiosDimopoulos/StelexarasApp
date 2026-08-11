@@ -25,11 +25,11 @@ public interface ISkinesApi
     Task<List<SkiniResponse>> GetSkinesEkpaideuomenonAsync();
 
     [Post("/Skines/Skini")]
-    Task<SkiniResponse> PostSkini([Body] CreateSkiniRequest skiniDto);
+    Task<bool> PostSkini([Body] CreateSkiniRequest skiniDto);
 
     [Delete("/Skines/Skini/{id}")]
-    Task DeleteSkini(int id);
+    Task<bool> DeleteSkini(int id);
 
     [Put("/Skines/Skini/{id}")]
-    Task PutSkini(int id, [Body] UpdateSkiniRequest skiniDto);
+    Task<bool> PutSkini(int id, [Body] UpdateSkiniRequest skiniDto);
 }

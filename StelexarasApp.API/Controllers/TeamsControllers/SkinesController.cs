@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Refit;
 
 namespace StelexarasApp.API.Controllers.TeamsControllers;
 
@@ -42,36 +43,36 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     }
 
     [HttpPost("Skini")]
-    public async Task<IActionResult> PostSkini([FromBody] CreateSkiniRequest skiniDto)
+    public async Task<bool> PostSkini([Body] CreateSkiniRequest skiniDto)
     {
         var result = await _teamsService.AddSkiniInService(skiniDto);
 
         if (!result)
-            return NotFound();
+            return false;
 
-        return Ok(true);
+        return true;
     }
 
     [HttpPut("Skini/{id}")]
-    public async Task<IActionResult> PutSkini(int id, [FromBody] UpdateSkiniRequest skiniDto)
+    public async Task<bool> PutSkini(int id, [Body] UpdateSkiniRequest skiniDto)
     {
         var result = await _teamsService.UpdateSkiniInService(id, skiniDto);
 
         if (!result)
-            return NotFound();
+            return false;
 
-        return Ok(result);
+        return true;
     }
 
     [HttpDelete("Skini/{id}")]
-    public async Task<IActionResult> DeleteSkini(int id)
+    public async Task<bool> DeleteSkini(int id)
     {
         var result = await _teamsService.DeleteSkiniInService(id);
 
         if (!result)
-            return NotFound();
+            return false;
 
-        return Ok(result);
+        return true;
     }
 
     [HttpGet("Skines/ByKoinotitaName/{koinotitaName}")]
