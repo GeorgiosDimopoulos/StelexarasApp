@@ -28,9 +28,6 @@
             @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Equals("B")).OrderBy(k => k.Name))
             {
                 var backgroundColor = koinotita.Name.ToUpper().Contains("ΣΧΟΛΉ") ? "dodgerblue" : "yellowgreen";
-                if (backgroundColor.Equals("dodgerblue"))
-                {
-                }
                 <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="@($"height:100px; padding:30px; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:{backgroundColor};")">
                     @koinotita.Name
                 </MudButton>

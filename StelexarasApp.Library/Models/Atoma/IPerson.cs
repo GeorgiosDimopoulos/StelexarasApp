@@ -4,7 +4,8 @@ namespace StelexarasApp.Library.Models.Atoma
 {
     public interface IPerson
     {
-        string FullName { get; set; }
+        string FirstName { get; set; }
+        string LastName { get; set; }
 
         [Key]
         int Id { get; set; }

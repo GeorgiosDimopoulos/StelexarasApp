@@ -2,6 +2,7 @@
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.People.Children
 @using StelexarasApp.Library.Models.Atoma
+@using StelexarasApp.Library.Models.Atoma.Children
 
 @inherits ComponentBase
 
@@ -12,9 +13,12 @@
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
         <MudForm Spacing="2">
-            <MudTextField @bind-Value="req.FullName" Label="Όνομα" />
-            <MudTextField @bind-Value="req.FullName" Label="Επίθετο" />
-            <MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
+            <MudTextField @bind-Value="req.FirstName" Label="Όνομα" />
+            <MudTextField @bind-Value="req.LastName" Label="Επίθετο" />
+            <MudSwitch @bind-Value="IsEkpaideuomenos" Label="Εκπαιδευόμενος" />
+            <MudNumericField @bind-Value="req.Age"
+                             Label="Ηλικία"
+                             Disabled="@(IsEkpaideuomenos)" />
             <MudSelect T="Sex" @bind-Value="req.Sex" Label="Φύλο">
                 @foreach (var sex in Enum.GetValues<Sex>())
                 {
@@ -23,6 +27,7 @@
                     </MudSelectItem>
                 }
             </MudSelect>
+            <MudTextField @bind-Value="req.SkiniName" Label="Σκηνή" />
             <MudSwitch @bind-Value="req.SeAdeia" Label="Σε Αδεία;" />
         </MudForm>
     </DialogContent>
@@ -49,13 +54,24 @@
 
     private async Task Save(MouseEventArgs _)
     {
+        if (req.PaidiType == PaidiType.Ekpaideuomenos)
+        {
+            req.Age = 16;
+        }
+        else if (req.Age < 0 || req.Age > 18)
+        {
+            Snackbar.Add("Η ηλικία πρέπει να είναι μεταξύ 0 και 18.", Severity.Error);
+            return;
+        }
+
         var newPaidiRequest = new CreatePaidiRequest
         {
-            FullName = req.FullName,
+            FirstName = req.FirstName,
+            LastName = req.LastName,
             Age = req.Age,
             Sex = req.Sex,
             PaidiType = req.PaidiType,
-            SeAdeia = req.SeAdeia,            
+            SeAdeia = req.SeAdeia,
             SkiniName = req.SkiniName
         };
 
@@ -70,6 +86,12 @@
             Snackbar.Add("Το παιδι αποθηκεύτηκε επιτυχώς.", Severity.Success);
             Dialog?.Close(DialogResult.Ok(newPaidiRequest));
         }
+    }
+
+    private bool IsEkpaideuomenos
+    {
+        get => req.PaidiType == PaidiType.Ekpaideuomenos;
+        set => req.PaidiType = value ? PaidiType.Ekpaideuomenos : PaidiType.Kataskinotis;
     }
 
     private string GetDisplayName(Enum sex)

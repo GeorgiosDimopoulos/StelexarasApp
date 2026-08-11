@@ -32,7 +32,8 @@ public class StaffServiceTests
         {
             Id = id,
             Thesi = thesi,
-            FullName = "Test Name",
+            LastName = "Μηρτου",
+            FirstName = "Δήμητρα",
             Tel = "1234567890",
             Age = 30,
             Sex = Sex.Male,
@@ -66,7 +67,8 @@ public class StaffServiceTests
         // Arrange
         var stelexosDto = new StelexosResponse
         {
-            FullName = name,
+            LastName = name.Split(' ')[1],
+            FirstName = name.Split(' ')[0],
             Age = 30,
             Tel = "1234567890",
             Sex = Sex.Male,
@@ -80,7 +82,8 @@ public class StaffServiceTests
             case Thesi.Omadarxis:
                 stelexos = new Omadarxis
                 {
-                    FullName = name,
+                    LastName = name.Split(' ')[1],
+                    FirstName = name.Split(' ')[0],
                     Age = 30,
                     Sex = Sex.Male,
                     Thesi = thesi,
@@ -90,7 +93,8 @@ public class StaffServiceTests
             case Thesi.Koinotarxis:
                 stelexos = new Koinotarxis
                 {
-                    FullName = name,
+                    LastName = name.Split(' ')[1],
+                    FirstName = name.Split(' ')[0],
                     Age = 30,
                     Sex = Sex.Male,
                     Thesi = thesi,
@@ -100,7 +104,8 @@ public class StaffServiceTests
             case Thesi.Tomearxis:
                 stelexos = new Tomearxis
                 {
-                    FullName = name,
+                    LastName = name.Split(' ')[1],
+                    FirstName = name.Split(' ')[0],
                     Age = 30,
                     Sex = Sex.Male,
                     Thesi = thesi,
@@ -113,7 +118,8 @@ public class StaffServiceTests
         _mockStelexiRepository.Setup(r => r.GetStelexosByNameInDb(name, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(stelexos);
         _mockMapper.Setup(m => m.Map<StelexosResponse>(stelexos)).Returns(new StelexosResponse()
         {
-            FullName = name,
+            LastName = name.Split(' ')[1],
+            FirstName = name.Split(' ')[0],
             Age = 30,
             Sex = Sex.Male,
             Thesi = thesi,
@@ -125,7 +131,9 @@ public class StaffServiceTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(name, result.FullName);
+        Assert.Equal(name.Split(' ')[1], result.LastName);
+        Assert.Equal(name.Split(' ')[0], result.FirstName);
+
         _mockStelexiRepository.Verify(r => r.GetStelexosByNameInDb(name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<StelexosResponse>(stelexos), Times.Once);
     }
@@ -136,13 +144,13 @@ public class StaffServiceTests
         // Arrange
         var omadarxisList = new List<Omadarxis>
         {
-            new() { FullName = "Test Omadarxis", Id = 1, Tel = "12312312" }
+            new() { LastName = "Test Omadarxis", FirstName = "Test", Sex = Sex.Male, Id = 1, Tel = "12312312" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(omadarxisList);
         _mockMapper.Setup(m => m.Map<IEnumerable<StelexosResponse>>(omadarxisList)).Returns(
         [
-            new() { FullName = "Test Omadarxis", Tel = "12312312" }
+            new() { LastName = "Test Omadarxis", FirstName = "Test", Sex =Sex.Male, Tel = "12312312" }
         ]);
 
         // Act
@@ -151,7 +159,8 @@ public class StaffServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Test Omadarxis", result.First().FullName);
+        Assert.Equal("Test Omadarxis", result.First().LastName);
+        Assert.Equal("Test", result.First().FirstName);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(omadarxisList), Times.Once);
     }
@@ -162,11 +171,11 @@ public class StaffServiceTests
         // Arrange
         var koinotarxisList = new List<Koinotarxis>
         {
-            new() { XwrosName = "Xwros1" , FullName = "Test Koinotarxis", Id = 1, Tel = "1231231", Thesi = Thesi.Koinotarxis, Age = 29, Sex = Sex.Female}
+            new() { XwrosName = "Xwros1" , LastName = "Test Koinotarxis", FirstName = "Test", Id = 1, Tel = "1231231", Thesi = Thesi.Koinotarxis, Age = 29, Sex = Sex.Female}
         };
         var koinotarxisDtoList = new List<StelexosResponse>
         {
-            new() { XwrosName = "Xwros1" , FullName = "Test Koinotarxis", Tel = "1231231" }
+            new() { XwrosName = "Xwros1" , LastName = "Test Koinotarxis", FirstName = "Test", Tel = "1231231" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>()))
@@ -180,7 +189,8 @@ public class StaffServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Test Koinotarxis", result.First().FullName);
+        Assert.Equal("Test Koinotarxis", result.First().LastName);
+        Assert.Equal("Test", result.First().FirstName);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(koinotarxisList), Times.Once);
     }
@@ -192,17 +202,17 @@ public class StaffServiceTests
         var tomeaDto = new TomeasDtoBase { Name = "TestTomea" };
         var koinotarxisList = new List<Koinotarxis>
         {
-            new() { FullName = "Test Koinotarxis", Id = 1 , Tel = "1231231", Sex = Sex.Female, Age = 19 , Thesi = Thesi.Koinotarxis }
+            new() { LastName = "Test KoinotarxisL", FirstName = "Test KoinotarxisF", Id = 1 , Tel = "1231231", Sex = Sex.Female, Age = 19 , Thesi = Thesi.Koinotarxis }
         };
         var koinotarxisDtoList = new List<StelexosDtoBase>
         {
-            new() { FullName = "Test Koinotarxis", Tel = "1231231" , Sex = Sex.Female}
+            new() { LastName = "Test KoinotarxisL", FirstName = "Test KoinotarxisF", Tel = "1231231" , Sex = Sex.Female}
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(tomeaDto.Name, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(koinotarxisList);
         _mockMapper.Setup(m => m.Map<IEnumerable<StelexosResponse>>(koinotarxisList)).Returns(new List<StelexosResponse>
         {
-            new() { FullName = "Test Koinotarxis", Tel = "1231231" }
+            new() { LastName = "Test", FirstName = "KoinotarxisF", Tel = "1231231" }
         });
 
         // Act
@@ -211,7 +221,8 @@ public class StaffServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Test Koinotarxis", result.First().FullName);
+        Assert.Equal("KoinotarxisF", result.First().FirstName);
+        Assert.Equal("Test", result.First().LastName);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(tomeaDto.Name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(koinotarxisList), Times.Once);
     }
@@ -223,7 +234,7 @@ public class StaffServiceTests
         var koinotita = new KoinotitaDtoBase { Name = "TestKoinotita", TomeasName = "TestTomeasName" };
         var omadarxisList = new List<Omadarxis>
         {
-            new() { FullName = "Test Omadarxis", Id = 1, Tel = "12313121" }
+            new() { FirstName = "Test", LastName = "Omadarxis", Sex = Sex.Female, Id = 1, Tel = "12313121" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(koinotita.Name, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(omadarxisList);
@@ -231,7 +242,7 @@ public class StaffServiceTests
         {
             new()
             {
-                FullName = "Test Omadarxis", Id = 1, Tel = "12312312"
+                FirstName = "Test", LastName = "Omadarxis", Sex = Sex.Female, Id = 1, Tel = "12312312"
             }
 
         });
@@ -242,7 +253,8 @@ public class StaffServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Test Omadarxis", result.First().FullName);
+        Assert.Equal("Test", result.First().FirstName);
+        Assert.Equal("Omadarxis", result.First().LastName);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(koinotita.Name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(omadarxisList), Times.Once);
     }
@@ -254,7 +266,7 @@ public class StaffServiceTests
         var tomeaDto = new TomeasDtoBase { Name = "TestTomea" };
         var omadarxisList = new List<Omadarxis>
         {
-            new() { FullName = "Test Omadarxis", Id = 1, Tel = "122345678" }
+            new() { LastName = "Omadarxis", FirstName  = "John", Sex = Sex.Female, Id = 1, Tel = "122345678" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(tomeaDto.Name, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(omadarxisList);
@@ -262,7 +274,7 @@ public class StaffServiceTests
         {
             new()
             {
-                Id = 1, FullName = "Test Omadarxis", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890"
+                Id = 1, LastName = "Omadarxis", FirstName  = "John", Sex = Sex.Female, Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890"
             }
         });
 
@@ -272,7 +284,8 @@ public class StaffServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Test Omadarxis", result.First().FullName);
+        Assert.Equal("Omadarxis", result.First().FirstName);
+        Assert.Equal("John", result.First().FirstName);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(tomeaDto.Name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(omadarxisList), Times.Once);
     }
@@ -294,7 +307,8 @@ public class StaffServiceTests
         // Arrange
         var omadarxisDto = new CreateStelexosRequest
         {
-            FullName = "Ιωαννα Μηρτου",
+            LastName = "Μηρτου",
+            FirstName = "Δήμητρα",
             Age = 30,
             Sex = Sex.Male,
             Tel = "11111111",
@@ -304,7 +318,8 @@ public class StaffServiceTests
         var omadarxis = new Omadarxis
         {
             Id = 67,
-            FullName = omadarxisDto.FullName,
+            LastName = omadarxisDto.LastName,
+            FirstName = omadarxisDto.FirstName,
             Age = omadarxisDto.Age,
             Tel = omadarxisDto.Tel,
             Thesi = Thesi.Omadarxis,
@@ -348,7 +363,7 @@ public class StaffServiceTests
         // Arrange
         var tomearxes = new List<Tomearxis>
         {
-            new() { Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890", Tomeas = new Tomeas { Name = "TestTomea" } }
+            new() { Id = 1, LastName = "Doe", FirstName = "John", Sex = Sex.Male, Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890", Tomeas = new Tomeas { Name = "TestTomea" } }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(tomearxes);
@@ -356,7 +371,7 @@ public class StaffServiceTests
         {
             new()
             {
-                Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890"
+                Id = 1, LastName = "Doe",FirstName = "John", Sex = Sex.Male, Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890"
             }
         });
 
@@ -365,7 +380,8 @@ public class StaffServiceTests
 
         // Assert
         Assert.Single(result);
-        Assert.Equal("John Doe", result.First().FullName);
+        Assert.Equal("Doe", result.First().LastName);
+        Assert.Equal("John", result.First().FirstName);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>()), Times.Once);
     }
 
@@ -383,13 +399,13 @@ public class StaffServiceTests
         {
             new()
             {
-                Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890"
+                Id = 1, LastName = "Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890" , FirstName ="John"
             }
         };
 
         var stelexoiDtos = new List<StelexosDtoBase>
         {
-            new() { FullName = "John Doe", Age = 30,Tel  = "1234567890" }
+            new() { LastName = "Doe", Age = 30,Tel  = "1234567890", FirstName ="John" }
         };
 
         _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(koinotitaName, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(stelexoi);
@@ -397,7 +413,7 @@ public class StaffServiceTests
         {
             new()
             {
-                Id = 1, FullName = "John Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890"
+                Id = 1, LastName = "Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890" , FirstName ="John"
             }
         });
 
@@ -406,7 +422,8 @@ public class StaffServiceTests
 
         // Assert
         Assert.Single(result);
-        Assert.Equal("John Doe", result.First().FullName);
+        Assert.Equal("Doe", result.First().LastName);
+        Assert.Equal("John", result.First().FirstName);
 
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(koinotitaName, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(stelexoi), Times.Once);
@@ -424,7 +441,8 @@ public class StaffServiceTests
         {
             Id = id,
             Thesi = thesi,
-            FullName = "Test Name",
+            FirstName = "FirstName",
+            LastName = "LastName",
             Tel = "1234567890",
             Skini = skini
         };
@@ -450,7 +468,8 @@ public class StaffServiceTests
         {
             Id = omadarxisId,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
+            FirstName = "FirstName",
+            LastName = "LastName",
             Tel = "1234567890",
             Age = 27,
             Sex = Sex.Male,
@@ -480,7 +499,8 @@ public class StaffServiceTests
 
         var createStelexosRequest = new CreateStelexosRequest
         {
-            FullName = "Test Name",
+            FirstName = "FirstName",
+            LastName = "LastName",
             Age = 30,
             XwrosName = "TestXwros",
             Tel = "1234567890",
@@ -489,7 +509,8 @@ public class StaffServiceTests
 
         var updateStelexosRequest = new UpdateStelexosRequest
         {
-            FullName = "Test Name",
+            FirstName = createStelexosRequest.FirstName,
+            LastName = createStelexosRequest.LastName,
             Age = 30,
             Tel = "1234567890",
             XwrosName = "TestXwros",
@@ -503,7 +524,8 @@ public class StaffServiceTests
             case Thesi.Omadarxis:
                 stelexos = new Omadarxis
                 {
-                    FullName = createStelexosRequest.FullName,
+                    FirstName = createStelexosRequest.FirstName,
+                    LastName = createStelexosRequest.LastName,
                     Age = createStelexosRequest.Age,
                     Tel = createStelexosRequest.Tel,
                     Thesi = Thesi.Omadarxis,
@@ -518,7 +540,8 @@ public class StaffServiceTests
             case Thesi.Koinotarxis:
                 stelexos = new Koinotarxis
                 {
-                    FullName = createStelexosRequest.FullName,
+                    FirstName = createStelexosRequest.FirstName,
+                    LastName = createStelexosRequest.LastName,
                     Age = createStelexosRequest.Age,
                     Id = id,
                     Tel = createStelexosRequest.Tel,
@@ -534,7 +557,8 @@ public class StaffServiceTests
             case Thesi.Tomearxis:
                 stelexos = new Tomearxis
                 {
-                    FullName = createStelexosRequest.FullName,
+                    FirstName = createStelexosRequest.FirstName,
+                    LastName = createStelexosRequest.LastName,
                     Id = id,
                     Age = createStelexosRequest.Age,
                     Sex = Sex.Female,
@@ -551,7 +575,8 @@ public class StaffServiceTests
                 stelexos = new Ekpaideutis
                 {
                     Id = id,
-                    FullName = createStelexosRequest.FullName,
+                    FirstName = createStelexosRequest.FirstName,
+                    LastName = createStelexosRequest.LastName,
                     Age = createStelexosRequest.Age,
                     Tel = createStelexosRequest.Tel,
                     Thesi = Thesi.Ekpaideutis,
@@ -565,7 +590,8 @@ public class StaffServiceTests
                 throw new ArgumentException("Invalid Thesi", nameof(thesi));
         }
         _mockStelexiRepository.Setup(r => r.AddStelexosInDb(It.Is<IStelexos>(s =>
-                                                                             s.FullName == createStelexosRequest.FullName &&
+                                                                             s.LastName == createStelexosRequest.LastName &&
+                                                                             s.FirstName == createStelexosRequest.FirstName &&
                                                                              s.Age == createStelexosRequest.Age &&
                                                                              s.Tel == createStelexosRequest.Tel &&
                                                                              s.XwrosName == createStelexosRequest.XwrosName &&

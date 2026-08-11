@@ -20,7 +20,7 @@ public class SkiniViewModel : INotifyPropertyChanged
 
     public async Task<bool> AddPaidiAsync(CreatePaidiRequest paidiDto)
     {
-        if (string.IsNullOrEmpty(paidiDto.FullName) || string.IsNullOrEmpty(paidiDto.SkiniName))
+        if (string.IsNullOrEmpty(paidiDto.FirstName) || string.IsNullOrEmpty(paidiDto.LastName) || string.IsNullOrEmpty(paidiDto.SkiniName))
             return false;
 
         var result = await _paidiaService.CreatePaidiInService(paidiDto);

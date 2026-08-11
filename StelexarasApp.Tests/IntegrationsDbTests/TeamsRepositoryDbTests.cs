@@ -318,7 +318,9 @@ namespace StelexarasApp.Tests.IntegrationDbTests
                 Id = id,
                 Tomearxis = new Tomearxis
                 {
-                    FullName = "Test Tomearxis",
+                    LastName = "Test Tomearxis",
+                    FirstName = "TestF",
+                    Sex = Sex.Female,
                     Tel = "1234567890",
                     Age = 30,
                     Tomeas = new Tomeas { Name = "TestTomea" }
@@ -336,9 +338,10 @@ namespace StelexarasApp.Tests.IntegrationDbTests
                 Koinotarxis = new Koinotarxis
                 {
                     Id = 4,
-                    FullName = "Test Koinotarxis",
-                    Tel = "1234567890",
+                    LastName = "Test Tomearxis",
+                    FirstName = "TestF",
                     Sex = Sex.Female,
+                    Tel = "1234567890",
                     Age = 30,
                     Thesi = Thesi.Koinotarxis,
                 },

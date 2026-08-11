@@ -130,13 +130,6 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
 
         try
         {
-            var parts = paidi.FullName.Trim().Split(' ');
-            if (parts.Length < 2)
-            {
-                _logger.LogWarning("Invalid FullName: " + nameof(paidi.FullName));
-                return false;
-            }
-
             if (paidi is null || paidi.Id <= 0 || _dbContext.Paidia is null)
             {
                 _logger.LogWarning("Attempted to add a null paidi or this nullable Id");
@@ -190,10 +183,6 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
 
         try
         {
-            var parts = paidi.FullName.Trim().Split(' ');
-            if (parts.Length < 2)
-                throw new ArgumentException("Invalid FullName", nameof(paidi.FullName));
-
             _dbContext.Paidia.Update(paidi);
             await _dbContext.SaveChangesAsync();
             if (transaction != null)

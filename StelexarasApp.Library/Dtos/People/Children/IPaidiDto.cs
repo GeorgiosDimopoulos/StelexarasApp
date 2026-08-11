@@ -2,7 +2,8 @@
 
 public interface IPaidiDto
 {
-    string FullName { get; set; }
+    string FirstName { get; set; }
+    string LastName { get; set; }
     int Age { get; set; }
     Sex Sex { get; set; }
     bool SeAdeia { get; set; }

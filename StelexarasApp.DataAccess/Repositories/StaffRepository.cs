@@ -103,19 +103,13 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        var parts = stelexos.FullName.Trim().Split(' ');
-        if (parts.Length < 2)
-        {
-            ArgumentException argumentException = new("Invalid FullName", nameof(stelexos.FullName));
-            throw argumentException;
-        }
-
         var existingStelexos = await GetStelexosByIdInDb(id);
         if (existingStelexos == null)
             return false;
 
         existingStelexos.XwrosName = stelexos.XwrosName;
-        existingStelexos.FullName = stelexos.FullName;
+        existingStelexos.LastName = stelexos.LastName;
+        existingStelexos.FirstName = stelexos.FirstName;
         existingStelexos.Tel = stelexos.Tel;
         existingStelexos.Age = stelexos.Age;
         existingStelexos.Sex = stelexos.Sex;
@@ -216,7 +210,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
                     .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
                     .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
-            return await query.FirstOrDefaultAsync(e => e.FullName == name) ?? null!;
+            return await query.FirstOrDefaultAsync(e => e.LastName == name) ?? null!;
         }
         catch (Exception ex)
         {

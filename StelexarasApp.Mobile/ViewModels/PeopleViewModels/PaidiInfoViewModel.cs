@@ -41,7 +41,9 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
             var paidiToUpdate = new UpdatePaidiRequest
             {
                 Id = PaidiDto.Id,
-                FullName = PaidiDto.FullName,
+                FirstName = PaidiDto.FirstName,
+                Sex = PaidiDto.Sex,
+                LastName= PaidiDto.LastName,
                 Age = PaidiDto.Age,
                 SkiniName = SkiniName
             };

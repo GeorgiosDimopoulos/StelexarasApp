@@ -12,7 +12,9 @@ public class PersonValidator : AbstractValidator<CreateStelexosRequest>
             .IsInEnum();
         RuleFor(request => request.Thesi)
             .NotNull();
-        RuleFor(request => request.FullName)
+        RuleFor(request => request.LastName)
+             .NotEmpty();
+        RuleFor(request => request.FirstName)
              .NotEmpty();
         RuleFor(request => request.XwrosName)
              .NotEmpty();
@@ -29,9 +31,10 @@ public class UpdateStelexosValidator : AbstractValidator<UpdateStelexosRequest>
             .IsInEnum();
         RuleFor(request => request.Sex)
             .IsInEnum();
-        RuleFor(request => request.FullName)
-             .NotEmpty()
-             .NotNull();
+        RuleFor(request => request.LastName)
+             .NotEmpty();
+        RuleFor(request => request.FirstName)
+             .NotEmpty();
         RuleFor(request => request.XwrosName)
              .NotEmpty();
     }
@@ -48,9 +51,10 @@ public class CreatePaidiValidator : AbstractValidator<CreatePaidiRequest>
             .LessThan(17);
         RuleFor(request => request.Sex)
             .IsInEnum();
-        RuleFor(request => request.FullName)
-             .NotEmpty()
-             .NotNull();
+        RuleFor(request => request.LastName)
+             .NotEmpty();
+        RuleFor(request => request.FirstName)
+             .NotEmpty();
         RuleFor(request => request.SkiniName)
              .NotEmpty();
     }
@@ -65,9 +69,10 @@ public class UpdatePaidiValidator : AbstractValidator<UpdatePaidiRequest>
             .LessThan(17);
         RuleFor(request => request.Sex)
             .IsInEnum();
-        RuleFor(request => request.FullName)
-             .NotEmpty()
-             .NotNull();
+        RuleFor(request => request.LastName)
+             .NotEmpty();
+        RuleFor(request => request.FirstName)
+             .NotEmpty();
         RuleFor(request => request.SkiniName)
              .NotEmpty();
         RuleFor(request => request.PaidiType)

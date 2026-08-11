@@ -30,12 +30,14 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 
             var paidi = new CreatePaidiRequest
             {
-                FullName = fullName,
                 SkiniName = skiniName,
                 Age = age,
                 SeAdeia = false,
                 Sex = sex,
             };
+
+            paidi.LastName = fullName.Split(' ').LastOrDefault();
+            paidi.FirstName = fullName.Substring(0, fullName.Length - paidi.LastName.Length).Trim();
 
             if (paidiType == PaidiType.Ekpaideuomenos)
             {

@@ -3,7 +3,8 @@ namespace StelexarasApp.Library.Dtos.People.Children;
 
 public record PaidiDtoBase : IPaidiDto
 {
-    public string FullName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
     public int Age { get; set; }
     public Sex Sex { get; set; }
     public bool SeAdeia { get; set; }

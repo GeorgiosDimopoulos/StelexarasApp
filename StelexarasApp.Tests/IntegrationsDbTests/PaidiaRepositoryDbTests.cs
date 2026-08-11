@@ -27,14 +27,15 @@ public class PaidiaRepositoryDbTests
     [InlineData(0, PaidiType.Kataskinotis, false)]
     public async Task AddPaidi_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
     {
-        var paidi = new Paidi { Id = id, FullName = "Test Paidi", Age = 10, PaidiType = paidiType };
+        var paidi = new Paidi { Id = id, LastName= "Test PaidiL", FirstName = "Test PaidiF", Age = 10, PaidiType = paidiType };
         var result = await _paidiRepository.AddPaidiInDb(paidi);
         Assert.Equal(result, expectedResult);
         if (expectedResult)
         {
             var addedPaidi = await _dbContext.Paidia!.FindAsync(id);
             Assert.NotNull(addedPaidi);
-            Assert.Equal(paidi.FullName, addedPaidi.FullName);
+            Assert.Equal(paidi.LastName, addedPaidi.LastName);
+            Assert.Equal(paidi.FirstName, addedPaidi.FirstName);
             Assert.Equal(paidi.Age, addedPaidi.Age);
             Assert.Equal(paidi.PaidiType, addedPaidi.PaidiType);
         }
@@ -53,7 +54,7 @@ public class PaidiaRepositoryDbTests
     public async Task DeletePaidiInDbAsync_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
     {
         // Arrange
-        Paidi paidi = new() { Id = id, FullName = "Test Name", Age = 10, PaidiType = paidiType };
+        Paidi paidi = new() { Id = id, LastName = "Test LName", FirstName = "PaidiF", Age = 10, PaidiType = paidiType };
         if (id > 0)
         {
             await _dbContext.Paidia!.AddAsync(paidi);
@@ -108,7 +109,8 @@ public class PaidiaRepositoryDbTests
         var existingPaidi = new Paidi
         {
             Id = paidiId,
-            FullName = "Test Paidi",
+            LastName = "PaidiL",
+            FirstName = "PaidiF",
             Age = 15,
             Sex = Sex.Male,
             Skini = existingSkini,
@@ -143,7 +145,7 @@ public class PaidiaRepositoryDbTests
         var paidi = new Paidi
         {
             Id = id,
-            FullName = "New Paidi",
+            LastName = "New Paidi",
             Age = 10,
             PaidiType = PaidiType.Kataskinotis,
             Sex = Sex.Male
@@ -153,7 +155,7 @@ public class PaidiaRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         if (!string.IsNullOrEmpty(newName))
-            paidi.FullName = newName;
+            paidi.LastName = newName;
         else
             paidi = null;
 
@@ -166,7 +168,7 @@ public class PaidiaRepositoryDbTests
         {
             var updatedPaidi = await _dbContext.Paidia.FindAsync(id);
             Assert.NotNull(updatedPaidi);
-            Assert.Equal(newName, updatedPaidi.FullName);
+            Assert.Equal(newName, updatedPaidi.LastName);
         }
     }
 }

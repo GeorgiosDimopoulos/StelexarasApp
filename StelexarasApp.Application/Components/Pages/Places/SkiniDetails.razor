@@ -9,6 +9,7 @@
 @inject IDialogService DialogService
 
 <h1 style="text-align:center">@Skini.Name</h1>
+<h2 style="text-align:center">Παιδιά: @Paidia.Count</h2>
 <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
     <MudItem xs="12" sm="4">
         <MudStack Justify="Justify.Center"
@@ -17,7 +18,7 @@
             @foreach (var p in Paidia)
             {
                 <MudButton Href="@($"/skines/{p.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-                    @p.FullName
+                    @p.FirstName @p.LastName
                 </MudButton>
             }
         </MudStack>

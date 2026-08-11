@@ -37,7 +37,8 @@ public class AddStelexosViewModel
             case Thesi.Omadarxis:
                 var omadarxis = new CreateStelexosRequest
                 {
-                    FullName = FullName,
+                    FirstName = FullName.Split(' ')[0],
+                    LastName = string.Join(' ', FullName.Split(' ')[1..]),
                     XwrosName = XwrosName,
                     Tel = PhoneNumber,
                     Age = Age,
@@ -49,7 +50,8 @@ public class AddStelexosViewModel
             case Thesi.Koinotarxis:
                 var koinotarxis = new CreateStelexosRequest
                 {
-                    FullName = FullName,
+                    FirstName = FullName.Split(' ')[0],
+                    LastName = string.Join(' ', FullName.Split(' ')[1..]),
                     Thesi = Thesi.Koinotarxis,
                     XwrosName = XwrosName,
                     Tel = PhoneNumber,
@@ -61,7 +63,8 @@ public class AddStelexosViewModel
             case Thesi.Tomearxis:
                 var tomearxis = new CreateStelexosRequest
                 {
-                    FullName = FullName,
+                    FirstName = FullName.Split(' ')[0],
+                    LastName = string.Join(' ', FullName.Split(' ')[1..]),
                     Thesi = Thesi.Tomearxis,
                     XwrosName = XwrosName,
                     Tel = PhoneNumber,

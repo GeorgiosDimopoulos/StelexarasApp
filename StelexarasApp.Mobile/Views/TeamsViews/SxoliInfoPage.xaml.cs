@@ -40,7 +40,8 @@ public partial class SxoliInfoPage : ContentPage
 
             paidi = new CreatePaidiRequest
             {
-                FullName = fullName,
+                FirstName = fullName.Split(' ')[0],
+                LastName = string.Join(' ', fullName.Split(' ')[1..]),
                 Age = age,
                 SkiniName = skiniName,
                 SeAdeia = false,

@@ -12,8 +12,8 @@
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
         <MudForm Spacing="2">
-            <MudTextField @bind-Value="req.FullName" Label="Όνομα" />
-            <MudTextField @bind-Value="req.FullName" Label="Επίθετο" />
+            <MudTextField @bind-Value="req.FirstName" Label="Όνομα" />
+            <MudTextField @bind-Value="req.LastName" Label="Επίθετο" />
             <MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
             <MudSelect T="Sex" @bind-Value="req.Sex" Label="Φύλο">
                 @foreach (var sex in Enum.GetValues<Sex>())
@@ -53,7 +53,8 @@
     {
         var newStelexosRequest = new CreateStelexosRequest
         {
-            FullName = req.FullName,
+            FirstName = req.FirstName,
+            LastName = req.LastName,
             Age = req.Age,
             Sex = req.Sex,
             Tel = req.Tel,
@@ -77,7 +78,7 @@
     private string GetDisplayName(Enum sex)
     {
         var member = sex.GetType().GetMember(sex.ToString()).First();
-        var displayAttribute = member.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute; 
+        var displayAttribute = member.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
         return displayAttribute?.Name ?? sex.ToString();
     }
 }

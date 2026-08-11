@@ -24,7 +24,9 @@ public class PaidiaServiceTests
         _mockMapper.Setup(m => m.Map<Ekpaideuomenos>(It.IsAny<IPaidiDto>()))
           .Returns((IPaidiDto dto) => new Ekpaideuomenos
           {
-              FullName = dto.FullName,
+              LastName = dto.LastName,
+              FirstName = dto.FirstName,
+              Sex = dto.Sex,
               Age = dto.Age,
               PaidiType = dto.PaidiType
           });
@@ -41,8 +43,8 @@ public class PaidiaServiceTests
     public async Task AddEkpaideuomenos_ShouldReturnTrue_WhenSuccessful()
     {
         // Arrange
-        var paidiDto = new CreatePaidiRequest { FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1" };
-        var paidi = new Paidi { Id = 1, FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos };
+        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1" };
+        var paidi = new Paidi { Id = 1, LastName = "John", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos };
 
         _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
         _mockPaidiRepository.Setup(repo => repo.AddPaidiInDb(paidi)).ReturnsAsync(true);
@@ -62,8 +64,8 @@ public class PaidiaServiceTests
         // Arrange
         var expectedPaidia = new List<Paidi>
         {
-            new Paidi { Id = 1, FullName = "John Doe", Age = 16, PaidiType = PaidiType.Ekpaideuomenos },
-            new Paidi { Id = 2, FullName = "Jane Smith", Age = 16, PaidiType = PaidiType.Ekpaideuomenos }
+            new Paidi { Id = 1, LastName = "Doe", FirstName = "Georg", Sex = Sex.Male, Age = 16, PaidiType = PaidiType.Ekpaideuomenos },
+            new Paidi { Id = 2, LastName = "Smith", FirstName = "Georg",Sex = Sex.Female, Age = 16, PaidiType = PaidiType.Ekpaideuomenos }
         }.Where(p => p.PaidiType == PaidiType.Ekpaideuomenos).ToList();
 
         _mockPaidiRepository
@@ -74,7 +76,9 @@ public class PaidiaServiceTests
             .Returns((IEnumerable<Paidi> paidia) => paidia.Select(p => new PaidiResponse
             {
                 Id = p.Id,
-                FullName = p.FullName,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                Sex = Sex.Female,
                 Age = p.Age,
                 PaidiType = p.PaidiType
             }));
@@ -96,7 +100,9 @@ public class PaidiaServiceTests
         var paidiToDelete = new Paidi
         {
             Id = 1,
-            FullName = "John Doe",
+            LastName = "Doe",
+            FirstName = "John",
+            Sex = Sex.Female,
             Age = 30,
             PaidiType = PaidiType.Ekpaideuomenos
         };
@@ -119,7 +125,8 @@ public class PaidiaServiceTests
         var expectedPaidi = shouldExist ? new Paidi
         {
             Id = paidiId,
-            FullName = expectedFullName,
+            LastName = expectedFullName.Split(' ')[0],
+            FirstName = expectedFullName.Split(' ')[1],
             Age = expectedAge,
             PaidiType = expectedType
         } : null;
@@ -130,7 +137,9 @@ public class PaidiaServiceTests
                    .Returns((Paidi p) => new PaidiResponse
                    {
                        Id = p.Id,
-                       FullName = p.FullName,
+                       LastName = p.LastName,
+                       FirstName = p.FirstName,
+                       Sex = p.Sex,
                        Age = p.Age,
                        PaidiType = p.PaidiType
                    });
@@ -143,7 +152,9 @@ public class PaidiaServiceTests
         {
             Assert.NotNull(result);
             Assert.Equal(expectedPaidi?.Id, result.Id);
-            Assert.Equal(expectedPaidi?.FullName, result.FullName);
+            Assert.Equal(expectedPaidi?.LastName, result.LastName);
+            Assert.Equal(expectedPaidi?.FirstName, result.FirstName);
+            Assert.Equal(expectedPaidi?.Sex, result.Sex);
             Assert.Equal(expectedPaidi?.Age, result.Age);
             Assert.Equal(expectedPaidi?.PaidiType, result.PaidiType);
         }

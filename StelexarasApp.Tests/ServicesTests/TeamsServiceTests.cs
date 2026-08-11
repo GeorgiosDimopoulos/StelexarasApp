@@ -91,13 +91,13 @@ public class TeamsServiceTests
             {
                 Id = 1, Name = "TestKoinotita1", Koinotarxis = new Koinotarxis
                 {
-                    FullName = "Test Name1" , Tel = "123456790" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
+                    LastName = "Test NameL", FirstName = "TestF", Tel = "123456790" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
                 }
             },
             new Koinotita
             { Id = 2, Name = "TestKoinotita2", Koinotarxis = new Koinotarxis()
             {
-                FullName = "Test Name2", Tel = "1334567890", Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
+                LastName = "Test NameL", FirstName = "TestF", Tel = "1334567890", Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
             }
             }
         };
@@ -121,14 +121,14 @@ public class TeamsServiceTests
             {
                 Id = 1, Name = "TestKoinotita1", Koinotarxis = new Koinotarxis
                 {
-                    FullName = "Test Name1", Tel = "1256789" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
+                    LastName = "Test Name1", FirstName = "TestF", Tel = "1256789" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
                 }
             },
             new Koinotita
             {
                 Id = 2, Name = "TestKoinotita2", Koinotarxis = new Koinotarxis()
                 {
-                    FullName = "Test Name2" , Tel = "23457890" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
+                    LastName = "Test Name2", FirstName = "TestF", Tel = "23457890" , Sex = Sex.Female, Thesi = Thesi.Koinotarxis, Age = 30
                 }
             }
         };

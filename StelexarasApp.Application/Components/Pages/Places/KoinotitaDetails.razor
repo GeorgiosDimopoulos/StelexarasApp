@@ -6,8 +6,9 @@
 @inject IKoinotitesApi KoinotitesApi
 @inject IDialogService DialogService
 
-<h1 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΣΚΗΝΕΣ</h1>
 <h1 style="text-align:center">@KoinotitaName</h1>
+<h2 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΠΑΙΔΙΑ: @Skines.Sum(sk => sk.PaidiaNumber)</h2>
+<h2 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΣΚΗΝΕΣ</h2>
 
 <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
     <MudItem xs="12" sm="4">
@@ -17,7 +18,7 @@
             @foreach (var sk in Skines)
             {
                 <MudButton Href="@($"/skines/{sk.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-                    @sk.Name
+                    @sk.Name - @sk.PaidiaNumber
                 </MudButton>
             }
         </MudStack>
@@ -27,10 +28,10 @@
 @code {
     [Parameter]
     public int KoinotitaId { get; set; }
-    public string KoinotitaName { get; set; } = string.Empty;
 
-    private List<SkiniResponse> Skines { get; set; } = new();
+    public string KoinotitaName { get; set; } = string.Empty;
     private string? errorMessage;
+    private List<SkiniResponse> Skines { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {

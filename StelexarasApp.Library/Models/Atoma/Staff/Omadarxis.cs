@@ -7,7 +7,8 @@ namespace StelexarasApp.Library.Models.Atoma.Staff
         [Key]
         public int Id { get; set; }
         public Skini Skini { get; set; } = new Skini();
-        public string FullName { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
         public string Tel { get; set; } = string.Empty;
         public Thesi Thesi { get; set; }
         public string XwrosName { get; set; } = string.Empty;

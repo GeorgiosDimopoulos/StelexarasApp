@@ -38,7 +38,9 @@ public partial class SkiniInfoPage : ContentPage
 
         var paidiDto = new CreatePaidiRequest
         {
-            FullName = fullName,
+            FirstName = fullName,
+            LastName = fullName,
+            Sex =Sex.Female,
             Age = age,
             SkiniName = skiniName,
             SeAdeia = false,

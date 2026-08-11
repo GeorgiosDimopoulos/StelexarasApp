@@ -2,7 +2,8 @@
 
 public interface IStelexosDto
 {
-    string FullName { get; set; }
+    string LastName { get; set; }
+    string FirstName { get; set; }
     int Age { get; set; }
     Sex Sex { get; set; }
     string XwrosName { get; set; }

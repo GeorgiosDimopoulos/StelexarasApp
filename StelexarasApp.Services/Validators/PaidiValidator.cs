@@ -6,8 +6,11 @@ public class PaidiValidator : AbstractValidator<PaidiDtoBase>
 {
     public PaidiValidator()
     {
-        RuleFor(user => user.FullName)
-            .NotEmpty().WithMessage("PaidiDto Name is required")
+        RuleFor(user => user.LastName)
+            .NotEmpty().WithMessage("PaidiDto last Name is required")
+            .Length(5, 50).WithMessage("PaidiDto Name must be between 2 and 50 characters");
+        RuleFor(user => user.FirstName)
+            .NotEmpty().WithMessage("PaidiDto first Name is required")
             .Length(5, 50).WithMessage("PaidiDto Name must be between 2 and 50 characters");
 
         RuleFor(user => user.SkiniName)

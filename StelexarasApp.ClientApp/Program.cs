@@ -58,7 +58,7 @@ class Program
                 var newOmadarxis = new CreateStelexosRequest()
                 {
                     Age = 0,
-                    FullName = GetPersonName(),
+                    LastName = GetPersonName(),
                     Thesi = Thesi.Omadarxis,
                     Sex = GetPersonSex(),
                     Tel = "123456789",
@@ -66,7 +66,7 @@ class Program
                 };
                 if (await _stelexiService.CreateStelexos(newOmadarxis))
                 {
-                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newOmadarxis.FullName}");
+                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newOmadarxis.LastName}");
                     Console.WriteLine("Stelexos created");
                 }
                 else
@@ -76,7 +76,7 @@ class Program
                 var newKoinotarxis = new CreateStelexosRequest()
                 {
                     Age = 0,
-                    FullName = GetPersonName(),
+                    LastName = GetPersonName(),
                     Sex = GetPersonSex(),
                     Thesi = Thesi.Koinotarxis,
                     Tel = "123456789",
@@ -84,7 +84,7 @@ class Program
                 };
                 if (await _stelexiService.CreateStelexos(newKoinotarxis))
                 {
-                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New koinotarxis created: {newKoinotarxis.FullName}");
+                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New koinotarxis created: {newKoinotarxis.LastName}");
                     Console.WriteLine("Stelexos created");
                 }
                 else
@@ -94,7 +94,7 @@ class Program
                 var newTomearxis = new CreateStelexosRequest()
                 {
                     Age = 0,
-                    FullName = GetPersonName(),
+                    LastName = GetPersonName(),
                     Sex = GetPersonSex(),
                     Tel = "123456789",
                     Thesi = Thesi.Tomearxis,
@@ -102,7 +102,7 @@ class Program
                 };
                 if (await _stelexiService.CreateStelexos(newTomearxis))
                 {
-                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newTomearxis.FullName}");
+                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New omadarxis created: {newTomearxis.LastName}");
                     Console.WriteLine("Stelexos created");
                 }
                 else
@@ -112,14 +112,14 @@ class Program
                 var newEkpaideutis = new CreateStelexosRequest()
                 {
                     Age = 0,
-                    FullName = GetPersonName(),
+                    LastName = GetPersonName(),
                     Sex = GetPersonSex(),
                     Tel = "123456789",
                     XwrosName = "Test Xwros",
                 };
                 if (await _stelexiService.CreateStelexos(newEkpaideutis))
                 {
-                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New ekpaideutis created: {newEkpaideutis.FullName}");
+                    await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New ekpaideutis created: {newEkpaideutis.LastName}");
                     Console.WriteLine("Stelexos created");
                 }
                 else
@@ -137,7 +137,8 @@ class Program
         var createKataskinotisRequest = new CreatePaidiRequest()
         {
             Age = newPaidi.Age,
-            FullName = newPaidi.FullName,
+            FirstName = newPaidi.FirstName,
+            LastName = newPaidi.LastName,
             PaidiType = newPaidi.PaidiType,
             SeAdeia = false,
             Sex = Sex.Male,
@@ -146,7 +147,7 @@ class Program
 
         if (await paidiService.CreatePaidiInService(createKataskinotisRequest))
         {
-            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Paidi created: {newPaidi.FullName}");
+            await connection.InvokeAsync("SendMessage", "ConsoleApp", $"New Paidi created: {newPaidi.LastName}");
             Console.WriteLine("Paidi created");
         }
         else
@@ -231,7 +232,7 @@ class Program
 
     private static PaidiDtoBase CreatePaidiFromUserInput(int typeOfPaidi) => new()
     {
-        FullName = GetPersonName(),
+        LastName = GetPersonName(),
         Age = GetPersonAge(),
         PaidiType = (PaidiType)(typeOfPaidi - 1),
         SeAdeia = false,

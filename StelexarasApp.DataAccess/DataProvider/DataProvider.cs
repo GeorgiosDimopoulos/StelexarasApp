@@ -232,7 +232,7 @@ public class DataProvider : IDataProvider
             Console.WriteLine("\nAll staff combined:");
             foreach (var person in AllStaff)
             {
-                Console.WriteLine(person.FullName + " - " + person.Thesi + " - " + person.XwrosName);
+                Console.WriteLine(person.LastName + " " + person.FirstName + " - " + person.Thesi + " - " + person.XwrosName);
             }
         }
     }

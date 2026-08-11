@@ -24,7 +24,7 @@ public class StaffRepositoryDbTests
     public async Task GetStelexosByIdInDb_ShouldReturnStelexos_WhenStelexosExists()
     {
         // Arrange
-        var stelexos = new Omadarxis { Id = 35, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "19123123" };
+        var stelexos = new Omadarxis { Id = 35, Thesi = Thesi.Omadarxis, LastName = "TestL", FirstName = "TestF", Tel = "19123123" };
 
         await _dbContext.Omadarxes!.AddAsync(stelexos);
         await _dbContext.SaveChangesAsync();
@@ -44,7 +44,8 @@ public class StaffRepositoryDbTests
         {
             Id = 96,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
+            LastName = "TestL",
+            FirstName = "TestF",
             Sex = Sex.Male,
             Tel = "1234567890",
         };
@@ -67,7 +68,8 @@ public class StaffRepositoryDbTests
         {
             Id = 18,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
+            LastName = "TestL",
+            FirstName = "TestF",
             Tel = "123-456-7890",
             Age = 30,
             XwrosName = "TestSkini",
@@ -105,7 +107,8 @@ public class StaffRepositoryDbTests
         {
             Id = 12,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
+            LastName = "TestL",
+            FirstName = "TestF",
             Tel = "123-456-7890"
         };
 
@@ -113,7 +116,8 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        stelexos.FullName = "Updated Name";
+        stelexos.LastName = "Updated NameL";
+
         var result = await _stelexiRepository.UpdateStelexosInDb(stelexos.Id, stelexos);
 
         // Assert
@@ -128,7 +132,9 @@ public class StaffRepositoryDbTests
         {
             Id = 1,
             Thesi = Thesi.Omadarxis,
-            FullName = "Test Name",
+            LastName = "NameL",
+            FirstName = "NameF",
+            Sex = Sex.Male,
             Tel = "123-456-7890"
         };
 
@@ -146,9 +152,9 @@ public class StaffRepositoryDbTests
     public async Task GetAllOmadarxesInDb_ShouldReturnAllStelexos()
     {
         // Arrange
-        var stelexos = new Omadarxis { Id = 3, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "123-456-7890" };
-        var stelexos2 = new Omadarxis { Id = 4, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "123-456-7890" };
-        var stelexos3 = new Omadarxis { Id = 5, Thesi = Thesi.Omadarxis, FullName = "Test Name", Tel = "123-456-7890" };
+        var stelexos = new Omadarxis { Id = 3, Thesi = Thesi.Omadarxis, LastName = "Test Name", FirstName = "TestF", Tel = "123-456-7890" };
+        var stelexos2 = new Omadarxis { Id = 4, Thesi = Thesi.Omadarxis, LastName = "Test Name", FirstName = "TestF", Tel = "123-456-7890" };
+        var stelexos3 = new Omadarxis { Id = 5, Thesi = Thesi.Omadarxis, LastName = "Test Name", FirstName = "TestF", Tel = "123-456-7890" };
 
         await _dbContext.Omadarxes!.AddRangeAsync(stelexos, stelexos2, stelexos3);
         await _dbContext.SaveChangesAsync();
@@ -164,8 +170,8 @@ public class StaffRepositoryDbTests
     public async Task GetAllKoinotarxesInDb_ShouldReturnAllStelexos()
     {
         // Arrange
-        var stelexos2 = new Koinotarxis { Id = 4, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890", Sex = Sex.Male, Age = 22 };
-        var stelexos = new Koinotarxis { Id = 5, Thesi = Thesi.Koinotarxis, FullName = "Test Name", Tel = "123-456-7890", Sex = Sex.Male, Age = 22 };
+        var stelexos2 = new Koinotarxis { Id = 4, Thesi = Thesi.Koinotarxis, LastName = "Test NameL", FirstName = "TestF", Tel = "123-456-7890", Sex = Sex.Male, Age = 22 };
+        var stelexos = new Koinotarxis { Id = 5, Thesi = Thesi.Koinotarxis, LastName = "Test NameL", FirstName = "TestF", Tel = "123-456-7890", Sex = Sex.Male, Age = 22 };
 
         await _dbContext.Koinotarxes!.AddRangeAsync(stelexos, stelexos2);
         await _dbContext.SaveChangesAsync();
