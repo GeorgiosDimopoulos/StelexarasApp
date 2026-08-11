@@ -299,10 +299,12 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             if (existingKoinotita == null)
                 return false;
 
-            existingKoinotita.Name = koinotita.Name;
-            existingKoinotita.TomeasId = koinotita.TomeasId;
+            existingKoinotita.Name = koinotita.Name;            
             existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
             existingKoinotita.Skines = koinotita.Skines;
+            
+            //existingKoinotita.Tomeas.Name = koinotita.Tomeas.Name;
+            existingKoinotita.TomeasId = koinotita.TomeasId;
 
             await _dbContext.SaveChangesAsync();
             if (transaction != null)

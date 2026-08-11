@@ -16,12 +16,11 @@ public class KoinotitaMappingProfile : Profile
         CreateMap<UpdateKoinotitaRequest, Koinotita>()
             .ForMember(dest => dest.KoinotarxisId, opt => opt.Ignore())
             .ForMember(dest => dest.Koinotarxis, opt => opt.Ignore())
-            .ForMember(dest => dest.Skines, opt => opt.Ignore())
-            .ForMember(dest => dest.Tomeas, opt => opt.MapFrom(src => new Tomeas { Name = src.TomeasName ?? string.Empty }));
-
+            .ForMember(dest => dest.Skines, opt => opt.Ignore());
 
         CreateMap<Koinotita, KoinotitaResponse>()
+            //.ForMember(dest => dest.TomeasId, opt => opt.MapFrom(src => src.TomeasId != 0 ? src.TomeasId : 0))
             .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom((src, dest) => src.Skines != null ? src.Skines.Count() : 0))
-            .ForMember(dest => dest.TomeasName, opt => opt.MapFrom(src => src.Tomeas != null ? src.Tomeas.Name : string.Empty)); ;
+            .ForMember(dest => dest.TomeasName, opt => opt.MapFrom(src => src.Tomeas != null ? src.Tomeas.Name : string.Empty));
     }
 }

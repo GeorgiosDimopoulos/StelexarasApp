@@ -123,10 +123,18 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return _mapper.Map<KoinotitaResponse>(skini);
     }
 
-    public Task<bool> UpdateKoinotitaInService(int id, UpdateKoinotitaRequest koinotitaDto)
+    public async Task<bool> UpdateKoinotitaInService(int id, UpdateKoinotitaRequest koinotitaDto)
     {
+        var tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), koinotitaDto.TomeasName);
+        if (tomeas == null)
+        {
+            return false;
+        }
+
         var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
-        return _teamsRepository.UpdateKoinotitaInDb(id, koinotita);
+        koinotita.TomeasId = tomeas.Id;
+
+        return await _teamsRepository.UpdateKoinotitaInDb(id, koinotita);
     }
 
     public Task<bool> UpdateSkiniInService(int id, UpdateSkiniRequest skiniDto)
