@@ -36,6 +36,7 @@
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="128.0.6613.11900" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="10.0.9" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageReference Include="xunit.assert" Version="2.9.3" />
     <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />

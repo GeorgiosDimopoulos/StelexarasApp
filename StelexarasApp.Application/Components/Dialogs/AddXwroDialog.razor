@@ -26,7 +26,7 @@
             @if (model.XwrosType == XwrosType.Skini)
             {
                 <MudSelect T="int?" Label="Κοινότητα" @bind-Value="model.KoinotitaId">
-                    @foreach (var koinotita in koinotites)
+                    @foreach (var koinotita in koinotites.OrderBy(k => k.Name))
                     {
                         <MudSelectItem T="int?" Value="@((int?)koinotita.Id)">
                             @koinotita.Name
@@ -38,7 +38,7 @@
             @if (model.XwrosType == XwrosType.Koinotita)
             {
                 <MudSelect T="string" Label="Τομέας" @bind-Value="model.Tomeasname">
-                    @foreach (var tomeas in tomeis)
+                    @foreach (var tomeas in tomeis.OrderBy(k => k.Name))
                     {
                         <MudSelectItem T="string" Value="@(tomeas.Name)">
                             @tomeas.Name
@@ -71,7 +71,7 @@
 
     private void Cancel(MouseEventArgs args)
     {
-        Dialog?.Close(DialogResult.Ok(model));
+        Dialog?.Cancel();
     }
 
     private async Task Save(MouseEventArgs _)
@@ -95,7 +95,6 @@
                 else
                 {
                     Snackbar.Add("Η σκηνή αποθηκεύτηκε επιτυχώς.", Severity.Success);
-
                     Dialog?.Close(DialogResult.Ok(result));
                 }
 

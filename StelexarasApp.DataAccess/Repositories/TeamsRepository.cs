@@ -300,11 +300,10 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
                 return false;
 
             existingKoinotita.Name = koinotita.Name;
-            existingKoinotita.Tomeas = koinotita.Tomeas;
+            existingKoinotita.TomeasId = koinotita.TomeasId;
             existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
             existingKoinotita.Skines = koinotita.Skines;
 
-            _dbContext.Koinotites.Update(existingKoinotita);
             await _dbContext.SaveChangesAsync();
             if (transaction != null)
             {

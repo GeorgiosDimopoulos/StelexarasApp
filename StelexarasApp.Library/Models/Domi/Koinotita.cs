@@ -8,6 +8,7 @@ public class Koinotita : Xwros
     public int Id { get; set; }
     public string Name { get; set; } = null!;
     public int? KoinotarxisId { get; set; }
+    public int TomeasId { get; set; }
 
     public HlikiaKoinotitas Hlikia { get; set; }
 

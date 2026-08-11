@@ -70,7 +70,6 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     /// </remarks>    
     /// <param name="koinotitaDto"></param>
     /// <returns></returns>
-    [Authorize]
     [HttpPost("Koinotita")]
     public async Task<ActionResult<bool>> PostKoinotita([FromQuery] CreateKoinotitaRequest koinotitaDto)
     {
@@ -96,7 +95,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPut("Koinotita/{id}")]
-    public async Task<IActionResult> PutKoinotita(int id, [FromBody] UpdateKoinotitaRequest koinotitaDto)
+    public async Task<IActionResult> PutKoinotita(int id, [FromQuery] UpdateKoinotitaRequest koinotitaDto)
     {
         var result = await _teamsService.UpdateKoinotitaInService(id, koinotitaDto);
 
