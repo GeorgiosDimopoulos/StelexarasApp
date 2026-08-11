@@ -25,11 +25,10 @@ public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiReques
 
     public async Task<bool> CreatePaidiInService(CreatePaidiRequest paidiDto)
     {
-        if (_paidiValidator == null || _mapper == null || _paidiRepository == null)
+        if (_paidiValidator == null || _mapper == null || _paidiRepository == null || string.IsNullOrEmpty(paidiDto.SkiniName))
             return false;
 
         var validationResult = _paidiValidator.Validate(paidiDto);
-
         if (!validationResult.IsValid)
         {
             return false;
@@ -39,11 +38,18 @@ public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiReques
             if (paidiDto == null || _mapper == null || _paidiRepository is null)
                 return false;
 
-            var paidi = _mapper.Map<Paidi>(paidiDto);
+            Paidi paidi = paidiDto.PaidiType switch
+            {
+                PaidiType.Kataskinotis => _mapper.Map<Kataskinotis>(paidiDto),
+                PaidiType.Ekpaideuomenos => _mapper.Map<Ekpaideuomenos>(paidiDto),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
             if (paidi == null)
                 return false;
 
-            return await _paidiRepository.AddPaidiInDb(paidi);
+            var res = await _paidiRepository.AddPaidiInDb(paidi, paidiDto.SkiniName);
+            return res;
         }
     }
 

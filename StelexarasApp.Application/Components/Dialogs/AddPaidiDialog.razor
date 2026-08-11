@@ -76,7 +76,7 @@
         };
 
         var result = await PaidiaApi.PostPaidi(newPaidiRequest);
-        if (result == null)
+        if (result == false)
         {
             Snackbar.Add("Σφάλμα κατά την αποθήκευση του παιδιού.", Severity.Error);
             return;

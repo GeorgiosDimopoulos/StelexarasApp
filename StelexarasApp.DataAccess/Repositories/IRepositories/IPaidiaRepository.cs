@@ -4,7 +4,7 @@ public interface IPaidiaRepository
 {
     Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId);
 
-    Task<bool> AddPaidiInDb(Paidi paidi);
+    Task<bool> AddPaidiInDb(Paidi paidi, string skini);
 
     Task<bool> AddSkinesInDb(Skini skini);
 

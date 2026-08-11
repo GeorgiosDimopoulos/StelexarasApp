@@ -15,7 +15,7 @@ public class PaidiaController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Kataskinotis>>> GetKataskinotes()
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidia()
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -49,42 +49,42 @@ public class PaidiaController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Paidi>> PostKataskinotis([FromBody] CreatePaidiRequest createPaidiRequest)
+    public async Task<bool> PostPaidi([FromBody] CreatePaidiRequest createPaidiRequest)
     {
         if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+            return false;
 
         var result = await _paidiService.CreatePaidiInService(createPaidiRequest);
 
         if (result)
-            return Ok(result);
+            return true;
 
-        return NotFound();
+        return false;
     }
 
     [Authorize]
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutKataskinotis(int id, [FromBody] UpdatePaidiRequest request)
+    public async Task<bool> PutPaidi(int id, [FromBody] UpdatePaidiRequest request)
     {
         request.Id = id;
         var result = await _paidiService.UpdatePaidiInService(request);
 
         if (!result)
-            return NotFound();
+            return false;
 
-        return Ok(result);
+        return true;
     }
 
     [Authorize]
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteKataskinotis(int id)
+    public async Task<bool> DeletePaidi(int id)
     {
         if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+            return false;
 
         var result = await _paidiService.DeletePaidiInService(id);
         if (!result)
-            return NotFound();
-        return Ok(result);
+            return false;
+        return true;
     }
 }

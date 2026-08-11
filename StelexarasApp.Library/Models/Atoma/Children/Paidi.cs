@@ -15,7 +15,7 @@ public class Paidi : IPerson
     public PaidiType PaidiType { get; set; }
     public int SkiniId { get; set; }
 
-    public Skini Skini { get; set; } = new Skini();
+    public Skini Skini { get; set; } = null!;
 }
 
 public enum PaidiType

@@ -123,14 +123,14 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         }
     }
 
-    public async Task<bool> AddPaidiInDb(Paidi paidi)
+    public async Task<bool> AddPaidiInDb(Paidi paidi, string skiniName)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
         try
         {
-            if (paidi is null || paidi.Id <= 0 || _dbContext.Paidia is null)
+            if (paidi is null || _dbContext.Paidia is null)
             {
                 _logger.LogWarning("Attempted to add a null paidi or this nullable Id");
                 return false;
@@ -142,6 +142,16 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
                 _logger.LogWarning("Paidi with the same Id already exists.");
                 return false;
             }
+
+            var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(sk => sk.Name.Equals(skiniName));
+            if (existingSkini == null)
+            {
+                _logger.LogWarning("Skini with the given Id doenst exists.");
+                return false;
+            }
+
+            //paidi.Skini = existingSkini;
+            paidi.SkiniId = existingSkini.Id;
 
             _dbContext!.Paidia!.Add(paidi);
             await _dbContext.SaveChangesAsync();

@@ -33,7 +33,11 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -67,7 +71,11 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -104,7 +112,11 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -147,12 +159,16 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("KoinotarxisId")
                         .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Sex")
                         .HasColumnType("int");
@@ -190,7 +206,11 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

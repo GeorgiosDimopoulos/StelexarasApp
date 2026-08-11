@@ -19,11 +19,11 @@ public interface IPaidiaApi
     Task<List<PaidiResponse>> GetPaidiaBySkiniId(int id, [Query] PaidiQueryParameters paidiQueryParameters);
 
     [Post("/Paidia")]
-    Task<PaidiResponse> PostPaidi([Body] CreatePaidiRequest paidiDto);
+    Task<bool> PostPaidi([Body] CreatePaidiRequest paidiDto);
 
     [Delete("/Paidia/{id}")]
-    Task DeletePaidi(int id);
+    Task<bool> DeletePaidi(int id);
 
     [Put("/Paidia/{id}")]
-    Task PutPaidi(int id, [Body] UpdatePaidiRequest paidiDto);
+    Task<bool> PutPaidi(int id, [Body] UpdatePaidiRequest paidiDto);
 }
