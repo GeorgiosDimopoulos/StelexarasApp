@@ -4,6 +4,7 @@
 @using StelexarasApp.Library.QueryParameters.Domi
 
 @inject IKoinotitesApi KoinotitesApi
+@inject IPaidiaApi PaidiaApi
 @inject IDialogService DialogService
 
 <h1 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΚΟΙΝΟΤΗΤΕΣ</h1>
@@ -16,7 +17,7 @@
             @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Equals("A")).OrderBy(k => k.Name))
             {
                 <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-                    @koinotita.Name
+                    @koinotita.Name - koinotitaPaidia
                 </MudButton>
             }
         </MudStack>
@@ -35,32 +36,23 @@
             }
         </MudStack>
     </MudItem>
-    @*<MudItem xs="12" sm="4">
-        <MudStack Justify="Justify.Center"
-                  AlignItems="AlignItems.Center"
-                  Spacing="10">
-            <MudButton Href="/sxoli"
-                       Style="height:100%; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-                ΣΧΟΛΗ
-            </MudButton>
-            <MudButton Href="/sxoli"
-                       Style="height:100%; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-                ΕΙΔΙΚΑ
-            </MudButton>
-            <MudButton Href="/sxoli"
-                       Style="height:100%; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-                ΑΡΧΗΓΕΙΟ
-            </MudButton>
-        </MudStack>
-    </MudItem>*@
 </MudGrid>
 
 @code
 {
     private List<KoinotitaResponse> Koinotites = new List<KoinotitaResponse>();
+    private List<int> koinotitaPaidia = new();
 
     protected override async Task OnInitializedAsync()
     {
         Koinotites = await KoinotitesApi.GetKoinotitesAsync(new KoinotitaQueryParameters() { IncludeStelexos = true });
+
+        int i = 0;
+        foreach (var koinotita in Koinotites)
+        {
+            var childrenPerKoinotita = await PaidiaApi.GetPaidiaByKoinotitaId(koinotita.Id, new());
+            koinotitaPaidia[i] = childrenPerKoinotita.Count;
+            i++;
+        }
     }
 }

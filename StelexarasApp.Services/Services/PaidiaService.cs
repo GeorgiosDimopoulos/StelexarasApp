@@ -23,9 +23,22 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
         _paidiRepository = paidiRepository ?? throw new ArgumentNullException(nameof(paidiRepository));
     }
 
-    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaInService(string koinotita, PaidiQueryParameters paidiQueryParameters)
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaIdInService(int id, PaidiQueryParameters paidiQueryParameters)
     {
-        var paidia = await _paidiRepository.GetPaidiaInKoinotitaFromDb(koinotita, paidiQueryParameters);
+        var paidia = await _paidiRepository.GetPaidiaInKoinotitaIdFromDb(id, paidiQueryParameters);
+        if (paidia == null)
+            return null!;
+
+        var paidiaResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
+        if (paidiaResponse == null)
+            return null!;
+        return paidiaResponse;
+    }
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaNameInService(string koinotitaName, PaidiQueryParameters paidiQueryParameters)
+    {
+        var paidia = await _paidiRepository.GetPaidiaInKoinotitaNameFromDb(koinotitaName, paidiQueryParameters);
         if (paidia == null)
             return null!;
 
@@ -51,8 +64,7 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
     public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniIdInService(int skiniId, PaidiQueryParameters paidiQueryParameters)
     {
         var paidia = await _paidiRepository.GetPaidiaInSkiniIdFromDb(skiniId, paidiQueryParameters);
-        var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
-        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
+        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
 
         return kataskinotesResponse;
     }

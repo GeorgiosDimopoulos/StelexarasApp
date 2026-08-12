@@ -68,12 +68,22 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         return await query.ToListAsync();
     }
 
-    public async Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaFromDb(string n, PaidiQueryParameters queryParameters)
+    public async Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaNameFromDb(string n, PaidiQueryParameters queryParameters)
     {
         IQueryable<Paidi> query = _dbContext.Paidia;
         if (queryParameters.IncludeSkini)
             query = query.Include(p => p.Skini);
         query = query.Where(p => p.Skini.Koinotita.Name == n);
+        return await query.ToListAsync();
+    }
+
+
+    public async Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaIdFromDb(int id, PaidiQueryParameters queryParameters)
+    {
+        IQueryable<Paidi> query = _dbContext.Paidia;
+        if (queryParameters.IncludeSkini)
+            query = query.Include(p => p.Skini);
+        query = query.Where(p => p.Skini.Koinotita.Id == id);
         return await query.ToListAsync();
     }
 

@@ -57,8 +57,34 @@ public class PaidiaController : ControllerBase
         return paidi;
     }
 
+    [HttpGet("Koinotita/ById/{id:int}")]
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaId(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)
+    {
+        if (!ModelState.IsValid)
+            return null!;
+
+        var paidia = await _paidiService.GetPaidiaByKoinotitaIdInService(id, paidiQueryParameters);
+        if (paidia == null)
+            return null!;
+
+        return paidia;
+    }
+
+    [HttpGet("Koinotita/ByName/{name}")]
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaName(string name, [FromQuery] PaidiQueryParameters paidiQueryParameters)
+    {
+        if (!ModelState.IsValid)
+            return null!;
+
+        var paidia = await _paidiService.GetPaidiaByKoinotitaNameInService(name, paidiQueryParameters);
+        if (paidia == null)
+            return null!;
+
+        return paidia;
+    }
+
     [HttpGet("BySkiniId/{id:int}")]
-    public async Task<ActionResult<PaidiResponse>> GetPaidiaBySkiniId(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidiaBySkiniId(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

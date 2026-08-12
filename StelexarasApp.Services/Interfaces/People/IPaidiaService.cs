@@ -9,6 +9,7 @@ public interface IPaidiaService<TCreate, TUpdate, TResponse>
     Task<IEnumerable<TResponse>> GetPaidiaInService(PaidiType? paidiType, PaidiQueryParameters paidiQueryParameters);
     Task<IEnumerable<TResponse>> GetPaidiaBySkiniInService(string skini, PaidiQueryParameters paidiQueryParameters);
     Task<IEnumerable<TResponse>> GetPaidiaBySkiniIdInService(int skiniId, PaidiQueryParameters paidiQueryParameters);
-    Task<IEnumerable<TResponse>> GetPaidiaByKoinotitaInService(string koinotita, PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<TResponse>> GetPaidiaByKoinotitaNameInService(string koinotita, PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<TResponse>> GetPaidiaByKoinotitaIdInService(int id, PaidiQueryParameters paidiQueryParameters);
     Task<IEnumerable<TResponse>> GetPaidiaBySxoliInService(PaidiQueryParameters paidiQueryParameters);
 }

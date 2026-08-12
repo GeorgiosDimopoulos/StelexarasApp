@@ -12,7 +12,10 @@ public interface IPaidiaApi
     [Get("/Paidia/{id}")]
     Task<PaidiResponse> GetPaidi(int id, [Query] PaidiQueryParameters paidiQueryParameters);
 
-    [Get("/Paidia/Koinotita/{name}")]
+    [Get("/Paidia/Koinotita/ById/{id}")]
+    Task<List<PaidiResponse>> GetPaidiaByKoinotitaId(int id, [Query] PaidiQueryParameters paidiQueryParameters);
+
+    [Get("/Paidia/Koinotita/ByName/{name}")]
     Task<List<PaidiResponse>> GetPaidiaByKoinotitaName(string name, [Query] PaidiQueryParameters paidiQueryParameters);
 
     [Get("/Paidia/BySkiniId/{id}")]
