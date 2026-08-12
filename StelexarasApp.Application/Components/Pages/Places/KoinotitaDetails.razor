@@ -7,21 +7,29 @@
 @inject IKoinotitesApi KoinotitesApi
 @inject IDialogService DialogService
 
-<h1 style="text-align:center">@KoinotitaName</h1>
-<h2 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΠΑΙΔΙΑ: @Skines.Sum(sk => sk.PaidiaNumber)</h2>
-<h2 style="text-align:center; padding-block-start:5px; margin-bottom:4px">ΣΚΗΝΕΣ</h2>
+<h1 style="text-align:center; padding-block-start:30px;">@KoinotitaName.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
 
 <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
     <MudItem xs="12" sm="4">
-        <MudStack Justify="Justify.Center"
-                  AlignItems="AlignItems.Center"
+        <MudStack AlignItems="AlignItems.Center"
                   Spacing="10">
-            @foreach (var sk in Skines)
+            @if(Skines.Count > 6)
             {
-                <MudButton Href="@($"/skines/{sk.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
+                @foreach (var sk in Skines.OrderBy(s => s.Name))
+                {
+                    <MudButton Href="@($"/skines/{sk.Id}")" Style="height:50px; width:450px; border-radius:15px; overflow:hidden; color:white; background-color:yellowgreen">
+                        @sk.Name - @sk.PaidiaNumber
+                    </MudButton>
+                }
+            }
+            else{
+            @foreach (var sk in Skines.OrderBy(s => s.Name))
+            {
+                <MudButton Href="@($"/skines/{sk.Id}")" Style="height:80px; width:500px; border-radius:15px; overflow:hidden; color:white; background-color:yellowgreen">
                     @sk.Name - @sk.PaidiaNumber
                 </MudButton>
             }
+            }            
         </MudStack>
     </MudItem>
 </MudGrid>

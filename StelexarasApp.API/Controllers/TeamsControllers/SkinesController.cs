@@ -42,39 +42,6 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("Skini")]
-    public async Task<bool> PostSkini([Body] CreateSkiniRequest skiniDto)
-    {
-        var result = await _teamsService.AddSkiniInService(skiniDto);
-
-        if (!result)
-            return false;
-
-        return true;
-    }
-
-    [HttpPut("Skini/{id}")]
-    public async Task<bool> PutSkini(int id, [Body] UpdateSkiniRequest skiniDto)
-    {
-        var result = await _teamsService.UpdateSkiniInService(id, skiniDto);
-
-        if (!result)
-            return false;
-
-        return true;
-    }
-
-    [HttpDelete("Skini/{id}")]
-    public async Task<bool> DeleteSkini(int id)
-    {
-        var result = await _teamsService.DeleteSkiniInService(id);
-
-        if (!result)
-            return false;
-
-        return true;
-    }
-
     [HttpGet("Skines/ByKoinotitaName/{koinotitaName}")]
     public async Task<ActionResult<IEnumerable<SkiniResponse>>> GetSkinesByKoinotitaName(string koinotitaName, [FromQuery] SkiniQueryParameters skiniQueryParameters)
     {
@@ -105,5 +72,38 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
             return NotFound();
 
         return Ok(result);
+    }
+
+    [HttpPost("Skini")]
+    public async Task<bool> PostSkini([FromBody] CreateSkiniRequest skiniDto)
+    {
+        var result = await _teamsService.AddSkiniInService(skiniDto);
+
+        if (!result)
+            return false;
+
+        return true;
+    }
+
+    [HttpPut("Skini/{id}")]
+    public async Task<bool> PutSkini(int id, [FromQuery] UpdateSkiniRequest skiniDto)
+    {
+        var result = await _teamsService.UpdateSkiniInService(id, skiniDto);
+
+        if (!result)
+            return false;
+
+        return true;
+    }
+
+    [HttpDelete("Skini/{id}")]
+    public async Task<bool> DeleteSkini(int id)
+    {
+        var result = await _teamsService.DeleteSkiniInService(id);
+
+        if (!result)
+            return false;
+
+        return true;
     }
 }

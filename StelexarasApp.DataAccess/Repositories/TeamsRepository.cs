@@ -299,10 +299,10 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             if (existingKoinotita == null)
                 return false;
 
-            existingKoinotita.Name = koinotita.Name;            
+            existingKoinotita.Name = koinotita.Name;
             existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
             existingKoinotita.Skines = koinotita.Skines;
-            
+
             //existingKoinotita.Tomeas.Name = koinotita.Tomeas.Name;
             existingKoinotita.TomeasId = koinotita.TomeasId;
 
@@ -338,8 +338,8 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
                 return false;
 
             existingSkini.Name = skini.Name;
-            existingSkini.Koinotita = skini.Koinotita;
-            existingSkini.Omadarxis = skini.Omadarxis;
+            existingSkini.KoinotitaId = skini.KoinotitaId;
+            existingSkini.OmadarxisId = skini.OmadarxisId;
             existingSkini.Paidia = skini.Paidia;
 
             _dbContext.Skines.Update(existingSkini);
@@ -493,7 +493,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
 
     public async Task<bool> AddSkiniInDb(Skini skini)
     {
-        if (skini == null || skini.Koinotita == null ||(await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || _dbContext.Skines is null) // skini.Id <= 0 ||
+        if (skini == null || skini.Koinotita == null || (await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || _dbContext.Skines is null) // skini.Id <= 0 ||
             return false;
 
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
@@ -504,6 +504,12 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             var existingKoinotita = await _dbContext.Koinotites.FirstOrDefaultAsync(t => t.Id == skini.Koinotita.Id);
             if (existingKoinotita != null)
                 skini.Koinotita = existingKoinotita;
+            else
+                return false;
+
+            var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(t => t.Name.Equals(skini.Name));
+            if (existingSkini != null)
+                return false;
 
             await _dbContext.Skines.AddAsync(skini);
             await _dbContext.SaveChangesAsync();

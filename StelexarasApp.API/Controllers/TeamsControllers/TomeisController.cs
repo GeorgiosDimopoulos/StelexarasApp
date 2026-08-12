@@ -61,7 +61,7 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPut("Tomea/{name}")]
-    public async Task<IActionResult> PutTomea(string name, [FromBody] UpdateTomeasRequest tomeasDto)
+    public async Task<IActionResult> PutTomea(string name, [FromQuery] UpdateTomeasRequest tomeasDto)
     {
         var result = await _teamsService.UpdateTomeaInService(name, tomeasDto);
 
