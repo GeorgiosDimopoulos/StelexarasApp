@@ -6,6 +6,9 @@ public class PaidiMappingProfile : Profile
 {
     public PaidiMappingProfile()
     {
+        CreateMap<Paidi,PaidiResponse>()
+            .Include<Kataskinotis, PaidiResponse>()
+            .Include<Ekpaideuomenos, PaidiResponse>();
         CreateMap<CreatePaidiRequest, Kataskinotis>();
         CreateMap<CreatePaidiRequest, Ekpaideuomenos>();
 

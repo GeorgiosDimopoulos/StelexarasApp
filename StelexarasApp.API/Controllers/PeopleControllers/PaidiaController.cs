@@ -7,30 +7,30 @@ namespace StelexarasApp.API.Controllers.PeopleControllers;
 [Route("[controller]")]
 public class PaidiaController : ControllerBase
 {
-    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiService;
+    private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiService;
 
-    public PaidiaController(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiService)
+    public PaidiaController(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiService)
     {
         _paidiService = paidiService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidia()
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidia(PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var paidia = await _paidiService.GetPaidiaInService(PaidiType.Kataskinotis);
+        var paidia = await _paidiService.GetPaidiaInService(PaidiType.Kataskinotis, paidiQueryParameters);
         return Ok(paidia);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<PaidiResponse>> GetPaidi(int id)
+    public async Task<ActionResult<PaidiResponse>> GetPaidi(int id, PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var paidi = await _paidiService.GetPaidiByIdInService(id);
+        var paidi = await _paidiService.GetPaidiByIdInService(id, paidiQueryParameters);
         if (paidi == null)
             return NotFound();
 
@@ -38,12 +38,12 @@ public class PaidiaController : ControllerBase
     }
 
     [HttpGet("BySkiniId/{id:int}")]
-    public async Task<ActionResult<PaidiResponse>> GetPaidiaBySkiniId(int id)
+    public async Task<ActionResult<PaidiResponse>> GetPaidiaBySkiniId(int id, PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var paidia = await _paidiService.GetPaidiaBySkiniIdInService(id);
+        var paidia = await _paidiService.GetPaidiaBySkiniIdInService(id, paidiQueryParameters);
 
         return Ok(paidia);
     }

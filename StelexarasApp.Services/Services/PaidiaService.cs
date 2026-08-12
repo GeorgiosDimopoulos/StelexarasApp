@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace StelexarasApp.Services.Services;
 
-public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>
+public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>
 {
     private readonly ILogger<PaidiaService> _logger;
     private readonly IPaidiaRepository _paidiRepository;
@@ -22,6 +22,90 @@ public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiReques
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _paidiRepository = paidiRepository ?? throw new ArgumentNullException(nameof(paidiRepository));
     }
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaInService(string koinotita, PaidiQueryParameters paidiQueryParameters)
+    {
+        var paidia = await _paidiRepository.GetPaidiaInKoinotitaFromDb(koinotita, paidiQueryParameters);
+        if (paidia == null)
+            return null!;
+
+        var paidiaResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
+        if (paidiaResponse == null)
+            return null!;
+        return paidiaResponse;
+    }
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniInService(string skini, PaidiQueryParameters paidiQueryParameters)
+    {
+        var paidia = await _paidiRepository.GetPaidiaInSkiniFromDb(skini, paidiQueryParameters);
+        if (paidia == null)
+            return null!;
+
+        var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
+        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
+        if (kataskinotesResponse == null)
+            return null!;
+        return kataskinotesResponse;
+    }
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniIdInService(int skiniId, PaidiQueryParameters paidiQueryParameters)
+    {
+        var paidia = await _paidiRepository.GetPaidiaInSkiniIdFromDb(skiniId, paidiQueryParameters);
+        var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
+        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
+
+        return kataskinotesResponse;
+    }
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySxoliInService(PaidiQueryParameters queryParameters)
+    {
+        var paidia = await _paidiRepository.GetPaidiaInSxoliFromDb(queryParameters);
+        if (paidia == null)
+            return null!;
+
+        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
+        if (kataskinotesResponse == null)
+            return null!;
+        return kataskinotesResponse;
+    }
+
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaInService(PaidiType? paidiType, PaidiQueryParameters queryParameters)
+    {
+        var paidia = await _paidiRepository.GetPaidiaFromDb(paidiType, queryParameters);
+        if (paidia == null)
+            return null!;
+
+        var paidiaresponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
+        if (paidiaresponse == null)
+            return null!;
+        return paidiaresponse;
+    }
+
+    public async Task<PaidiResponse> GetPaidiByIdInService(int id, PaidiQueryParameters queryParameters)
+    {
+        if (_mapper == null || _paidiRepository is null)
+            return null!;
+
+        Paidi paidi = await _paidiRepository.GetPaidiByIdFromDb(id, queryParameters);
+        if (paidi == null)
+            return null!;
+
+        return _mapper.Map<PaidiResponse>(paidi);
+    }
+
+    public async Task<bool> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId)
+    {
+        if (paidiId <= 0 || newSkiniId <= 0 || _mapper == null || _paidiRepository is null)
+            return false;
+
+        var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
+        if (!result)
+            return false;
+
+        return true;
+    }
+
+
 
     public async Task<bool> CreatePaidiInService(CreatePaidiRequest paidiDto)
     {
@@ -58,93 +142,11 @@ public class PaidiaService : IPaidiService<CreatePaidiRequest, UpdatePaidiReques
         if (_mapper == null || _paidiRepository is null)
             return false;
 
-        var paidi = await _paidiRepository.GetPaidiByIdFromDb(id);
+        var paidi = await _paidiRepository.GetPaidiByIdFromDb(id, new PaidiQueryParameters { IncludeSkini = true });
         if (paidi == null)
             return false;
 
         return await _paidiRepository.DeletePaidiInDb(id);
-    }
-
-    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaInService(string koinotita)
-    {
-        var paidia = await _paidiRepository.GetPaidiaInKoinotitaFromDb(koinotita);
-        if (paidia == null)
-            return null!;
-
-        var paidiaResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
-        if (paidiaResponse == null)
-            return null!;
-        return paidiaResponse;
-    }
-
-    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniInService(string skini)
-    {
-        var paidia = await _paidiRepository.GetPaidiaInSkiniFromDb(skini);
-        if (paidia == null)
-            return null!;
-
-        var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
-        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
-        if (kataskinotesResponse == null)
-            return null!;
-        return kataskinotesResponse;
-    }
-
-    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniIdInService(int skiniId)
-    {
-        var paidia = await _paidiRepository.GetPaidiaInSkiniIdFromDb(skiniId);
-        var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
-        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
-
-        return kataskinotesResponse;
-    }
-
-    public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySxoliInService()
-    {
-        var paidia = await _paidiRepository.GetPaidiaInSxoliFromDb();
-        if (paidia == null)
-            return null!;
-
-        var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
-        if (kataskinotesResponse == null)
-            return null!;
-        return kataskinotesResponse;
-    }
-
-    public async Task<IEnumerable<PaidiResponse>> GetPaidiaInService(PaidiType? paidiType)
-    {
-        var paidia = await _paidiRepository.GetPaidiaFromDb(paidiType);
-        if (paidia == null)
-            return null!;
-
-        var paidiaresponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
-        if (paidiaresponse == null)
-            return null!;
-        return paidiaresponse;
-    }
-
-    public async Task<PaidiResponse> GetPaidiByIdInService(int id)
-    {
-        if (_mapper == null || _paidiRepository is null)
-            return null!;
-
-        Paidi paidi = await _paidiRepository.GetPaidiByIdFromDb(id);
-        if (paidi == null)
-            return null!;
-
-        return _mapper.Map<PaidiResponse>(paidi);
-    }
-
-    public async Task<bool> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId)
-    {
-        if (paidiId <= 0 || newSkiniId <= 0 || _mapper == null || _paidiRepository is null)
-            return false;
-
-        var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
-        if (!result)
-            return false;
-
-        return true;
     }
 
     public async Task<bool> UpdatePaidiInService(UpdatePaidiRequest paidiDto)
