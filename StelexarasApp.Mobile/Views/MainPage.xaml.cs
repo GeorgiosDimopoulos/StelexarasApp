@@ -7,7 +7,7 @@ public partial class MainPage : ContentPage
 {
     private readonly IExpenseService _expenseService;
     private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _staffService;
-    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+    private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
     private readonly IDutyService _dutiesService;
     private readonly ITeamsService _teamsService;
     private readonly SignalrService _signalRService;
@@ -18,7 +18,7 @@ public partial class MainPage : ContentPage
     public MainPage(
         IDutyService dutyService,
         IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> staffService,
-        IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService,
+        IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService,
         ITeamsService teamsService,
         IExpenseService expenseService,
         SignalrService signalRService,

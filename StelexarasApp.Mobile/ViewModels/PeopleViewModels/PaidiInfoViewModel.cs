@@ -5,14 +5,14 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 {
     public class PaidiInfoViewModel : INotifyPropertyChanged
     {
-        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+        private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
         private ICommand SavePaidiCommand { get; }
 
         public PaidiResponse PaidiDto { get; set; } = new PaidiResponse();
         public string SkiniName { get; set; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public PaidiInfoViewModel(PaidiResponse paidiDto, IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService, string skini)
+        public PaidiInfoViewModel(PaidiResponse paidiDto, IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService, string skini)
         {
             PaidiDto = paidiDto;
             _paidiaService = peopleService;

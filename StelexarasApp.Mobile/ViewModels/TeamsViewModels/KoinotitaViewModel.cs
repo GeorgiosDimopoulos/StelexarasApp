@@ -6,12 +6,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 {
     public class KoinotitaViewModel : INotifyPropertyChanged
     {
-        private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+        private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
         private readonly ITeamsService _teamsService;
         public ObservableCollection<string> Skines { get; set; }
         public KoinotitaResponse? Koinotita { get; set; }
 
-        public KoinotitaViewModel(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService)
+        public KoinotitaViewModel(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService)
         {
             _paidiaService = paidiaService;
             _teamsService = teamsService;

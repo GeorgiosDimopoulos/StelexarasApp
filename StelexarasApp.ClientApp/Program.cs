@@ -43,7 +43,7 @@ class Program
 
     private static async Task HandlePersonCreation(int choice, ServiceProvider serviceProvider)
     {
-        var _paidiService = serviceProvider.GetService<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>>();
+        var _paidiService = serviceProvider.GetService<IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>>();
         var _stelexiService = serviceProvider.GetService<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse>>();
 
         switch (choice)
@@ -131,7 +131,7 @@ class Program
         }
     }
 
-    private static async Task CreatePaidi(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiService, int typeOfPaidi)
+    private static async Task CreatePaidi(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiService, int typeOfPaidi)
     {
         var newPaidi = CreatePaidiFromUserInput(typeOfPaidi);
         var createKataskinotisRequest = new CreatePaidiRequest()
@@ -197,7 +197,7 @@ class Program
         .AddTransient<IValidator<DutyDtoBase>, DutyValidator>()
         .AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>()
         .AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>()
-        .AddScoped<IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>, PaidiaService>()
+        .AddScoped<IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>, PaidiaService>()
         .AddScoped<IDutyService, DutyService>()
         .AddScoped<IExpenseService, ExpenseService>()
         .AddScoped<ITeamsService, TeamsService>()

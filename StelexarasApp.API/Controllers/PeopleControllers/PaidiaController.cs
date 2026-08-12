@@ -14,8 +14,18 @@ public class PaidiaController : ControllerBase
         _paidiService = paidiService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidia(PaidiQueryParameters paidiQueryParameters)
+    [HttpGet("Paidia")]
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidia([FromQuery] PaidiQueryParameters paidiQueryParameters)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var paidia = await _paidiService.GetPaidiaInService(null, paidiQueryParameters);
+        return Ok(paidia);
+    }
+
+    [HttpGet("Kataskinotes")]
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetKataskinotes([FromQuery] PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -24,8 +34,18 @@ public class PaidiaController : ControllerBase
         return Ok(paidia);
     }
 
+    [HttpGet("Ekpaideuomenoi")]
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetEkpaideuomenoi([FromQuery] PaidiQueryParameters paidiQueryParameters)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var paidia = await _paidiService.GetPaidiaInService(PaidiType.Ekpaideuomenos, paidiQueryParameters);
+        return Ok(paidia);
+    }
+
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<PaidiResponse>> GetPaidi(int id, PaidiQueryParameters paidiQueryParameters)
+    public async Task<ActionResult<PaidiResponse>> GetPaidi(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -38,7 +58,7 @@ public class PaidiaController : ControllerBase
     }
 
     [HttpGet("BySkiniId/{id:int}")]
-    public async Task<ActionResult<PaidiResponse>> GetPaidiaBySkiniId(int id, PaidiQueryParameters paidiQueryParameters)
+    public async Task<ActionResult<PaidiResponse>> GetPaidiaBySkiniId(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

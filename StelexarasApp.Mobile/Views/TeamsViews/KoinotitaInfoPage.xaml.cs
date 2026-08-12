@@ -4,14 +4,14 @@ namespace StelexarasApp.Mobile.Views.TeamsViews;
 
 public partial class KoinotitaInfoPage : ContentPage
 {
-    private IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+    private IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
     private ITeamsService _teamsService;
     private IPageFactory _pageFactory;
 
     public KoinotitaResponse Koinotita { get; set; }
 
     public KoinotitaInfoPage(ITeamsService teamsService,
-        IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService,
+        IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService,
         KoinotitaViewModel koinotitaViewModel,
         IPageFactory pageFactory)
     {

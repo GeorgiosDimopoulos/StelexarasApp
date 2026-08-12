@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using StelexarasApp.Library.QueryParameters.People;
 
 namespace StelexarasApp.Tests.ServicesTests;
 
@@ -69,7 +70,7 @@ public class PaidiaServiceTests
         }.Where(p => p.PaidiType == PaidiType.Ekpaideuomenos).ToList();
 
         _mockPaidiRepository
-            .Setup(repo => repo.GetPaidiaInSxoliFromDb())
+            .Setup(repo => repo.GetPaidiaInSxoliFromDb(new PaidiQueryParameters()))
             .ReturnsAsync(expectedPaidia);
 
         _mockMapper.Setup(m => m.Map<IEnumerable<PaidiResponse>>(It.IsAny<IEnumerable<Paidi>>()))
@@ -84,7 +85,7 @@ public class PaidiaServiceTests
             }));
 
         // Act
-        var result = await _paidiService.GetPaidiaBySxoliInService();
+        var result = await _paidiService.GetPaidiaBySxoliInService(new PaidiQueryParameters());
 
         // Assert
         Assert.Equal(2, result.Count());
@@ -107,13 +108,13 @@ public class PaidiaServiceTests
             PaidiType = PaidiType.Ekpaideuomenos
         };
 
-        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id)).ReturnsAsync(paidiToDelete);
+        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, new PaidiQueryParameters())).ReturnsAsync(paidiToDelete);
         _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete.Id)).ReturnsAsync(true);
 
         var result = await _paidiService.DeletePaidiInService(paidiToDelete.Id);
 
         Assert.True(result);
-        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, new PaidiQueryParameters()), Times.Once);
         _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete.Id), Times.Once);
     }
 
@@ -131,7 +132,7 @@ public class PaidiaServiceTests
             PaidiType = expectedType
         } : null;
 
-        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiId))
+        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiId, new PaidiQueryParameters()))
                             .ReturnsAsync(expectedPaidi);
         _mockMapper.Setup(m => m.Map<PaidiResponse>(It.IsAny<Paidi>()))
                    .Returns((Paidi p) => new PaidiResponse
@@ -145,7 +146,7 @@ public class PaidiaServiceTests
                    });
 
         // Act
-        var result = await _paidiService.GetPaidiByIdInService(paidiId);
+        var result = await _paidiService.GetPaidiByIdInService(paidiId, new PaidiQueryParameters());
 
         // Assert
         if (shouldExist)

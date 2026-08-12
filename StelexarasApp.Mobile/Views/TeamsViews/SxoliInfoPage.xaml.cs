@@ -3,9 +3,9 @@
 public partial class SxoliInfoPage : ContentPage
 {
     private readonly SxoliViewModel _sxoliViewModel;
-    private readonly IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+    private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
 
-    public SxoliInfoPage(IPaidiService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, SxoliViewModel sxoliViewModel)
+    public SxoliInfoPage(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, SxoliViewModel sxoliViewModel)
     {
         InitializeComponent();
         _paidiaService = paidiaService ?? throw new ArgumentNullException(nameof(paidiaService));
