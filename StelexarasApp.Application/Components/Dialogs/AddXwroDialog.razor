@@ -2,6 +2,7 @@
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.Models.Atoma
+@using StelexarasApp.Library.QueryParameters.Domi
 
 @inherits ComponentBase
 
@@ -65,7 +66,7 @@
     {
         await Task.Delay(500);
 
-        koinotites = await KoinotitesApi.GetKoinotitesAsync();
+        koinotites = await KoinotitesApi.GetKoinotitesAsync(new KoinotitaQueryParameters());
         tomeis = await TomeisApi.GetTomeisAsync(new());
     }
 

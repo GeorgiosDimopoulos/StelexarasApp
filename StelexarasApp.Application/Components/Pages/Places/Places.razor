@@ -1,6 +1,7 @@
 ﻿@page "/xwroi"
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
+@using StelexarasApp.Library.QueryParameters.Domi
 
 @inject IKoinotitesApi KoinotitesApi
 @inject IDialogService DialogService
@@ -60,6 +61,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Koinotites = await KoinotitesApi.GetKoinotitesAsync();
+        Koinotites = await KoinotitesApi.GetKoinotitesAsync(new KoinotitaQueryParameters() { IncludeStelexos = true });
     }
 }

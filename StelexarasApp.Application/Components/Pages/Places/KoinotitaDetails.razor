@@ -1,6 +1,7 @@
 ﻿@page "/koinotites/{KoinotitaId:int}"
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
+@using StelexarasApp.Library.QueryParameters.Domi
 
 @inject ISkinesApi SkinesApi
 @inject IKoinotitesApi KoinotitesApi
@@ -37,8 +38,8 @@
     {
         try
         {
-            Skines = await SkinesApi.GetSkinesByKoinotitaIdAsync(KoinotitaId);
-            KoinotitaName = (await KoinotitesApi.GetKoinotitaById(KoinotitaId)).Name;
+            Skines = await SkinesApi.GetSkinesByKoinotitaId(KoinotitaId, new SkiniQueryParameters() { IncludePaidia = true, IncludeStelexos = true });
+            KoinotitaName = (await KoinotitesApi.GetKoinotitaById(KoinotitaId, new KoinotitaQueryParameters() { IncludeStelexos = true })).Name;
         }
         catch (Exception ex)
         {

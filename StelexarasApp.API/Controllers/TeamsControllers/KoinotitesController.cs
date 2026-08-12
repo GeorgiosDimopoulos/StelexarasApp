@@ -22,7 +22,6 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
         return Ok(result);
     }
 
-
     /// <remarks>
     /// To get the koinotarxi, just IncludeStelexos
     /// </remarks>

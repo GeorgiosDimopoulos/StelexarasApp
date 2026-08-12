@@ -16,13 +16,13 @@ public interface ISkinesApi
     Task<SkiniResponse> GetSkiniByName(string name, [Query] SkiniQueryParameters skiniQueryParameters);
 
     [Get("/Skines/Skines/ByKoinotitaName/{koinotitaName}")]
-    Task<List<SkiniResponse>> GetSkinesByKoinotitaNameAsync(string koinotitaName);
+    Task<List<SkiniResponse>> GetSkinesByKoinotitaName(string koinotitaName, [Query] SkiniQueryParameters skiniQueryParameters);
 
     [Get("/Skines/Skines/ByKoinotitaId/{koinotitaId}")]
-    Task<List<SkiniResponse>> GetSkinesByKoinotitaIdAsync(int koinotitaId);
+    Task<List<SkiniResponse>> GetSkinesByKoinotitaId(int koinotitaId, [Query] SkiniQueryParameters skiniQueryParameters);
 
     [Get("/Skines/SkinesEkpaideuomenon")]
-    Task<List<SkiniResponse>> GetSkinesEkpaideuomenonAsync();
+    Task<List<SkiniResponse>> GetSkinesEkpaideuomenon();
 
     [Post("/Skines/Skini")]
     Task<bool> PostSkini([Body] CreateSkiniRequest skiniDto);

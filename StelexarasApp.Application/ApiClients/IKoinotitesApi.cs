@@ -1,21 +1,22 @@
 ﻿using Refit;
 using StelexarasApp.Library.Dtos.Domi;
+using StelexarasApp.Library.QueryParameters.Domi;
 
 namespace StelexarasApp.Application.ApiClients;
 
 public interface IKoinotitesApi
 {
     [Get("/Koinotites/Koinotites")]
-    Task<List<KoinotitaResponse>> GetKoinotitesAsync();
+    Task<List<KoinotitaResponse>> GetKoinotitesAsync([Query] KoinotitaQueryParameters koinotitaQueryParameters);
 
     [Get("/Koinotites/Koinotites/{tomeaId}")]
-    Task<List<KoinotitaResponse>> GetKoinotitesByTomeaAsync(int tomeaId);
+    Task<List<KoinotitaResponse>> GetKoinotitesByTomeaAsync(int tomeaId, [Query] KoinotitaQueryParameters koinotitaQueryParameters);
 
     [Get("/Koinotites/Koinotita/ByName/{name}")]
-    Task<KoinotitaResponse> GetKoinotitaByName(string name);
+    Task<KoinotitaResponse> GetKoinotitaByName(string name, [Query] KoinotitaQueryParameters koinotitaQueryParameters);
 
     [Get("/Koinotites/Koinotita/ById/{id}")]
-    Task<KoinotitaResponse> GetKoinotitaById(int id);
+    Task<KoinotitaResponse> GetKoinotitaById(int id, [Query] KoinotitaQueryParameters koinotitaQueryParameters);
 
     [Post("/Koinotites/Koinotita")]
     Task<bool> PostKoinotita([Body] CreateKoinotitaRequest dto);
