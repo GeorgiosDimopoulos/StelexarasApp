@@ -20,7 +20,7 @@ public class PaidiValidator : AbstractValidator<PaidiDtoBase>
         RuleFor(user => user.PaidiType)
             .NotNull().WithMessage("PaidiType is required");
         RuleFor(paidi => paidi.Age)
-                .NotEqual(6).WithMessage("Ekpaideuomenos must be 16 years old");
+                .NotEqual(16).WithMessage("Ekpaideuomenos must be 16 years old");
 
         When(paidi => paidi.PaidiType == PaidiType.Kataskinotis, () =>
         {

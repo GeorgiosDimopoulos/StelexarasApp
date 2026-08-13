@@ -2,6 +2,7 @@
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.People.Staff
 @using StelexarasApp.Library.Models.Atoma
+@using StelexarasApp.Library.Models.Atoma.Staff
 
 @inherits ComponentBase
 
@@ -15,7 +16,15 @@
             <MudTextField @bind-Value="req.FirstName" Label="Όνομα" />
             <MudTextField @bind-Value="req.LastName" Label="Επίθετο" />
             <MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
-            <MudNumericField @bind-Value="req.Tel" Label="Τηλέφωνο" />
+            <MudTextField @bind-Value="req.Tel" Label="Τηλέφωνο" />
+            <MudSelect T="Thesi" @bind-Value="req.Thesi" Label="Θέση">
+                @foreach (var thesi in Enum.GetValues<Thesi>())
+                {
+                    <MudSelectItem T="Thesi" Value="thesi">
+                        @GetDisplayName(thesi)
+                    </MudSelectItem>
+                }
+            </MudSelect>
             <MudSelect T="Sex" @bind-Value="req.Sex" Label="Φύλο">
                 @foreach (var sex in Enum.GetValues<Sex>())
                 {
@@ -25,7 +34,7 @@
                 }
             </MudSelect>
             <MudTextField @bind-Value="req.XwrosName" Label="Χώρος" />
-            @* <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" /> *@
+             <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" />
         </MudForm>
     </DialogContent>
     <DialogActions>

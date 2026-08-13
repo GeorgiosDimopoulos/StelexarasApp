@@ -94,6 +94,12 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Paidi>().Property(o => o.FirstName).IsRequired().HasMaxLength(20);
         modelBuilder.Entity<Paidi>().Property(o => o.LastName).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Paidi>().Property(o => o.ParentTel).IsRequired().HasMaxLength(20);
+                
+        modelBuilder.Entity<Skini>()    
+            .HasOne(s => s.Omadarxis)    
+            .WithOne(o => o.Skini)    
+            .HasForeignKey<Skini>(s => s.OmadarxisId)    
+            .OnDelete(DeleteBehavior.SetNull);
     }
 
     private static void OnModelsRelationsCreating(ModelBuilder modelBuilder)

@@ -8,8 +8,17 @@ public class StelexiController(IStaffService<CreateStelexosRequest, UpdateStelex
 {
     private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _stelexiService = stelexiService;
 
-    [HttpGet("Stelexi")]
-    public async Task<ActionResult<StelexosDtoBase>> GetStelexi(string name, StelexosQueryParameters stelexosQueryParameters)
+    [HttpGet()]
+    public async Task<ActionResult<StelexosResponse>> GetStelexi(StelexosQueryParameters stelexosQueryParameters)
+    {
+        var result = await _stelexiService.GetStelexi(string.Empty, stelexosQueryParameters);
+        if (result is null)
+            return NotFound();
+        return Ok(result);
+    }
+
+    [HttpGet("StelexiAnaXwro")]
+    public async Task<ActionResult<StelexosResponse>> GetStelexi(string name, StelexosQueryParameters stelexosQueryParameters)
     {
         var result = await _stelexiService.GetStelexi(name, stelexosQueryParameters);
         if (result is null)
@@ -18,7 +27,7 @@ public class StelexiController(IStaffService<CreateStelexosRequest, UpdateStelex
     }
 
     [HttpGet("StelexosByName")]
-    public async Task<ActionResult<StelexosDtoBase>> GetStelexosByName(string name)
+    public async Task<ActionResult<StelexosResponse>> GetStelexosByName(string name)
     {
         var result = await _stelexiService.GetStelexosByName(name, new());
         if (result is null)
@@ -27,7 +36,7 @@ public class StelexiController(IStaffService<CreateStelexosRequest, UpdateStelex
     }
 
     [HttpGet("StelexosById")]
-    public async Task<ActionResult<StelexosDtoBase>> GetStelexosById(int id)
+    public async Task<ActionResult<StelexosResponse>> GetStelexosById(int id)
     {
         var result = await _stelexiService.GetStelexosById(id, new());
         if (result is null)

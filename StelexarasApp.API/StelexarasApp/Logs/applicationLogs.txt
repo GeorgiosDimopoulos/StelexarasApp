@@ -141,3 +141,5 @@ DbError, Unique constraint error: An error occurred while saving the entity chan
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
 ClientConnectionId:5e2efa63-7827-49fa-979d-5aeeef4fc071
 Error Number:515,State:2,Class:16 in MoveNext, 2026-08-12 15:24:09
+DbError, Thesi cannot be None! (Parameter 'Thesi'), , 2026-08-13 14:31:48
+DbError, Unique constraint error: Incompatible sources used for set operation.,  in MoveNext, 2026-08-13 15:26:20

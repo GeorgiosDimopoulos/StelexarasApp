@@ -7,17 +7,17 @@ namespace StelexarasApp.Application.ApiClients;
 public interface IStelexiApi
 {
     [Get("/Stelexi/Stelexi")]
-    Task<List<StelexosResponse>> GetStelexiAsync([Query] StelexosQueryParameters stelexosQueryParameters);
+    Task<List<StelexosResponse>> GetStelexi([Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Get("/Stelexi/Stelexos/{name}")]
     Task<StelexosResponse> GetStelexos(string name, [Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Post("/Stelexi/Stelexos")]
-    Task<StelexosResponse> PostStelexos([Query] CreateStelexosRequest stelexosDto);
+    Task<bool> PostStelexos([Body] CreateStelexosRequest stelexosDto);
 
     [Delete("/Stelexi/Stelexos/{name}")]
-    Task DeleteStelexos(string name);
+    Task<bool> DeleteStelexos(string name);
 
     [Put("/Stelexi/Stelexos/{name}")]
-    Task PutStelexos(string name, [Body] UpdateStelexosRequest stelexosDto);
+    Task<bool> PutStelexos(string name, [Body] UpdateStelexosRequest stelexosDto);
 }

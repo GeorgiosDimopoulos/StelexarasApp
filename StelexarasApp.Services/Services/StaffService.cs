@@ -56,7 +56,8 @@ public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosR
                 throw new ArgumentNullException(nameof(stelexosEntity), "Mapping failed");
             }
 
-            return await _stelexiRepository.AddStelexosInDb(stelexosEntity);
+            var result = await _stelexiRepository.AddStelexosInDb(stelexosEntity);
+            return result;
         }
         catch (Exception ex)
         {

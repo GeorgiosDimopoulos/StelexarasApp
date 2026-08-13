@@ -445,7 +445,8 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
 
                     b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Omadarxis", "Omadarxis")
                         .WithOne("Skini")
-                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Skini", "OmadarxisId");
+                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Skini", "OmadarxisId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Koinotita");
 

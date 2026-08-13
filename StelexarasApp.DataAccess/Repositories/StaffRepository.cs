@@ -74,28 +74,30 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         if (ekpaideutis != null)
             return ekpaideutis;
 
-        //switch (thesi)
-        //{
-        //    case Thesi.None:
-        //        break;
-        //    case Thesi.Omadarxis:
-        //        if (_dbContext.Omadarxes == null)
-        //            return null!;
-        //        return await _dbContext.Omadarxes!.FirstOrDefaultAsync(om => om.Id == id) ?? null!;
-        //    case Thesi.Koinotarxis:
-        //        if (_dbContext.Koinotarxes == null)
-        //            return null!;
-        //        return await _dbContext.Koinotarxes.FirstOrDefaultAsync(ko => ko.Id == id) ?? null!;
-        //    case Thesi.Tomearxis:
-        //        if (_dbContext.Tomearxes == null)
-        //            return null!;
-        //        return await _dbContext.Tomearxes.FirstOrDefaultAsync(to => to.Id == id) ?? null!;
-        //    case Thesi.Ekpaideutis:
-        //        throw new NotImplementedException();
-        //    default:
-        //        break;
-        //}
         return null!;
+    }
+    public async Task<IStelexos> GetStelexosByNameInDb(string name, StelexosQueryParameters stelexosQueryParameters)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(name))
+                return null!;
+
+            // ToDo: implement it
+            if (stelexosQueryParameters.IncludeXwros)
+            {
+            }
+
+            IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
+                    .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
+                    .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
+            return await query.FirstOrDefaultAsync(e => e.LastName == name) ?? null!;
+        }
+        catch (Exception ex)
+        {
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
+        }
     }
 
     public async Task<bool> UpdateStelexosInDb(int id, IStelexos stelexos)
@@ -195,30 +197,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IStelexos> GetStelexosByNameInDb(string name, StelexosQueryParameters stelexosQueryParameters)
-    {
-        try
-        {
-            if (string.IsNullOrEmpty(name))
-                return null!;
-
-            // ToDo: implement it
-            if (stelexosQueryParameters.IncludeXwros)
-            {
-            }
-
-            IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
-                    .Concat(_dbContext.Koinotarxes!.Cast<IStelexos>())
-                    .Concat(_dbContext.Tomearxes!.Cast<IStelexos>());
-            return await query.FirstOrDefaultAsync(e => e.LastName == name) ?? null!;
-        }
-        catch (Exception ex)
-        {
-            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-            return null!;
-        }
-    }
-
     private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string? xwrosName, OmadarxisQueryParameters omadarxisQueryParameters)
     {
         var omadarxes = _dbContext.Omadarxes.AsQueryable();
@@ -307,17 +285,40 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
     public async Task<bool> AddStelexosInDb(IStelexos stelexos)
     {
+        var xwrosName = stelexos.XwrosName;
+
         switch (stelexos.Thesi)
         {
             case Thesi.None:
                 break;
             case Thesi.Omadarxis:
+                var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == xwrosName);
+                if (existingSkini == null)
+                {
+                    return false;
+                }
+
+                ((Omadarxis)stelexos).Skini = existingSkini;
                 await _dbContext.Omadarxes.AddAsync((Omadarxis)stelexos);
                 break;
             case Thesi.Koinotarxis:
+                var existingKoinotita = await _dbContext.Koinotites.FirstOrDefaultAsync(s => s.Name == xwrosName);
+                if (existingKoinotita == null)
+                {
+                    return false;
+                }
+
+                ((Koinotarxis)stelexos).Koinotita = existingKoinotita;
                 await _dbContext.Koinotarxes.AddAsync((Koinotarxis)stelexos);
                 break;
             case Thesi.Tomearxis:
+                var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(s => s.Name == xwrosName);
+                if (existingTomeas == null)
+                {
+                    return false;
+                }
+                
+                ((Tomearxis)stelexos).Tomeas = existingTomeas;
                 await _dbContext.Tomearxes.AddAsync((Tomearxis)stelexos);
                 break;
             case Thesi.Ekpaideutis:
