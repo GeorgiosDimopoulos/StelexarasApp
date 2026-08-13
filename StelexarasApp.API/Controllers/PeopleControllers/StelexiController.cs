@@ -36,7 +36,7 @@ public class StelexiController(IStaffService<CreateStelexosRequest, UpdateStelex
     }
 
     [HttpPost("Stelexos")]
-    public async Task<ActionResult<bool>> CreateStelexos([FromBody] CreateStelexosRequest request)
+    public async Task<ActionResult<bool>> PostStelexos([FromBody] CreateStelexosRequest request)
     {
         var result = await _stelexiService.CreateStelexos(request);
         if (!result)

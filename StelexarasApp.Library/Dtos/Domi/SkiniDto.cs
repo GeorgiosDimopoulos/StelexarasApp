@@ -2,7 +2,7 @@
 
 public record SkiniDtoBase : IXwrosDto
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;    
     public Sex Sex { get; set; }
     public int KoinotitaId{ get; set; }
 }
@@ -15,4 +15,5 @@ public record SkiniResponse : SkiniDtoBase
 {
     public int Id { get; set; }
     public int? PaidiaNumber { get; set; }
+    public string? OmadarxisName { get; set; }
 }

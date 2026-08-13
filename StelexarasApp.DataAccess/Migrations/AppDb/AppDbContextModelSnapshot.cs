@@ -35,17 +35,26 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("PaidiType")
                         .HasColumnType("int");
 
+                    b.Property<string>("ParentTel")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<bool>("SeAdeia")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("Sex")
                         .HasColumnType("int");
@@ -91,11 +100,15 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                         .HasColumnType("int");
 
                     b.Property<string>("XwrosName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Tel")
+                        .IsUnique();
+
+                    b.HasIndex("XwrosName")
                         .IsUnique();
 
                     b.ToTable("Ekpaideutes");

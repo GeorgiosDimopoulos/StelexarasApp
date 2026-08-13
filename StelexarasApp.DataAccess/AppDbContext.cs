@@ -77,10 +77,23 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Tomearxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.Tel).IsUnique();
 
+        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.XwrosName).IsUnique();
+        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.XwrosName).IsUnique();
+        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.XwrosName).IsUnique();
+        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.XwrosName).IsUnique();
+
         modelBuilder.Entity<Omadarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Koinotarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Tomearxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Ekpaideutis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
+
+        modelBuilder.Entity<Paidi>().Property(o => o.Sex).IsRequired();
+        modelBuilder.Entity<Paidi>().Property(o => o.PaidiType).IsRequired();
+        modelBuilder.Entity<Paidi>().Property(o => o.SkiniId).IsRequired();
+        modelBuilder.Entity<Paidi>().Property(o => o.SeAdeia).IsRequired().HasDefaultValue(false);
+        modelBuilder.Entity<Paidi>().Property(o => o.FirstName).IsRequired().HasMaxLength(20);
+        modelBuilder.Entity<Paidi>().Property(o => o.LastName).IsRequired().HasMaxLength(100);
+        modelBuilder.Entity<Paidi>().Property(o => o.ParentTel).IsRequired().HasMaxLength(20);
     }
 
     private static void OnModelsRelationsCreating(ModelBuilder modelBuilder)

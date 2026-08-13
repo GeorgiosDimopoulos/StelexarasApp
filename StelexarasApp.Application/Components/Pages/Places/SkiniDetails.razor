@@ -8,32 +8,54 @@
 @inject IPaidiaApi PaidiaApi
 @inject IDialogService DialogService
 
-<h1 style="text-align:center">@Skini.Name</h1>
-<h2 style="text-align:center">Παιδιά: @Paidia.Count</h2>
-<MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
-    <MudItem xs="12" sm="4">
-        <MudStack Justify="Justify.Center"
-                  AlignItems="AlignItems.Center"
-                  Spacing="10">
-            @foreach (var p in Paidia)
-            {
-                <MudButton Href="@($"/skines/{p.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-                    @p.FirstName @p.LastName
-                </MudButton>
-            }
-        </MudStack>
-    </MudItem>
-</MudGrid>
+<h1 style="text-align:center;">@Skini.Name - @Paidia.Count παιδιά</h1>
+<h1> Στέλεχος - @Skini.OmadarxisName</h1>
 
+<div style="padding:0px 30px;">
+    <MudTable Items="Paidia">
+        <HeaderContent>
+            <MudTh Style="font-weight:bold;">Όνομα</MudTh>
+            <MudTh Style="font-weight:bold;">Ηλικία</MudTh>
+            <MudTh Style="font-weight:bold;">Τηλ Γονέα</MudTh>
+            <MudTh Style="font-weight:bold;">Σε άδεια;</MudTh>
+            <MudTh Style="font-weight:bold;">Επεξεργασία</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.LastName @context.FirstName</MudTd>
+            <MudTd>@context.Age</MudTd>
+            <MudTd>@context.ParentPhone</MudTd>
+            <MudTd>@IsPresent(context.SeAdeia)</MudTd>
+            <MudTd>
+                <MudButton Color="Color.Success"
+                           Variant="Variant.Filled"
+                           Style="min-width:40px; width:40px; height:30px; padding:0;"
+                           OnClick="@(() => OpenPaidi(context))">
+                    <MudIcon Icon="@Icons.Material.Filled.ArrowForward" />
+                </MudButton>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+</div>
 @code {
     [Parameter]
     public int SkiniId { get; set; }
+    
     private SkiniResponse Skini = new SkiniResponse();
     private List<PaidiResponse> Paidia = new List<PaidiResponse>();
 
     protected override async Task OnInitializedAsync()
     {
         Skini = await SkinesApi.GetSkiniById(SkiniId, new());
-        Paidia = await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new());
+        Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new())).OrderBy(c => c.LastName).ToList();    
+    }
+
+    private object OpenPaidi(PaidiResponse context)
+    {
+        throw new NotImplementedException();
+    }
+
+    private string IsPresent(bool seAdeia)
+    {
+        return seAdeia ? "Σε Αδεία" : "Εδώ";
     }
 }

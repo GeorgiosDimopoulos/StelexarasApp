@@ -15,6 +15,7 @@
             <MudTextField @bind-Value="req.FirstName" Label="Όνομα" />
             <MudTextField @bind-Value="req.LastName" Label="Επίθετο" />
             <MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
+            <MudNumericField @bind-Value="req.Tel" Label="Τηλέφωνο" />
             <MudSelect T="Sex" @bind-Value="req.Sex" Label="Φύλο">
                 @foreach (var sex in Enum.GetValues<Sex>())
                 {

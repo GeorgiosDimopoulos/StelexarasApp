@@ -9,6 +9,7 @@ public record PaidiDtoBase : IPaidiDto
     public Sex Sex { get; set; }
     public bool SeAdeia { get; set; }
     public string? SkiniName { get; set; } = string.Empty;
+    public string? ParentPhone { get; set; } = string.Empty;
     public PaidiType PaidiType { get; set; }
 }
 

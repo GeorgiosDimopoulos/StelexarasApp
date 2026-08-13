@@ -12,6 +12,6 @@ namespace StelexarasApp.Library.Models.Atoma.Staff
         public Sex Sex { get; set; }
         public string Tel { get; set; } = string.Empty;
         public Thesi Thesi { get; set; } = Thesi.Ekpaideutis;
-        public string? XwrosName { get; set; }
+        public string XwrosName { get; set; } = string.Empty;
     }
 }

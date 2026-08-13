@@ -21,6 +21,7 @@ public class SkiniMappingProfile : Profile
 
         CreateMap<Skini, SkiniResponse>()
             .ForMember(dest => dest.PaidiaNumber, opt => opt.MapFrom(src => src.Paidia != null ? src.Paidia.Count : 0))
+            .ForMember(dest => dest.OmadarxisName, opt => opt.MapFrom(src => src.Omadarxis != null ? src.Omadarxis.FirstName : string.Empty))
             .ForMember(dest => dest.KoinotitaId, opt => opt.MapFrom(src => src.Koinotita != null ? src.Koinotita.Id : 0));
     }
 }
