@@ -14,15 +14,14 @@
 <div class="page">
     <main>
         <div class="top-row px-4"
-             style=" height:10vh; display:flex; align-items:center; justify-content:space-between; background: linear-gradient(90deg, #e9eef1 0%, #f3f6f8 55%, #cfeee6 100%);">
+             style=" height:10vh; display:flex; align-items:center; justify-content:space-between; background: linear-gradient(90deg, #e9eef1 0%, #f3f6f8 55%, #f3cccc  100%);">
             <MudButton Href="/">
-                <MudText Typo="Typo.h5">Κατασκηνώσεις ΤΥΠΕΤ</MudText>
+                <MudText Typo="Typo.h5" Style="color:darkred;">Κατασκηνώσεις ΤΥΠΕΤ</MudText>
             </MudButton>
             <div style="gap:12px; align-items:center; width:80vh">
-                <MudAutocomplete T="string" Label="Search..." Variant="Variant.Outlined" ShowProgressIndicator="true" />
+                <MudAutocomplete T="string" Label="Αναζήτηση:" Variant="Variant.Outlined" ShowProgressIndicator="true" />
             </div>
             <div style="display:flex; gap:12px; align-items:center;">
-                @* <MudButton Href="/help" Variant="Variant.Text">Βοήθεια</MudButton> *@
                 <MudMenu Label="Προσθήκη" StartIcon="@Icons.Material.Filled.Add">
                     <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPaidi">Προσθήκη παιδιού</MudMenuItem>
                     <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddStelexos">Προσθήκη στελέχους</MudMenuItem>
