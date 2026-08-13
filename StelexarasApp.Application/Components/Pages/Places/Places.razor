@@ -14,10 +14,10 @@
         <MudStack Justify="Justify.Center"
                   AlignItems="AlignItems.Center"
                   Spacing="5">
-            @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Equals("A")).OrderBy(k => k.Name))
+            @foreach (var koinotita in Koinotites.Where(k => k.TomeasName == "A").OrderBy(k => k.Name))
             {
                 <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:100px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:yellowgreen">
-                    @koinotita.Name - koinotitaPaidia
+                    @koinotita.Name - @KoinotitaPaidia[koinotita.Id]
                 </MudButton>
             }
         </MudStack>
@@ -27,11 +27,11 @@
         <MudStack Justify="Justify.Center"
                   AlignItems="AlignItems.Center"
                   Spacing="5">
-            @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Equals("B")).OrderBy(k => k.Name))
+            @foreach (var koinotita in Koinotites.Where(k => k.TomeasName == "B").OrderBy(k => k.Name))
             {
                 var backgroundColor = koinotita.Name.ToUpper().Contains("ΣΧΟΛΉ") ? "dodgerblue" : "yellowgreen";
                 <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="@($"height:100px; padding:30px; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:{backgroundColor};")">
-                    @koinotita.Name
+                    @koinotita.Name - @KoinotitaPaidia[koinotita.Id]
                 </MudButton>
             }
         </MudStack>
@@ -41,18 +41,16 @@
 @code
 {
     private List<KoinotitaResponse> Koinotites = new List<KoinotitaResponse>();
-    private List<int> koinotitaPaidia = new();
+    private Dictionary<int, int> KoinotitaPaidia = new();
 
     protected override async Task OnInitializedAsync()
     {
         Koinotites = await KoinotitesApi.GetKoinotitesAsync(new KoinotitaQueryParameters() { IncludeStelexos = true });
 
-        int i = 0;
         foreach (var koinotita in Koinotites)
         {
-            var childrenPerKoinotita = await PaidiaApi.GetPaidiaByKoinotitaId(koinotita.Id, new());
-            koinotitaPaidia[i] = childrenPerKoinotita.Count;
-            i++;
+            var children = await PaidiaApi.GetPaidiaByKoinotitaId(koinotita.Id, new());
+            KoinotitaPaidia[koinotita.Id] = children.Count;
         }
     }
 }
