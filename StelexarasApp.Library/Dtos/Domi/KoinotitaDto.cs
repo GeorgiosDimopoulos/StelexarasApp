@@ -27,4 +27,5 @@ public record KoinotitaResponse : KoinotitaDtoBase
     public int TomeasId { get; set; }
     public int SkinesNumber { get; set; }
     public string KoinotarxisName { get; set; } = string.Empty;
+    public int KoinotarxisId { get; set; }
 }

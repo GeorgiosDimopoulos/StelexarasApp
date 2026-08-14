@@ -8,7 +8,9 @@
 @inject IDialogService DialogService
 
 <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
-<h2> Στέλεχος: @Koinotita?.KoinotarxisName</h2>
+<h2>
+    Στέλεχος: <a href= "@($"/stelexi/{Koinotita?.KoinotarxisId}")" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Koinotita?.KoinotarxisName</a>    
+</h2>
 
 <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
     <MudItem xs="12" sm="4">

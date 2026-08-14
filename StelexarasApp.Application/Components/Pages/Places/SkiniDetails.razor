@@ -9,8 +9,9 @@
 @inject IDialogService DialogService
 
 <h1 style="text-align:center;">@Skini.Name: @Paidia.Count δύναμη</h1>
-<h2> Στέλεχος: @Skini.OmadarxisName</h2>
-
+<h2 style="padding-block-start:10px;">
+    Στέλεχος: <a href="@($"/stelexi/{Skini?.OmadarxisId}")" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Skini?.OmadarxisName</a>
+</h2>
 <div style="padding:0px 30px;">
     <MudTable Items="Paidia">
         <HeaderContent>

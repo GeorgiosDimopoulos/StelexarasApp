@@ -19,8 +19,8 @@ public class KoinotitaMappingProfile : Profile
             .ForMember(dest => dest.Skines, opt => opt.Ignore());
 
         CreateMap<Koinotita, KoinotitaResponse>()
-            //.ForMember(dest => dest.TomeasId, opt => opt.MapFrom(src => src.TomeasId != 0 ? src.TomeasId : 0))
-            .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom((src, dest) => src.Skines != null ? src.Skines.Count() : 0))
+            .ForMember(dest => dest.KoinotarxisName, opt => opt.MapFrom(src => src.Koinotarxis != null ? $"{src.Koinotarxis.LastName} {src.Koinotarxis.FirstName}" : string.Empty))
+            .ForMember(dest => dest.SkinesNumber, opt => opt.MapFrom((src, dest) => src.Skines != null ? src.Skines.Count : 0))
             .ForMember(dest => dest.TomeasName, opt => opt.MapFrom(src => src.Tomeas != null ? src.Tomeas.Name : string.Empty));
     }
 }
