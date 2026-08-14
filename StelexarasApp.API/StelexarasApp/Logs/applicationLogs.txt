@@ -143,3 +143,12 @@ ClientConnectionId:5e2efa63-7827-49fa-979d-5aeeef4fc071
 Error Number:515,State:2,Class:16 in MoveNext, 2026-08-12 15:24:09
 DbError, Thesi cannot be None! (Parameter 'Thesi'), , 2026-08-13 14:31:48
 DbError, Unique constraint error: Incompatible sources used for set operation.,  in MoveNext, 2026-08-13 15:26:20
+DbError, Value cannot be null. (Parameter 'TomearxisQueryParameters'), , 2026-08-14 13:05:19
+DbError, Value cannot be null. (Parameter 'second'), , 2026-08-14 13:07:43
+DbError, Value cannot be null. (Parameter 'second'), , 2026-08-14 13:08:36
+DbError, Value cannot be null. (Parameter 'second'), , 2026-08-14 13:09:04
+DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:18:26
+DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:19:28
+DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:44
+DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:48
+DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:57

@@ -27,8 +27,7 @@ public class StaffViewModel : INotifyPropertyChanged
 
             var allStaff = await _staffService.GetStelexi(string.Empty, new()
             {
-                IncludeXwros = true,
-                IncludeYpostelexi = true,
+                IncludeXwros = true
             });
 
             if (allStaff == null)
