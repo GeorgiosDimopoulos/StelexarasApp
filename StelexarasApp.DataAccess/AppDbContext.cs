@@ -61,8 +61,8 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         OnModelsRulesCreating(modelBuilder);
-        OnModelsRelationsCreating(modelBuilder);
         OnModelsUniquenessCreating(modelBuilder);
+        OnModelsRelationsCreating(modelBuilder);
     }
 
     private static void OnModelsUniquenessCreating(ModelBuilder modelBuilder)
@@ -94,12 +94,6 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Paidi>().Property(o => o.FirstName).IsRequired().HasMaxLength(20);
         modelBuilder.Entity<Paidi>().Property(o => o.LastName).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Paidi>().Property(o => o.ParentTel).IsRequired().HasMaxLength(20);
-                
-        modelBuilder.Entity<Skini>()    
-            .HasOne(s => s.Omadarxis)    
-            .WithOne(o => o.Skini)    
-            .HasForeignKey<Skini>(s => s.OmadarxisId)    
-            .OnDelete(DeleteBehavior.SetNull);
     }
 
     private static void OnModelsRelationsCreating(ModelBuilder modelBuilder)
@@ -111,37 +105,34 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Skini>()
-            .HasOne(sk => sk.Omadarxis)
-            .WithOne(om => om.Skini)
-            .HasForeignKey<Skini>(sk => sk.OmadarxisId);
+            .HasOne(s => s.Omadarxis)
+            .WithOne(o => o.Skini)
+            .HasForeignKey<Skini>(s => s.OmadarxisId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Koinotita>()
             .HasOne(k => k.Koinotarxis)
             .WithOne(kt => kt.Koinotita)
-            .HasForeignKey<Koinotita>(kt => kt.KoinotarxisId);
+            .HasForeignKey<Koinotita>(kt => kt.KoinotarxisId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Tomeas>()
             .HasOne(t => t.Tomearxis)
             .WithOne(t => t.Tomeas)
-            .HasForeignKey<Tomeas>(kt => kt.TomearxisId);
+            .HasForeignKey<Tomeas>(kt => kt.TomearxisId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Koinotita>()
             .HasOne(k => k.Tomeas)
-            .WithMany(t => t.Koinotites)
+            .WithMany(t => t.Koinotites)                
+            .HasForeignKey(k => k.TomeasId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Skini>()
            .HasOne(sk => sk.Koinotita)
            .WithMany(k => k.Skines)
+           .HasForeignKey(sk => sk.KoinotitaId)
            .OnDelete(DeleteBehavior.Restrict);
-
-        // To-Do: do i need these below?
-        //modelBuilder.Entity<Skini>().ToTable("Skines");
-        //modelBuilder.Entity<Koinotita>().ToTable("Koinoties");
-        //modelBuilder.Entity<Tomeas>().ToTable("Tomeis"); 
-        //modelBuilder.Entity<Omadarxis>().ToTable("Omadarxes");
-        //modelBuilder.Entity<Koinotarxis>().ToTable("Koinotarxes");
-        //modelBuilder.Entity<Tomearxis>().ToTable("Tomearxes");
     }
 
     private static void OnModelsRulesCreating(ModelBuilder modelBuilder)
@@ -169,42 +160,4 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Tomearxis>().Property(t => t.Id).ValueGeneratedOnAdd();
         // modelBuilder.Entity<Ekpaideutis>().Property(ek => ek.Id).ValueGeneratedOnAdd();
     }
-
-    //private static Xwros ConvertToXwros(string value, int type)
-    //{
-    //    if (value == null)
-    //        return null;
-
-    //    var parts = value.Split(',');
-    //    if (parts.Length != 2)
-    //    {
-    //        throw new ArgumentException("Invalid string format for xwros conversion.");
-    //    }
-
-    //    if (type == 1)
-    //    {
-    //        return new Skini
-    //        {
-    //            Id = parts [0],
-    //            Name = parts [1]
-    //        };
-    //    }
-    //    else if (type == 2)
-    //    {
-    //        return new Koinotita
-    //        {
-    //            Id = parts [0],
-    //            Name = parts [1]
-    //        };
-    //    }
-    //    else if (type == 3)
-    //    {
-    //        return new Tomeas
-    //        {
-    //            Id = parts [0],
-    //            Name = parts [1]
-    //        };
-    //    }
-    //    else return null;
-    //}
 }

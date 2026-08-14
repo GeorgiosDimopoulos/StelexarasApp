@@ -171,7 +171,8 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             skines = skines.Include(s => s.Omadarxis);
         }
 
-        return await skines.FirstOrDefaultAsync(s => s.Id == id) ?? new Skini();
+        var skini= await skines.FirstOrDefaultAsync(s => s.Id == id) ?? new Skini();
+        return skini;
     }
 
     public async Task<Skini> GetSkiniByNameInDb(SkiniQueryParameters? skiniQueryParameters, string name)
@@ -228,11 +229,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         }
         if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeStelexos)
         {
-            koinotites = koinotites.Include(k => k.Skines);
-        }
-        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeKoinotarxis)
-        {
-            koinotites = koinotites.Include(k => k.Koinotarxis);
+            koinotites = koinotites.Include(k => k.KoinotarxisId); // or KoinotarxisId
         }
         if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeOmadarxes && koinotites.Select(k => k.Skines).Any())
         {
@@ -249,10 +246,6 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             koinotites = koinotites.Include(k => k.Skines);
         }
         if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeStelexos)
-        {
-            koinotites = koinotites.Include(k => k.Skines);
-        }
-        if (koinotitaQueryParameters is not null && koinotitaQueryParameters.IncludeKoinotarxis)
         {
             koinotites = koinotites.Include(k => k.Koinotarxis);
         }

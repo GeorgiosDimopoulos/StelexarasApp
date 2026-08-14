@@ -294,12 +294,13 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             case Thesi.Omadarxis:
                 var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == xwrosName);
                 if (existingSkini == null)
-                {
                     return false;
-                }
 
                 ((Omadarxis)stelexos).Skini = existingSkini;
                 await _dbContext.Omadarxes.AddAsync((Omadarxis)stelexos);
+                await _dbContext.SaveChangesAsync();
+
+                existingSkini.OmadarxisId = ((Omadarxis)stelexos).Id;              
                 break;
             case Thesi.Koinotarxis:
                 var existingKoinotita = await _dbContext.Koinotites.FirstOrDefaultAsync(s => s.Name == xwrosName);
@@ -310,6 +311,9 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 
                 ((Koinotarxis)stelexos).Koinotita = existingKoinotita;
                 await _dbContext.Koinotarxes.AddAsync((Koinotarxis)stelexos);
+                await _dbContext.SaveChangesAsync();
+
+                existingKoinotita.KoinotarxisId = ((Koinotarxis)stelexos).Id;
                 break;
             case Thesi.Tomearxis:
                 var existingTomeas = await _dbContext.Tomeis.FirstOrDefaultAsync(s => s.Name == xwrosName);
@@ -317,9 +321,12 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                 {
                     return false;
                 }
-                
+
                 ((Tomearxis)stelexos).Tomeas = existingTomeas;
                 await _dbContext.Tomearxes.AddAsync((Tomearxis)stelexos);
+                await _dbContext.SaveChangesAsync();
+
+                existingTomeas.TomearxisId = ((Tomearxis)stelexos).Id;                
                 break;
             case Thesi.Ekpaideutis:
                 await _dbContext.Ekpaideutes.AddAsync((Ekpaideutis)stelexos);

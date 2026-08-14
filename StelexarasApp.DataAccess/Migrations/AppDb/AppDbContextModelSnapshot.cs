@@ -422,7 +422,8 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                 {
                     b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", "Koinotarxis")
                         .WithOne("Koinotita")
-                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Koinotita", "KoinotarxisId");
+                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Koinotita", "KoinotarxisId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("StelexarasApp.Library.Models.Domi.Tomeas", "Tomeas")
                         .WithMany("Koinotites")
@@ -457,7 +458,8 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                 {
                     b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Tomearxis", "Tomearxis")
                         .WithOne("Tomeas")
-                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Tomeas", "TomearxisId");
+                        .HasForeignKey("StelexarasApp.Library.Models.Domi.Tomeas", "TomearxisId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Tomearxis");
                 });
