@@ -334,13 +334,15 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             existingSkini.KoinotitaId = skini.KoinotitaId;
             existingSkini.OmadarxisId = skini.OmadarxisId;
             existingSkini.Paidia = skini.Paidia;
+            existingSkini.Sex = skini.Sex;
+            existingSkini.KoinotitaId = skini.KoinotitaId;
 
             _dbContext.Skines.Update(existingSkini);
             await _dbContext.SaveChangesAsync();
-            if (transaction != null)
-            {
+
+            if (transaction != null)            
                 await transaction.CommitAsync();
-            }
+            
             return true;
         }
         catch (Exception ex)

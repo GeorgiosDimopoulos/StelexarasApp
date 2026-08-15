@@ -150,7 +150,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         }
     }
 
-    public async Task<bool> AddPaidiInDb(Paidi paidi, string skiniName)
+    public async Task<bool> AddPaidiInSkini(Paidi paidi, string skiniName)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
@@ -173,11 +173,16 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(sk => sk.Name.Equals(skiniName));
             if (existingSkini == null)
             {
-                _logger.LogWarning("Skini with the given Id doenst exists.");
+                _logger.LogWarning("Skini with the given Id doesnt exist.");
                 return false;
             }
 
-            //paidi.Skini = existingSkini;
+            if (existingSkini.Sex != paidi.Sex)
+            {
+                _logger.LogWarning("Skini has different sex/fulo");
+                return false;
+            }
+
             paidi.SkiniId = existingSkini.Id;
 
             _dbContext!.Paidia!.Add(paidi);

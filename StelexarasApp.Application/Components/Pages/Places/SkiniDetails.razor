@@ -8,6 +8,8 @@
 @inject IPaidiaApi PaidiaApi
 @inject IDialogService DialogService
 
+@inject NavigationManager NavigationManager
+
 <h1 style="text-align:center;">@Skini.Name: @Paidia.Count δύναμη</h1>
 <h2 style="padding-block-start:10px;">
     Στέλεχος: <a href="@($"/stelexi/{Skini?.OmadarxisId}")" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Skini?.OmadarxisName</a>
@@ -15,7 +17,6 @@
 <div style="padding:0px 30px;">
     <MudTable Items="Paidia">
         <HeaderContent>
-            <MudTh Style="font-weight:bold;">Όνομα</MudTh>
             <MudTh Style="font-weight:bold;">Ηλικία</MudTh>
             <MudTh Style="font-weight:bold;">Τηλ Γονέα</MudTh>
             <MudTh Style="font-weight:bold;">Σε άδεια;</MudTh>
@@ -50,9 +51,15 @@
         Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new())).OrderBy(c => c.LastName).ToList();
     }
 
-    private object OpenPaidi(PaidiResponse context)
+    private async Task OpenPaidi(PaidiResponse context)
     {
-        throw new NotImplementedException();
+        var dialog = await DialogService.ShowAsync<EditPaidiDialog>("Προσθήκη Στελέχους");
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private string IsPresent(bool seAdeia)

@@ -1,0 +1,40 @@
+﻿@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.People.Children
+
+@inherits ComponentBase
+
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+@inject IPaidiaApi PaidiaApi
+
+<MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
+    <DialogContent>
+        <MudForm Spacing="2">
+            
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Ακύρωση</MudButton>
+        <MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Αποθήκευση</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private CreatePaidiRequest req = new();
+
+    [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
+
+    protected async override void OnParametersSet()
+    {
+        await Task.Delay(500);
+    }
+
+    private void Cancel(MouseEventArgs args)
+    {
+        Dialog?.Close(DialogResult.Ok(req));
+    }
+
+    private async Task Save(MouseEventArgs _)
+    {
+    }
+}

@@ -144,7 +144,7 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
             if (paidi == null)
                 return false;
 
-            var res = await _paidiRepository.AddPaidiInDb(paidi, paidiDto.SkiniName);
+            var res = await _paidiRepository.AddPaidiInSkini(paidi, paidiDto.SkiniName);
             return res;
         }
     }
