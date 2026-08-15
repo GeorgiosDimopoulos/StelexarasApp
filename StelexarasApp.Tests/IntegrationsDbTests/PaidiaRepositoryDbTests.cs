@@ -28,7 +28,7 @@ public class PaidiaRepositoryDbTests
     public async Task AddPaidi_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
     {
         var paidi = new Paidi { Id = id, LastName= "Test PaidiL", FirstName = "Test PaidiF", Age = 10, PaidiType = paidiType };
-        var result = await _paidiRepository.AddPaidiInDb(paidi, "Skini1");
+        var result = await _paidiRepository.AddPaidiInSkini(paidi, "Skini1");
         Assert.Equal(result, expectedResult);
         if (expectedResult)
         {
@@ -117,7 +117,7 @@ public class PaidiaRepositoryDbTests
             PaidiType = PaidiType.Kataskinotis,
         };
 
-        await _paidiRepository.AddPaidiInDb(existingPaidi, "Skini1");
+        await _paidiRepository.AddPaidiInSkini(existingPaidi, "Skini1");
 
         await _dbContext.SaveChangesAsync();
 

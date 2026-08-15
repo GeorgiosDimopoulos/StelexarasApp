@@ -10,7 +10,12 @@
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
         <MudForm Spacing="2">
-
+            <MudTextField @bind-Value="PaidiToEdit.FirstName" Label="Όνομα" />
+            <MudTextField @bind-Value="PaidiToEdit.LastName" Label="Επώνυμο" />
+            <MudNumericField @bind-Value="PaidiToEdit.Age" Label="Ηλικία" />
+            <MudNumericField @bind-Value="PaidiToEdit.ParentPhone" Label="Τηλέφωνο" />
+            <MudTextField @bind-Value="PaidiToEdit.SkiniName" Label="Σκηνή" />
+            <MudSwitch @bind-Value="PaidiToEdit.SeAdeia" Label="Σε αδεια;" />
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -20,21 +25,50 @@
 </MudDialog>
 
 @code {
-    private CreatePaidiRequest req = new();
+    private PaidiResponse PaidiToEdit = new();
 
+    [Parameter] public PaidiResponse Paidi { get; set; } = default!;
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
-    protected async override void OnParametersSet()
+    protected override void OnParametersSet()
     {
-        await Task.Delay(500);
+        PaidiToEdit = new PaidiResponse()
+        {
+            Age = Paidi.Age,
+            FirstName = Paidi.FirstName,
+            LastName = Paidi.LastName,
+            ParentPhone = Paidi.ParentPhone
+        };
     }
 
     private void Cancel(MouseEventArgs args)
     {
-        Dialog?.Close(DialogResult.Ok(req));
+        Dialog.Cancel();
     }
 
     private async Task Save(MouseEventArgs _)
     {
+        var paidiUpdateRequest = new UpdatePaidiRequest()
+        {
+            LastName = PaidiToEdit.LastName,
+            FirstName = PaidiToEdit.FirstName,
+            Age = PaidiToEdit.Age,
+            ParentPhone = PaidiToEdit.ParentPhone,
+            SeAdeia = PaidiToEdit.SeAdeia,
+            SkiniName = PaidiToEdit.SkiniName,
+            Sex = Paidi.Sex,
+            PaidiType = Paidi.PaidiType,
+        };
+
+        var result = await PaidiaApi.UpdatePaidi(Paidi.Id, paidiUpdateRequest);
+        if (result != false)
+        {
+            Snackbar.Add("Το παιδί ενημερώθηκε επιτυχώς!", Severity.Success);
+            Dialog?.Close(DialogResult.Ok(result));
+        }
+        else
+        {
+            Snackbar.Add("Αποτυχία ενημέρωσης του παιδιού.", Severity.Error);
+        }
     }
 }

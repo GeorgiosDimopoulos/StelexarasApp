@@ -110,7 +110,7 @@ public class PaidiaController : ControllerBase
 
     [Authorize]
     [HttpPut("{id:int}")]
-    public async Task<bool> PutPaidi(int id, [FromBody] UpdatePaidiRequest request)
+    public async Task<bool> UpdatePaidi(int id, [FromBody] UpdatePaidiRequest request)
     {
         request.Id = id;
         var result = await _paidiService.UpdatePaidiInService(request);

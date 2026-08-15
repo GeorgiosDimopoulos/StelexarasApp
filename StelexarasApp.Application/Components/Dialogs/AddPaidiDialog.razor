@@ -44,12 +44,12 @@
 
     protected async override void OnParametersSet()
     {
-        await Task.Delay(500);
+        
     }
 
     private void Cancel(MouseEventArgs args)
     {
-        Dialog?.Close(DialogResult.Ok(req));
+        Dialog.Cancel();
     }
 
     private async Task Save(MouseEventArgs _)

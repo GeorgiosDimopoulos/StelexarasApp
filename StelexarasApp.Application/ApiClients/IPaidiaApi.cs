@@ -28,5 +28,5 @@ public interface IPaidiaApi
     Task<bool> DeletePaidi(int id);
 
     [Put("/Paidia/{id}")]
-    Task<bool> PutPaidi(int id, [Body] UpdatePaidiRequest paidiDto);
+    Task<bool> UpdatePaidi(int id, [Body] UpdatePaidiRequest paidiDto);
 }

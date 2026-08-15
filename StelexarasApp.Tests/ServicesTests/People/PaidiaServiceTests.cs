@@ -48,7 +48,7 @@ public class PaidiaServiceTests
         var paidi = new Paidi { Id = 1, LastName = "John", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos };
 
         _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
-        _mockPaidiRepository.Setup(repo => repo.AddPaidiInDb(paidi, "Skini1")).ReturnsAsync(true);
+        _mockPaidiRepository.Setup(repo => repo.AddPaidiInSkini(paidi, "Skini1")).ReturnsAsync(true);
         _paidiValidatorMock.Setup(v => v.Validate(paidiDto)).Returns(new FluentValidation.Results.ValidationResult());
 
         // Act
@@ -56,7 +56,7 @@ public class PaidiaServiceTests
 
         // Assert
         Assert.True(result);
-        _mockPaidiRepository.Verify(repo => repo.AddPaidiInDb(paidi, "Skini1"), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.AddPaidiInSkini(paidi, "Skini1"), Times.Once);
     }
 
     [Fact]

@@ -1,16 +1,19 @@
 ﻿@using StelexarasApp.Application.ApiClients
-@using StelexarasApp.Library.Dtos.People.Children
+@using StelexarasApp.Library.Dtos.People.Staff
 
 @inherits ComponentBase
 
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
-@inject IPaidiaApi PaidiaApi
+@inject IStelexiApi StelexiApi
 
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
         <MudForm Spacing="2">
-            
+            <MudTextField @bind-Value="PersonToEdit.FirstName" Label="Όνομα" />
+            <MudTextField @bind-Value="PersonToEdit.LastName" Label="Επώνυμο" />
+            <MudTextField @bind-Value="PersonToEdit.XwrosName" Label="Χώρος" />
+            <MudNumericField @bind-Value="PersonToEdit.Tel" Label="Τηλέφωνο" />
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -20,21 +23,50 @@
 </MudDialog>
 
 @code {
-    private CreatePaidiRequest req = new();
+    private StelexosResponse PersonToEdit = new();
 
+    [Parameter] public StelexosResponse Stelexos { get; set; } = default!;
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
-    protected async override void OnParametersSet()
+    protected override void OnParametersSet()
     {
-        await Task.Delay(500);
+        PersonToEdit = new StelexosResponse()
+        {
+            Age = Stelexos.Age,
+            FirstName = Stelexos.FirstName,
+            LastName = Stelexos.LastName,
+            Tel = Stelexos.Tel,
+            XwrosName = Stelexos.XwrosName
+        };
     }
 
     private void Cancel(MouseEventArgs args)
     {
-        Dialog?.Close(DialogResult.Ok(req));
+        Dialog.Cancel();
     }
 
     private async Task Save(MouseEventArgs _)
     {
+        var personToUpdateRequest = new UpdateStelexosRequest()
+        {
+            LastName = PersonToEdit.LastName,
+            FirstName = PersonToEdit.FirstName,
+            Age = PersonToEdit.Age,
+            XwrosName = PersonToEdit.XwrosName,
+            Sex = Stelexos.Sex,
+            Thesi = Stelexos.Thesi,
+            Tel = PersonToEdit.Tel
+        };
+
+        var result = await StelexiApi.UpdateStelexos(Stelexos.Id, personToUpdateRequest);
+        if (result != false)
+        {
+            Snackbar.Add("Το στελέχος ενημερώθηκε επιτυχώς!", Severity.Success);
+            Dialog?.Close(DialogResult.Ok(result));
+        }
+        else
+        {
+            Snackbar.Add("Αποτυχία ενημέρωσης του στελέχους.", Severity.Error);
+        }
     }
 }
