@@ -1,15 +1,18 @@
 ﻿@page "/koinotites/{KoinotitaId:int}"
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
+@using StelexarasApp.Library.Dtos.People.Staff
 @using StelexarasApp.Library.QueryParameters.Domi
 
 @inject ISkinesApi SkinesApi
 @inject IKoinotitesApi KoinotitesApi
 @inject IDialogService DialogService
 
+@inject NavigationManager NavigationManager
+
 <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
 <h2>
-    Στέλεχος: <a href= "@($"/stelexi/{Koinotita?.KoinotarxisId}")" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Koinotita?.KoinotarxisName</a>    
+    Στέλεχος: <a onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Koinotita?.KoinotarxisName</a>
 </h2>
 
 <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
@@ -57,4 +60,25 @@
             errorMessage = $"Failed to load skines: {ex.Message}";
         }
     }
+
+    
+    private async Task OpenStelexos(StelexosResponse context)
+    {
+        if (Koinotita?.KoinotarxisId is null)
+            return;
+
+        var parameters = new DialogParameters<EditStelexosDialog>
+        {
+            { x => x.Stelexos, context }
+        };
+
+        var dialog = await DialogService.ShowAsync<EditStelexosDialog>("Επεξεργασία Στελέχους", parameters);
+
+        var result = await dialog.Result;
+        if (result is not null && !result.Canceled)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
 }
