@@ -3,21 +3,22 @@
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.Dtos.People.Children
-@using StelexarasApp.Library.Dtos.People.Staff
 
 @inject ISkinesApi SkinesApi
 @inject IPaidiaApi PaidiaApi
+@inject IStelexiApi StelexiApi
 @inject IDialogService DialogService
 
 @inject NavigationManager NavigationManager
 
 <h1 style="text-align:center;">@Skini.Name: @Paidia.Count δύναμη</h1>
 <h2 style="padding-block-start:10px;">
-    Στέλεχος: <a onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Skini?.OmadarxisName</a>
+    Στέλεχος: <a @onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Skini?.OmadarxisName</a>
 </h2>
 <div style="padding:0px 30px;">
     <MudTable Items="Paidia">
         <HeaderContent>
+            <MudTh Style="font-weight:bold;">Όνομα</MudTh>
             <MudTh Style="font-weight:bold;">Ηλικία</MudTh>
             <MudTh Style="font-weight:bold;">Τηλ Γονέα</MudTh>
             <MudTh Style="font-weight:bold;">Σε άδεια;</MudTh>
@@ -67,14 +68,18 @@
         }
     }
 
-    private async Task OpenStelexos(StelexosResponse context)
+    private async Task OpenStelexos()
     {
         if (Skini?.OmadarxisId is null)
             return;
 
+        var omadarxis = await StelexiApi.GetStelexosById(Skini.OmadarxisId, new());
+        if (omadarxis is null)
+            return;
+
         var parameters = new DialogParameters<EditStelexosDialog>
         {
-            { x => x.Stelexos, context }
+            { x => x.Stelexos, omadarxis }
         };
 
         var dialog = await DialogService.ShowAsync<EditStelexosDialog>("Επεξεργασία Στελέχους", parameters);

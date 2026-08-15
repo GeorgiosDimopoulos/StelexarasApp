@@ -6,18 +6,45 @@ public class StelexosValidator : AbstractValidator<StelexosDtoBase>
 {
     public StelexosValidator()
     {
-        RuleFor(user => user.LastName)
-            .NotEmpty().WithMessage("StelexosName is required")
-            .Length(2, 50).WithMessage("Stelexos Name must be between 2 and 50 characters");
-        RuleFor(user => user.FirstName)
-            .NotEmpty().WithMessage("StelexosName is required")
-            .Length(2, 50).WithMessage("Stelexos Name must be between 2 and 50 characters");
-        RuleFor(user => user.XwrosName)
-            .NotEmpty().WithMessage("Stelexos XwrosName is required")
-            .Length(2, 50).WithMessage("Stelexos XwrosName must be between 2 and 50 characters");
-        RuleFor(user => user.Age)                
-            .GreaterThan(18).WithMessage("Stelexos must be more than 18 years old");
-        RuleFor(user => user.Thesi)
-            .NotEmpty().WithMessage("Stelexos Thesi is required");
+        RuleFor(x => x.LastName)
+            .NotEmpty()
+            .Length(2, 50);
+
+        RuleFor(x => x.FirstName)
+            .NotEmpty()
+            .Length(2, 50);
+
+        RuleFor(x => x.XwrosName)
+            .NotEmpty()
+            .Length(2, 50);
+
+        RuleFor(x => x.Age)
+            .GreaterThan(18);
+
+        RuleFor(x => x.Sex)
+            .IsInEnum();
+
+        RuleFor(x => x.Thesi)
+            .IsInEnum();
     }
 }
+
+public class CreateStelexosValidator : AbstractValidator<CreateStelexosRequest>
+{
+    public CreateStelexosValidator()
+    {
+        Include(new StelexosValidator());
+    }
+}
+
+public class UpdateStelexosValidator : AbstractValidator<UpdateStelexosRequest>
+{
+    public UpdateStelexosValidator()
+    {
+        Include(new StelexosValidator());
+
+        RuleFor(x => x.Id)
+            .GreaterThan(0);
+    }
+}
+

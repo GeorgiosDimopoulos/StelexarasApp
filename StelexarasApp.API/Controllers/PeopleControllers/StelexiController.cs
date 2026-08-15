@@ -9,7 +9,7 @@ public class StelexiController(IStaffService<CreateStelexosRequest, UpdateStelex
     private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _stelexiService = stelexiService;
 
     [HttpGet()]
-    public async Task<ActionResult<StelexosResponse>> GetStelexi([FromQuery]StelexosQueryParameters stelexosQueryParameters)
+    public async Task<ActionResult<StelexosResponse>> GetStelexi([FromQuery] StelexosQueryParameters stelexosQueryParameters)
     {
         var result = await _stelexiService.GetStelexi(string.Empty, stelexosQueryParameters);
         if (result is null)
@@ -18,7 +18,7 @@ public class StelexiController(IStaffService<CreateStelexosRequest, UpdateStelex
     }
 
     [HttpGet("StelexiAnaXwro")]
-    public async Task<ActionResult<StelexosResponse>> GetStelexi([FromQuery] string name, StelexosQueryParameters stelexosQueryParameters)
+    public async Task<ActionResult<StelexosResponse>> GetStelexi(string name, [FromQuery] StelexosQueryParameters stelexosQueryParameters)
     {
         var result = await _stelexiService.GetStelexi(name, stelexosQueryParameters);
         if (result is null)
@@ -27,18 +27,18 @@ public class StelexiController(IStaffService<CreateStelexosRequest, UpdateStelex
     }
 
     [HttpGet("StelexosByName")]
-    public async Task<ActionResult<StelexosResponse>> GetStelexosByName([FromQuery] string name)
+    public async Task<ActionResult<StelexosResponse>> GetStelexosByName(string name, [FromQuery] StelexosQueryParameters stelexosQueryParameters)
     {
-        var result = await _stelexiService.GetStelexosByName(name, new());
+        var result = await _stelexiService.GetStelexosByName(name, stelexosQueryParameters);
         if (result is null)
             return NotFound();
         return Ok(result);
     }
 
-    [HttpGet("StelexosById")]
-    public async Task<ActionResult<StelexosResponse>> GetStelexosById([FromQuery] int id)
+    [HttpGet("Stelexos/{id:int}")]
+    public async Task<ActionResult<StelexosResponse>> GetStelexosById(int id, [FromQuery] StelexosQueryParameters stelexosQueryParameters)
     {
-        var result = await _stelexiService.GetStelexosById(id, new());
+        var result = await _stelexiService.GetStelexosById(id, stelexosQueryParameters);
         if (result is null)
             return NotFound();
         return Ok(result);

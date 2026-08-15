@@ -52,4 +52,8 @@
 		<ProjectReference Include="..\StelexarasApp.Services\StelexarasApp.Services.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Validators\" />
+	</ItemGroup>
+
 </Project>

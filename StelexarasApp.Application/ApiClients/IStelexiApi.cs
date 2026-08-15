@@ -12,6 +12,9 @@ public interface IStelexiApi
     [Get("/Stelexi/Stelexos/{name}")]
     Task<StelexosResponse> GetStelexos(string name, [Query] StelexosQueryParameters stelexosQueryParameters);
 
+    [Get("/Stelexi/Stelexos/{id}")]
+    Task<StelexosResponse> GetStelexosById(int id, [Query] StelexosQueryParameters stelexosQueryParameters);
+
     [Post("/Stelexi/Stelexos")]
     Task<bool> PostStelexos([Body] CreateStelexosRequest stelexosDto);
 
