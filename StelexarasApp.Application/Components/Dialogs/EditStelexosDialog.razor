@@ -14,6 +14,7 @@
             <MudTextField @bind-Value="PersonToEdit.LastName" Label="Επώνυμο" />
             <MudTextField @bind-Value="PersonToEdit.XwrosName" Label="Χώρος" />
             <MudNumericField @bind-Value="PersonToEdit.Tel" Label="Τηλέφωνο" />
+            <MudSwitch @bind-Value="PersonToEdit.SeAdeia" Label="Σε άδεια" />
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -55,6 +56,7 @@
             XwrosName = PersonToEdit.XwrosName,
             Sex = Stelexos.Sex,
             Thesi = Stelexos.Thesi,
+            SeAdeia = Stelexos.SeAdeia,
             Tel = PersonToEdit.Tel
         };
 

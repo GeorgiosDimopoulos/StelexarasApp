@@ -9,6 +9,7 @@ public record StelexosDtoBase : IStelexosDto
     public string XwrosName { get; set; } = string.Empty;
     public string? Tel { get; set; }
     public Thesi Thesi { get; set; } = Thesi.None;
+    public bool SeAdeia { get; set; }
 }
 
 public record CreateStelexosRequest : StelexosDtoBase { }

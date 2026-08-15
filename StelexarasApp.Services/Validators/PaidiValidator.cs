@@ -28,8 +28,8 @@ public class PaidiValidator : AbstractValidator<PaidiDtoBase>
         When(paidi => paidi.PaidiType == PaidiType.Kataskinotis, () =>
         {
             RuleFor(paidi => paidi.Age)        
-                .GreaterThan(0)        
-                .LessThan(16);
+                .InclusiveBetween(6, 15)        
+                .WithMessage("Kataskinotis age must be between 6 and 15");
         });
         When(paidi => paidi.PaidiType == PaidiType.Ekpaideuomenos, () =>
         {

@@ -152,3 +152,4 @@ DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:19:28
 DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:44
 DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:48
 DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:57
+DbError, Thesi cannot be None! (Parameter 'Thesi'), , 2026-08-15 22:14:17

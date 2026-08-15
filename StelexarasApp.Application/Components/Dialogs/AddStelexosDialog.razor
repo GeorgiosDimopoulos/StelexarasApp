@@ -34,7 +34,7 @@
                 }
             </MudSelect>
             <MudTextField @bind-Value="req.XwrosName" Label="Χώρος" />
-             <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" />
+            <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" />
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -72,8 +72,13 @@
             Thesi = req.Thesi
         };
 
+        if (IsSomethingMissing(newStelexosRequest))
+        {
+            Snackbar.Add("Σφάλμα κατά την αποθήκευση του στελέχους, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
+        }
+
         var result = await StelexiApi.PostStelexos(newStelexosRequest);
-        if (result == null)
+        if (result == false)
         {
             Snackbar.Add("Σφάλμα κατά την αποθήκευση του στελέχους.", Severity.Error);
             return;
@@ -83,6 +88,17 @@
             Snackbar.Add("Το στέλεχος αποθηκεύτηκε επιτυχώς.", Severity.Success);
             Dialog?.Close(DialogResult.Ok(newStelexosRequest));
         }
+    }
+
+    private bool IsSomethingMissing(CreateStelexosRequest newStelexosRequest)
+    {
+        return string.IsNullOrWhiteSpace(newStelexosRequest.FirstName) ||
+               string.IsNullOrWhiteSpace(newStelexosRequest.LastName) ||
+               newStelexosRequest.Age <= 0 ||
+               newStelexosRequest.Sex == default ||
+               string.IsNullOrWhiteSpace(newStelexosRequest.Tel) ||
+               string.IsNullOrWhiteSpace(newStelexosRequest.XwrosName) ||
+               newStelexosRequest.Thesi == default;
     }
 
     private string GetDisplayName(Enum sex)

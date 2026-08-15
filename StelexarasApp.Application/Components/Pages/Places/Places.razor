@@ -8,16 +8,18 @@
 @inject IDialogService DialogService
 
 <div style="background: linear-gradient(rgba(255,255,255,0.68),rgba(225,245,242,0.68)), url('/images/football.jpg') center/cover no-repeat;">
-    <h1 style="text-align:center; padding-block-start:5px; margin-bottom:10px; color:dimgray">ΠΑΙΔΙΑ - @allPaidia</h1>
-    <h2 style="text-align:center; padding-block-start:5px; color:dimgray">ΚΟΙΝΟΤΗΤΕΣ</h2>
+    <h1 style="text-align:center; margin-bottom:10px; color:dimgray">ΠΑΙΔΙΑ: @allPaidia</h1>
+    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΔΥΝΑΜΗ: @dunamhPaidia</h3>
+    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΣΕ ΑΔΕΙΑ: @seAdeiaPaidia</h3>
+    <h2 style="text-align:center; padding-block-start:50px; color:dimgray">ΚΟΙΝΟΤΗΤΕΣ</h2>
 
-    <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 20vh); align-items:center;">
+    <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 15vh);">
         <MudItem xs="12" sm="4">
             <h2 style="text-align:center;margin-bottom:20px;">Α ΤΟΜΕΑΣ</h2>
             <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="5">
                 @foreach (var koinotita in Koinotites.Where(k => k.TomeasName == "A").OrderBy(k => k.Name))
                 {
-                    <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:80px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:#58B98D">
+                    <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:70px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:#58B98D">
                         @koinotita.Name - @KoinotitaPaidia[koinotita.Id]
                     </MudButton>
                 }
@@ -29,7 +31,7 @@
                 @foreach (var koinotita in Koinotites.Where(k => k.TomeasName == "B").OrderBy(k => k.Name))
                 {
                     var backgroundColor = koinotita.Name.ToUpper().Contains("ΣΧΟΛΉ") ? "#83CBD4" : "#58B98D";
-                    <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="@($"height:80px; padding:30px; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:{backgroundColor};")">
+                    <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="@($"height:70px; padding:30px; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:{backgroundColor};")">
                         @koinotita.Name - @KoinotitaPaidia[koinotita.Id]
                     </MudButton>
                 }
@@ -42,17 +44,22 @@
     private List<KoinotitaResponse> Koinotites = new List<KoinotitaResponse>();
     private Dictionary<int, int> KoinotitaPaidia = new();
     private int allPaidia;
+    private int seAdeiaPaidia;
+    private int dunamhPaidia;
 
     protected override async Task OnInitializedAsync()
     {
         Koinotites = await KoinotitesApi.GetKoinotitesAsync(new KoinotitaQueryParameters() { IncludeStelexos = true });
+        seAdeiaPaidia = 0;
 
         foreach (var koinotita in Koinotites)
         {
-            var children = await PaidiaApi.GetPaidiaByKoinotitaId(koinotita.Id, new());
-            KoinotitaPaidia[koinotita.Id] = children.Count;
+            var paidiaKoinotitas = await PaidiaApi.GetPaidiaByKoinotitaId(koinotita.Id, new());
+            KoinotitaPaidia[koinotita.Id] = paidiaKoinotitas.Count;
+            seAdeiaPaidia += paidiaKoinotitas.Count(p => p.SeAdeia);
         }
 
         allPaidia = KoinotitaPaidia.Values.Sum();
+        dunamhPaidia = allPaidia - seAdeiaPaidia;
     }
 }

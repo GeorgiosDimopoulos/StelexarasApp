@@ -44,7 +44,7 @@
 
     protected async override void OnParametersSet()
     {
-        
+
     }
 
     private void Cancel(MouseEventArgs args)
@@ -92,7 +92,14 @@
     private bool IsEkpaideuomenos
     {
         get => req.PaidiType == PaidiType.Ekpaideuomenos;
-        set => req.PaidiType = value ? PaidiType.Ekpaideuomenos : PaidiType.Kataskinotis;
+        set
+        {
+            req.PaidiType = value ? PaidiType.Ekpaideuomenos : PaidiType.Kataskinotis;
+            if (value)
+                req.Age = 16;
+            else if (req.Age == 16)
+                req.Age = 12; // for example 12, you can set it to any default value you want when switching back to Kataskinotis
+        } 
     }
 
     private string GetDisplayName(Enum sex)
