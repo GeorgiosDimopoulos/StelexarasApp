@@ -11,6 +11,7 @@
 
 @inject NavigationManager NavigationManager
 
+<h1>ΠΙΣΩ <a @onclick="GoBack" style="color:#606C69; text-decoration:underline; cursor:pointer;"></a></h1>
 <h1 style="text-align:center;">@Skini.Name (@Skini.Sex): @Paidia.Count δύναμη</h1>
 <h2 style="padding-block-start:10px;">
     Στέλεχος: <a @onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Skini?.OmadarxisName</a>
@@ -66,6 +67,11 @@
         {
             NavigationManager.NavigateTo("/");
         }
+    }
+
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/xwroi");
     }
 
     private async Task OpenStelexos()

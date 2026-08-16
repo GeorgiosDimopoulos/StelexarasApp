@@ -75,6 +75,11 @@
             SkiniName = req.SkiniName,
             ParentPhone = req.ParentPhone
         };
+        
+        if (IsSomethingMissing(newPaidiRequest))
+        {
+            Snackbar.Add("Σφάλμα κατά την αποθήκευση του παιδιού, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
+        }
 
         var result = await PaidiaApi.PostPaidi(newPaidiRequest);
         if (result == false)
@@ -108,4 +113,13 @@
         var displayAttribute = member.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
         return displayAttribute?.Name ?? sex.ToString();
     }
+
+    private bool IsSomethingMissing(CreatePaidiRequest newPaidiRequest)
+    {
+        return string.IsNullOrWhiteSpace(newPaidiRequest.FirstName) ||
+               string.IsNullOrWhiteSpace(newPaidiRequest.LastName) ||
+               newPaidiRequest.Age <= 0 ||
+               newPaidiRequest.Sex == default ||
+               string.IsNullOrWhiteSpace(newPaidiRequest.ParentPhone);
+    }    
 }

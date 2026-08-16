@@ -11,6 +11,7 @@
 
 @inject NavigationManager NavigationManager
 
+<h1>ΠΙΣΩ <a @onclick="GoBack" style="color:#606C69; text-decoration:underline; cursor:pointer;"></a></h1>
 <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
 <h2>
     Στέλεχος: <a @onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Koinotita?.KoinotarxisName</a>
@@ -20,7 +21,7 @@
     <MudItem xs="12" sm="4">
         <MudStack AlignItems="AlignItems.Center"
                   Spacing="10">
-            @if(Skines.Count > 6)
+            @if (Skines.Count > 6)
             {
                 @foreach (var sk in Skines.OrderBy(s => s.Name))
                 {
@@ -29,14 +30,15 @@
                     </MudButton>
                 }
             }
-            else{
-            @foreach (var sk in Skines.OrderBy(s => s.Name))
+            else
             {
+                @foreach (var sk in Skines.OrderBy(s => s.Name))
+                {
                     <MudButton Href="@($"/skines/{sk.Id}")" Style="height:80px; width:500px; border-radius:15px; overflow:hidden; color:white; background-color:#58B98D">
-                    @sk.Name - @sk.PaidiaNumber
-                </MudButton>
+                        @sk.Name - @sk.PaidiaNumber
+                    </MudButton>
+                }
             }
-            }            
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -62,7 +64,11 @@
         }
     }
 
-    
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/xwroi");
+    }
+        
     private async Task OpenStelexos()
     {
         if (Koinotita?.KoinotarxisId is null)

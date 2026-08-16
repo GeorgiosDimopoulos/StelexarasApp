@@ -77,6 +77,12 @@
 
     private async Task Save(MouseEventArgs _)
     {
+        if (IsSomethingMissing())
+        {
+            Snackbar.Add("Σφάλμα κατά την αποθήκευση, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
+        }
+
+
         switch (model.XwrosType)
         {
             case XwrosType.Skini:
@@ -174,5 +180,12 @@
         var member = type.GetType().GetMember(type.ToString()).First();
         var displayAttribute = member.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
         return displayAttribute?.Name ?? type.ToString();
+    }
+
+    private bool IsSomethingMissing()
+    {
+        return string.IsNullOrWhiteSpace(model.Name) ||
+               model.XwrosType == default ||
+               model.Sex == default;
     }
 }
