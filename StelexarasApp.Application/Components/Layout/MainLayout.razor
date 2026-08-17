@@ -30,6 +30,7 @@
                                  Label="Αναζήτηση παιδιών:"
                                  Variant="Variant.Outlined"
                                  ShowProgressIndicator="true"
+                                 Value="_selectedPaidiName" 
                                  SearchFunc="SearchGenerally"
                                  ValueChanged="OnPaidiSelected"
                                  ResetValueOnEmptyText="true"
@@ -56,8 +57,9 @@
 </div>
 
 @code {
+    private string? _selectedPaidiName;
 
-    private async Task<IEnumerable<string>> SearchGenerally(string value, CancellationToken token)
+    private async Task<IEnumerable<string>> SearchGenerally(string? value, CancellationToken token)
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -66,7 +68,6 @@
 
         var paidia = await PaidiaApi.SearchPaidiaByName(value, new());
 
-
         return paidia.Select(p => $"{p.FirstName} {p.LastName}");
     }
 
@@ -74,6 +75,8 @@
     {
         if (string.IsNullOrWhiteSpace(selectedName))
             return;
+
+        _selectedPaidiName = selectedName;
 
         var paidia = await PaidiaApi.SearchPaidiaByName(selectedName, new());
         var paidi = paidia.FirstOrDefault(p => $"{p.FirstName} {p.LastName}" == selectedName);
@@ -86,13 +89,7 @@
             { x => x.Paidi, paidi }
         };
 
-        var dialog = await DialogService.ShowAsync<EditPaidiDialog>("Επεξεργασία Παιδιού", parameters);
-        var result = await dialog.Result;
-
-        if (result is not null && !result.Canceled)
-        {
-            NavigationManager.NavigateTo("/");
-        }
+        await DialogService.ShowAsync<EditPaidiDialog>("Επεξεργασία Παιδιού", parameters);        
     }
 
     private async Task AddPaidi()

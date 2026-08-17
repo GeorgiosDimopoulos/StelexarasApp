@@ -78,8 +78,8 @@
         if (IsSomethingMissing())
         {
             Snackbar.Add("Σφάλμα κατά την αποθήκευση, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
+            return;
         }
-
 
         switch (model.XwrosType)
         {
@@ -87,8 +87,7 @@
                 var skini = new CreateSkiniRequest
                 {
                     Name = model.Name,
-                    KoinotitaId = model.KoinotitaId ?? 0,
-                    Sex = model.Sex
+                    KoinotitaId = model.KoinotitaId ?? 0
                 };
 
                 var result = await XwroiApi.PostSkini(skini);
@@ -156,7 +155,6 @@
     {
         public string Name { get; set; } = string.Empty;
         public XwrosType XwrosType { get; set; }
-        public Sex Sex { get; set; }
         public string? Tomeasname { get; set; }
         public int? KoinotitaId { get; set; }
     }
@@ -182,8 +180,11 @@
 
     private bool IsSomethingMissing()
     {
-        return string.IsNullOrWhiteSpace(model.Name) ||
-               model.XwrosType == default ||
-               model.Sex == default;
+        var nameFilled = string.IsNullOrWhiteSpace(model.Name);
+        var xwrosFilled = model.XwrosType != XwrosType.Koinotita && model.XwrosType != XwrosType.Skini && model.XwrosType != XwrosType.Tomeas;
+
+        bool fuloFilled = false;
+        
+        return nameFilled && xwrosFilled && fuloFilled;
     }
 }

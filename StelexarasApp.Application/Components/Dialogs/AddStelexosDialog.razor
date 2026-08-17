@@ -81,6 +81,12 @@
 
     private async Task Save(MouseEventArgs _)
     {
+        if (IsSomethingMissing())
+        {
+            Snackbar.Add("Σφάλμα κατά την αποθήκευση, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
+            return;
+        }
+
         var newStelexosRequest = new CreateStelexosRequest
         {
             FirstName = req.FirstName,
@@ -138,5 +144,16 @@
 
         var xwroi = _xwroiNames.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
         return Task.FromResult(xwroi);
+    }
+
+    private bool IsSomethingMissing()
+    {
+        return string.IsNullOrWhiteSpace(req.LastName) ||
+               string.IsNullOrWhiteSpace(req.XwrosName) ||
+               string.IsNullOrWhiteSpace(req.XwrosName) ||
+               string.IsNullOrWhiteSpace(req.Tel) ||
+               string.IsNullOrWhiteSpace(req.Age.ToString()) ||
+               (req.Thesi != Thesi.Omadarxis && req.Thesi != Thesi.Koinotarxis && req.Thesi != Thesi.Tomearxis && req.Thesi != Thesi.Ekpaideutis) ||
+               (req.Sex != Sex.Female && req.Sex != Sex.Male);
     }
 }
