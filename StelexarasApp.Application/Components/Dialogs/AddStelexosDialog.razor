@@ -9,6 +9,9 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 @inject IStelexiApi StelexiApi
+@inject IKoinotitesApi KoinotitesApi
+@inject ISkinesApi SkinesApi
+@inject ITomeisApi TomeisApi
 
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
@@ -33,7 +36,15 @@
                     </MudSelectItem>
                 }
             </MudSelect>
-            <MudTextField @bind-Value="req.XwrosName" Label="Χώρος" />
+            <MudAutocomplete T="string"
+                             Label="Χώρος"
+                             @bind-Value="req.XwrosName"
+                             SearchFunc="SearchXwroi"
+                             Clearable="true"
+                             ResetValueOnEmptyText="true"
+                             CoerceText="true"
+                             CoerceValue="true"
+                             Dense="true" />
             <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" />
         </MudForm>
     </DialogContent>
@@ -46,12 +57,23 @@
 
 @code {
     private CreateStelexosRequest req = new();
+    private List<string> _xwroiNames = new();
 
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
     protected async override void OnParametersSet()
     {
-        await Task.Delay(500);
+        await Task.Delay(200);
+
+        var skines = await SkinesApi.GetSkinesAsync(new());
+        var koinotites = await KoinotitesApi.GetKoinotitesAsync(new());
+        var tomeis = await TomeisApi.GetTomeisAsync(new());    
+        _xwroiNames = skines.Select(x => x.Name)
+                            .Concat(koinotites.Select(x => x.Name))
+                            .Concat(tomeis.Select(x => x.Name))
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToList();
     }
 
     private void Cancel(MouseEventArgs args)
@@ -75,6 +97,7 @@
         if (IsSomethingMissing(newStelexosRequest))
         {
             Snackbar.Add("Σφάλμα κατά την αποθήκευση του στελέχους, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
+            return;
         }
 
         var result = await StelexiApi.PostStelexos(newStelexosRequest);
@@ -95,10 +118,10 @@
         return string.IsNullOrWhiteSpace(newStelexosRequest.FirstName) ||
                string.IsNullOrWhiteSpace(newStelexosRequest.LastName) ||
                newStelexosRequest.Age <= 0 ||
-               newStelexosRequest.Sex == default ||
+               (newStelexosRequest.Sex != Sex.Female && newStelexosRequest.Sex != Sex.Male) ||
                string.IsNullOrWhiteSpace(newStelexosRequest.Tel) ||
                string.IsNullOrWhiteSpace(newStelexosRequest.XwrosName) ||
-               newStelexosRequest.Thesi == default;
+               (newStelexosRequest.Thesi != Thesi.Omadarxis && newStelexosRequest.Thesi != Thesi.Koinotarxis && newStelexosRequest.Thesi != Thesi.Tomearxis && newStelexosRequest.Thesi != Thesi.Ekpaideutis);
     }
 
     private string GetDisplayName(Enum sex)
@@ -106,5 +129,16 @@
         var member = sex.GetType().GetMember(sex.ToString()).First();
         var displayAttribute = member.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
         return displayAttribute?.Name ?? sex.ToString();
+    }
+
+    private Task<IEnumerable<string>> SearchXwroi(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return Task.FromResult(_xwroiNames.AsEnumerable());
+        }
+
+        var xwroi = _xwroiNames.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        return Task.FromResult(xwroi);
     }
 }

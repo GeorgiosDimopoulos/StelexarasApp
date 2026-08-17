@@ -9,6 +9,7 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 @inject IPaidiaApi PaidiaApi
+@inject ISkinesApi SkinesApi
 
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
@@ -27,7 +28,15 @@
                     </MudSelectItem>
                 }
             </MudSelect>
-            <MudTextField @bind-Value="req.SkiniName" Label="Σκηνή" />
+            <MudAutocomplete T="string"
+                             Label="Χώρος"
+                             @bind-Value="req.SkiniName"
+                             SearchFunc="SearchXwroi"
+                             Clearable="true"
+                             ResetValueOnEmptyText="true"
+                             CoerceText="true"
+                             CoerceValue="true"
+                             Dense="true" />
             <MudSwitch @bind-Value="req.SeAdeia" Label="Σε Αδεία;" />
         </MudForm>
     </DialogContent>
@@ -39,12 +48,17 @@
 
 @code {
     private CreatePaidiRequest req = new();
+    private List<string> _xwroiNames = new();
 
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
     protected async override void OnParametersSet()
     {
-
+        var skines = await SkinesApi.GetSkinesAsync(new());
+        _xwroiNames = skines.Select(x => x.Name)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToList();
     }
 
     private void Cancel(MouseEventArgs args)
@@ -75,7 +89,7 @@
             SkiniName = req.SkiniName,
             ParentPhone = req.ParentPhone
         };
-        
+
         if (IsSomethingMissing(newPaidiRequest))
         {
             Snackbar.Add("Σφάλμα κατά την αποθήκευση του παιδιού, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
@@ -94,6 +108,17 @@
         }
     }
 
+    private Task<IEnumerable<string>> SearchXwroi(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return Task.FromResult(_xwroiNames.AsEnumerable());
+        }
+
+        var xwroi = _xwroiNames.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        return Task.FromResult(xwroi);
+    }
+
     private bool IsEkpaideuomenos
     {
         get => req.PaidiType == PaidiType.Ekpaideuomenos;
@@ -104,7 +129,7 @@
                 req.Age = 16;
             else if (req.Age == 16)
                 req.Age = 12; // for example 12, you can set it to any default value you want when switching back to Kataskinotis
-        } 
+        }
     }
 
     private string GetDisplayName(Enum sex)
@@ -121,5 +146,5 @@
                newPaidiRequest.Age <= 0 ||
                newPaidiRequest.Sex == default ||
                string.IsNullOrWhiteSpace(newPaidiRequest.ParentPhone);
-    }    
+    }
 }
