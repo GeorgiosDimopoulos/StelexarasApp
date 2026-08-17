@@ -110,6 +110,10 @@ public class AppDbContext : DbContext
             .HasForeignKey<Skini>(s => s.OmadarxisId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        modelBuilder.Entity<Skini>()    
+            .Property(s => s.Sex)    
+            .IsRequired(false);
+
         modelBuilder.Entity<Koinotita>()
             .HasOne(k => k.Koinotarxis)
             .WithOne(kt => kt.Koinotita)

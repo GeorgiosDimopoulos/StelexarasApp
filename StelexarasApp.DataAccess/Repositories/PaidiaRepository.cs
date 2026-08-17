@@ -32,7 +32,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             query = query.Include(p => p.Skini);
         }
 
-        var paidi = await query.FirstAsync(p => p.Id == id);        
+        var paidi = await query.FirstAsync(p => p.Id == id);
         return paidi;
     }
 
@@ -59,7 +59,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         if (_dbContext.Paidia == null)
             return Enumerable.Empty<Paidi>();
 
-        IQueryable<Paidi> query = _dbContext.Paidia.Where(p => p.LastName.Contains(name)|| p.FirstName.Contains(name));
+        IQueryable<Paidi> query = _dbContext.Paidia.Where(p => p.LastName.Contains(name) || p.FirstName.Contains(name));
 
         if (queryParameters.IncludeSkini)
             query = query.Include(p => p.Skini);
@@ -195,33 +195,31 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
                 return false;
             }
 
-            var existingPaidi = await _dbContext.Paidia.FindAsync(paidi.Id);
-            if (existingPaidi != null)
-            {
-                _logger.LogWarning("Paidi with the same Id already exists.");
-                return false;
-            }
-
-            var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(sk => sk.Name.Equals(skiniName));
+            var existingSkini = await _dbContext.Skines.Include(sk => sk.Paidia).FirstOrDefaultAsync(sk => sk.Name.Equals(skiniName));
             if (existingSkini == null)
             {
                 _logger.LogWarning("Skini with the given Id doesnt exist.");
                 return false;
             }
 
-            if (existingSkini.Sex != paidi.Sex)
+            if (existingSkini.Sex is null || existingSkini.Paidia.Count == 0)
             {
-                _logger.LogWarning("Skini has different sex/fulo");
+                existingSkini.Sex = paidi.Sex;
+            }
+            else if (existingSkini.Sex != paidi.Sex)
+            {
+                _logger.LogWarning("Skini has different sex");
                 return false;
             }
 
             paidi.SkiniId = existingSkini.Id;
 
-            _dbContext!.Paidia!.Add(paidi);
+            await _dbContext!.Paidia!.AddAsync(paidi);
             await _dbContext.SaveChangesAsync();
 
             if (transaction != null)
                 await transaction.CommitAsync();
+            
             return true;
         }
         catch (Exception ex)

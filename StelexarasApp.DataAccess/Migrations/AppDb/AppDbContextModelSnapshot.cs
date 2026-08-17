@@ -303,7 +303,7 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.Property<int?>("OmadarxisId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Sex")
+                    b.Property<int?>("Sex")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

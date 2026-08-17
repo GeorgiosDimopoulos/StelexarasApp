@@ -93,6 +93,7 @@
         if (IsSomethingMissing(newPaidiRequest))
         {
             Snackbar.Add("Σφάλμα κατά την αποθήκευση του παιδιού, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
+            return;
         }
 
         var result = await PaidiaApi.PostPaidi(newPaidiRequest);
@@ -144,7 +145,7 @@
         return string.IsNullOrWhiteSpace(newPaidiRequest.FirstName) ||
                string.IsNullOrWhiteSpace(newPaidiRequest.LastName) ||
                newPaidiRequest.Age <= 0 ||
-               newPaidiRequest.Sex == default ||
+               (newPaidiRequest.Sex != Sex.Female && newPaidiRequest.Sex != Sex.Female) ||
                string.IsNullOrWhiteSpace(newPaidiRequest.ParentPhone);
     }
 }
