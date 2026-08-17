@@ -3,6 +3,7 @@
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.Dtos.People.Children
+@using StelexarasApp.Library.Models.Atoma
 
 @inject ISkinesApi SkinesApi
 @inject IPaidiaApi PaidiaApi
@@ -11,8 +12,7 @@
 
 @inject NavigationManager NavigationManager
 
-<h1>ΠΙΣΩ <a @onclick="GoBack" style="color:#606C69; text-decoration:underline; cursor:pointer;"></a></h1>
-<h1 style="text-align:center;">@Skini.Name (@Skini.Sex): @Paidia.Count δύναμη</h1>
+<h1 style="text-align:center;">@Skini.Name (@SexOfSKini(@Skini.Sex)): @Paidia.Count δύναμη</h1>
 <h2 style="padding-block-start:10px;">
     Στέλεχος: <a @onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Skini?.OmadarxisName</a>
 </h2>
@@ -69,11 +69,6 @@
         }
     }
 
-    private async Task GoBack()
-    {
-        NavigationManager.NavigateTo("/xwroi");
-    }
-
     private async Task OpenStelexos()
     {
         if (Skini?.OmadarxisId is null)
@@ -89,14 +84,24 @@
         };
 
         var dialog = await DialogService.ShowAsync<EditStelexosDialog>("Επεξεργασία Στελέχους", parameters);
-        
+
         var result = await dialog.Result;
         if (result is not null && !result.Canceled)
         {
             NavigationManager.NavigateTo("/");
         }
     }
-        
+
+    private string SexOfSKini(Sex sex)
+    {
+        return sex switch
+        {
+            Sex.Male => "Αγόρια",
+            Sex.Female => "Κορίτσια",
+            _ => "Άγνωστο φύλο"
+        };
+    }
+
     private string IsPresent(bool seAdeia)
     {
         return seAdeia ? "Σε Αδεία" : "Εδώ";

@@ -4,6 +4,7 @@
 @inherits LayoutComponentBase
 
 @inject IDialogService DialogService
+@inject IJSRuntime JS
 @inject NavigationManager NavigationManager
 
 <MudThemeProvider />
@@ -15,7 +16,10 @@
     <main>
         <div class="top-row px-4"
              style=" height:10vh; display:flex; align-items:center; justify-content:space-between; background: linear-gradient(90deg, #e9eef1 0%, #f3f6f8 55%, #f3cccc  100%);">
-            <MudButton Href="/">
+            <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
+                           Color="Color.Default"
+                           OnClick="GoBack" />
+             <MudButton Href="/">
                 <MudText Typo="Typo.h5" Style="color:darkred;">Κατασκηνώσεις ΤΥΠΕΤ</MudText>
             </MudButton>
             <div style="gap:12px; align-items:center; width:80vh">
@@ -40,6 +44,11 @@
 </div>
 
 @code {
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("history.back");
+    }
+
     private async Task AddPaidi()
     {
         var dialog = await DialogService.ShowAsync<AddPaidiDialog>("Προσθήκη Παιδιού");

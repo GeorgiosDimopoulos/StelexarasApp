@@ -11,7 +11,6 @@
 
 @inject NavigationManager NavigationManager
 
-<h1>ΠΙΣΩ <a @onclick="GoBack" style="color:#606C69; text-decoration:underline; cursor:pointer;"></a></h1>
 <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
 <h2>
     Στέλεχος: <a @onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Koinotita?.KoinotarxisName</a>
@@ -63,12 +62,7 @@
             errorMessage = $"Failed to load skines: {ex.Message}";
         }
     }
-
-    private async Task GoBack()
-    {
-        NavigationManager.NavigateTo("/xwroi");
-    }
-        
+            
     private async Task OpenStelexos()
     {
         if (Koinotita?.KoinotarxisId is null)
