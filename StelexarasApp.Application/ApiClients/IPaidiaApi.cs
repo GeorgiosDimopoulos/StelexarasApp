@@ -9,8 +9,14 @@ public interface IPaidiaApi
     [Get("/Paidia")]
     Task<List<PaidiResponse>> GetPaidiaAsync([Query] PaidiQueryParameters paidiQueryParameters);
 
+    [Get("/Paidia/SearchByName/{name}")]
+    Task<List<PaidiResponse>> SearchPaidiaByName(string name, [Query] PaidiQueryParameters paidiQueryParameters); 
+
     [Get("/Paidia/{id}")]
     Task<PaidiResponse> GetPaidi(int id, [Query] PaidiQueryParameters paidiQueryParameters);
+
+    [Get("/Paidia/{name}")]
+    Task<PaidiResponse> GetPaidiByName(string name, [Query] PaidiQueryParameters paidiQueryParameters);
 
     [Get("/Paidia/Koinotita/ById/{id}")]
     Task<List<PaidiResponse>> GetPaidiaByKoinotitaId(int id, [Query] PaidiQueryParameters paidiQueryParameters);

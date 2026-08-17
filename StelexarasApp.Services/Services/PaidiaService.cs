@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +24,17 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
         _paidiRepository = paidiRepository ?? throw new ArgumentNullException(nameof(paidiRepository));
     }
 
+    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByNameInService(string name, PaidiQueryParameters paidiQueryParameters)
+    {
+        var paidia = await _paidiRepository.GetPaidiaByNameFromDb(name, paidiQueryParameters);
+        if (paidia == null)
+            return null!;
+
+        var paidiaResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
+        if (paidiaResponse == null)
+            return null!;
+        return paidiaResponse;
+    }
 
     public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaIdInService(int id, PaidiQueryParameters paidiQueryParameters)
     {
@@ -99,6 +111,18 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
             return null!;
 
         Paidi paidi = await _paidiRepository.GetPaidiByIdFromDb(id, queryParameters);
+        if (paidi == null)
+            return null!;
+
+        return _mapper.Map<PaidiResponse>(paidi);
+    }
+
+    public async Task<PaidiResponse> GetPaidiByNameInService(string name, PaidiQueryParameters queryParameters)
+    {
+        if (_mapper == null || _paidiRepository is null)
+            return null!;
+
+        Paidi paidi = await _paidiRepository.GetPaidiByNameFromDb(name, queryParameters);
         if (paidi == null)
             return null!;
 

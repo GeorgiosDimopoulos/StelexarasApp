@@ -32,7 +32,39 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             query = query.Include(p => p.Skini);
         }
 
-        return await query.FirstAsync();
+        var paidi = await query.FirstAsync(p => p.Id == id);        
+        return paidi;
+    }
+
+    public async Task<Paidi> GetPaidiByNameFromDb(string fullName, PaidiQueryParameters queryParameters)
+    {
+        if (_dbContext.Paidia is null || _dbContext.Paidia.Count() == 0)
+        {
+            return null!;
+        }
+
+        IQueryable<Paidi> query = _dbContext.Paidia;
+        if (queryParameters.IncludeSkini)
+        {
+            query = query.Include(p => p.Skini);
+        }
+
+        // ToDo: fix, so if fullname contains LastName in query, not if it is equal
+        var paidi = await query.FirstOrDefaultAsync(p => p.LastName == fullName);
+        return paidi!;
+    }
+
+    public async Task<IEnumerable<Paidi>> GetPaidiaByNameFromDb(string name, PaidiQueryParameters queryParameters)
+    {
+        if (_dbContext.Paidia == null)
+            return Enumerable.Empty<Paidi>();
+
+        IQueryable<Paidi> query = _dbContext.Paidia.Where(p => p.LastName.Contains(name)|| p.FirstName.Contains(name));
+
+        if (queryParameters.IncludeSkini)
+            query = query.Include(p => p.Skini);
+
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType? type, PaidiQueryParameters queryParameters)

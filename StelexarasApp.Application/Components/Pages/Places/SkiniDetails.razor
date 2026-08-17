@@ -57,7 +57,8 @@
     private async Task OpenPaidi(PaidiResponse context)
     {
         var parameters = new DialogParameters<EditPaidiDialog>
-        {                  { x => x.Paidi, context }
+        {                 
+            { x => x.Paidi, context }
         };
 
         var dialog = await DialogService.ShowAsync<EditPaidiDialog>("Επεξεργασία Παιδιού", parameters);

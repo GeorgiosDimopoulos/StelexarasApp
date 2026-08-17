@@ -13,10 +13,14 @@ public interface IPaidiaRepository
     Task<bool> UpdatePaidiInDb(Paidi paidi);
 
     Task<Paidi> GetPaidiByIdFromDb(int id, PaidiQueryParameters queryParameters);
+    Task<Paidi> GetPaidiByNameFromDb(string name, PaidiQueryParameters queryParameters); 
+
     Task<IEnumerable<Paidi>> GetPaidiaInSkiniFromDb(string n, PaidiQueryParameters paidiQueryParameters);
     Task<IEnumerable<Paidi>> GetPaidiaInSkiniIdFromDb(int id, PaidiQueryParameters paidiQueryParameters); 
     Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaIdFromDb(int id, PaidiQueryParameters queryParameters);
     Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaNameFromDb(string n, PaidiQueryParameters queryParameters);
     Task<IEnumerable<Paidi>> GetPaidiaInSxoliFromDb(PaidiQueryParameters queryParameters);
     Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType? type, PaidiQueryParameters queryParameters);
+
+    Task<IEnumerable<Paidi>> GetPaidiaByNameFromDb(string name, PaidiQueryParameters queryParameters); 
 }

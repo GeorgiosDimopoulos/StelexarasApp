@@ -24,6 +24,16 @@ public class PaidiaController : ControllerBase
         return Ok(paidia);
     }
 
+    [HttpGet("SearchByName/{name}")]
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> SearchPaidiaByName(string name, [FromQuery] PaidiQueryParameters paidiQueryParameters)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var paidia = await _paidiService.GetPaidiaByNameInService(name, paidiQueryParameters);
+        return Ok(paidia);
+    }
+    
     [HttpGet("Kataskinotes")]
     public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetKataskinotes([FromQuery] PaidiQueryParameters paidiQueryParameters)
     {
@@ -56,6 +66,19 @@ public class PaidiaController : ControllerBase
 
         return paidi;
     }
+
+    [HttpGet("{name}")]
+    public async Task<ActionResult<PaidiResponse>> GetPaidiByName(string name, [FromQuery] PaidiQueryParameters paidiQueryParameters)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var paidi = await _paidiService.GetPaidiByNameInService(name, paidiQueryParameters);
+        if (paidi == null)
+            return NotFound();
+
+        return paidi;
+    }    
 
     [HttpGet("Koinotita/ById/{id:int}")]
     public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaId(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)

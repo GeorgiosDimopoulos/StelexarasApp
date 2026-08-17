@@ -1,10 +1,12 @@
-﻿@using MudBlazor
-@using Microsoft.AspNetCore.Components
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor
+@using StelexarasApp.Application.ApiClients
 
 @inherits LayoutComponentBase
 
 @inject IDialogService DialogService
 @inject IJSRuntime JS
+@inject IPaidiaApi PaidiaApi
 @inject NavigationManager NavigationManager
 
 <MudThemeProvider />
@@ -19,11 +21,21 @@
             <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
                            Color="Color.Default"
                            OnClick="GoBack" />
-             <MudButton Href="/">
+            <MudButton Href="/">
                 <MudText Typo="Typo.h5" Style="color:darkred;">Κατασκηνώσεις ΤΥΠΕΤ</MudText>
             </MudButton>
             <div style="gap:12px; align-items:center; width:80vh">
-                <MudAutocomplete T="string" Label="Αναζήτηση:" Variant="Variant.Outlined" ShowProgressIndicator="true" />
+                <MudAutocomplete T="string"
+                                 Clearable="true"
+                                 Label="Αναζήτηση παιδιών:"
+                                 Variant="Variant.Outlined"
+                                 ShowProgressIndicator="true"
+                                 SearchFunc="SearchGenerally"
+                                 ValueChanged="OnPaidiSelected"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true"
+                                 CoerceValue="true"
+                                 Dense="true" />
             </div>
             <div style="display:flex; gap:12px; align-items:center;">
                 <MudMenu Label="Προσθήκη" StartIcon="@Icons.Material.Filled.Add">
@@ -44,9 +56,43 @@
 </div>
 
 @code {
-    private async Task GoBack()
+
+    private async Task<IEnumerable<string>> SearchGenerally(string value, CancellationToken token)
     {
-        await JS.InvokeVoidAsync("history.back");
+        if (string.IsNullOrEmpty(value))
+        {
+            return Enumerable.Empty<string>();
+        }
+
+        var paidia = await PaidiaApi.SearchPaidiaByName(value, new());
+
+
+        return paidia.Select(p => $"{p.FirstName} {p.LastName}");
+    }
+
+    private async Task OnPaidiSelected(string selectedName)
+    {
+        if (string.IsNullOrWhiteSpace(selectedName))
+            return;
+
+        var paidia = await PaidiaApi.SearchPaidiaByName(selectedName, new());
+        var paidi = paidia.FirstOrDefault(p => $"{p.FirstName} {p.LastName}" == selectedName);
+
+        if (paidi == null)
+            return;
+
+        var parameters = new DialogParameters<EditPaidiDialog>
+        {
+            { x => x.Paidi, paidi }
+        };
+
+        var dialog = await DialogService.ShowAsync<EditPaidiDialog>("Επεξεργασία Παιδιού", parameters);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private async Task AddPaidi()
@@ -80,5 +126,10 @@
         {
             NavigationManager.NavigateTo("/");
         }
+    }    
+    
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("history.back");
     }
 }
