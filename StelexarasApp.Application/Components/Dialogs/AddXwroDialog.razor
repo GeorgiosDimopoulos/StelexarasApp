@@ -8,9 +8,7 @@
 
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
-@inject IKoinotitesApi KoinotitesApi
-@inject ITomeisApi TomeisApi
-@inject ISkinesApi SkinesApi
+@inject IXwroiApi XwroiApi
 
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
@@ -66,8 +64,8 @@
     {
         await Task.Delay(500);
 
-        koinotites = await KoinotitesApi.GetKoinotitesAsync(new KoinotitaQueryParameters());
-        tomeis = await TomeisApi.GetTomeisAsync(new());
+        koinotites = await XwroiApi.GetKoinotitesAsync(new KoinotitaQueryParameters());
+        tomeis = await XwroiApi.GetTomeisAsync(new());
     }
 
     private void Cancel(MouseEventArgs args)
@@ -93,7 +91,7 @@
                     Sex = model.Sex
                 };
 
-                var result = await SkinesApi.PostSkini(skini);
+                var result = await XwroiApi.PostSkini(skini);
                 if (result == false)
                 {
                     Snackbar.Add("Σφάλμα κατά την αποθήκευση της σκηνής.", Severity.Error);
@@ -114,7 +112,7 @@
                     TomeasName = model.Tomeasname ?? string.Empty
                 };
 
-                var kresult = await KoinotitesApi.PostKoinotita(koinotita);
+                var kresult = await XwroiApi.PostKoinotita(koinotita);
                 if (kresult == false)
                 {
                     Snackbar.Add("Σφάλμα κατά την αποθήκευση της κοινότητας.", Severity.Error);
@@ -136,7 +134,7 @@
 
                 };
 
-                var tresult = await TomeisApi.PostTomea(tomeas);
+                var tresult = await XwroiApi.PostTomea(tomeas);
                 if (tresult == null)
                 {
                     Snackbar.Add("Σφάλμα κατά την αποθήκευση του τομέα.", Severity.Error);

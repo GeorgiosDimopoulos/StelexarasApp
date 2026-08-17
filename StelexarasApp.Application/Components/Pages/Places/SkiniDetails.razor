@@ -5,7 +5,7 @@
 @using StelexarasApp.Library.Dtos.People.Children
 @using StelexarasApp.Library.Models.Atoma
 
-@inject ISkinesApi SkinesApi
+@inject IXwroiApi XwroiApi
 @inject IPaidiaApi PaidiaApi
 @inject IStelexiApi StelexiApi
 @inject IDialogService DialogService
@@ -50,7 +50,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Skini = await SkinesApi.GetSkiniById(SkiniId, new() { IncludeStelexos = true });
+        Skini = await XwroiApi.GetSkiniById(SkiniId, new() { IncludeStelexos = true });
         Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new())).OrderBy(c => c.LastName).ToList();
     }
 

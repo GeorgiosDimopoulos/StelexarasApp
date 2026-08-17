@@ -4,8 +4,7 @@
 @using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.QueryParameters.Domi
 
-@inject ISkinesApi SkinesApi
-@inject IKoinotitesApi KoinotitesApi
+@inject IXwroiApi XwroiApi
 @inject IStelexiApi StelexiApi
 @inject IDialogService DialogService
 
@@ -54,8 +53,8 @@
     {
         try
         {
-            Koinotita = await KoinotitesApi.GetKoinotitaById(KoinotitaId, new KoinotitaQueryParameters() { IncludeStelexos = true });
-            Skines = await SkinesApi.GetSkinesByKoinotitaId(KoinotitaId, new SkiniQueryParameters() { IncludePaidia = true, IncludeStelexos = true });
+            Koinotita = await XwroiApi.GetKoinotitaById(KoinotitaId, new KoinotitaQueryParameters() { IncludeStelexos = true });
+            Skines = await XwroiApi.GetSkinesByKoinotitaId(KoinotitaId, new SkiniQueryParameters() { IncludePaidia = true, IncludeStelexos = true });
         }
         catch (Exception ex)
         {

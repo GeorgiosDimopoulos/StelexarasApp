@@ -3,7 +3,7 @@
 @using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.QueryParameters.Domi
 
-@inject IKoinotitesApi KoinotitesApi
+@inject IXwroiApi XwroiApi
 @inject IPaidiaApi PaidiaApi
 @inject IDialogService DialogService
 
@@ -49,7 +49,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Koinotites = await KoinotitesApi.GetKoinotitesAsync(new KoinotitaQueryParameters() { IncludeStelexos = true });
+        Koinotites = await XwroiApi.GetKoinotitesAsync(new KoinotitaQueryParameters() { IncludeStelexos = true });
         seAdeiaPaidia = 0;
 
         foreach (var koinotita in Koinotites)

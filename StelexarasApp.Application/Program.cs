@@ -15,11 +15,7 @@ if (string.IsNullOrEmpty(apiBaseUrl))
     throw new InvalidOperationException("ApiBaseUrl configuration is missing.");
 }
 
-builder.Services.AddRefitClient<IKoinotitesApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
-builder.Services.AddRefitClient<ITomeisApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
-builder.Services.AddRefitClient<ISkinesApi>()
+builder.Services.AddRefitClient<IXwroiApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
 builder.Services.AddRefitClient<IPaidiaApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));

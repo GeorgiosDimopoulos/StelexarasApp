@@ -9,9 +9,7 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 @inject IStelexiApi StelexiApi
-@inject IKoinotitesApi KoinotitesApi
-@inject ISkinesApi SkinesApi
-@inject ITomeisApi TomeisApi
+@inject IXwroiApi XwroiApi
 
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
@@ -65,9 +63,9 @@
     {
         await Task.Delay(200);
 
-        var skines = await SkinesApi.GetSkinesAsync(new());
-        var koinotites = await KoinotitesApi.GetKoinotitesAsync(new());
-        var tomeis = await TomeisApi.GetTomeisAsync(new());    
+        var skines = await XwroiApi.GetSkinesAsync(new());
+        var koinotites = await XwroiApi.GetKoinotitesAsync(new());
+        var tomeis = await XwroiApi.GetTomeisAsync(new());
         _xwroiNames = skines.Select(x => x.Name)
                             .Concat(koinotites.Select(x => x.Name))
                             .Concat(tomeis.Select(x => x.Name))
