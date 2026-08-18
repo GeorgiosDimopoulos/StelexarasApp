@@ -17,14 +17,14 @@
 <div class="page">
     <main>
         <div class="top-row px-4"
-             style=" height:10vh; display:flex; align-items:center; justify-content:space-between; background: linear-gradient(90deg, #e9eef1 0%, #f3f6f8 55%, #f3cccc  100%);">
+             style="height:10vh; display:flex; align-items:center; gap:10px; background:linear-gradient(90deg,#e9eef1 0%,#f3f6f8 55%,#f3cccc 100%);">
             <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
                            Color="Color.Default"
                            OnClick="GoBack" />
             <MudButton Href="/">
                 <MudText Typo="Typo.h5" Style="color:darkred;">Κατασκηνώσεις ΤΥΠΕΤ</MudText>
             </MudButton>
-            <div style="gap:12px; align-items:center; width:80vh">
+            <div style="display:flex; align-items:center; margin-left:80px; width:500px;">
                 <MudAutocomplete T="string"
                                  Clearable="true"
                                  Label="Αναζήτηση παιδιών:"
@@ -37,6 +37,13 @@
                                  CoerceText="true"
                                  CoerceValue="true"
                                  Dense="true" />
+            </div>
+            <div style="display:flex; gap:12px; align-items:center;">
+                <MudMenu Label="Άλλα στελέχη" StartIcon="@Icons.Material.Filled.Person">
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPaidi">Ανώτατα</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddStelexos">Ειδικά στελέχη</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPlace">Ομαδάρχες χώρου</MudMenuItem>
+                </MudMenu>
             </div>
             <div style="display:flex; gap:12px; align-items:center;">
                 <MudMenu Label="Προσθήκη" StartIcon="@Icons.Material.Filled.Add">

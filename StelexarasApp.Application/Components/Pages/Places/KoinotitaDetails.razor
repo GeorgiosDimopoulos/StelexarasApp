@@ -16,8 +16,7 @@
 <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
 <h2>
     Στέλεχος:
-
-    @if (Koinotita.Name.Contains("Σχολή"))
+    @if (Koinotita != null && Koinotita.Name.Contains("Σχολή"))
     {
         @foreach (var ekp in ekpaideutes)
         {
@@ -28,7 +27,9 @@
     }
     else
     {
-        <a @onclick="() => OpenStelexos(koinotarxis)" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Koinotita.KoinotarxisName</a>
+        <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos(koinotarxis))">
+            @Koinotita?.KoinotarxisName
+        </MudChip>
     }
 </h2>
 

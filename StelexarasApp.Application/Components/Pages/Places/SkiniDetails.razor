@@ -3,6 +3,7 @@
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.Dtos.People.Children
+@using StelexarasApp.Library.Dtos.People.Staff
 @using StelexarasApp.Library.Models.Atoma
 
 @inject IXwroiApi XwroiApi
@@ -14,7 +15,10 @@
 
 <h1 style="text-align:center;">@Skini.Name (@SexOfSKini(@Skini.Sex)): @Paidia.Count δύναμη</h1>
 <h2 style="padding-block-start:10px;">
-    Στέλεχος: <a @onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Skini?.OmadarxisName</a>
+    Στέλεχος:
+    <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos())">
+        @Skini?.OmadarxisName
+    </MudChip>
 </h2>
 <div style="padding:0px 30px;">
     <MudTable Items="Paidia">
@@ -72,7 +76,7 @@
 
     private async Task OpenStelexos()
     {
-        if (Skini?.OmadarxisId is null)
+        if (Skini?.OmadarxisId < 0)
             return;
 
         var omadarxis = await StelexiApi.GetStelexosById(Skini.OmadarxisId, new());
