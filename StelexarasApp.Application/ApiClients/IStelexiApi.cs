@@ -1,19 +1,24 @@
-﻿using Refit;
+﻿using Microsoft.AspNetCore.Mvc;
+using Refit;
 using StelexarasApp.Library.Dtos.People.Staff;
+using StelexarasApp.Library.Models.Atoma.Staff;
 using StelexarasApp.Library.QueryParameters.People;
 
 namespace StelexarasApp.Application.ApiClients;
 
 public interface IStelexiApi
 {
-    [Get("/Stelexi/Stelexi")]
-    Task<List<StelexosResponse>> GetStelexi([Query] StelexosQueryParameters stelexosQueryParameters);
+    [Get("/Stelexi")]
+    Task<IEnumerable<StelexosResponse>> GetStelexi([FromQuery] Thesi? thesi,[Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Get("/Stelexi/Stelexos/{name}")]
-    Task<StelexosResponse> GetStelexos(string name, [Query] StelexosQueryParameters stelexosQueryParameters);
+    Task<IEnumerable<StelexosResponse>> GetStelexiByXwro([FromQuery] string name, [Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Get("/Stelexi/Stelexos/{id}")]
     Task<StelexosResponse> GetStelexosById(int id, [Query] StelexosQueryParameters stelexosQueryParameters);
+
+    [Get("/Stelexi/Stelexos/{name}")]
+    Task<StelexosResponse> GetStelexosByName(string name, [Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Post("/Stelexi/Stelexos")]
     Task<bool> PostStelexos([Body] CreateStelexosRequest stelexosDto);

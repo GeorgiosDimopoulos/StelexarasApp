@@ -171,7 +171,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             skines = skines.Include(s => s.Omadarxis);
         }
 
-        var skini= await skines.FirstOrDefaultAsync(s => s.Id == id) ?? new Skini();
+        var skini = await skines.FirstOrDefaultAsync(s => s.Id == id) ?? new Skini();
         return skini;
     }
 
@@ -253,7 +253,10 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         {
             koinotites = koinotites.Include(k => k.Skines!.Select(sk => sk.Omadarxis));
         }
-        return await koinotites.FirstOrDefaultAsync(k => k.Id == id) ?? new Koinotita();
+        
+        var koinotita = await koinotites.FirstOrDefaultAsync(k => k.Id == id) ?? new Koinotita();
+        
+        return koinotita;
     }
 
     public async Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? tomeasQueryParameters, string name)
@@ -340,9 +343,9 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             _dbContext.Skines.Update(existingSkini);
             await _dbContext.SaveChangesAsync();
 
-            if (transaction != null)            
+            if (transaction != null)
                 await transaction.CommitAsync();
-            
+
             return true;
         }
         catch (Exception ex)

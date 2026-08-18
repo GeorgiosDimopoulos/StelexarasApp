@@ -101,15 +101,9 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
 
                     b.Property<string>("XwrosName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Tel")
-                        .IsUnique();
-
-                    b.HasIndex("XwrosName")
-                        .IsUnique();
 
                     b.ToTable("Ekpaideutes");
                 });

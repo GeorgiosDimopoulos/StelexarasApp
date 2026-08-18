@@ -154,7 +154,7 @@ public class StaffServiceTests
         ]);
 
         // Act
-        var result = await _stelexiService.GetStelexi(string.Empty, new());
+        var result = await _stelexiService.GetStelexi(Thesi.Omadarxis, new());
 
         // Assert
         Assert.NotNull(result);
@@ -184,7 +184,7 @@ public class StaffServiceTests
                    .Returns(koinotarxisDtoList);
 
         // Act
-        var result = await _stelexiService.GetStelexi(string.Empty, new());
+        var result = await _stelexiService.GetStelexi(Thesi.Koinotarxis, new());
 
         // Assert
         Assert.NotNull(result);
@@ -216,7 +216,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexi(tomeaDto.Name, new());
+        var result = await _stelexiService.GetStelexoiAnaXwroInDb(tomeaDto.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -248,7 +248,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexi(koinotita.Name, new());
+        var result = await _stelexiService.GetStelexoiAnaXwroInDb(koinotita.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -279,7 +279,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexi(tomeaDto.Name, new());
+        var result = await _stelexiService.GetStelexoiAnaXwroInDb(tomeaDto.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -376,7 +376,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexi(string.Empty, new());
+        var result = await _stelexiService.GetStelexi(Thesi.Tomearxis, new());
 
         // Assert
         Assert.Single(result);
@@ -418,7 +418,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexi(koinotita.Name, new());
+        var result = await _stelexiService.GetStelexoiAnaXwroInDb(koinotita.Name, new());
 
         // Assert
         Assert.Single(result);

@@ -25,7 +25,7 @@ public class StaffViewModel : INotifyPropertyChanged
         {
             AllStaff.Clear();
 
-            var allStaff = await _staffService.GetStelexi(string.Empty, new()
+            var allStaff = await _staffService.GetStelexi(null, new()
             {
                 IncludeXwros = true
             });
@@ -60,38 +60,38 @@ public class StaffViewModel : INotifyPropertyChanged
 
     public async Task<IEnumerable<StelexosResponse>> GetAllStaff()
     {
-        return await _staffService.GetStelexi(string.Empty, new());
+        return await _staffService.GetStelexi(null, new());
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetOmadarxesSeKoinotita(KoinotitaDtoBase koinotitaDto)
     {
-        return await _staffService.GetStelexi(koinotitaDto.Name, new());
+        return await _staffService.GetStelexoiAnaXwroInDb(koinotitaDto.Name, new());
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetAllKoinotarxes()
     {
-        return await _staffService.GetStelexi(string.Empty, new());
+        return await _staffService.GetStelexi(Thesi.Koinotarxis, new());
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetAllOmadarxes()
     {
-        return await _staffService.GetStelexi(string.Empty, new());
+        return await _staffService.GetStelexi(Thesi.Omadarxis, new());
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetAllTomearxes()
     {
-        return await _staffService.GetStelexi(string.Empty, new());
+        return await _staffService.GetStelexi(Thesi.Tomearxis, new());
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetOmadarxesSeTomea(TomeasDtoBase tomeasDto)
     {
-        return await _staffService.GetStelexi(tomeasDto.Name, new());
+        return await _staffService.GetStelexoiAnaXwroInDb(tomeasDto.Name, new());
 
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetKoinotarxesSeTomea(TomeasDtoBase tomeasDto)
     {
-        return await _staffService.GetStelexi(tomeasDto.Name, new());
+        return await _staffService.GetStelexoiAnaXwroInDb(tomeasDto.Name, new());
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

@@ -16,6 +16,45 @@ public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosR
         _stelexiRepository = stelexiRepository;
     }
 
+    public async Task<IEnumerable<StelexosResponse>> GetStelexi(Thesi? thesi, StelexosQueryParameters? stelexosQueryParameters)
+    {
+        var stelexosInDb = await _stelexiRepository.GetStelexiInDb(thesi, stelexosQueryParameters);
+        if (stelexosInDb is null)
+            return null!;
+        var stelexosInService = _mapper.Map<IEnumerable<StelexosResponse>>(stelexosInDb);
+        return stelexosInService;
+    }
+        
+    public async Task<IEnumerable<StelexosResponse>> GetStelexoiAnaXwroInDb(string? xwros, StelexosQueryParameters? stelexosQueryParameters)
+    {
+        var stelexosInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(xwros, stelexosQueryParameters);
+        if (stelexosInDb is null)
+            return null!;
+        var stelexosInService = _mapper.Map<IEnumerable<StelexosResponse>>(stelexosInDb);
+        return stelexosInService;
+    }
+
+    public async Task<StelexosResponse> GetStelexosById(int id, StelexosQueryParameters stelexosQueryParameters)
+    {
+        var stelexosInDb = await _stelexiRepository.GetStelexosByIdInDb(id);
+        if (stelexosInDb is null)
+            return null!;
+
+        var stelexosInService = _mapper.Map<StelexosResponse>(stelexosInDb);
+        return stelexosInService;
+    }
+
+    public async Task<StelexosResponse> GetStelexosByName(string n, StelexosQueryParameters stelexosQueryParameters)
+    {
+        var stelexosInDb = await _stelexiRepository.GetStelexosByNameInDb(n, stelexosQueryParameters);
+        if (stelexosInDb is null)
+            return null!;
+
+        var stelexosInService = _mapper.Map<StelexosResponse>(stelexosInDb);
+        return stelexosInService;
+    }
+
+
     public async Task<bool> CreateStelexos(CreateStelexosRequest stelexosDto)
     {
         try
@@ -69,35 +108,6 @@ public class StaffService : IStaffService<CreateStelexosRequest, UpdateStelexosR
     public async Task<bool> DeleteStelexos(int id)
     {
         return await _stelexiRepository.DeleteStelexosInDb(id);
-    }
-
-    public async Task<IEnumerable<StelexosResponse>> GetStelexi(string? xwros, StelexosQueryParameters? stelexosQueryParameters)
-    {
-        var stelexosInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(xwros, stelexosQueryParameters);
-        if (stelexosInDb is null)
-            return null!;
-        var stelexosInService = _mapper.Map<IEnumerable<StelexosResponse>>(stelexosInDb);
-        return stelexosInService;
-    }
-
-    public async Task<StelexosResponse> GetStelexosById(int id, StelexosQueryParameters stelexosQueryParameters)
-    {
-        var stelexosInDb = await _stelexiRepository.GetStelexosByIdInDb(id);
-        if (stelexosInDb is null)
-            return null!;
-
-        var stelexosInService = _mapper.Map<StelexosResponse>(stelexosInDb);
-        return stelexosInService;
-    }
-
-    public async Task<StelexosResponse> GetStelexosByName(string n, StelexosQueryParameters stelexosQueryParameters)
-    {
-        var stelexosInDb = await _stelexiRepository.GetStelexosByNameInDb(n, stelexosQueryParameters);
-        if (stelexosInDb is null)
-            return null!;
-
-        var stelexosInService = _mapper.Map<StelexosResponse>(stelexosInDb);
-        return stelexosInService;
     }
 
     public async Task<bool> UpdateStelexos(int id, UpdateStelexosRequest entity)

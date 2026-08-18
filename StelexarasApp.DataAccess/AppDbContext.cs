@@ -75,12 +75,6 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Omadarxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Koinotarxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Tomearxis>().HasIndex(k => k.Tel).IsUnique();
-        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.Tel).IsUnique();
-
-        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.XwrosName).IsUnique();
-        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.XwrosName).IsUnique();
-        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.XwrosName).IsUnique();
-        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.XwrosName).IsUnique();
 
         modelBuilder.Entity<Omadarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Koinotarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);

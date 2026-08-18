@@ -2,7 +2,10 @@
 
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
+@using StelexarasApp.Library.Dtos.People.Staff
+@using StelexarasApp.Library.Models.Atoma.Staff
 @using StelexarasApp.Library.QueryParameters.Domi
+@using StelexarasApp.Library.QueryParameters.People
 
 @inject IXwroiApi XwroiApi
 @inject IStelexiApi StelexiApi
@@ -12,7 +15,21 @@
 
 <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
 <h2>
-    Στέλεχος: <a @onclick="OpenStelexos" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Koinotita?.KoinotarxisName</a>
+    Στέλεχος:
+
+    @if (Koinotita.Name.Contains("Σχολή"))
+    {
+        @foreach (var ekp in ekpaideutes)
+        {
+            <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos(ekp))">
+                @ekp.FirstName @ekp.LastName
+            </MudChip>
+        }
+    }
+    else
+    {
+        <a @onclick="() => OpenStelexos(koinotarxis)" style="color:#606C69; text-decoration:underline; cursor:pointer;">@Koinotita.KoinotarxisName</a>
+    }
 </h2>
 
 <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
@@ -45,8 +62,11 @@
     [Parameter]
     public int KoinotitaId { get; set; }
 
-    public KoinotitaResponse Koinotita { get; set; } = default!;
     private string? errorMessage;
+    public KoinotitaResponse Koinotita { get; set; } = default!;
+
+    private StelexosResponse koinotarxis { get; set; } = new StelexosResponse();
+    private IEnumerable<StelexosResponse> ekpaideutes { get; set; } = new List<StelexosResponse>();
     private List<SkiniResponse> Skines { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
@@ -55,25 +75,40 @@
         {
             Koinotita = await XwroiApi.GetKoinotitaById(KoinotitaId, new KoinotitaQueryParameters() { IncludeStelexos = true });
             Skines = await XwroiApi.GetSkinesByKoinotitaId(KoinotitaId, new SkiniQueryParameters() { IncludePaidia = true, IncludeStelexos = true });
+
+            if (Koinotita.Name.Contains("Σχολή"))
+            {
+                ekpaideutes = await StelexiApi.GetStelexi(Thesi.Ekpaideutis, new StelexosQueryParameters());
+                Koinotita.KoinotarxisName = ekpaideutes.Count() > 0
+                    ? string.Join(", ", ekpaideutes.Select(e => $"{e.FirstName} {e.LastName}"))
+                    : "Δεν υπάρχουν εκπαιδευτές";
+            }
+            else if (Koinotita.KoinotarxisId > 0)
+            {
+                koinotarxis = await StelexiApi.GetStelexosById(Koinotita.KoinotarxisId, new() { IncludeXwros = true });
+                Koinotita.KoinotarxisName = koinotarxis is not null
+                    ? $"{koinotarxis.FirstName} {koinotarxis.LastName}"
+                    : "Δεν υπάρχει στέλεχος";
+            }
+            else
+            {
+                Koinotita.KoinotarxisName = "Δεν υπάρχει στέλεχος";
+            }
         }
         catch (Exception ex)
         {
-            errorMessage = $"Failed to load skines: {ex.Message}";
+            errorMessage = $"Failed to load kointotia or a field of it: {ex.Message}";
         }
     }
-            
-    private async Task OpenStelexos()
-    {
-        if (Koinotita?.KoinotarxisId is null)
-            return;
 
-        var koinotarxis = await StelexiApi.GetStelexosById(Koinotita.KoinotarxisId, new());
-        if (koinotarxis is null)
+    private async Task OpenStelexos(StelexosResponse stelexos)
+    {
+        if (stelexos is null || stelexos.Id <= 0)
             return;
 
         var parameters = new DialogParameters<EditStelexosDialog>
         {
-            { x => x.Stelexos, koinotarxis }
+            { x => x.Stelexos, stelexos }
         };
 
         var dialog = await DialogService.ShowAsync<EditStelexosDialog>("Επεξεργασία Στελέχους", parameters);
@@ -81,7 +116,7 @@
         var result = await dialog.Result;
         if (result is not null && !result.Canceled)
         {
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
     }
 }
