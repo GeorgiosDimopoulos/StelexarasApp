@@ -1,34 +1,61 @@
 ﻿@page "/organogram"
+@using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.People.Staff
+@using StelexarasApp.Library.Models.Atoma.Staff
+
+@inject IStelexiApi StelexiApi
 
 <div class="organogram">
-    <MudGrid Justify="Justify.Center" Spacing="4">
-        <MudItem xs="12">
-
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12" sm="5">
+            <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">@tomearxisA.LastName @tomearxisA.FirstName</MudText>
+                    <MudText Typo="Typo.subtitle2">@tomearxisA.XwrosName</MudText>
+                    <MudText Typo="Typo.subtitle2">@tomearxisA.Tel</MudText>
+                </MudCardContent>
+            </MudCard>
         </MudItem>
-        <MudGrid Justify="Justify.Center">
-            <MudItem xs="12" sm="5">
-                <!-- Tomearxis A -->
-            </MudItem>
-
-            <MudItem xs="12" sm="5">
-                <!-- Tomearxis B -->
-            </MudItem>
-        </MudGrid>        
+        <MudItem xs="12" sm="5">
+            <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">@tomearxisB.LastName @tomearxisB.FirstName</MudText>
+                    <MudText Typo="Typo.subtitle2">@tomearxisB.XwrosName</MudText>
+                    <MudText Typo="Typo.subtitle2">@tomearxisB.Tel</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Justify="Justify.Center" Spacing="2">
         @foreach (var koinotarxis in koinotarxes)
         {
-            <MudItem xs="12" sm="6" md="2">
-                <!-- Koinotarxis card -->
+            <MudItem xs="12" sm="6" md="1" Class="pa-1">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">@koinotarxis.LastName @koinotarxis.FirstName</MudText>
+                        <MudText Typo="Typo.subtitle2">@koinotarxis.XwrosName</MudText>
+                        <MudText Typo="Typo.subtitle2">@koinotarxis.Tel</MudText>
+                    </MudCardContent>
+                </MudCard>
             </MudItem>
-        }        
+        }
     </MudGrid>
 </div>
 
-@code{
-    private IEnumerable<StelexosResponse> koinotarxes;
+@code {
+    private IEnumerable<StelexosResponse> koinotarxes = new List<StelexosResponse>();
+    private StelexosResponse tomearxisA = new StelexosResponse();
+    private StelexosResponse tomearxisB = new StelexosResponse();
+    private IEnumerable<StelexosResponse> uparxhgoi = new List<StelexosResponse>();
 
     protected override async Task OnInitializedAsync()
     {
-        
+        koinotarxes = await StelexiApi.GetStelexi(Thesi.Koinotarxis, new());
+
+        var tomearxes = await StelexiApi.GetStelexi(Thesi.Tomearxis, new());
+        tomearxisA = tomearxes.FirstOrDefault(t => t.XwrosName.Equals("A")) ?? new StelexosResponse();
+        tomearxisB = tomearxes.FirstOrDefault(t => t.XwrosName.Equals("B")) ?? new StelexosResponse();
+
+        uparxhgoi = await StelexiApi.GetStelexi(Thesi.Anwtatos, new());
     }
 }

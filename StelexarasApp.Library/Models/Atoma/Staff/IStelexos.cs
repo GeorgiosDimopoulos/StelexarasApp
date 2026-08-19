@@ -24,4 +24,7 @@ public enum Thesi
     
     [Display(Name = "Εκπαιδευτής")] 
     Ekpaideutis = 4,
+
+    [Display(Name = "Ανώτατος")] // arxhgos and uparxhgoi
+    Anwtatos = 4,
 }
