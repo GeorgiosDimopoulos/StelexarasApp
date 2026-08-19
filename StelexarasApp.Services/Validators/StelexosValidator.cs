@@ -15,8 +15,7 @@ public class StelexosValidator : AbstractValidator<StelexosDtoBase>
             .Length(2, 50);
 
         RuleFor(x => x.XwrosName)
-            .NotEmpty()
-            .Length(2, 50);
+            .NotEmpty();
 
         RuleFor(x => x.Age)
             .GreaterThan(18);

@@ -17,20 +17,25 @@
 <div class="page">
     <main>
         <div class="top-row px-4"
-             style="height:10vh; display:flex; align-items:center; gap:10px; background:linear-gradient(90deg,#e9eef1 0%,#f3f6f8 55%,#f3cccc 100%);">
-            <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
-                           Color="Color.Default"
-                           OnClick="GoBack" />
-            <MudButton Href="/">
-                <MudText Typo="Typo.h5" Style="color:darkred;">Κατασκηνώσεις ΤΥΠΕΤ</MudText>
-            </MudButton>
-            <div style="display:flex; align-items:center; margin-left:80px; width:500px;">
-                <MudAutocomplete T="string"
+             style="height:10vh; display:flex; align-items:center; gap:10px; background:linear-gradient(90deg,#e9eef1 0%,#f3f6f8 55%,#f3cccc 100%)">
+
+            <div style="display:flex; align-items:center;">
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
+                               Color="Color.Default"
+                               OnClick="GoBack" />
+                <MudButton Href="/">
+                    <MudText Typo="Typo.h5" Style="color:darkred;">Κατασκηνώσεις ΤΥΠΕΤ</MudText>
+                </MudButton>
+            </div>
+
+            <div style="flex:1; display:flex; justify-content:center;position:absolute;left:50%;
+                transform:translateX(-50%);">
+                <MudAutocomplete style="width:400px" T="string"
                                  Clearable="true"
                                  Label="Αναζήτηση παιδιών:"
                                  Variant="Variant.Outlined"
                                  ShowProgressIndicator="true"
-                                 Value="_selectedPaidiName" 
+                                 Value="_selectedPaidiName"
                                  SearchFunc="SearchGenerally"
                                  ValueChanged="OnPaidiSelected"
                                  ResetValueOnEmptyText="true"
@@ -38,14 +43,12 @@
                                  CoerceValue="true"
                                  Dense="true" />
             </div>
-            <div style="display:flex; gap:12px; align-items:center;">
+            <div style="display:flex; align-items:center; gap:12px;margin-left:auto;">
                 <MudMenu Label="Άλλα στελέχη" StartIcon="@Icons.Material.Filled.Person">
-                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPaidi">Ανώτατα</MudMenuItem>
-                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddStelexos">Ειδικά στελέχη</MudMenuItem>
-                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPlace">Ομαδάρχες χώρου</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="OpenStelexos">Ανώτατα</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="OpenStelexos">Ειδικά στελέχη</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="OpenStelexos">Ομαδάρχες χώρου</MudMenuItem>
                 </MudMenu>
-            </div>
-            <div style="display:flex; gap:12px; align-items:center;">
                 <MudMenu Label="Προσθήκη" StartIcon="@Icons.Material.Filled.Add">
                     <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPaidi">Προσθήκη παιδιού</MudMenuItem>
                     <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddStelexos">Προσθήκη στελέχους</MudMenuItem>
@@ -96,7 +99,7 @@
             { x => x.Paidi, paidi }
         };
 
-        await DialogService.ShowAsync<EditPaidiDialog>("Επεξεργασία Παιδιού", parameters);        
+        await DialogService.ShowAsync<EditPaidiDialog>("Επεξεργασία Παιδιού", parameters);
     }
 
     private async Task AddPaidi()
@@ -130,8 +133,12 @@
         {
             NavigationManager.NavigateTo("/");
         }
-    }    
-    
+    }
+
+    private async Task OpenStelexos()
+    {
+    }
+
     private async Task GoBack()
     {
         await JS.InvokeVoidAsync("history.back");
