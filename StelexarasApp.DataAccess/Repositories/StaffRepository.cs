@@ -32,6 +32,10 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                     var ekpaideutes = await _dbContext.Ekpaideutes.AsNoTracking().ToListAsync();
                     stelexi.AddRange(ekpaideutes);
                     break;
+                case Thesi.Anwtatos:
+                    var anotata = await _dbContext.Anwtata.AsNoTracking().ToListAsync();
+                    stelexi.AddRange(anotata);
+                    break;
                 case null:
                 case Thesi.None:
                 default:

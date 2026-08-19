@@ -69,6 +69,48 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.ToTable("Paidia");
                 });
 
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Anwtatos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tel")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Thesi")
+                        .HasColumnType("int");
+
+                    b.Property<string>("XwrosName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Tel")
+                        .IsUnique();
+
+                    b.ToTable("Anwtata");
+                });
+
             modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Ekpaideutis", b =>
                 {
                     b.Property<int>("Id")
@@ -104,6 +146,9 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Tel")
+                        .IsUnique();
 
                     b.ToTable("Ekpaideutes");
                 });

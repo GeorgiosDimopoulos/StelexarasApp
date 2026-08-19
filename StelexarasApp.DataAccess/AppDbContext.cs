@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public virtual DbSet<Koinotarxis> Koinotarxes { get; set; }
     public virtual DbSet<Tomearxis> Tomearxes { get; set; }
     public DbSet<Ekpaideutis> Ekpaideutes { get; set; }
+    public DbSet<Anwtatos> Anwtata { get; set; }
     public DbSet<Paidi> Paidia { get; set; }
 
     public DbSet<Koinotita> Koinotites { get; set; }
@@ -75,11 +76,14 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Omadarxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Koinotarxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Tomearxis>().HasIndex(k => k.Tel).IsUnique();
+        modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.Tel).IsUnique();
+        modelBuilder.Entity<Anwtatos>().HasIndex(k => k.Tel).IsUnique();
 
         modelBuilder.Entity<Omadarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Koinotarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Tomearxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Ekpaideutis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
+        modelBuilder.Entity<Anwtatos>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
 
         modelBuilder.Entity<Paidi>().Property(o => o.Sex).IsRequired();
         modelBuilder.Entity<Paidi>().Property(o => o.PaidiType).IsRequired();
