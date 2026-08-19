@@ -1,0 +1,34 @@
+﻿@page "/organogram"
+@using StelexarasApp.Library.Dtos.People.Staff
+
+<div class="organogram">
+    <MudGrid Justify="Justify.Center" Spacing="4">
+        <MudItem xs="12">
+
+        </MudItem>
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="12" sm="5">
+                <!-- Tomearxis A -->
+            </MudItem>
+
+            <MudItem xs="12" sm="5">
+                <!-- Tomearxis B -->
+            </MudItem>
+        </MudGrid>        
+        @foreach (var koinotarxis in koinotarxes)
+        {
+            <MudItem xs="12" sm="6" md="2">
+                <!-- Koinotarxis card -->
+            </MudItem>
+        }        
+    </MudGrid>
+</div>
+
+@code{
+    private IEnumerable<StelexosResponse> koinotarxes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+}

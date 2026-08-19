@@ -45,9 +45,9 @@
             </div>
             <div style="display:flex; align-items:center; gap:12px;margin-left:auto;">
                 <MudMenu Label="Άλλα στελέχη" StartIcon="@Icons.Material.Filled.Person">
-                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="OpenStelexos">Ανώτατα</MudMenuItem>
-                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="OpenStelexos">Ειδικά στελέχη</MudMenuItem>
-                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="OpenStelexos">Ομαδάρχες χώρου</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" Href="/organogram">Οργανόγραμμα</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" Href="/specialStaff">Ειδικά στελέχη</MudMenuItem>
+                    <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" Href="/omadarxesXwrou">Ομαδάρχες χώρου</MudMenuItem>
                 </MudMenu>
                 <MudMenu Label="Προσθήκη" StartIcon="@Icons.Material.Filled.Add">
                     <MudMenuItem StartIcon="@Icons.Material.Filled.ChildCare" OnClick="AddPaidi">Προσθήκη παιδιού</MudMenuItem>
@@ -133,10 +133,6 @@
         {
             NavigationManager.NavigateTo("/");
         }
-    }
-
-    private async Task OpenStelexos()
-    {
     }
 
     private async Task GoBack()
