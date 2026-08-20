@@ -6,6 +6,8 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 @inject IPaidiaApi PaidiaApi
+@inject IXwroiApi XwroiApi
+@inject IDialogService DialogService
 
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
@@ -14,12 +16,22 @@
             <MudTextField @bind-Value="PaidiToEdit.LastName" Label="Επώνυμο" />
             <MudNumericField @bind-Value="PaidiToEdit.Age" Label="Ηλικία" />
             <MudNumericField @bind-Value="PaidiToEdit.ParentPhone" Label="Τηλέφωνο" />
-            <MudTextField @bind-Value="PaidiToEdit.SkiniName" Label="Σκηνή" />
+            @* <MudTextField @bind-Value="PaidiToEdit.SkiniName" Label="Σκηνή" /> *@
+            <MudAutocomplete T="string"
+                             Label="Χώρος"
+                             @bind-Value="PaidiToEdit.SkiniName"
+                             SearchFunc="SearchXwroi"
+                             Clearable="true"
+                             ResetValueOnEmptyText="true"
+                             CoerceText="true"
+                             CoerceValue="true"
+                             Dense="true" />
             <MudSwitch @bind-Value="PaidiToEdit.SeAdeia" Label="Σε αδεια;" />
             <MudSwitch @bind-Value="PaidiToEdit.Sex" Label="Φύλο" />
         </MudForm>
     </DialogContent>
     <DialogActions>
+        <MudButton Color="Color.Error" Variant="Variant.Text" OnClick="Delete">ΔΙΑΓΡΑΦΗ</MudButton>
         <MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Ακύρωση</MudButton>
         <MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Αποθήκευση</MudButton>
     </DialogActions>
@@ -27,11 +39,12 @@
 
 @code {
     private PaidiResponse PaidiToEdit = new();
+    private List<string> _xwroiNames = new();
 
     [Parameter] public PaidiResponse Paidi { get; set; } = default!;
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
-    protected override void OnParametersSet()
+    protected async override void OnParametersSet()
     {
         PaidiToEdit = new PaidiResponse()
         {
@@ -42,11 +55,38 @@
             LastName = Paidi.LastName,
             ParentPhone = Paidi.ParentPhone
         };
+
+        var skines = await XwroiApi.GetSkinesAsync(new());
+        _xwroiNames = skines.Select(x => x.Name)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToList();
     }
 
     private void Cancel(MouseEventArgs args)
     {
         Dialog.Cancel();
+    }
+
+    private async Task Delete()
+    {
+        string confirmationMessage = "Είστε σίγουροι ότι θέλετε να διαγράψετε το παιδί; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
+        bool? confirmed = await DialogService.ShowMessageBox("Επιβεβαίωση Διαγραφής", confirmationMessage, yesText: "Ναι", noText: "Όχι");
+
+        if (confirmed != true)
+            return;
+
+        var result = await PaidiaApi.DeletePaidi(Paidi.Id);
+
+        if (result)
+        {
+            Snackbar.Add("Το παιδί διαγράφηκε επιτυχώς.", Severity.Success);
+            Dialog?.Close(DialogResult.Ok("delete"));
+        }
+        else
+        {
+            Snackbar.Add("Σφάλμα κατά τη διαγραφή του παιδιού.", Severity.Error);
+        }
     }
 
     private async Task Save(MouseEventArgs _)
@@ -74,4 +114,39 @@
             Snackbar.Add("Αποτυχία ενημέρωσης του παιδιού.", Severity.Error);
         }
     }
+
+    // private async Task ChangeSkini()
+    // {
+    //     var skines = await XwroiApi.GetSkinesAsync(new(){});
+    //     if (skines == null || skines.Count == 0)
+    //     {
+    //         Snackbar.Add("Δεν υπάρχουν διαθέσιμες σκηνές για αλλαγή.", Severity.Warning);
+    //         return;
+    //     }
+        
+    //     var parameters = new DialogParameters
+    //     {
+    //         { "Skines", skines },
+    //         { "CurrentSkini", PaidiToEdit.SkiniName }
+    //     };
+        
+    //     var dialog = DialogService.Show<ChangeSkiniDialog>("Αλλαγή Σκηνής", parameters);
+    //     var result = await dialog.Result;
+    //     if (!result.Cancelled)
+    //     {
+    //         PaidiToEdit.SkiniName = result.Data.ToString();
+    //     }
+    // }
+
+    private Task<IEnumerable<string>> SearchXwroi(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return Task.FromResult(_xwroiNames.AsEnumerable());
+        }
+
+        var xwroi = _xwroiNames.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        return Task.FromResult(xwroi);
+    }
+
 }

@@ -42,18 +42,6 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                     break;
             }
 
-            //var omadarxes = await GetOmadarxesAnaXwro(null, queryParameters as OmadarxisQueryParameters);
-            //stelexi.AddRange(omadarxes);
-
-            //var koinotarxes = await GetKoinotarxesAnaXwro(null, queryParameters as KoinotarxisQueryParameters);
-            //stelexi.AddRange(koinotarxes);
-
-            //var tomearxes = await GetTomearxes(queryParameters as TomearxisQueryParameters);
-            //stelexi.AddRange(tomearxes);
-
-            //var ekpaideutes = await _dbContext.Ekpaideutes.AsNoTracking().ToListAsync();
-            //stelexi.AddRange(ekpaideutes);
-
             return stelexi;
         }
         catch (Exception ex)
@@ -148,6 +136,9 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             var tomearxis = await _dbContext.Tomearxes.FindAsync(id);
             if (tomearxis != null)
                 _dbContext.Tomearxes.Remove(tomearxis);
+            var ekpaideutis = await _dbContext.Ekpaideutes.FindAsync(id);
+            if (ekpaideutis != null)
+                _dbContext.Ekpaideutes.Remove(ekpaideutis);
 
             var changes = await _dbContext.SaveChangesAsync();
             if (transaction != null)

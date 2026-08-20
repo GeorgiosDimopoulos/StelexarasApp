@@ -202,7 +202,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
                 return false;
             }
 
-            if (existingSkini.Sex is null || existingSkini.Paidia.Count == 0)
+            if (existingSkini.Sex is null)
             {
                 existingSkini.Sex = paidi.Sex;
             }

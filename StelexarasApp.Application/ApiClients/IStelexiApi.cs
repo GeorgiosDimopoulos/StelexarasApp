@@ -9,7 +9,7 @@ namespace StelexarasApp.Application.ApiClients;
 public interface IStelexiApi
 {
     [Get("/Stelexi")]
-    Task<IEnumerable<StelexosResponse>> GetStelexi([FromQuery] Thesi? thesi,[Query] StelexosQueryParameters stelexosQueryParameters);
+    Task<IEnumerable<StelexosResponse>> GetStelexi([FromQuery] Thesi? thesi, [Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Get("/Stelexi/Stelexos/{name}")]
     Task<IEnumerable<StelexosResponse>> GetStelexiByXwro([FromQuery] string name, [Query] StelexosQueryParameters stelexosQueryParameters);
@@ -23,8 +23,8 @@ public interface IStelexiApi
     [Post("/Stelexi/Stelexos")]
     Task<bool> PostStelexos([Body] CreateStelexosRequest stelexosDto);
 
-    [Delete("/Stelexi/Stelexos/{id}")]
-    Task<bool> DeleteStelexos(int id);
+    [Delete("/Stelexi/Stelexos")]
+    Task<bool> DeleteStelexos([Query] int id);
 
     [Put("/Stelexi/Stelexos/{id}")]
     Task<bool> UpdateStelexos(int id, [Body] UpdateStelexosRequest stelexosDto);
