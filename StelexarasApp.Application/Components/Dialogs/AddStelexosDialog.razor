@@ -34,15 +34,18 @@
                     </MudSelectItem>
                 }
             </MudSelect>
-            <MudAutocomplete T="string"
-                             Label="Χώρος"
-                             @bind-Value="req.XwrosName"
-                             SearchFunc="SearchXwroi"
-                             Clearable="true"
-                             ResetValueOnEmptyText="true"
-                             CoerceText="true"
-                             CoerceValue="true"
-                             Dense="true" />
+            @if (req.Thesi != Thesi.Anwtatos)
+            {
+                <MudAutocomplete T="string"
+                                 Label="Χώρος"
+                                 @bind-Value="req.XwrosName"
+                                 SearchFunc="SearchXwroi"
+                                 Clearable="true"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true"
+                                 CoerceValue="true"
+                                 Dense="true" />
+            }            
             <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" />
         </MudForm>
     </DialogContent>

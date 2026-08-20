@@ -4,8 +4,9 @@
 @inherits ComponentBase
 
 @inject ISnackbar Snackbar
-@inject NavigationManager Navigation
 @inject IStelexiApi StelexiApi
+@inject IDialogService DialogService
+@inject NavigationManager Navigation
 
 <MudDialog MaxWidth="MaxWidth.Large" Style="width:400px" FullWidth="true">
     <DialogContent>
@@ -18,6 +19,7 @@
         </MudForm>
     </DialogContent>
     <DialogActions>
+        <MudButton Color="Color.Error" Variant="Variant.Text" OnClick="Delete">ΔΙΑΓΡΑΦΗ</MudButton>
         <MudButton Color="Color.Primary" Variant=" Variant.Text" OnClick="Cancel">Ακύρωση</MudButton>
         <MudButton Color="Color.Primary" Variant=" Variant.Filled" OnClick="Save">Αποθήκευση</MudButton>
     </DialogActions>
@@ -69,6 +71,27 @@
         else
         {
             Snackbar.Add("Αποτυχία ενημέρωσης του στελέχους.", Severity.Error);
+        }
+    }
+
+    private async Task Delete()
+    {
+        string confirmationMessage = "Είστε σίγουροι ότι θέλετε να διαγράψετε το στέλεχος; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
+        bool? confirmed = await DialogService.ShowMessageBox("Επιβεβαίωση Διαγραφής", confirmationMessage, yesText: "Ναι", noText: "Όχι");
+
+        if (confirmed != true)
+            return;
+
+        var result = await StelexiApi.DeleteStelexos(Stelexos.Id);
+
+        if (result)
+        {
+            Snackbar.Add("Το στέλεχος διαγράφηκε επιτυχώς.", Severity.Success);
+            Dialog?.Close(DialogResult.Ok("delete"));
+        }
+        else
+        {
+            Snackbar.Add("Σφάλμα κατά τη διαγραφή του στελέχους.", Severity.Error);
         }
     }
 }

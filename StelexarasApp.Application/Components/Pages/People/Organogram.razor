@@ -4,11 +4,31 @@
 @using StelexarasApp.Library.Models.Atoma.Staff
 
 @inject IStelexiApi StelexiApi
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
 
 <div class="organogram">
-    <MudGrid Justify="Justify.Center">
+    <MudText style="text-align:center; text-decoration:underline" Class="mt-6">ΥΠΑΡΧΗΓΟΙ</MudText>
+    <MudGrid Justify="Justify.Center" Class="mb-20">
         <MudItem xs="12" sm="5">
-            <MudCard>
+            @foreach (var uparxhgos in uparxhgoi)
+            {
+                <MudItem xs="12" sm="6" md="1" Class="pa-1">
+                    <MudCard onclick="@(() => OpenStelexos(uparxhgos))" Style="cursor:pointer; transition:0.2s;">
+                        <MudCardContent>
+                            <MudText Typo="Typo.h6">@uparxhgos.LastName @uparxhgos.FirstName</MudText>
+                            <MudText Typo="Typo.subtitle2">@uparxhgos.XwrosName</MudText>
+                            <MudText Typo="Typo.subtitle2">@uparxhgos.Tel</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudItem>
+    </MudGrid>
+    <MudText style="text-align:center; text-decoration:underline" Class="mb-6">ΤΟΜΕΑΡΧΕΣ</MudText>
+    <MudGrid Justify="Justify.Center" Class="mb-20">
+        <MudItem xs="12" sm="5">
+            <MudCard onclick="@(() => OpenStelexos(tomearxisA))" Style="cursor:pointer; transition:0.2s;">
                 <MudCardContent>
                     <MudText Typo="Typo.h6">@tomearxisA.LastName @tomearxisA.FirstName</MudText>
                     <MudText Typo="Typo.subtitle2">@tomearxisA.XwrosName</MudText>
@@ -17,7 +37,7 @@
             </MudCard>
         </MudItem>
         <MudItem xs="12" sm="5">
-            <MudCard>
+            <MudCard onclick="@(() => OpenStelexos(tomearxisB))" Style="cursor:pointer; transition:0.2s;">
                 <MudCardContent>
                     <MudText Typo="Typo.h6">@tomearxisB.LastName @tomearxisB.FirstName</MudText>
                     <MudText Typo="Typo.subtitle2">@tomearxisB.XwrosName</MudText>
@@ -26,11 +46,12 @@
             </MudCard>
         </MudItem>
     </MudGrid>
+    <MudText style="text-align:center; text-decoration:underline" Class="mb-6">ΚΟΙΝΟΤΑΡΧΕΣ</MudText>
     <MudGrid Justify="Justify.Center" Spacing="2">
         @foreach (var koinotarxis in koinotarxes)
         {
             <MudItem xs="12" sm="6" md="1" Class="pa-1">
-                <MudCard>
+                <MudCard onclick="@(() => OpenStelexos(koinotarxis))" Style="cursor:pointer; transition:0.2s;">
                     <MudCardContent>
                         <MudText Typo="Typo.h6">@koinotarxis.LastName @koinotarxis.FirstName</MudText>
                         <MudText Typo="Typo.subtitle2">@koinotarxis.XwrosName</MudText>
@@ -57,5 +78,24 @@
         tomearxisB = tomearxes.FirstOrDefault(t => t.XwrosName.Equals("B")) ?? new StelexosResponse();
 
         uparxhgoi = await StelexiApi.GetStelexi(Thesi.Anwtatos, new());
+    }
+
+    private async Task OpenStelexos(StelexosResponse stelexos)
+    {
+        if (stelexos is null || stelexos.Id <= 0)
+            return;
+
+        var parameters = new DialogParameters<EditStelexosDialog>
+        {
+            { x => x.Stelexos, stelexos }
+        };
+
+        var dialog = await DialogService.ShowAsync<EditStelexosDialog>("Επεξεργασία Στελέχους", parameters);
+
+        var result = await dialog.Result;
+        if (result is not null && !result.Canceled)
+        {
+            Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        }
     }
 }

@@ -23,8 +23,8 @@ public interface IStelexiApi
     [Post("/Stelexi/Stelexos")]
     Task<bool> PostStelexos([Body] CreateStelexosRequest stelexosDto);
 
-    [Delete("/Stelexi/Stelexos/{name}")]
-    Task<bool> DeleteStelexos(string name);
+    [Delete("/Stelexi/Stelexos/{id}")]
+    Task<bool> DeleteStelexos(int id);
 
     [Put("/Stelexi/Stelexos/{id}")]
     Task<bool> UpdateStelexos(int id, [Body] UpdateStelexosRequest stelexosDto);
