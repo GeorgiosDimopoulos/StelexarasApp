@@ -10,16 +10,12 @@ public class AnwtatoiXwroiController(ITeamsService teamsService) : ControllerBas
     private readonly ITeamsService _teamsService = teamsService;
 
     /// <remarks>
-    /// To get the koinotarxes,just IncludeStelexos
+    /// To get the anwtatoi/leaders,just IncludeStelexos
     /// </remarks>
-    [HttpGet("AnwatatoiXwroi")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<string>>> GetAnwtatoiXwroi()
     {
         var result = await _teamsService.GetAnwtatoiXwroi();
-
-        if (result is null)
-            return NotFound();
-        return Ok(result);
+        return Ok(result ?? []);
     }
-
 }

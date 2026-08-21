@@ -62,8 +62,9 @@ public interface IXwroiApi
     [Get("/Tomeis/Tomea/{name}")]
     Task<TomeasResponse> GetTomea(string name, [Query] TomeasQueryParameters tomeasQueryParameters);
 
-    [Get("/AnwatatoiXwroi")]
+    [Get("/AnwtatoiXwroi")]
     Task<List<string>> GetAnwtatoiXwroiAsync();
+
 
     [Post("/Tomeis/Tomea")]
     Task<TomeasResponse> PostTomea([Query] CreateTomeasRequest tomeasDto);
