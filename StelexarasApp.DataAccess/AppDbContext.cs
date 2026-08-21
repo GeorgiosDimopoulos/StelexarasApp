@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<Koinotita> Koinotites { get; set; }
     public DbSet<Skini> Skines { get; set; }
     public DbSet<Tomeas> Tomeis { get; set; }
+    public DbSet<AnwtatosXwros> AnwtatosXwroi { get; set; }    
 
     public string? ConnectionString { get; set; }
 
@@ -72,6 +73,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Koinotita>().HasIndex(k => k.Name).IsUnique();
         modelBuilder.Entity<Tomeas>().HasIndex(k => k.Name).IsUnique();
         modelBuilder.Entity<Duty>().HasIndex(k => k.Name).IsUnique();
+        modelBuilder.Entity<AnwtatosXwros>().HasIndex(k => k.Name).IsUnique(); 
 
         modelBuilder.Entity<Omadarxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Koinotarxis>().HasIndex(k => k.Tel).IsUnique();

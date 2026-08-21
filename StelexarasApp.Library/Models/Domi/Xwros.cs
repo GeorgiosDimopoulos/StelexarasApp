@@ -14,6 +14,8 @@ namespace StelexarasApp.Library.Models.Domi
     {
         Skini = 0,
         Koinotita = 1,
-        Tomeas = 2
+        Tomeas = 2,
+        Sxoli = 3,
+        Anwtatos = 4
     }
 }

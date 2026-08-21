@@ -282,6 +282,23 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         return await tomeis.FirstOrDefaultAsync(t => t.Name == name) ?? new Tomeas();
     }
 
+    public async Task<IEnumerable<string>> GetAnwtatoiXwroiInDb()
+    {
+        try
+        {
+            var kataskinwsh = "Κατασκήνωση";
+            var sxoli = "Σχολή";
+
+            var anwtatoiXwroi = new List<string> { kataskinwsh, sxoli };
+            return anwtatoiXwroi;
+        }
+        catch (Exception ex)
+        {
+            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
+            return null!;
+        }
+    }
+
     public async Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";

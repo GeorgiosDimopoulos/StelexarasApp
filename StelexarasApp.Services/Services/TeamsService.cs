@@ -170,6 +170,12 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return _mapper.Map<TomeasResponse>(tomeasInDb);
     }
 
+    public async Task<IEnumerable<string>> GetAnwtatoiXwroi()
+    {
+        var anwtatoiXwroiInDb = await _teamsRepository.GetAnwtatoiXwroiInDb();
+        return anwtatoiXwroiInDb;
+    }
+
     public async Task<bool> AddTomeasInService(CreateTomeasRequest tomeasDto)
     {
         try

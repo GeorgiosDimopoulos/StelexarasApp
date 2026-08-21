@@ -26,6 +26,8 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
         Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(KoinotitaQueryParameters? parameters, int tomeaId);
         Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb(SkiniQueryParameters? parameters);
 
+        Task<IEnumerable<string>> GetAnwtatoiXwroiInDb();
+
         Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita);
         Task<bool> UpdateSkiniInDb(int id, Skini skini);
         Task<bool> UpdateTomeasInDb(string id, Tomeas tomeas);

@@ -31,4 +31,6 @@ public interface ITeamsService
 
     Task<IEnumerable<TomeasResponse>> GetAllTomeisInService(TomeasQueryParameters tomeasQueryParameters);
     Task<TomeasResponse> GetTomeaByNameInService(TomeasQueryParameters? tomeasQueryParameters, string name);
+
+    Task<IEnumerable<string>> GetAnwtatoiXwroi();
 }

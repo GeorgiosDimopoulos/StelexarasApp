@@ -289,6 +289,31 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.ToTable("Tomearxes");
                 });
 
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.AnwtatosXwros", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AnwtatosId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnwtatosId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AnwtatosXwroi");
+                });
+
             modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Koinotita", b =>
                 {
                     b.Property<int>("Id")
@@ -455,6 +480,15 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", null)
                         .WithMany("Omadarxes")
                         .HasForeignKey("KoinotarxisId");
+                });
+
+            modelBuilder.Entity("StelexarasApp.Library.Models.Domi.AnwtatosXwros", b =>
+                {
+                    b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Anwtatos", "Anwtatos")
+                        .WithMany()
+                        .HasForeignKey("AnwtatosId");
+
+                    b.Navigation("Anwtatos");
                 });
 
             modelBuilder.Entity("StelexarasApp.Library.Models.Domi.Koinotita", b =>

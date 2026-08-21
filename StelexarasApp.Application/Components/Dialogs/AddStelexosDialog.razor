@@ -34,18 +34,15 @@
                     </MudSelectItem>
                 }
             </MudSelect>
-            @if (req.Thesi != Thesi.Anwtatos)
-            {
-                <MudAutocomplete T="string"
-                                 Label="Χώρος"
-                                 @bind-Value="req.XwrosName"
-                                 SearchFunc="SearchXwroi"
-                                 Clearable="true"
-                                 ResetValueOnEmptyText="true"
-                                 CoerceText="true"
-                                 CoerceValue="true"
-                                 Dense="true" />
-            }            
+            <MudAutocomplete T="string"
+                             Label="Χώρος"
+                             @bind-Value="req.XwrosName"
+                             SearchFunc="SearchXwroi"
+                             Clearable="true"
+                             ResetValueOnEmptyText="true"
+                             CoerceText="true"
+                             CoerceValue="true"
+                             Dense="true" />
             <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" />
         </MudForm>
     </DialogContent>
@@ -69,9 +66,12 @@
         var skines = await XwroiApi.GetSkinesAsync(new());
         var koinotites = await XwroiApi.GetKoinotitesAsync(new());
         var tomeis = await XwroiApi.GetTomeisAsync(new());
+        var anwtatoiXwroi = await XwroiApi.GetAnwtatoiXwroiAsync();
+
         _xwroiNames = skines.Select(x => x.Name)
                             .Concat(koinotites.Select(x => x.Name))
                             .Concat(tomeis.Select(x => x.Name))
+                            .Concat(anwtatoiXwroi)
                             .Distinct()
                             .OrderBy(x => x)
                             .ToList();
@@ -84,12 +84,6 @@
 
     private async Task Save(MouseEventArgs _)
     {
-        if (IsSomethingMissing())
-        {
-            Snackbar.Add("Σφάλμα κατά την αποθήκευση, παρακαλώ συμπληρώστε όλα τα πεδία.", Severity.Error);
-            return;
-        }
-
         var newStelexosRequest = new CreateStelexosRequest
         {
             FirstName = req.FirstName,
@@ -120,17 +114,6 @@
         }
     }
 
-    private bool IsSomethingMissing(CreateStelexosRequest newStelexosRequest)
-    {
-        return string.IsNullOrWhiteSpace(newStelexosRequest.FirstName) ||
-               string.IsNullOrWhiteSpace(newStelexosRequest.LastName) ||
-               newStelexosRequest.Age <= 0 ||
-               (newStelexosRequest.Sex != Sex.Female && newStelexosRequest.Sex != Sex.Male) ||
-               string.IsNullOrWhiteSpace(newStelexosRequest.Tel) ||
-               string.IsNullOrWhiteSpace(newStelexosRequest.XwrosName) ||
-               (newStelexosRequest.Thesi != Thesi.Omadarxis && newStelexosRequest.Thesi != Thesi.Koinotarxis && newStelexosRequest.Thesi != Thesi.Tomearxis && newStelexosRequest.Thesi != Thesi.Ekpaideutis);
-    }
-
     private string GetDisplayName(Enum sex)
     {
         var member = sex.GetType().GetMember(sex.ToString()).First();
@@ -149,14 +132,15 @@
         return Task.FromResult(xwroi);
     }
 
-    private bool IsSomethingMissing()
+    
+    private bool IsSomethingMissing(CreateStelexosRequest request)
     {
-        return string.IsNullOrWhiteSpace(req.LastName) ||
-               string.IsNullOrWhiteSpace(req.XwrosName) ||
-               string.IsNullOrWhiteSpace(req.XwrosName) ||
-               string.IsNullOrWhiteSpace(req.Tel) ||
-               string.IsNullOrWhiteSpace(req.Age.ToString()) ||
-               (req.Thesi != Thesi.Omadarxis && req.Thesi != Thesi.Koinotarxis && req.Thesi != Thesi.Tomearxis && req.Thesi != Thesi.Ekpaideutis) ||
-               (req.Sex != Sex.Female && req.Sex != Sex.Male);
+        return string.IsNullOrWhiteSpace(request.FirstName) ||
+               string.IsNullOrWhiteSpace(request.LastName) ||
+               request.Age <= 0 ||
+               (request.Sex != Sex.Female && request.Sex != Sex.Male) ||
+               string.IsNullOrWhiteSpace(request.Tel) ||
+               string.IsNullOrWhiteSpace(request.XwrosName) ||
+               (request.Thesi != Thesi.Anwtatos && request.Thesi != Thesi.Omadarxis && request.Thesi != Thesi.Koinotarxis && request.Thesi != Thesi.Tomearxis && request.Thesi != Thesi.Ekpaideutis);
     }
 }
