@@ -34,8 +34,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped<ITeamsRepository, TeamsRepository>();
 
-        services.AddScoped<IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>, PaidiaService>();
-        services.AddScoped<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse>, StaffService>();
+        services.AddScoped<IPaidiaService>();
+        services.AddScoped<IStaffService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<IDutyService, DutyService>();

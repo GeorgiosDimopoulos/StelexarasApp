@@ -17,8 +17,6 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetAllKoinotitesInService(koinotitaQueryParameters);
 
-        if (result is null)
-            return NotFound();
         return Ok(result);
     }
 
@@ -30,10 +28,10 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetKoinotitaByNameInService(koinotitaQueryParameters, name);
 
-        if (result is null)
-            return NotFound();
+        if (result.IsFailed)
+            return NotFound(result.Errors.First().Message);
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     /// <remarks>
@@ -44,10 +42,10 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetKoinotitaByIdInService(id, koinotitaQueryParameters);
 
-        if (result is null)
-            return NotFound();
+        if (result.IsFailed)
+            return NotFound(result.Errors.First().Message);
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     /// <remarks>
@@ -59,8 +57,6 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetKoinotitesAnaTomeaInService(koinotitaQueryParameters, tomeaId);
 
-        if (result is null)
-            return NotFound();
         return Ok(result);
     }
 
@@ -74,33 +70,33 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.AddKoinotitaInService(koinotitaDto);
 
-        if (!result)
-            return NotFound();
+        if (!result.IsSuccess)
+            return BadRequest(result.Errors.Select(e => e.Message));
 
-        return Ok(result);
+        return Ok();
     }
 
     [Authorize]
     [HttpDelete("Koinotita/{id}")]
-    public async Task<IActionResult> DeleteKoinotita(int id)
+    public async Task<ActionResult> DeleteKoinotita(int id)
     {
         var result = await _teamsService.DeleteKoinotitaInService(id);
 
-        if (!result)
-            return NotFound();
+        if (!result.IsSuccess)
+            return NotFound(result.Errors.Select(e => e.Message));
 
-        return Ok(result);
+        return Ok();
     }
 
     [Authorize]
     [HttpPut("Koinotita/{id}")]
-    public async Task<IActionResult> PutKoinotita(int id, [FromQuery] UpdateKoinotitaRequest koinotitaDto)
+    public async Task<ActionResult> PutKoinotita(int id, [FromQuery] UpdateKoinotitaRequest koinotitaDto)
     {
         var result = await _teamsService.UpdateKoinotitaInService(id, koinotitaDto);
 
-        if (!result)
-            return NotFound();
+        if (!result.IsSuccess)
+            return NotFound(result.Errors.Select(e => e.Message));
 
-        return Ok(result);
+        return Ok();
     }
 }

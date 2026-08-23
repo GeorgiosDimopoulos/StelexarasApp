@@ -7,9 +7,9 @@ namespace StelexarasApp.API.Controllers.PeopleControllers;
 [Route("[controller]")]
 public class PaidiaController : ControllerBase
 {
-    private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiService;
+    private readonly IPaidiaService _paidiService;
 
-    public PaidiaController(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiService)
+    public PaidiaController(IPaidiaService paidiService)
     {
         _paidiService = paidiService;
     }
@@ -60,11 +60,11 @@ public class PaidiaController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var paidi = await _paidiService.GetPaidiByIdInService(id, paidiQueryParameters);
-        if (paidi == null)
-            return NotFound();
+        var result = await _paidiService.GetPaidiByIdInService(id, paidiQueryParameters);
+        if (result.IsFailed)
+            return NotFound(result.Errors.First().Message);
 
-        return paidi;
+        return result.Value;
     }
 
     [HttpGet("{name}")]
@@ -73,37 +73,37 @@ public class PaidiaController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var paidi = await _paidiService.GetPaidiByNameInService(name, paidiQueryParameters);
-        if (paidi == null)
-            return NotFound();
+        var result = await _paidiService.GetPaidiByNameInService(name, paidiQueryParameters);
+        if (result.IsFailed)
+            return NotFound(result.Errors.First().Message);
 
-        return paidi;
+        return result.Value;
     }    
 
     [HttpGet("Koinotita/ById/{id:int}")]
-    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaId(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidiaByKoinotitaId(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
-            return null!;
+            return BadRequest(ModelState);
 
         var paidia = await _paidiService.GetPaidiaByKoinotitaIdInService(id, paidiQueryParameters);
         if (paidia == null)
-            return null!;
+            return NotFound();
 
-        return paidia;
+        return Ok(paidia);
     }
 
     [HttpGet("Koinotita/ByName/{name}")]
-    public async Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaName(string name, [FromQuery] PaidiQueryParameters paidiQueryParameters)
+    public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidiaByKoinotitaName(string name, [FromQuery] PaidiQueryParameters paidiQueryParameters)
     {
         if (!ModelState.IsValid)
-            return null!;
+            return BadRequest(ModelState);
 
         var paidia = await _paidiService.GetPaidiaByKoinotitaNameInService(name, paidiQueryParameters);
         if (paidia == null)
-            return null!;
+            return NotFound();
 
-        return paidia;
+        return Ok(paidia);
     }
 
     [HttpGet("BySkiniId/{id:int}")]
@@ -118,42 +118,43 @@ public class PaidiaController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<bool> PostPaidi([FromBody] CreatePaidiRequest createPaidiRequest)
+    public async Task<ActionResult> PostPaidi([FromBody] CreatePaidiRequest createPaidiRequest)
     {
         if (!ModelState.IsValid)
-            return false;
+            return BadRequest(ModelState);
+
 
         var result = await _paidiService.CreatePaidiInService(createPaidiRequest);
 
-        if (result)
-            return true;
+        if (result.IsFailed)
+            return BadRequest(result.Errors.Select(e => e.Message));
 
-        return false;
+        return Ok();
     }
 
     [Authorize]
     [HttpPut("{id:int}")]
-    public async Task<bool> UpdatePaidi(int id, [FromBody] UpdatePaidiRequest request)
+    public async Task<ActionResult> UpdatePaidi(int id, [FromBody] UpdatePaidiRequest request)
     {
         request.Id = id;
         var result = await _paidiService.UpdatePaidiInService(request);
 
-        if (!result)
-            return false;
+        if (!result.IsSuccess)
+            return BadRequest(result.Errors.Select(e => e.Message));
 
-        return true;
+        return Ok();
     }
 
     [Authorize]
     [HttpDelete("{id:int}")]
-    public async Task<bool> DeletePaidi(int id)
+    public async Task<ActionResult> DeletePaidi(int id)
     {
         if (!ModelState.IsValid)
-            return false;
+            return BadRequest();
 
         var result = await _paidiService.DeletePaidiInService(id);
-        if (!result)
-            return false;
-        return true;
+        if (result.IsSuccess == false)
+            return BadRequest(result.Errors.Select(e => e.Message));
+        return Ok();
     }
 }

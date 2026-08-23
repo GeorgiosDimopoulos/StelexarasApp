@@ -25,7 +25,6 @@
 		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />
 		<PackageReference Include="AutoMapper" Version="16.2.0" />
-		<PackageReference Include="FluentResults" Version="4.0.0" />
 		<PackageReference Include="FluentValidation" Version="12.1.1" />
 		<PackageReference Include="IdentityModel" Version="5.2.0" />
 		<PackageReference Include="KubernetesClient" Version="19.0.2" />

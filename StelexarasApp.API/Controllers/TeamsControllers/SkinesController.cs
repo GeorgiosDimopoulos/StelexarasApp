@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Refit;
 
 namespace StelexarasApp.API.Controllers.TeamsControllers;
 
@@ -14,9 +13,6 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetAllSkinesInService(skinQueryParameters);
 
-        if (result is null)
-            return NotFound();
-
         return Ok(result);
     }
 
@@ -25,10 +21,10 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetSkiniByIdInService(parameters, id);
 
-        if (result is null)
-            return NotFound();
+        if (result.IsFailed)
+            return NotFound(result.Errors.Select(e => e.Message));
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [HttpGet("Skini/{name}")]
@@ -36,10 +32,10 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetSkiniByNameInService(parameters, name);
 
-        if (result is null)
-            return NotFound();
+        if (result.IsFailed)
+            return NotFound(result.Errors.Select(e => e.Message));
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [HttpGet("Skines/ByKoinotitaName/{koinotitaName}")]
@@ -47,8 +43,6 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetSkinesAnaKoinotitaNameInService(skiniQueryParameters, koinotitaName);
 
-        if (result is null)
-            return NotFound();
         return Ok(result);
     }
 
@@ -58,8 +52,6 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetSkinesAnaKoinotitaIdInService(skiniQueryParameters, koinotitaId);
 
-        if (result is null)
-            return NotFound();
         return Ok(result);
     }
 
@@ -68,42 +60,39 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetSkinesEkpaideuomenonInService(new());
 
-        if (result is null)
-            return NotFound();
-
         return Ok(result);
     }
 
     [HttpPost("Skini")]
-    public async Task<bool> PostSkini([FromBody] CreateSkiniRequest skiniDto)
+    public async Task<ActionResult> PostSkini([FromBody] CreateSkiniRequest skiniDto)
     {
         var result = await _teamsService.AddSkiniInService(skiniDto);
 
-        if (!result)
-            return false;
+        if (!result.IsSuccess)
+            return BadRequest(result.Errors.Select(e => e.Message));
 
-        return true;
+        return Ok();
     }
 
     [HttpPut("Skini/{id}")]
-    public async Task<bool> PutSkini(int id, [FromQuery] UpdateSkiniRequest skiniDto)
+    public async Task<ActionResult> PutSkini(int id, [FromQuery] UpdateSkiniRequest skiniDto)
     {
         var result = await _teamsService.UpdateSkiniInService(id, skiniDto);
 
-        if (!result)
-            return false;
+        if (!result.IsSuccess)
+            return BadRequest(result.Errors.Select(e => e.Message));
 
-        return true;
+        return Ok();
     }
 
     [HttpDelete("Skini/{id}")]
-    public async Task<bool> DeleteSkini(int id)
+    public async Task<ActionResult> DeleteSkini(int id)
     {
         var result = await _teamsService.DeleteSkiniInService(id);
 
-        if (!result)
-            return false;
+        if (!result.IsSuccess)
+            return BadRequest(result.Errors.Select(e => e.Message));
 
-        return true;
+        return Ok();
     }
 }

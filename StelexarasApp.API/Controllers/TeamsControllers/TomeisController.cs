@@ -17,8 +17,6 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetAllTomeisInService(queryParameters);
 
-        if (result is null)
-            return NotFound();
         return Ok(result);
     }
 
@@ -30,43 +28,44 @@ public class TomeisController(ITeamsService teamsService) : ControllerBase
     {
         var result = await _teamsService.GetTomeaByNameInService(queryParameters, name);
 
-        if (result is null)
-            return NotFound();
-        return Ok(result);
+        if (result.IsFailed)
+            return NotFound(result.Errors.Select(e => e.Message));
+
+        return Ok(result.Value);
     }
 
     [Authorize]
     [HttpPost("Tomea")]
-    public async Task<ActionResult<CreateTomeasRequest>> PostTomea([FromQuery] CreateTomeasRequest tomeasDto)
+    public async Task<ActionResult> PostTomea([FromBody] CreateTomeasRequest tomeasDto)
     {
         var result = await _teamsService.AddTomeasInService(tomeasDto);
 
-        if (!result)
-            return NotFound();
+        if (!result.IsSuccess)
+            return BadRequest(result.Errors.Select(e => e.Message));
 
-        return Ok(result);
+        return Ok();
     }
 
     [Authorize]
     [HttpDelete("Tomea/{name}")]
-    public async Task<IActionResult> DeleteTomea(string name)
+    public async Task<ActionResult> DeleteTomea(string name)
     {
         var result = await _teamsService.DeleteTomeasInService(name);
 
-        if (!result)
-            return NotFound();
+        if (!result.IsSuccess)
+            return BadRequest(result.Errors.Select(e => e.Message));
 
-        return Ok(result);
+        return Ok();
     }
 
     [Authorize]
     [HttpPut("Tomea/{name}")]
-    public async Task<IActionResult> PutTomea(string name, [FromQuery] UpdateTomeasRequest tomeasDto)
+    public async Task<ActionResult> PutTomea(string name, [FromQuery] UpdateTomeasRequest tomeasDto)
     {
         var result = await _teamsService.UpdateTomeaInService(name, tomeasDto);
 
-        if (!result)
-            return StatusCode(500, "An error occurred while updating the Tomea.");
-        return Ok(result);
+        if (!result.IsSuccess)
+            return BadRequest(result.Errors.Select(e => e.Message));
+        return Ok();
     }
 }
