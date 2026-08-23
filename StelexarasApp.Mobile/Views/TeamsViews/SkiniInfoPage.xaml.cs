@@ -5,9 +5,9 @@ namespace StelexarasApp.Mobile.Views.TeamsViews;
 public partial class SkiniInfoPage : ContentPage
 {
     private readonly SkiniViewModel _skiniViewModel;
-    private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+    private readonly IPaidiaService _paidiaService;
 
-    public SkiniInfoPage(SkiniResponse skini, IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, IMapper mapper)
+    public SkiniInfoPage(SkiniResponse skini, IPaidiaService paidiaService, IMapper mapper)
     {
         InitializeComponent();
 

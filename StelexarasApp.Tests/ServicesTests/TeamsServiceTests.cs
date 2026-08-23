@@ -27,7 +27,7 @@ public class TeamsServiceTests
         var result = await _teamsService.AddSkiniInService(team);
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         _mockdteamsRepository.Verify(m => m.AddSkiniInDb(It.IsAny<Skini>()), Times.Once);
     }
 
@@ -42,7 +42,7 @@ public class TeamsServiceTests
         var result = await _teamsService.DeleteSkiniInService(team.Id);
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
@@ -155,7 +155,7 @@ public class TeamsServiceTests
         var result = await _teamsService.UpdateSkiniInService(1, team);
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
@@ -169,6 +169,6 @@ public class TeamsServiceTests
         var result = await _teamsService.UpdateSkiniInService(1, team);
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
     }
 }

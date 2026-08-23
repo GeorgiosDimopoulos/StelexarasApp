@@ -2,14 +2,14 @@
 {
     public partial class PaidiaPage : ContentPage
     {
-        private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _peopleService;
+        private readonly IPaidiaService _paidiService;
         private readonly PaidiaViewModel paidiaViewModel;
 
-        public PaidiaPage(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService)
+        public PaidiaPage(IPaidiaService paidiService)
         {
             InitializeComponent();
-            _peopleService = peopleService;
-            BindingContext = paidiaViewModel = new PaidiaViewModel(_peopleService);
+            _paidiService = paidiService;
+            BindingContext = paidiaViewModel = new PaidiaViewModel(_paidiService);
         }
 
         private void OnPaidiSelected(object sender, SelectionChangedEventArgs e)

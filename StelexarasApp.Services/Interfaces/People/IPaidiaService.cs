@@ -1,17 +1,21 @@
-﻿namespace StelexarasApp.Services.Interfaces.People;
+﻿using FluentResults;
 
-public interface IPaidiaService<TCreate, TUpdate, TResponse>
+namespace StelexarasApp.Services.Interfaces.People;
+
+public interface IPaidiaService
 {
-    Task<bool> CreatePaidiInService(TCreate request);
-    Task<bool> UpdatePaidiInService(TUpdate request);
-    Task<bool> DeletePaidiInService(int id);
-    Task<TResponse> GetPaidiByIdInService(int id, PaidiQueryParameters paidiQueryParameters);
-    Task<TResponse> GetPaidiByNameInService(string name, PaidiQueryParameters paidiQueryParameters);
-    Task<IEnumerable<TResponse>> GetPaidiaInService(PaidiType? paidiType, PaidiQueryParameters paidiQueryParameters);
-    Task<IEnumerable<TResponse>> GetPaidiaBySkiniInService(string skini, PaidiQueryParameters paidiQueryParameters);
-    Task<IEnumerable<TResponse>> GetPaidiaBySkiniIdInService(int skiniId, PaidiQueryParameters paidiQueryParameters);
-    Task<IEnumerable<TResponse>> GetPaidiaByKoinotitaNameInService(string koinotita, PaidiQueryParameters paidiQueryParameters);
-    Task<IEnumerable<TResponse>> GetPaidiaByKoinotitaIdInService(int id, PaidiQueryParameters paidiQueryParameters);
-    Task<IEnumerable<TResponse>> GetPaidiaBySxoliInService(PaidiQueryParameters paidiQueryParameters);
-    Task<IEnumerable<TResponse>> GetPaidiaByNameInService(string name, PaidiQueryParameters paidiQueryParameters);
+    Task<Result<PaidiResponse>> GetPaidiByIdInService(int id, PaidiQueryParameters paidiQueryParameters);
+    Task<Result<PaidiResponse>> GetPaidiByNameInService(string name, PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<PaidiResponse>> GetPaidiaInService(PaidiType? paidiType, PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniInService(string skini, PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniIdInService(int skiniId, PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaNameInService(string koinotita, PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<PaidiResponse>> GetPaidiaByKoinotitaIdInService(int id, PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<PaidiResponse>> GetPaidiaBySxoliInService(PaidiQueryParameters paidiQueryParameters);
+    Task<IEnumerable<PaidiResponse>> GetPaidiaByNameInService(string name, PaidiQueryParameters paidiQueryParameters);
+
+    Task<Result> CreatePaidiInService(CreatePaidiRequest request);
+    Task<Result> UpdatePaidiInService(UpdatePaidiRequest request);
+    Task<Result> DeletePaidiInService(int id);
+    Task<Result> MovePaidiToNewSkiniInService(int paidiId, int skiniId);
 }

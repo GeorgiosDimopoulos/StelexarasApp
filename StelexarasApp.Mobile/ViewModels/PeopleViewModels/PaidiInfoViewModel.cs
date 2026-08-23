@@ -5,14 +5,14 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 {
     public class PaidiInfoViewModel : INotifyPropertyChanged
     {
-        private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+        private readonly IPaidiaService _paidiaService;
         private ICommand SavePaidiCommand { get; }
 
         public PaidiResponse PaidiDto { get; set; } = new PaidiResponse();
         public string SkiniName { get; set; }
         public string StatusMessage { get; set; } = string.Empty;
 
-        public PaidiInfoViewModel(PaidiResponse paidiDto, IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService, string skini)
+        public PaidiInfoViewModel(PaidiResponse paidiDto, IPaidiaService peopleService, string skini)
         {
             PaidiDto = paidiDto;
             _paidiaService = peopleService;
@@ -22,14 +22,15 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 
         public async Task<bool> DeletePaidiAsync(int id)
         {
-            if (await _paidiaService.DeletePaidiInService(id))
+            var result = await _paidiaService.DeletePaidiInService(id);
+            if (result.IsSuccess)
             {
                 StatusMessage = "Delete successful";
                 return true;
             }
             else
             {
-                StatusMessage = "Delete failed";
+                StatusMessage = result.Errors.FirstOrDefault()?.Message ?? "Delete failed";
                 return false;
             }
         }
@@ -43,21 +44,20 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
                 Id = PaidiDto.Id,
                 FirstName = PaidiDto.FirstName,
                 Sex = PaidiDto.Sex,
-                LastName= PaidiDto.LastName,
+                LastName = PaidiDto.LastName,
                 Age = PaidiDto.Age,
                 SkiniName = SkiniName
             };
             var result = await _paidiaService.UpdatePaidiInService(paidiToUpdate);
-            StatusMessage = result ? "Save successful" : "Save failed";
-
-            if (result)
+            if (!result.IsSuccess)
             {
-                OnPropertyChanged(nameof(SkiniName));
-                OnPropertyChanged(nameof(PaidiDto));
-                return true;
+                StatusMessage = result.Errors.FirstOrDefault()?.Message ?? "Save failed";
+                return false;
             }
-
-            return false;
+            StatusMessage = "Save successful";
+            OnPropertyChanged(nameof(SkiniName));
+            OnPropertyChanged(nameof(PaidiDto));
+            return true;
         }
 
         protected void OnPropertyChanged(string propertyName)

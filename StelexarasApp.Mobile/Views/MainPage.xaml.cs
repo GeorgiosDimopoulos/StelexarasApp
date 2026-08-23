@@ -6,8 +6,8 @@ namespace StelexarasApp.Mobile.Views;
 public partial class MainPage : ContentPage
 {
     private readonly IExpenseService _expenseService;
-    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _staffService;
-    private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+    private readonly IStaffService _staffService;
+    private readonly IPaidiaService _paidiaService;
     private readonly IDutyService _dutiesService;
     private readonly ITeamsService _teamsService;
     private readonly SignalrService _signalRService;
@@ -17,8 +17,8 @@ public partial class MainPage : ContentPage
 
     public MainPage(
         IDutyService dutyService,
-        IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> staffService,
-        IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService,
+        IStaffService staffService,
+        IPaidiaService paidiaService,
         ITeamsService teamsService,
         IExpenseService expenseService,
         SignalrService signalRService,

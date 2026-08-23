@@ -202,10 +202,18 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
                 return false;
             }
 
+
+            if (existingSkini.OmadarxisId == null || existingSkini.OmadarxisId < 0) 
+            {
+                _logger.LogWarning("Skini has no Omadarxis");
+                return false;
+            }
+
             if (existingSkini.Sex is null)
             {
                 existingSkini.Sex = paidi.Sex;
             }
+
             else if (existingSkini.Sex != paidi.Sex)
             {
                 _logger.LogWarning("Skini has different sex");

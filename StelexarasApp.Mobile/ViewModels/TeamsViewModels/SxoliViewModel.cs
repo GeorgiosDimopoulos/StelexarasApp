@@ -6,14 +6,14 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
     public class SxoliViewModel : INotifyPropertyChanged
     {
         private readonly ITeamsService _teamsService;
-        private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+        private readonly IPaidiaService _paidiaService;
         public List<string> SkinesNames { get; set; }
 
-        public SxoliViewModel(ITeamsService teamsService, IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService)
+        public SxoliViewModel(ITeamsService teamsService, IPaidiaService paidiaService)
         {
             _teamsService = teamsService;
             _paidiaService = paidiaService;
-            SkinesNames = [];
+            SkinesNames = new List<string>();
             LoadSkinesKoinotitas();
         }
 
@@ -35,7 +35,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
         {
             var result = await _paidiaService.CreatePaidiInService(request);
 
-            if (result)
+            if (result.IsSuccess)
             {
                 OnPropertyChanged(nameof(SkinesNames));
                 return true;

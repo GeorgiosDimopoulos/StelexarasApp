@@ -9,7 +9,7 @@ namespace StelexarasApp.Tests.ServicesTests;
 public class StaffServiceTests
 {
     private readonly Mock<IStaffRepository> _mockStelexiRepository;
-    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _stelexiService;
+    private readonly IStaffService _stelexiService;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<IValidator<StelexosDtoBase>> _stelexosValidator;
 
@@ -131,8 +131,8 @@ public class StaffServiceTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(name.Split(' ')[1], result.LastName);
-        Assert.Equal(name.Split(' ')[0], result.FirstName);
+        Assert.Equal(name.Split(' ')[1], result.Value.LastName);
+        Assert.Equal(name.Split(' ')[0], result.Value.FirstName);
 
         _mockStelexiRepository.Verify(r => r.GetStelexosByNameInDb(name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<StelexosResponse>(stelexos), Times.Once);
@@ -216,7 +216,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexoiAnaXwroInDb(tomeaDto.Name, new());
+        var result = await _stelexiService.GetStelexoiAnaXwro(tomeaDto.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -248,7 +248,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexoiAnaXwroInDb(koinotita.Name, new());
+        var result = await _stelexiService.GetStelexoiAnaXwro(koinotita.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -279,7 +279,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexoiAnaXwroInDb(tomeaDto.Name, new());
+        var result = await _stelexiService.GetStelexoiAnaXwro(tomeaDto.Name, new());
 
         // Assert
         Assert.NotNull(result);
@@ -298,7 +298,7 @@ public class StaffServiceTests
 
         // Act & Assert
         var rest = await _stelexiService.CreateStelexos(omadarxisDto);
-        Assert.False(rest);
+        Assert.True(rest.IsFailed);
     }
 
     [Fact]
@@ -336,7 +336,7 @@ public class StaffServiceTests
         var result = await _stelexiService.CreateStelexos(omadarxisDto);
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         _mockMapper.Verify(m => m.Map<Omadarxis>(omadarxisDto), Times.Once);
         _mockStelexiRepository.Verify(r => r.AddStelexosInDb(omadarxis), Times.Once);
     }
@@ -353,7 +353,7 @@ public class StaffServiceTests
         var result = await _stelexiService.DeleteStelexos(id);
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         _mockStelexiRepository.Verify(r => r.DeleteStelexosInDb(id), Times.Once);
     }
 
@@ -418,7 +418,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexoiAnaXwroInDb(koinotita.Name, new());
+        var result = await _stelexiService.GetStelexoiAnaXwro(koinotita.Name, new());
 
         // Assert
         Assert.Single(result);
@@ -453,7 +453,7 @@ public class StaffServiceTests
         var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(id, newSkini.Name);
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Name), Times.Once);
     }
 
@@ -483,7 +483,7 @@ public class StaffServiceTests
         var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(omadarxisId, newSkiniName);
 
         // Assert
-        Assert.False(result);
+        Assert.False(result.IsSuccess);
         _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName), Times.Once);
     }
 
@@ -611,17 +611,17 @@ public class StaffServiceTests
                    .Returns(stelexos);
 
         _stelexosValidator.Setup(v => v.ValidateAsync(It.IsAny<StelexosDtoBase>(), default))
-                          .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+                          .ReturnsAsync(new ValidationResult());
 
         // Act
         var additionResult = await _stelexiService.CreateStelexos(createStelexosRequest);
 
-        Assert.True(additionResult);
+        Assert.True(additionResult.IsSuccess);
 
         var updateResult = await _stelexiService.UpdateStelexos(id, updateStelexosRequest);
 
         // Assert
-        Assert.True(updateResult);
+        Assert.True(updateResult.IsSuccess);
         _mockStelexiRepository.Verify(r => r.UpdateStelexosInDb(id, stelexos), Times.Once);
 
         _mockMapper.Verify(m => m.Map<IStelexos>(createStelexosRequest), Times.Once);

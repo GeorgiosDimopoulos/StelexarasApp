@@ -2,11 +2,11 @@
 
 public partial class StaffPage : ContentPage
 {
-    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _personalService;
+    private readonly IStaffService _personalService;
     private readonly ITeamsService _teamsService;
     private readonly StaffViewModel _personalViewModel;
 
-    public StaffPage(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> personalService, ITeamsService teamsService, StaffViewModel personalViewModel)
+    public StaffPage(IStaffService personalService, ITeamsService teamsService, StaffViewModel personalViewModel)
     {
         _personalService = personalService;
         _teamsService = teamsService;
@@ -19,7 +19,7 @@ public partial class StaffPage : ContentPage
     {
         if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
         {
-            var staffService = DependencyService.Get<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse>>();
+            var staffService = DependencyService.Get<IStaffService>();
             int stelexosId = (e.CurrentSelection[0] as IStelexos)!.Id;
             var selectedWorkerDto = e.CurrentSelection[0] as StelexosDtoBase;
             if (selectedWorkerDto != null)

@@ -8,11 +8,11 @@ public partial class GeneralTeamsPage : ContentPage
     private readonly TomeasViewModel _tomeas1ViewModel;
     private readonly KoinotitaViewModel _koinotitaViewModel;
     private readonly SxoliViewModel _sxoliViewModel;
-    private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+    private readonly IPaidiaService _paidiaService;
     private readonly ITeamsService _teamsService;
     private readonly IPageFactory pageFactory;
 
-    public GeneralTeamsPage(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService, IPageFactory pageFactory)
+    public GeneralTeamsPage(IPaidiaService paidiaService, ITeamsService teamsService, IPageFactory pageFactory)
     {
         InitializeComponent();
         _paidiaService = paidiaService ?? throw new ArgumentNullException(nameof(paidiaService));
@@ -27,7 +27,8 @@ public partial class GeneralTeamsPage : ContentPage
 
     private async Task<TomeasDtoBase> GetTomea(int num)
     {
-        return await _teamsService.GetTomeaByNameInService(new(), num.ToString());
+        var result = await _teamsService.GetTomeaByNameInService(new(), num.ToString());
+        return result.Value;
     }
 
     private async void TomeasA_Clicked(object sender, EventArgs e)

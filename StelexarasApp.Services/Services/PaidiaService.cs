@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Azure;
+using FluentResults;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
 namespace StelexarasApp.Services.Services;
 
-public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>
+public class PaidiaService : IPaidiaService
 {
     private readonly ILogger<PaidiaService> _logger;
     private readonly IPaidiaRepository _paidiRepository;
@@ -28,7 +28,7 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
     {
         var paidia = await _paidiRepository.GetPaidiaByNameFromDb(name, paidiQueryParameters);
         if (paidia == null)
-            return null!;
+            return Enumerable.Empty<PaidiResponse>();
 
         var paidiaResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
         if (paidiaResponse == null)
@@ -40,7 +40,7 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
     {
         var paidia = await _paidiRepository.GetPaidiaInKoinotitaIdFromDb(id, paidiQueryParameters);
         if (paidia == null)
-            return null!;
+            return Enumerable.Empty<PaidiResponse>();
 
         var paidiaResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
         if (paidiaResponse == null)
@@ -52,7 +52,7 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
     {
         var paidia = await _paidiRepository.GetPaidiaInKoinotitaNameFromDb(koinotitaName, paidiQueryParameters);
         if (paidia == null)
-            return null!;
+            return Enumerable.Empty<PaidiResponse>();
 
         var paidiaResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
         if (paidiaResponse == null)
@@ -64,7 +64,7 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
     {
         var paidia = await _paidiRepository.GetPaidiaInSkiniFromDb(skini, paidiQueryParameters);
         if (paidia == null)
-            return null!;
+            return Enumerable.Empty<PaidiResponse>();
 
         var kataskinotes = paidia.OfType<Kataskinotis>().ToList();
         var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(kataskinotes);
@@ -75,8 +75,16 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
 
     public async Task<IEnumerable<PaidiResponse>> GetPaidiaBySkiniIdInService(int skiniId, PaidiQueryParameters paidiQueryParameters)
     {
+        if (skiniId <= 0)
+            return Enumerable.Empty<PaidiResponse>();
+
         var paidia = await _paidiRepository.GetPaidiaInSkiniIdFromDb(skiniId, paidiQueryParameters);
+        if (paidia is null)
+            return Enumerable.Empty<PaidiResponse>(); 
+        
         var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
+        if (kataskinotesResponse is null)
+            return null!;
 
         return kataskinotesResponse;
     }
@@ -85,7 +93,7 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
     {
         var paidia = await _paidiRepository.GetPaidiaInSxoliFromDb(queryParameters);
         if (paidia == null)
-            return null!;
+            return Enumerable.Empty<PaidiResponse>();
 
         var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
         if (kataskinotesResponse == null)
@@ -97,7 +105,7 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
     {
         var paidia = await _paidiRepository.GetPaidiaFromDb(paidiType, queryParameters);
         if (paidia == null)
-            return null!;
+            return Enumerable.Empty<PaidiResponse>();
 
         var paidiaresponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
         if (paidiaresponse == null)
@@ -105,101 +113,99 @@ public class PaidiaService : IPaidiaService<CreatePaidiRequest, UpdatePaidiReque
         return paidiaresponse;
     }
 
-    public async Task<PaidiResponse> GetPaidiByIdInService(int id, PaidiQueryParameters queryParameters)
+    public async Task<Result<PaidiResponse>> GetPaidiByIdInService(int id, PaidiQueryParameters queryParameters)
     {
-        if (_mapper == null || _paidiRepository is null)
-            return null!;
+        if (id <= 0)
+            return Result.Fail<PaidiResponse>("Invalid Paidi id");
 
-        Paidi paidi = await _paidiRepository.GetPaidiByIdFromDb(id, queryParameters);
+        var paidi = await _paidiRepository.GetPaidiByIdFromDb(id, queryParameters);
         if (paidi == null)
-            return null!;
+            return Result.Fail<PaidiResponse>("Paidi not found");
 
-        return _mapper.Map<PaidiResponse>(paidi);
+        return Result.Ok(_mapper.Map<PaidiResponse>(paidi));
     }
 
-    public async Task<PaidiResponse> GetPaidiByNameInService(string name, PaidiQueryParameters queryParameters)
+    public async Task<Result<PaidiResponse>> GetPaidiByNameInService(string name, PaidiQueryParameters queryParameters)
     {
-        if (_mapper == null || _paidiRepository is null)
-            return null!;
-
         Paidi paidi = await _paidiRepository.GetPaidiByNameFromDb(name, queryParameters);
         if (paidi == null)
-            return null!;
+            return Result.Fail<PaidiResponse>("Paidi not found");
 
-        return _mapper.Map<PaidiResponse>(paidi);
+        return Result.Ok(_mapper.Map<PaidiResponse>(paidi));
     }
 
-    public async Task<bool> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId)
+    public async Task<Result> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId)
     {
-        if (paidiId <= 0 || newSkiniId <= 0 || _mapper == null || _paidiRepository is null)
-            return false;
+        if (paidiId <= 0 || newSkiniId <= 0)
+            return Result.Fail("paidiId and newSkiniId must be greater than 0");
 
         var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
         if (!result)
-            return false;
+            return Result.Fail("Failed to move Paidi to new Skini");
 
-        return true;
+        return Result.Ok();
     }
 
 
 
-    public async Task<bool> CreatePaidiInService(CreatePaidiRequest paidiDto)
+    public async Task<Result> CreatePaidiInService(CreatePaidiRequest paidiDto)
     {
-        if (_paidiValidator == null || _mapper == null || _paidiRepository == null || string.IsNullOrEmpty(paidiDto.SkiniName))
-            return false;
-
-        var validationResult = _paidiValidator.Validate(paidiDto);
+        if (paidiDto is null)
+            return Result.Fail("Invalid Paidi data");
+        if (string.IsNullOrEmpty(paidiDto.SkiniName))
+            return Result.Fail("Skini name is required");
+        
+        var validationResult = await _paidiValidator.ValidateAsync(paidiDto);
         if (!validationResult.IsValid)
         {
-            return false;
+            return Result.Fail(validationResult.Errors.Select(x => x.ErrorMessage));
         }
-        else
+
+        Paidi paidi = paidiDto.PaidiType switch
         {
-            if (paidiDto == null || _mapper == null || _paidiRepository is null)
-                return false;
+            PaidiType.Kataskinotis => _mapper.Map<Kataskinotis>(paidiDto),
+            PaidiType.Ekpaideuomenos => _mapper.Map<Ekpaideuomenos>(paidiDto),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
-            Paidi paidi = paidiDto.PaidiType switch
-            {
-                PaidiType.Kataskinotis => _mapper.Map<Kataskinotis>(paidiDto),
-                PaidiType.Ekpaideuomenos => _mapper.Map<Ekpaideuomenos>(paidiDto),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+        if (paidi == null)
+            return Result.Fail("Failed to create Paidi");
 
-            if (paidi == null)
-                return false;
+        var res = await _paidiRepository.AddPaidiInSkini(paidi, paidiDto.SkiniName);
+        if (!res)
+            return Result.Fail("Failed to create Paidi");
 
-            var res = await _paidiRepository.AddPaidiInSkini(paidi, paidiDto.SkiniName);
-            return res;
-        }
+        return Result.Ok();
     }
 
-    public async Task<bool> DeletePaidiInService(int id)
+    public async Task<Result> DeletePaidiInService(int id)
     {
-        if (_mapper == null || _paidiRepository is null)
-            return false;
-
         var paidi = await _paidiRepository.GetPaidiByIdFromDb(id, new PaidiQueryParameters { IncludeSkini = true });
         if (paidi == null)
-            return false;
+            return Result.Fail("Paidi not found");
 
-        return await _paidiRepository.DeletePaidiInDb(id);
+        var res = await _paidiRepository.DeletePaidiInDb(id);
+        if (!res)
+            return Result.Fail("Failed to delete Paidi");
+
+        return Result.Ok();
     }
 
-    public async Task<bool> UpdatePaidiInService(UpdatePaidiRequest paidiDto)
+    public async Task<Result> UpdatePaidiInService(UpdatePaidiRequest paidiDto)
     {
-        var validationResult = _paidiValidator.Validate(paidiDto);
+        if (paidiDto == null)
+            return Result.Fail("PaidiDto was null");
+
+        var validationResult = await _paidiValidator.ValidateAsync(paidiDto);
 
         if (!validationResult.IsValid)
-            return false;
-
-        if (paidiDto == null || _mapper == null || _paidiRepository is null)
-            return false;
+            return Result.Fail(validationResult.Errors.Select(x => x.ErrorMessage));
 
         var paidi = _mapper.Map<Paidi>(paidiDto);
         var result = await _paidiRepository.UpdatePaidiInDb(paidi);
 
         if (!result)
-            return false;
-        return true;
+            return Result.Fail("Failed to update Paidi");
+        return Result.Ok();
     }
 }

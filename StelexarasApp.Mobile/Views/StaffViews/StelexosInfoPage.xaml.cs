@@ -4,7 +4,7 @@ public partial class StelexosInfoPage : ContentPage
 {
     private readonly StelexosInfoViewModel? _stelexosinfoViewModel;
 
-    public StelexosInfoPage(IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> stelexiService, StelexosDtoBase stelexos, int id)
+    public StelexosInfoPage(IStaffService stelexiService, StelexosDtoBase stelexos, int id)
     {
         InitializeComponent();
 

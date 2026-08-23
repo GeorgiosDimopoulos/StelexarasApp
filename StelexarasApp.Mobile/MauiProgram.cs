@@ -141,8 +141,8 @@ public static class MauiProgram
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<IDutyService, DutyService>();
-        services.AddScoped<IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse>, PaidiaService>();
-        services.AddScoped<IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse>, StaffService>();
+        services.AddScoped<IPaidiaService, PaidiaService>();
+        services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<SignalrService>();

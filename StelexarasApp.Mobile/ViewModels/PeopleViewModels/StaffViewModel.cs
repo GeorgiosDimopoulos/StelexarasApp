@@ -6,12 +6,12 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels;
 
 public class StaffViewModel : INotifyPropertyChanged
 {
-    private readonly IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> _staffService;
+    private readonly IStaffService _staffService;
     private readonly IApiService _apiService;
 
     public ObservableCollection<StelexosResponse> AllStaff { get; set; }
 
-    public StaffViewModel(IApiService apiService, IStaffService<CreateStelexosRequest, UpdateStelexosRequest, StelexosResponse> staffService)
+    public StaffViewModel(IApiService apiService, IStaffService staffService)
     {
         _staffService = staffService ?? throw new ArgumentNullException(nameof(staffService));
         _apiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
@@ -65,7 +65,7 @@ public class StaffViewModel : INotifyPropertyChanged
 
     public async Task<IEnumerable<StelexosResponse>> GetOmadarxesSeKoinotita(KoinotitaDtoBase koinotitaDto)
     {
-        return await _staffService.GetStelexoiAnaXwroInDb(koinotitaDto.Name, new());
+        return await _staffService.GetStelexoiAnaXwro(koinotitaDto.Name, new());
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetAllKoinotarxes()
@@ -85,13 +85,13 @@ public class StaffViewModel : INotifyPropertyChanged
 
     public async Task<IEnumerable<StelexosResponse>> GetOmadarxesSeTomea(TomeasDtoBase tomeasDto)
     {
-        return await _staffService.GetStelexoiAnaXwroInDb(tomeasDto.Name, new());
+        return await _staffService.GetStelexoiAnaXwro(tomeasDto.Name, new());
 
     }
 
     public async Task<IEnumerable<StelexosResponse>> GetKoinotarxesSeTomea(TomeasDtoBase tomeasDto)
     {
-        return await _staffService.GetStelexoiAnaXwroInDb(tomeasDto.Name, new());
+        return await _staffService.GetStelexoiAnaXwro(tomeasDto.Name, new());
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

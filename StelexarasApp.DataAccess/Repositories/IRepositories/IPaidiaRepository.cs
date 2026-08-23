@@ -2,16 +2,6 @@
 
 public interface IPaidiaRepository
 {
-    Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId);
-
-    Task<bool> AddPaidiInSkini(Paidi paidi, string skini);
-
-    Task<bool> AddSkinesInDb(Skini skini);
-
-    Task<bool> DeletePaidiInDb(int id);
-
-    Task<bool> UpdatePaidiInDb(Paidi paidi);
-
     Task<Paidi> GetPaidiByIdFromDb(int id, PaidiQueryParameters queryParameters);
     Task<Paidi> GetPaidiByNameFromDb(string name, PaidiQueryParameters queryParameters); 
 
@@ -22,5 +12,15 @@ public interface IPaidiaRepository
     Task<IEnumerable<Paidi>> GetPaidiaInSxoliFromDb(PaidiQueryParameters queryParameters);
     Task<IEnumerable<Paidi>> GetPaidiaFromDb(PaidiType? type, PaidiQueryParameters queryParameters);
 
-    Task<IEnumerable<Paidi>> GetPaidiaByNameFromDb(string name, PaidiQueryParameters queryParameters); 
+    Task<IEnumerable<Paidi>> GetPaidiaByNameFromDb(string name, PaidiQueryParameters queryParameters);
+
+    Task<bool> AddPaidiInSkini(Paidi paidi, string skini);
+
+    Task<bool> AddSkinesInDb(Skini skini);
+
+    Task<bool> DeletePaidiInDb(int id);
+
+    Task<bool> UpdatePaidiInDb(Paidi paidi);
+
+    Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId);
 }

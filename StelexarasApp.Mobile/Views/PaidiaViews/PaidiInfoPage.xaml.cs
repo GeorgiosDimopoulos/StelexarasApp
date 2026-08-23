@@ -10,7 +10,7 @@
         private bool isPaidiNameFilled = false;
         private bool isPaidiAgeFilled = false;
 
-        public PaidiInfoPage(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> peopleService, PaidiResponse paidi)
+        public PaidiInfoPage(IPaidiaService peopleService, PaidiResponse paidi)
         {
             InitializeComponent();
             _paidiDto = paidi;

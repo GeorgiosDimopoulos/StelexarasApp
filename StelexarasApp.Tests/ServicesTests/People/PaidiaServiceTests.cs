@@ -55,7 +55,7 @@ public class PaidiaServiceTests
         var result = await _paidiService.CreatePaidiInService(paidiDto);
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         _mockPaidiRepository.Verify(repo => repo.AddPaidiInSkini(paidi, "Skini1"), Times.Once);
     }
 
@@ -113,7 +113,7 @@ public class PaidiaServiceTests
 
         var result = await _paidiService.DeletePaidiInService(paidiToDelete.Id);
 
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, new PaidiQueryParameters()), Times.Once);
         _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete.Id), Times.Once);
     }
@@ -152,12 +152,12 @@ public class PaidiaServiceTests
         if (shouldExist)
         {
             Assert.NotNull(result);
-            Assert.Equal(expectedPaidi?.Id, result.Id);
-            Assert.Equal(expectedPaidi?.LastName, result.LastName);
-            Assert.Equal(expectedPaidi?.FirstName, result.FirstName);
-            Assert.Equal(expectedPaidi?.Sex, result.Sex);
-            Assert.Equal(expectedPaidi?.Age, result.Age);
-            Assert.Equal(expectedPaidi?.PaidiType, result.PaidiType);
+            Assert.Equal(expectedPaidi?.Id, result.Value.Id);
+            Assert.Equal(expectedPaidi?.LastName, result.Value.LastName);
+            Assert.Equal(expectedPaidi?.FirstName, result.Value.FirstName);
+            Assert.Equal(expectedPaidi?.Sex, result.Value.Sex);
+            Assert.Equal(expectedPaidi?.Age, result.Value.Age);
+            Assert.Equal(expectedPaidi?.PaidiType, result.Value.PaidiType);
         }
         else
         {

@@ -6,12 +6,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 {
     public class KoinotitaViewModel : INotifyPropertyChanged
     {
-        private readonly IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+        private readonly IPaidiaService _paidiaService;
         private readonly ITeamsService _teamsService;
         public ObservableCollection<string> Skines { get; set; }
         public KoinotitaResponse? Koinotita { get; set; }
 
-        public KoinotitaViewModel(IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService, ITeamsService teamsService)
+        public KoinotitaViewModel(IPaidiaService paidiaService, ITeamsService teamsService)
         {
             _paidiaService = paidiaService;
             _teamsService = teamsService;
@@ -49,7 +49,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 
             var result = await _paidiaService.CreatePaidiInService(paidi);
 
-            if (result)
+            if (result.IsSuccess)
             {
                 OnPropertyChanged(nameof(Skines));
                 return true;
@@ -64,7 +64,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
                 return false;
 
             var result = await _paidiaService.DeletePaidiInService(int.Parse(paidiId));
-            if (result)
+            if (result.IsSuccess)
             {
                 OnPropertyChanged(nameof(Skines));
                 return true;
@@ -89,8 +89,8 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
 
         public async Task<bool> AddKoinotita(CreateKoinotitaRequest koinotita)
         {
-            bool result = await _teamsService.AddKoinotitaInService(koinotita);
-            if (result)
+            var result = await _teamsService.AddKoinotitaInService(koinotita);
+            if (result.IsSuccess)
             {
                 OnPropertyChanged(nameof(Skines));
                 return true;

@@ -1,41 +1,40 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
+namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels;
+
+public class TomeasViewModel : INotifyPropertyChanged
 {
-    public class TomeasViewModel : INotifyPropertyChanged
+    private readonly ITeamsService _teamsService;
+    private readonly IPaidiaService _paidiaService;
+
+    public List<KoinotitaDtoBase>? Koinotites { get; set; }
+    public string TomeasNumber { get; set; }
+
+    public TomeasViewModel(int tomeasNumber, ITeamsService teamsService, IPaidiaService paidiaService)
     {
-        private readonly ITeamsService _teamsService;
-        private IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> _paidiaService;
+        _teamsService = teamsService;
+        _paidiaService = paidiaService;
+        TomeasNumber = tomeasNumber.ToString();
+        _ = LoadKoinotites(tomeasNumber);
+    }
 
-        public List<KoinotitaDtoBase>? Koinotites { get; set; }
-        public string TomeasNumber { get; set; }
+    private async Task LoadKoinotites(int tomeas)
+    {
+        var koinotites = await GetKoinotitesForTomea(tomeas);
+        Koinotites = koinotites.ToList();
+        OnPropertyChanged(nameof(Koinotites));
+    }
 
-        public TomeasViewModel(int tomeasNumber, ITeamsService teamsService, IPaidiaService<CreatePaidiRequest, UpdatePaidiRequest, PaidiResponse> paidiaService)
-        {
-            _teamsService = teamsService;
-            _paidiaService = paidiaService;
-            TomeasNumber = tomeasNumber.ToString();
-            _ = LoadKoinotites(tomeasNumber);
-        }
+    private async Task<IEnumerable<KoinotitaDtoBase>> GetKoinotitesForTomea(int tomeasId)
+    {
+        return await _teamsService.GetKoinotitesAnaTomeaInService(new(), tomeasId);
+    }
 
-        private async Task LoadKoinotites(int tomeas)
-        {
-            var koinotites = await GetKoinotitesForTomea(tomeas);
-            Koinotites = koinotites.ToList();
-            OnPropertyChanged(nameof(Koinotites));
-        }
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-        private async Task<IEnumerable<KoinotitaDtoBase>> GetKoinotitesForTomea(int tomeasId)
-        {
-            return await _teamsService.GetKoinotitesAnaTomeaInService(new(), tomeasId);
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

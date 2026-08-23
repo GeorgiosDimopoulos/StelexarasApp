@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentResults;
 using StelexarasApp.Library.QueryParameters.Domi;
 
 namespace StelexarasApp.Services.Services;
@@ -8,77 +9,53 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
     private readonly ITeamsRepository _teamsRepository = teamsRepository;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<bool> AddSkiniInService(CreateSkiniRequest skiniDto)
+    public async Task<Result> AddSkiniInService(CreateSkiniRequest skiniDto)
     {
-        try
-        {
-            if (skiniDto is null || string.IsNullOrEmpty(skiniDto.Name) || skiniDto.KoinotitaId == 0)
-                return false;
+        if (skiniDto is null || string.IsNullOrEmpty(skiniDto.Name) || skiniDto.KoinotitaId == 0)
+            return Result.Fail("Invalid data for adding a Skini");
 
-            var skini = _mapper.Map<Skini>(skiniDto);
-            return await _teamsRepository.AddSkiniInDb(skini);
+        var skini = _mapper.Map<Skini>(skiniDto);
+        var skiniAdded = await _teamsRepository.AddSkiniInDb(skini);
+        if (skiniAdded)
+        {
+            return Result.Ok();
         }
-        catch (Exception ex)
+        else
         {
-            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
-            return false;
-        }
-    }
-
-    public async Task<bool> AddKoinotitaInService(CreateKoinotitaRequest koinotitaDto)
-    {
-        try
-        {
-            if (koinotitaDto is null || string.IsNullOrEmpty(koinotitaDto.Name))
-                return false;
-
-            var tomeasExisting = await _teamsRepository.GetTomeaByNameInDb(new(), koinotitaDto.TomeasName);
-            if (tomeasExisting == null)
-            {
-                return false;
-            }
-
-            var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
-
-            koinotita.Tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), koinotitaDto.TomeasName);
-            return await _teamsRepository.AddKoinotitaInDb(koinotita);
-        }
-        catch (Exception ex)
-        {
-            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
-            return false;
+            //LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            LogFileWriter.WriteToLog($"Failed to add Skini with name: {skiniDto.Name} and KoinotitaId: {skiniDto.KoinotitaId}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return Result.Fail("Failed to add Skini");
         }
     }
 
     public async Task<IEnumerable<SkiniResponse>> GetAllSkinesInService(SkiniQueryParameters? skiniQueryParameters)
     {
-        try
-        {
-            var skini = await _teamsRepository.GetSkinesInDb(skiniQueryParameters);
-            return _mapper.Map<IEnumerable<SkiniResponse>>(skini);
-        }
-        catch
-        {
-            return [];
-        }
+        var skini = await _teamsRepository.GetSkinesInDb(skiniQueryParameters);
+        return _mapper.Map<IEnumerable<SkiniResponse>>(skini);
     }
 
-    public async Task<SkiniResponse> GetSkiniByNameInService(SkiniQueryParameters? skiniQueryParameters, string name)
+    public async Task<Result<SkiniResponse>> GetSkiniByNameInService(SkiniQueryParameters? skiniQueryParameters, string name)
     {
         var skini = await _teamsRepository.GetSkiniByNameInDb(skiniQueryParameters, name);
-        return _mapper.Map<SkiniResponse>(skini);
+        return Result.Ok(_mapper.Map<SkiniResponse>(skini));
     }
 
-    public async Task<SkiniResponse> GetSkiniByIdInService(SkiniQueryParameters? skiniQueryParameters, int id)
+    public async Task<Result<SkiniResponse>> GetSkiniByIdInService(SkiniQueryParameters? skiniQueryParameters, int id)
     {
         var skini = await _teamsRepository.GetSkiniByIdInDb(skiniQueryParameters, id);
-        return _mapper.Map<SkiniResponse>(skini);
+        if (skini is null)
+            return Result.Fail<SkiniResponse>("Skini not found");
+
+        return Result.Ok(_mapper.Map<SkiniResponse>(skini));
     }
     
-    public async Task<KoinotitaResponse> GetKoinotitaByIdInService(int id, KoinotitaQueryParameters koinotitaQueryParameters)
+    public async Task<Result<KoinotitaResponse>> GetKoinotitaByIdInService(int id, KoinotitaQueryParameters koinotitaQueryParameters)
     {
         var skini = await _teamsRepository.GetKoinotitaByIdInDb(id, koinotitaQueryParameters);
-        return _mapper.Map<KoinotitaResponse>(skini);
+        if (skini is null)
+            return Result.Fail<KoinotitaResponse>("Koinotita not found");
+
+        return Result.Ok(_mapper.Map<KoinotitaResponse>(skini));
     }
 
     public async Task<IEnumerable<SkiniResponse>> GetSkinesAnaKoinotitaIdInService(SkiniQueryParameters? skiniQueryParameters, int id)
@@ -117,57 +94,20 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return _mapper.Map<IEnumerable<TomeasResponse>>(tomeisInDb);
     }
 
-    public async Task<KoinotitaResponse> GetKoinotitaByNameInService(KoinotitaQueryParameters? koinotitaQueryParameters, string name)
+    public async Task<Result<KoinotitaResponse>> GetKoinotitaByNameInService(KoinotitaQueryParameters? koinotitaQueryParameters, string name)
     {
         var skini = await _teamsRepository.GetKoinotitaByNameInDb(koinotitaQueryParameters, name);
-        return _mapper.Map<KoinotitaResponse>(skini);
+        return Result.Ok(_mapper.Map<KoinotitaResponse>(skini));
     }
-
-    public async Task<bool> UpdateKoinotitaInService(int id, UpdateKoinotitaRequest koinotitaDto)
-    {
-        var tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), koinotitaDto.TomeasName);
-        if (tomeas == null)
-        {
-            return false;
-        }
-
-        var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
-        koinotita.TomeasId = tomeas.Id;
-
-        return await _teamsRepository.UpdateKoinotitaInDb(id, koinotita);
-    }
-
-    public Task<bool> UpdateSkiniInService(int id, UpdateSkiniRequest skiniDto)
-    {
-        var skini = _mapper.Map<Skini>(skiniDto);
-        return _teamsRepository.UpdateSkiniInDb(id, skini);
-    }
-
-    public Task<bool> UpdateTomeaInService(string id, UpdateTomeasRequest tomeasDto)
-    {
-        var tomeas = _mapper.Map<Tomeas>(tomeasDto);
-        return _teamsRepository.UpdateTomeasInDb(id, tomeas);
-    }
-
-    public Task<bool> DeleteSkiniInService(int skiniId)
-    {
-        return _teamsRepository.DeleteSkiniInDb(skiniId);
-    }
-
-    public Task<bool> DeleteKoinotitaInService(int koinotitaId)
-    {
-        return _teamsRepository.DeleteKoinotitaInDb(koinotitaId);
-    }
-
-    public Task<bool> DeleteTomeasInService(string n)
-    {
-        return _teamsRepository.DeleteTomeasInDb(n);
-    }
-
-    public async Task<TomeasResponse> GetTomeaByNameInService(TomeasQueryParameters tomeasQueryParameters, string name)
+    
+    public async Task<Result<TomeasResponse>> GetTomeaByNameInService(TomeasQueryParameters tomeasQueryParameters, string name)
     {
         var tomeasInDb = await _teamsRepository.GetTomeaByNameInDb(tomeasQueryParameters, name);
-        return _mapper.Map<TomeasResponse>(tomeasInDb);
+        if (tomeasInDb == null)
+        {
+            return Result.Fail<TomeasResponse>("Tomeas not found");
+        }
+        return Result.Ok(_mapper.Map<TomeasResponse>(tomeasInDb));
     }
 
     public async Task<IEnumerable<string>> GetAnwtatoiXwroi()
@@ -176,28 +116,121 @@ public class TeamsService(IMapper mapper, ITeamsRepository teamsRepository) : IT
         return anwtatoiXwroiInDb;
     }
 
-    public async Task<bool> AddTomeasInService(CreateTomeasRequest tomeasDto)
+    public async Task<Result> AddKoinotitaInService(CreateKoinotitaRequest request)
     {
-        try
+        if (request is null || string.IsNullOrEmpty(request.Name))
+            return Result.Fail("Invalid data for adding a Koinotita");
+
+        var tomeasExisting = await _teamsRepository.GetTomeaByNameInDb(new(), request.TomeasName);
+        if (tomeasExisting == null)
+            return Result.Fail("Tomeas not found");
+
+        var koinotita = _mapper.Map<Koinotita>(request);
+        koinotita.Tomeas = tomeasExisting;
+
+        var koinotitaAdded = await _teamsRepository.AddKoinotitaInDb(koinotita);
+        if (koinotitaAdded)
+            return Result.Ok();
+        else
         {
-            if (tomeasDto is null || string.IsNullOrEmpty(tomeasDto.Name))
-                return false;
-            var tomeas = _mapper.Map<Tomeas>(tomeasDto);
-            return await _teamsRepository.AddTomeasInDb(tomeas);
-        }
-        catch (Exception ex)
-        {
-            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
-            return false;
-        }
+            LogFileWriter.WriteToLog($"Failed to add Koinotita with name: {request.Name} and TomeasName: {request.TomeasName}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return Result.Fail("Failed to add Koinotita");
+        }        
     }
 
-    public Task<bool> HasData()
+    public async Task<Result> UpdateKoinotitaInService(int id, UpdateKoinotitaRequest koinotitaDto)
     {
-        if (!_teamsRepository.GetSkinesInDb(new()).Result.Any() &&
-            !_teamsRepository.GetKoinotitesAnaTomeaInDb(new(), 2).Result.Any() &&
-            !_teamsRepository.GetKoinotitesAnaTomeaInDb(new(), 1).Result.Any())
-            return Task.FromResult(false);
-        return Task.FromResult(true);
+        var existing = await _teamsRepository.GetKoinotitaByIdInDb(id, new());
+        if (existing is null)
+            return Result.Fail("Koinotita not found");
+
+        var tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), koinotitaDto.TomeasName);
+        if (tomeas == null)
+        {
+            return Result.Fail("Tomeas not found");
+        }
+
+        var koinotita = _mapper.Map<Koinotita>(koinotitaDto);
+        koinotita.TomeasId = tomeas.Id;
+
+        var koinotitaUpdated = await _teamsRepository.UpdateKoinotitaInDb(id, koinotita);
+        if (koinotitaUpdated == false)
+        {
+            LogFileWriter.WriteToLog($"Failed to update Koinotita with id: {id} and TomeasName: {koinotitaDto.TomeasName}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return Result.Fail("Failed to update Koinotita");
+        }
+
+        return Result.Ok();
+    }
+
+    public async Task<Result> UpdateSkiniInService(int id, UpdateSkiniRequest skiniDto)
+    {
+        var skini = _mapper.Map<Skini>(skiniDto);
+        var skiniUpdated = await _teamsRepository.UpdateSkiniInDb(id, skini);
+        if (skiniUpdated == false)
+        {
+            LogFileWriter.WriteToLog($"Failed to update Skini with id: {id} and Name: {skiniDto.Name}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return Result.Fail("Failed to update Skini");
+        }
+
+        return Result.Ok();
+    }
+
+    public async Task<Result> UpdateTomeaInService(string id, UpdateTomeasRequest tomeasDto)
+    {
+        var tomeas = _mapper.Map<Tomeas>(tomeasDto);
+        var tomeasUpdated = await _teamsRepository.UpdateTomeasInDb(id, tomeas);
+        if (tomeasUpdated == false)
+        {
+            LogFileWriter.WriteToLog($"Failed to update Tomeas with id: {id} and Name: {tomeasDto.Name}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return Result.Fail("Failed to update Tomeas");
+        }
+
+        return Result.Ok();
+    }
+
+    public async Task<Result> DeleteSkiniInService(int skiniId)
+    {
+        var deleted = await _teamsRepository.DeleteSkiniInDb(skiniId);
+        if (!deleted)
+        {
+            LogFileWriter.WriteToLog($"Failed to delete Skini with id: {skiniId}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return Result.Fail("Failed to delete Skini");
+        }
+        return Result.Ok();
+    }
+
+    public async Task<Result> DeleteKoinotitaInService(int koinotitaId)
+    {
+        var deleted = await _teamsRepository.DeleteKoinotitaInDb(koinotitaId);
+        if (!deleted)
+        {
+            LogFileWriter.WriteToLog($"Failed to delete Koinotita with id: {koinotitaId}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return Result.Fail("Failed to delete Koinotita");
+        }
+        return Result.Ok();
+    }
+
+    public async Task<Result> DeleteTomeasInService(string n)
+    {
+        var deleted = await _teamsRepository.DeleteTomeasInDb(n);
+        if (!deleted)
+        {
+            LogFileWriter.WriteToLog($"Failed to delete Tomeas with name: {n}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+            return Result.Fail("Failed to delete Tomeas");
+        }
+        return Result.Ok();
+    }
+
+    public async Task<Result> AddTomeasInService(CreateTomeasRequest tomeasDto)
+    {
+        if (tomeasDto is null || string.IsNullOrEmpty(tomeasDto.Name))
+            return Result.Fail("Invalid data for adding a Tomeas");
+        var tomeas = _mapper.Map<Tomeas>(tomeasDto);
+        var tomeasAdded = await _teamsRepository.AddTomeasInDb(tomeas);
+        if (tomeasAdded)
+            return Result.Ok();
+        else
+            return Result.Fail("Failed to add Tomeas");
     }
 }
