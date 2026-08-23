@@ -516,11 +516,15 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
 
         try
         {
-            var existingKoinotita = await _dbContext.Koinotites.FirstOrDefaultAsync(t => t.Id == skini.Koinotita.Id);
-            if (existingKoinotita != null)
-                skini.Koinotita = existingKoinotita;
-            else
+            var koinotites = await _dbContext.Koinotites.ToListAsync();
+            if (koinotites.Count == 0)            
                 return false;
+            
+            if (!koinotites.Any(k => k.Id == skini.Koinotita.Id))
+                return false;
+
+            var existingKoinotita = koinotites.FirstOrDefault(t => t.Id == skini.Koinotita.Id);
+            skini.Koinotita = existingKoinotita!;
 
             var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(t => t.Name.Equals(skini.Name));
             if (existingSkini != null)

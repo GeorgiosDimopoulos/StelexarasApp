@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentResults;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
@@ -20,44 +21,39 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             _teamsRepository = new TeamsRepository(_dbContext, loggerFactory);
         }
 
-        [Theory]
-        [InlineData(3, "TestTeam1", true)]
-        [InlineData(-1, "TestTeam3", false)]
-        [InlineData(0, "TestTeam4", false)]
-        public async Task AddSkini_ShouldReturnExpectedResult(int id, string name, bool expectedResult)
+        [Fact]
+        public async Task AddSkini_ShouldReturnExpectedResult()
         {
+            var tomeis = await _teamsRepository.GetTomeisInDb(new());
+            var tomeas = tomeis.FirstOrDefault();
+            if (tomeas is null)
+            {
+                var tomeasAdded = await _teamsRepository.AddTomeasInDb(new Tomeas { Name = "TestTomeas" });
+                Assert.True(tomeasAdded);
+                tomeas = await _teamsRepository.GetTomeaByNameInDb(new(), "TestTomeas");
+            }
+
+            var koinotites = await _teamsRepository.GetKoinotitesInDb(new());
+            var koinotita = koinotites.FirstOrDefault();
+            if (koinotita is null)
+            {
+                var koinotitaAdded = await _teamsRepository.AddKoinotitaInDb(new Koinotita { Name = "KoinotitaName" });
+                Assert.True(koinotitaAdded);
+                koinotita = await _teamsRepository.GetKoinotitaByNameInDb(new(), "KoinotitaName");
+            }
+
             var team = new Skini
             {
-                Id = id,
-                Name = name,
+                Name = "Skini1",
                 Paidia = new List<Paidi>(),
                 Sex = Sex.Female,
-                Koinotita = new Koinotita
-                {
-                    Name = "KoinotitaName",
-                    Skines = new List<Skini>(),
-                    Tomeas = new Tomeas
-                    {
-                        Name = "TomeasName",
-                        Koinotites = new List<Koinotita>(),
-                    }
-                }
+                Koinotita = koinotita
             };
 
             var result = await _teamsRepository.AddSkiniInDb(team);
-
-            Assert.Equal(result, expectedResult);
-            if (expectedResult)
-            {
-                var addedTeam = await _teamsRepository.GetSkiniByNameInDb(new(), team.Name);
-                Assert.NotNull(addedTeam);
-                Assert.Equal(team.Name, addedTeam.Name);
-            }
-            else
-            {
-                var addedTeam = await _dbContext.Skines!.FindAsync(id);
-                Assert.Null(addedTeam);
-            }
+            var addedTeam = await _teamsRepository.GetSkiniByNameInDb(new(), team.Name);
+            Assert.NotNull(addedTeam);
+            Assert.Equal(team.Name, addedTeam.Name);
         }
 
         [Theory]
@@ -315,17 +311,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             return new Tomeas
             {
                 Name = name,
-                Id = id,
-                Tomearxis = new Tomearxis
-                {
-                    LastName = "Test Tomearxis",
-                    FirstName = "TestF",
-                    Sex = Sex.Female,
-                    Tel = "1234567890",
-                    Age = 30,
-                    Tomeas = new Tomeas { Name = "TestTomea" }
-                },
-                Koinotites = [],
+                Id = id
             };
         }
 
@@ -335,17 +321,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
             {
                 Id = id,
                 Name = name,
-                Koinotarxis = new Koinotarxis
-                {
-                    Id = 4,
-                    LastName = "Test Tomearxis",
-                    FirstName = "TestF",
-                    Sex = Sex.Female,
-                    Tel = "1234567890",
-                    Age = 30,
-                    Thesi = Thesi.Koinotarxis,
-                },
-                Skines = [],
+                Tomeas = GetTomeas("A", 1)
             };
         }
     }

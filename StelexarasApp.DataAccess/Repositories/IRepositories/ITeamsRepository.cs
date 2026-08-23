@@ -9,7 +9,7 @@ namespace StelexarasApp.DataAccess.Repositories.IRepositories
 
         Task<bool> AddSkiniInDb(Skini skini);
         Task<bool> AddKoinotitaInDb(Koinotita koinotita);
-        Task<bool> AddTomeasInDb(Tomeas koinotita);
+        Task<bool> AddTomeasInDb(Tomeas tomeas);
 
         Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters? parameters);
         Task<IEnumerable<Koinotita>> GetKoinotitesInDb(KoinotitaQueryParameters? parameters);

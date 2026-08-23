@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using OpenQA.Selenium.DevTools.V126.Debugger;
 
 namespace StelexarasApp.Tests.IntegrationDbTests;
 
@@ -64,6 +65,17 @@ public class StaffRepositoryDbTests
     public async Task AddStelexosInDb_ShouldReturnTrue_WhenStelexosIsAdded()
     {
         // Arrange
+        var tomeas = GetTomeas("A", 23);
+        var koinotita = GetKoinotita(21, "TestKoinotita");
+        var skini = new Skini
+        {
+            Id = 41,
+            Name = "TestSkini",
+            Koinotita = koinotita,
+            Sex = Sex.Female,
+            KoinotitaId = koinotita.Id
+        };
+
         var stelexos = new Omadarxis
         {
             Id = 18,
@@ -73,26 +85,15 @@ public class StaffRepositoryDbTests
             Tel = "123-456-7890",
             Age = 30,
             XwrosName = "TestSkini",
-            Sex = Sex.Male,
-            Skini = new Skini
-            {
-                Id = 41,
-                Name = "TestSkini",
-                Koinotita = new Koinotita
-                {
-                    Id = 21,
-                    Name = "TestKoinotita",
-                    Hlikia = HlikiaKoinotitas.Mikra,
-                    Tomeas = new Tomeas
-                    {
-                        Id = 32,
-                        Name = "TestTomeas"
-                    }
-                }
-            }
+            Sex = Sex.Male
         };
 
         // Act
+        await  _dbContext.Tomeis.AddAsync(tomeas);
+        await _dbContext.Koinotites.AddAsync(koinotita);
+        await _dbContext.Skines.AddAsync(skini);
+        await _dbContext.SaveChangesAsync();
+
         var result = await _stelexiRepository.AddStelexosInDb(stelexos);
 
         // Assert
@@ -181,5 +182,24 @@ public class StaffRepositoryDbTests
 
         // Assert
         Assert.NotNull(result);
+    }
+
+    private static Tomeas GetTomeas(string name, int id)
+    {
+        return new Tomeas
+        {
+            Name = name,
+            Id = id
+        };
+    }
+
+    private static Koinotita GetKoinotita(int id, string name)
+    {
+        return new Koinotita
+        {
+            Id = id,
+            Name = name,
+            Tomeas = GetTomeas("A", 1)
+        };
     }
 }
