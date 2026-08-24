@@ -172,6 +172,9 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("SeAdeia")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Sex")
                         .HasColumnType("int");
 

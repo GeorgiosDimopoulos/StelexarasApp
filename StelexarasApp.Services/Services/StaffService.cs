@@ -20,7 +20,7 @@ public class StaffService : IStaffService
     public async Task<IEnumerable<StelexosResponse>> GetStelexi(Thesi? thesi, StelexosQueryParameters? stelexosQueryParameters)
     {
         var stelexosInDb = await _stelexiRepository.GetStelexiInDb(thesi, stelexosQueryParameters);
-        if (stelexosInDb is null)
+        if (stelexosInDb is null || !stelexosInDb.Any())
             return new List<StelexosResponse>();
         var stelexosInService = _mapper.Map<IEnumerable<StelexosResponse>>(stelexosInDb);
         if (!stelexosInService.Any())
@@ -78,6 +78,9 @@ public class StaffService : IStaffService
 
     public async Task<Result> CreateStelexos(CreateStelexosRequest stelexosDto)
     {
+        if (stelexosDto is null)
+            return Result.Fail("Invalid Stelexos data");
+
         var stelexosResult = await _stelexosValidator.ValidateAsync(stelexosDto);
 
         if (!stelexosResult.IsValid)

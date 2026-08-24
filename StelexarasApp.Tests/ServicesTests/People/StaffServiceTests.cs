@@ -154,7 +154,7 @@ public class StaffServiceTests
         ]);
 
         // Act
-        var result = await _stelexiService.GetStelexi(Thesi.Omadarxis, new());
+        var result = await _stelexiService.GetStelexoiAnaXwro(string.Empty, new());
 
         // Assert
         Assert.NotNull(result);
@@ -169,29 +169,30 @@ public class StaffServiceTests
     public async Task GetAllKoinotarxesInService_ShouldReturnKoinotarxes()
     {
         // Arrange
+        var koinotita = new Koinotita { Name = "TestKoinotita", TomeasId = 1, Id = 123 };
         var koinotarxisList = new List<Koinotarxis>
         {
-            new() { XwrosName = "Xwros1" , LastName = "Test Koinotarxis", FirstName = "Test", Id = 1, Tel = "1231231", Thesi = Thesi.Koinotarxis, Age = 29, Sex = Sex.Female}
+            new() { XwrosName = "Xwros1" , LastName = "Test Koinotarxis", FirstName = "Test", Id = 1 , Tel = "1231231", Thesi = Thesi.Koinotarxis, Age = 29, Sex = Sex.Female, Koinotita = koinotita }
         };
         var koinotarxisDtoList = new List<StelexosResponse>
         {
-            new() { XwrosName = "Xwros1" , LastName = "Test Koinotarxis", FirstName = "Test", Tel = "1231231" }
+            new() { XwrosName = "Xwros1" , LastName = "Test Koinotarxis", FirstName = "Test", Tel = "1231231", Sex = Sex.Female, Age = 29, Thesi = Thesi.Koinotarxis, SeAdeia = false }
         };
 
-        _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>()))
+        _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(It.IsAny<string>(), It.IsAny<StelexosQueryParameters>()))
                               .ReturnsAsync(koinotarxisList);
         _mockMapper.Setup(m => m.Map<IEnumerable<StelexosResponse>>(koinotarxisList))
                    .Returns(koinotarxisDtoList);
 
         // Act
-        var result = await _stelexiService.GetStelexi(Thesi.Koinotarxis, new());
+        var result = await _stelexiService.GetStelexoiAnaXwro(koinotita.Name, new());
 
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
         Assert.Equal("Test Koinotarxis", result.First().LastName);
         Assert.Equal("Test", result.First().FirstName);
-        _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>()), Times.Once);
+        _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(koinotita.Name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(koinotarxisList), Times.Once);
     }
 
@@ -284,7 +285,7 @@ public class StaffServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Omadarxis", result.First().FirstName);
+        Assert.Equal("Omadarxis", result.First().LastName);
         Assert.Equal("John", result.First().FirstName);
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(tomeaDto.Name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(omadarxisList), Times.Once);
@@ -376,7 +377,7 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexi(Thesi.Tomearxis, new());
+        var result = await _stelexiService.GetStelexoiAnaXwro(string.Empty, new());
 
         // Assert
         Assert.Single(result);
