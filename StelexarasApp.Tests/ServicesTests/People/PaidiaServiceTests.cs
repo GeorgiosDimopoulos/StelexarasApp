@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Any;
 using Moq;
 using StelexarasApp.Library.QueryParameters.People;
 
@@ -44,12 +45,12 @@ public class PaidiaServiceTests
     public async Task AddEkpaideuomenos_ShouldReturnTrue_WhenSuccessful()
     {
         // Arrange
-        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1" };
-        var paidi = new Paidi { Id = 1, LastName = "John", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos };
+        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentPhone = "1234567290", SeAdeia = false, Sex = Sex.Male };
+        var paidi = new Ekpaideuomenos { Id = 1, LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, Sex = Sex.Male, SeAdeia = false, ParentTel = "1234567290", SkiniId = 1 };
 
         _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
         _mockPaidiRepository.Setup(repo => repo.AddPaidiInSkini(paidi, "Skini1")).ReturnsAsync(true);
-        _paidiValidatorMock.Setup(v => v.Validate(paidiDto)).Returns(new FluentValidation.Results.ValidationResult());
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(paidiDto, It.IsAny<CancellationToken>())).ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var result = await _paidiService.CreatePaidiInService(paidiDto);
@@ -65,24 +66,27 @@ public class PaidiaServiceTests
         // Arrange
         var expectedPaidia = new List<Paidi>
         {
-            new Paidi { Id = 1, LastName = "Doe", FirstName = "Georg", Sex = Sex.Male, Age = 16, PaidiType = PaidiType.Ekpaideuomenos },
-            new Paidi { Id = 2, LastName = "Smith", FirstName = "Georg",Sex = Sex.Female, Age = 16, PaidiType = PaidiType.Ekpaideuomenos }
-        }.Where(p => p.PaidiType == PaidiType.Ekpaideuomenos).ToList();
+            new Ekpaideuomenos { Id = 1, LastName = "Doe", FirstName = "Georg", Sex = Sex.Male, Age = 16, PaidiType = PaidiType.Ekpaideuomenos, ParentTel = "1234567890", SeAdeia = false, SkiniId = 1 },
+            new Ekpaideuomenos { Id = 2, LastName = "Smith", FirstName = "Georg",Sex = Sex.Female, Age = 16, PaidiType = PaidiType.Ekpaideuomenos, ParentTel = "0987654321", SeAdeia = true, SkiniId = 2 }
+        };
 
         _mockPaidiRepository
-            .Setup(repo => repo.GetPaidiaInSxoliFromDb(new PaidiQueryParameters()))
+            .Setup(repo => repo.GetPaidiaInSxoliFromDb(It.IsAny<PaidiQueryParameters>()))
             .ReturnsAsync(expectedPaidia);
 
         _mockMapper.Setup(m => m.Map<IEnumerable<PaidiResponse>>(It.IsAny<IEnumerable<Paidi>>()))
-            .Returns((IEnumerable<Paidi> paidia) => paidia.Select(p => new PaidiResponse
-            {
-                Id = p.Id,
-                FirstName = p.FirstName,
-                LastName = p.LastName,
-                Sex = Sex.Female,
-                Age = p.Age,
-                PaidiType = p.PaidiType
-            }));
+                   .Returns((IEnumerable<Paidi> paidia) => paidia.Select(p => new PaidiResponse
+                   {
+                       Id = p.Id,
+                       FirstName = p.FirstName,
+                       LastName = p.LastName,
+                       SeAdeia = p.SeAdeia,
+                       ParentPhone = p.ParentTel,
+                       SkiniName = p.Skini?.Name,
+                       Sex = p.Sex,
+                       Age = p.Age,
+                       PaidiType = p.PaidiType
+                   }));
 
         // Act
         var result = await _paidiService.GetPaidiaBySxoliInService(new PaidiQueryParameters());
@@ -101,38 +105,40 @@ public class PaidiaServiceTests
         var paidiToDelete = new Paidi
         {
             Id = 1,
-            LastName = "Doe",
-            FirstName = "John",
+            LastName = "Deoe",
+            FirstName = "Joohn",
+            ParentTel = "1233567890",
+            SeAdeia = false,
+            SkiniId = 1,
             Sex = Sex.Female,
             Age = 30,
             PaidiType = PaidiType.Ekpaideuomenos
         };
 
-        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, new PaidiQueryParameters())).ReturnsAsync(paidiToDelete);
+        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>())).ReturnsAsync(paidiToDelete);
         _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete.Id)).ReturnsAsync(true);
 
         var result = await _paidiService.DeletePaidiInService(paidiToDelete.Id);
 
         Assert.True(result.IsSuccess);
-        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, new PaidiQueryParameters()), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>()), Times.Once);
         _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete.Id), Times.Once);
     }
 
-    [Theory]
-    [InlineData(1, "John Doe", 30, PaidiType.Kataskinotis, true)]
-    public async Task GetPaidiById_ShouldReturnExpectedResult(int paidiId, string expectedFullName, int expectedAge, PaidiType expectedType, bool shouldExist)
+    [Fact]
+    public async Task GetPaidiById_ShouldReturn()
     {
         // Arrange
-        var expectedPaidi = shouldExist ? new Paidi
+        var expectedPaidi = new Paidi
         {
-            Id = paidiId,
-            LastName = expectedFullName.Split(' ')[0],
-            FirstName = expectedFullName.Split(' ')[1],
-            Age = expectedAge,
-            PaidiType = expectedType
-        } : null;
+            Id = 192,
+            LastName = "Doe",
+            FirstName = "John",
+            Age = 30,
+            PaidiType = PaidiType.Kataskinotis,
+        };
 
-        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiId, new PaidiQueryParameters()))
+        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(expectedPaidi.Id, It.IsAny<PaidiQueryParameters>()))
                             .ReturnsAsync(expectedPaidi);
         _mockMapper.Setup(m => m.Map<PaidiResponse>(It.IsAny<Paidi>()))
                    .Returns((Paidi p) => new PaidiResponse
@@ -146,22 +152,15 @@ public class PaidiaServiceTests
                    });
 
         // Act
-        var result = await _paidiService.GetPaidiByIdInService(paidiId, new PaidiQueryParameters());
+        var result = await _paidiService.GetPaidiByIdInService(expectedPaidi.Id, new PaidiQueryParameters());
 
         // Assert
-        if (shouldExist)
-        {
-            Assert.NotNull(result);
-            Assert.Equal(expectedPaidi?.Id, result.Value.Id);
-            Assert.Equal(expectedPaidi?.LastName, result.Value.LastName);
-            Assert.Equal(expectedPaidi?.FirstName, result.Value.FirstName);
-            Assert.Equal(expectedPaidi?.Sex, result.Value.Sex);
-            Assert.Equal(expectedPaidi?.Age, result.Value.Age);
-            Assert.Equal(expectedPaidi?.PaidiType, result.Value.PaidiType);
-        }
-        else
-        {
-            Assert.Null(result);
-        }
+        Assert.NotNull(result);
+        Assert.Equal(expectedPaidi?.Id, result.Value.Id);
+        Assert.Equal(expectedPaidi?.LastName, result.Value.LastName);
+        Assert.Equal(expectedPaidi?.FirstName, result.Value.FirstName);
+        Assert.Equal(expectedPaidi?.Sex, result.Value.Sex);
+        Assert.Equal(expectedPaidi?.Age, result.Value.Age);
+        Assert.Equal(expectedPaidi?.PaidiType, result.Value.PaidiType);
     }
 }

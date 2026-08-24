@@ -51,7 +51,8 @@ public class ExpenseService : IExpenseService
     {
         try
         {
-            return await _expenseRepository.DeleteExpenseInDb(id);
+            var res = await _expenseRepository.DeleteExpenseInDb(id);
+            return res;
         }
         catch (Exception ex)
         {

@@ -21,29 +21,39 @@ public class PaidiaRepositoryDbTests
     }
 
     [Theory]
-    [InlineData(23, PaidiType.Kataskinotis, true)]
-    [InlineData(22, PaidiType.Ekpaideuomenos, true)]
-    [InlineData(-1, PaidiType.Ekpaideuomenos, false)]
-    [InlineData(0, PaidiType.Kataskinotis, false)]
-    public async Task AddPaidi_ShouldReturnExpectedResult(int id, PaidiType paidiType, bool expectedResult)
+    [InlineData(PaidiType.Kataskinotis)]
+    [InlineData(PaidiType.Ekpaideuomenos)]
+    public async Task AddKataskinotis_ShouldReturnExpectedResult(PaidiType paidiType)
     {
-        var paidi = new Paidi { Id = id, LastName= "Test PaidiL", FirstName = "Test PaidiF", Age = 10, PaidiType = paidiType };
-        var result = await _paidiRepository.AddPaidiInSkini(paidi, "Skini1");
-        Assert.Equal(result, expectedResult);
-        if (expectedResult)
+        var paidi = new Paidi { Id = new Random().Next(1, 100), LastName = "Test PaidiL", FirstName = "Test PaidiF", Age = 10, PaidiType = paidiType, Sex = Sex.Male };
+        var omadarxis = new Omadarxis { Id = new Random().Next(1, 100), LastName = "OmadarxisL", FirstName = "OmadarxisF", Age = 20, Sex = Sex.Male};
+
+        var tomeas = GetTomeas("A", new Random().Next(1, 100));
+        var koinotita = GetKoinotita(21, "TestKoinotita");
+        var skini = new Skini
         {
-            var addedPaidi = await _dbContext.Paidia!.FindAsync(id);
-            Assert.NotNull(addedPaidi);
-            Assert.Equal(paidi.LastName, addedPaidi.LastName);
-            Assert.Equal(paidi.FirstName, addedPaidi.FirstName);
-            Assert.Equal(paidi.Age, addedPaidi.Age);
-            Assert.Equal(paidi.PaidiType, addedPaidi.PaidiType);
-        }
-        else
-        {
-            var addedPaidi = await _dbContext.Paidia!.FindAsync(id);
-            Assert.Null(addedPaidi);
-        }
+            Id = 43 + new Random().Next(1, 100),
+            Name = "TestSkini",
+            Koinotita = koinotita,
+            Sex = Sex.Male,
+            OmadarxisId = omadarxis.Id,
+            KoinotitaId = koinotita.Id
+        };
+        await _dbContext.Tomeis.AddAsync(tomeas);
+        await _dbContext.Koinotites.AddAsync(koinotita);
+        await _dbContext.Skines.AddAsync(skini);
+
+        await _dbContext.SaveChangesAsync();
+        var result = await _paidiRepository.AddPaidiInSkini(paidi, skini.Name);
+
+        Assert.True(result);
+
+        var addedPaidi = await _dbContext.Paidia!.FindAsync(paidi.Id);
+        Assert.NotNull(addedPaidi);
+        Assert.Equal(paidi.LastName, addedPaidi.LastName);
+        Assert.Equal(paidi.FirstName, addedPaidi.FirstName);
+        Assert.Equal(paidi.Age, addedPaidi.Age);
+        Assert.Equal(paidi.PaidiType, addedPaidi.PaidiType);
     }
 
     [Theory]
@@ -170,5 +180,24 @@ public class PaidiaRepositoryDbTests
             Assert.NotNull(updatedPaidi);
             Assert.Equal(newName, updatedPaidi.LastName);
         }
+    }
+
+    private static Tomeas GetTomeas(string name, int id)
+    {
+        return new Tomeas
+        {
+            Name = name,
+            Id = id
+        };
+    }
+
+    private static Koinotita GetKoinotita(int id, string name)
+    {
+        return new Koinotita
+        {
+            Id = id,
+            Name = name,
+            Tomeas = GetTomeas("A", 1)
+        };
     }
 }

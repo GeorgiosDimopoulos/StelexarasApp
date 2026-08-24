@@ -203,7 +203,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             }
 
 
-            if (existingSkini.OmadarxisId == null || existingSkini.OmadarxisId < 0) 
+            if (paidi.PaidiType == PaidiType.Kataskinotis && (existingSkini.OmadarxisId == null || existingSkini.OmadarxisId < 0)) 
             {
                 _logger.LogWarning("Skini has no Omadarxis");
                 return false;

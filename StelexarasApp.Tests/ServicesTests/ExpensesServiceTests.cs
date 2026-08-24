@@ -37,7 +37,7 @@ public class ExpensesServiceTests
         // Assert
         Assert.True(result);
         _mockMapper.Verify(m => m.Map<Expense>(expense), Times.Once);
-        mockExpenseValidator.Verify(v => v.ValidateAndThrow(expense), Times.Once);
+        mockExpenseValidator.Verify(v => v.Validate(It.IsAny<ValidationContext<ExpenseDtoBase>>()), Times.Once);
     }
 
     [Fact]
@@ -82,7 +82,7 @@ public class ExpensesServiceTests
         // Assert
         Assert.True(result);
         _mockMapper.Verify(m => m.Map<Expense>(updateExpenseRequest), Times.Once);
-        mockExpenseValidator.Verify(v => v.ValidateAndThrow((It.IsAny<UpdateExpenseRequest>())), Times.Once);
+        mockExpenseValidator.Verify(v => v.Validate(It.IsAny<ValidationContext<ExpenseDtoBase>>()), Times.Once);
     }
 
     [Fact]
@@ -90,8 +90,8 @@ public class ExpensesServiceTests
     {
         // Arrange
         var expense = new Expense { Id = 1, Description = "TestExpense", Date = DateTime.Now, Amount = 100 };
-        _mockexpenseRepository.Setup(m => m.GetExpenseByIdInDb(It.IsAny<int>())).ReturnsAsync(expense);
-        
+        _mockexpenseRepository.Setup(m => m.DeleteExpenseInDb(expense.Id)).ReturnsAsync(true);
+
         // Act
         var result = await _expenseService.DeleteExpenseInService(expense.Id);
 
