@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Any;
 using Moq;
+using OpenQA.Selenium.DevTools.V126.Browser;
 using StelexarasApp.Library.QueryParameters.People;
 
 namespace StelexarasApp.Tests.ServicesTests;
@@ -41,6 +43,7 @@ public class PaidiaServiceTests
 
     }
 
+    #region Create    
     [Fact]
     public async Task AddEkpaideuomenos_ShouldReturnTrue_WhenSuccessful()
     {
@@ -60,6 +63,52 @@ public class PaidiaServiceTests
         _mockPaidiRepository.Verify(repo => repo.AddPaidiInSkini(paidi, "Skini1"), Times.Once);
     }
 
+    [Fact]
+    public async Task CreatePaidi_ShouldFail_WhenValidationFails()
+    {
+        // Arrange
+        var newPaidiRequest = new CreatePaidiRequest { LastName = string.Empty, FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentPhone = "1234567890", SeAdeia = false, Sex = Sex.Male };
+
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(newPaidiRequest, It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult(
+            [new ValidationFailure("LastName", "PaidiDto last Name is required")]));
+
+        // Act
+        var result = await _paidiService.CreatePaidiInService(newPaidiRequest);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(repo => repo.AddPaidiInSkini(It.IsAny<Paidi>(), It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task CreatePaidi_ShouldFail_WhenRepositoryReturnsFalse()
+    {
+        // Arrange
+        var newPaidiRequest = new CreatePaidiRequest
+        {
+            LastName = "Dae",
+            FirstName = "John",
+            Age = 16,
+            PaidiType = PaidiType.Ekpaideuomenos,
+            ParentPhone = "1234567890",
+            SeAdeia = false,
+            Sex = Sex.Male,
+            SkiniName = "Skini1",
+        };
+
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(It.IsAny<CreatePaidiRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult());
+        _mockPaidiRepository.Setup(repo => repo.AddPaidiInSkini(It.IsAny<Paidi>(), It.IsAny<string>())).ReturnsAsync(false);
+
+        // Act
+        var result = await _paidiService.CreatePaidiInService(newPaidiRequest);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(repo => repo.AddPaidiInSkini(It.IsAny<Paidi>(), It.IsAny<string>()), Times.Once);
+    }
+    #endregion
+
+    #region Get
     [Fact]
     public async Task GetEkpaideuomenous_ShouldReturnThem()
     {
@@ -100,32 +149,6 @@ public class PaidiaServiceTests
     }
 
     [Fact]
-    public async Task DeletePaidiShouldReturnOk()
-    {
-        var paidiToDelete = new Paidi
-        {
-            Id = 1,
-            LastName = "Deoe",
-            FirstName = "Joohn",
-            ParentTel = "1233567890",
-            SeAdeia = false,
-            SkiniId = 1,
-            Sex = Sex.Female,
-            Age = 30,
-            PaidiType = PaidiType.Ekpaideuomenos
-        };
-
-        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>())).ReturnsAsync(paidiToDelete);
-        _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete.Id)).ReturnsAsync(true);
-
-        var result = await _paidiService.DeletePaidiInService(paidiToDelete.Id);
-
-        Assert.True(result.IsSuccess);
-        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>()), Times.Once);
-        _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete.Id), Times.Once);
-    }
-
-    [Fact]
     public async Task GetPaidiById_ShouldReturn()
     {
         // Arrange
@@ -163,4 +186,177 @@ public class PaidiaServiceTests
         Assert.Equal(expectedPaidi?.Age, result.Value.Age);
         Assert.Equal(expectedPaidi?.PaidiType, result.Value.PaidiType);
     }
+
+    [Fact]
+    public async Task GetPaidiById_ShouldFail_WhenNotFound()
+    {
+        // Arrange
+        int paidiId = 129;
+
+        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiId, It.IsAny<PaidiQueryParameters>()))
+                            .ReturnsAsync((Paidi?)null);
+
+        // Act
+        var result = await _paidiService.GetPaidiByIdInService(paidiId, new PaidiQueryParameters());
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiId, It.IsAny<PaidiQueryParameters>()), Times.Once);
+    }
+    #endregion
+
+    #region Update
+    [Fact]
+    public async Task UpdatePaidi_ShouldFail_WhenRepositoryReturnsFalse()
+    {
+        // Arrange
+        var paidiRequest =
+            new UpdatePaidiRequest
+            {
+                Id = 123,
+                LastName = "UpdatedLastName",
+                FirstName = "UpdatedFirstName",
+                Age = 10,
+                SeAdeia = true,
+                Sex = Sex.Male,
+                PaidiType = PaidiType.Ekpaideuomenos,
+                ParentPhone = "1234567890",
+                SkiniName = "Skini1"
+            };
+
+        var mappedPaidi = new Paidi
+        {
+            Id = paidiRequest.Id,
+            FirstName = paidiRequest.FirstName,
+            LastName = paidiRequest.LastName,
+            SeAdeia = paidiRequest.SeAdeia,
+            Age = paidiRequest.Age,
+            PaidiType = paidiRequest.PaidiType,
+            ParentTel = paidiRequest.ParentPhone,
+            Sex = paidiRequest.Sex
+        };
+
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(paidiRequest, It.IsAny<CancellationToken>()))
+                           .ReturnsAsync(new ValidationResult());
+        _mockMapper.Setup(m => m.Map<Paidi>(paidiRequest))
+                   .Returns(mappedPaidi);
+        _mockPaidiRepository.Setup(repo => repo.UpdatePaidiInDb(mappedPaidi))
+                            .ReturnsAsync(false);
+
+        // Act
+        var result = await _paidiService.UpdatePaidiInService(paidiRequest);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(repo => repo.UpdatePaidiInDb(mappedPaidi), Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdatePaidi_ShouldFail_WhenValidationFails()
+    {
+        var updatePaidiRequest = new UpdatePaidiRequest()
+        {
+            Id = 124,
+            LastName = "UpdateddLastName",
+            FirstName = "UpdateddFirstName",
+            Age = 10,
+            SeAdeia = true,
+            Sex = Sex.Male,
+            PaidiType = PaidiType.Ekpaideuomenos,
+            ParentPhone = "1234567290",
+            SkiniName = "Skini11"
+        };
+
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(updatePaidiRequest, It.IsAny<CancellationToken>()))
+                           .ReturnsAsync(new ValidationResult([new ValidationFailure("LastName", "LastName is required")]));
+
+
+        // Act
+        var result = await _paidiService.UpdatePaidiInService(updatePaidiRequest);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(repo => repo.UpdatePaidiInDb(It.IsAny<Paidi>()), Times.Never);
+    }
+    #endregion
+
+    #region Delete
+    [Fact]
+    public async Task DeletePaidiShouldReturnOk()
+    {
+        var paidiToDelete = new Paidi
+        {
+            Id = 1,
+            LastName = "Deoe",
+            FirstName = "Joohn",
+            ParentTel = "1233567890",
+            SeAdeia = false,
+            SkiniId = 1,
+            Sex = Sex.Female,
+            Age = 30,
+            PaidiType = PaidiType.Ekpaideuomenos
+        };
+
+        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>())).ReturnsAsync(paidiToDelete);
+        _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete.Id)).ReturnsAsync(true);
+
+        var result = await _paidiService.DeletePaidiInService(paidiToDelete.Id);
+
+        Assert.True(result.IsSuccess);
+        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>()), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete.Id), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeletePaidi_ShouldFail_WhenNotFound()
+    {
+        var paidiToDelete = new Paidi
+        {
+            Id = 1,
+            LastName = "Deoe",
+            FirstName = "Joohn",
+            ParentTel = "1233567890",
+            SeAdeia = false,
+            SkiniId = 1,
+            Sex = Sex.Female,
+            Age = 30,
+            PaidiType = PaidiType.Ekpaideuomenos
+        };
+
+        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>())).ReturnsAsync((Paidi?)null);
+        _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete.Id)).ReturnsAsync(false);
+
+        var result = await _paidiService.DeletePaidiInService(paidiToDelete.Id);
+
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>()), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete.Id), Times.Never);
+    }
+
+    [Fact]
+    public async Task DeletePaidi_ShouldFail_WhenRepositoryReturnsFalse()
+    {
+        var paidiToDelete = new Paidi
+        {
+            Id = 1,
+            LastName = "Deoe",
+            FirstName = "Joohn",
+            ParentTel = "1233567890",
+            SeAdeia = false,
+            SkiniId = 1,
+            Sex = Sex.Female,
+            Age = 30,
+            PaidiType = PaidiType.Ekpaideuomenos
+        };
+
+        _mockPaidiRepository.Setup(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>())).ReturnsAsync(paidiToDelete);
+        _mockPaidiRepository.Setup(repo => repo.DeletePaidiInDb(paidiToDelete.Id)).ReturnsAsync(false);
+
+        var result = await _paidiService.DeletePaidiInService(paidiToDelete.Id);
+
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(repo => repo.GetPaidiByIdFromDb(paidiToDelete.Id, It.IsAny<PaidiQueryParameters>()), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.DeletePaidiInDb(paidiToDelete.Id), Times.Once);
+    }
+    #endregion
 }
