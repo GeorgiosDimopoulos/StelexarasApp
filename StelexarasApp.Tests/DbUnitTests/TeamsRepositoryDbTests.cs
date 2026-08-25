@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
-namespace StelexarasApp.Tests.IntegrationDbTests
+namespace StelexarasApp.Tests.DbUnitTests
 {
     public class TeamsRepositoryDbTests
     {

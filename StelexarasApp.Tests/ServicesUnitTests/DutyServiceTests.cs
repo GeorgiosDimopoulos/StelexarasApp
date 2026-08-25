@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Moq;
 
-namespace StelexarasApp.Tests.ServicesTests;
+namespace StelexarasApp.Tests.ServicesUnitTests;
 
 public class DutyServiceTests
 {

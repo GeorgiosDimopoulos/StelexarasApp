@@ -2,12 +2,10 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Any;
 using Moq;
-using OpenQA.Selenium.DevTools.V126.Browser;
 using StelexarasApp.Library.QueryParameters.People;
 
-namespace StelexarasApp.Tests.ServicesTests;
+namespace StelexarasApp.Tests.ServicesUnitTests;
 
 public class PaidiaServiceTests
 {

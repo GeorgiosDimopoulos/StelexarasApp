@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
-using OpenQA.Selenium.DevTools.V126.Debugger;
 
-namespace StelexarasApp.Tests.IntegrationDbTests;
+namespace StelexarasApp.Tests.DbUnitTests;
 
 public class StaffRepositoryDbTests
 {

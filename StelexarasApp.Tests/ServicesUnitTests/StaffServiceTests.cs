@@ -4,7 +4,7 @@ using FluentValidation.Results;
 using Moq;
 using StelexarasApp.Library.QueryParameters.People;
 
-namespace StelexarasApp.Tests.ServicesTests;
+namespace StelexarasApp.Tests.ServicesUnitTests;
 
 public class StaffServiceTests
 {
@@ -21,6 +21,7 @@ public class StaffServiceTests
         _stelexiService = new StaffService(_mockMapper.Object, _mockStelexiRepository.Object, _stelexosValidator.Object);
     }
 
+    #region GET
     [Fact]
     public async Task GetStelexosByIdInService_ShouldReturnStelexos()
     {
@@ -166,6 +167,78 @@ public class StaffServiceTests
     }
 
     [Fact]
+    public async Task GetAllTomearxesInService_ShouldWork()
+    {
+        // Arrange
+        var tomearxes = new List<Tomearxis>
+        {
+            new() { Id = 1, LastName = "Doe", FirstName = "John", Sex = Sex.Male, Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890", Tomeas = new Tomeas { Name = "TestTomea" } }
+        };
+
+        _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(tomearxes);
+        _mockMapper.Setup(m => m.Map<IEnumerable<StelexosResponse>>(It.IsAny<IEnumerable<Tomearxis>>())).Returns(new List<StelexosResponse>()
+        {
+            new()
+            {
+                Id = 1, LastName = "Doe",FirstName = "John", Sex = Sex.Male, Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890"
+            }
+        });
+
+        // Act
+        var result = await _stelexiService.GetStelexoiAnaXwro(string.Empty, new());
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("Doe", result.First().LastName);
+        Assert.Equal("John", result.First().FirstName);
+        _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetOmadarxesSeKoinotitaInService_ShouldWork()
+    {
+        // Arrange
+        var koinotitaName = "TestKoinotita";
+        var koinotita = new KoinotitaDtoBase
+        {
+            Name = koinotitaName,
+            TomeasName = "Tomeas1"
+        };
+        var stelexoi = new List<Omadarxis>
+        {
+            new()
+            {
+                Id = 1, LastName = "Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890" , FirstName ="John"
+            }
+        };
+
+        var stelexoiDtos = new List<StelexosDtoBase>
+        {
+            new() { LastName = "Doe", Age = 30,Tel  = "1234567890", FirstName ="John" }
+        };
+
+        _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(koinotitaName, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(stelexoi);
+        _mockMapper.Setup(m => m.Map<IEnumerable<StelexosDtoBase>>(It.IsAny<IEnumerable<Omadarxis>>())).Returns(new List<StelexosResponse>()
+        {
+            new()
+            {
+                Id = 1, LastName = "Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890" , FirstName ="John"
+            }
+        });
+
+        // Act
+        var result = await _stelexiService.GetStelexoiAnaXwro(koinotita.Name, new());
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("Doe", result.First().LastName);
+        Assert.Equal("John", result.First().FirstName);
+
+        _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(koinotitaName, It.IsAny<StelexosQueryParameters>()), Times.Once);
+        _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(stelexoi), Times.Once);
+    }
+
+    [Fact]
     public async Task GetAllKoinotarxesInService_ShouldReturnKoinotarxes()
     {
         // Arrange
@@ -290,7 +363,9 @@ public class StaffServiceTests
         _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(tomeaDto.Name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(omadarxisList), Times.Once);
     }
+    #endregion
 
+    #region CREATE
     [Fact]
     public async Task AddStelexosInService_ShouldThrowArgumentNullExceptionOrFalse_WhenDtoIsNull()
     {
@@ -343,6 +418,20 @@ public class StaffServiceTests
     }
 
     [Fact]
+    public async Task CreateStelexos_ShouldFail_WhenValidationFails()
+    {
+
+    }
+
+    [Fact]
+    public async Task CreateStelexos_ShouldFail_WhenRepositoryReturnsFalse()
+    {
+
+    }
+    #endregion
+
+    #region DELETE
+    [Fact]
     public async Task DeleteStelexosInService_ShouldReturnTrue_WhenRepositoryReturnsTrue()
     {
         // Arrange
@@ -357,79 +446,8 @@ public class StaffServiceTests
         Assert.True(result.IsSuccess);
         _mockStelexiRepository.Verify(r => r.DeleteStelexosInDb(id), Times.Once);
     }
-
-    [Fact]
-    public async Task GetAllTomearxesInService_ShouldWork()
-    {
-        // Arrange
-        var tomearxes = new List<Tomearxis>
-        {
-            new() { Id = 1, LastName = "Doe", FirstName = "John", Sex = Sex.Male, Age = 30, Thesi = Thesi.Tomearxis, Tel = "1234567890", Tomeas = new Tomeas { Name = "TestTomea" } }
-        };
-
-        _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(tomearxes);
-        _mockMapper.Setup(m => m.Map<IEnumerable<StelexosResponse>>(It.IsAny<IEnumerable<Tomearxis>>())).Returns(new List<StelexosResponse>()
-        {
-            new()
-            {
-                Id = 1, LastName = "Doe",FirstName = "John", Sex = Sex.Male, Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890"
-            }
-        });
-
-        // Act
-        var result = await _stelexiService.GetStelexoiAnaXwro(string.Empty, new());
-
-        // Assert
-        Assert.Single(result);
-        Assert.Equal("Doe", result.First().LastName);
-        Assert.Equal("John", result.First().FirstName);
-        _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(string.Empty, It.IsAny<StelexosQueryParameters>()), Times.Once);
-    }
-
-    [Fact]
-    public async Task GetOmadarxesSeKoinotitaInService_ShouldWork()
-    {
-        // Arrange
-        var koinotitaName = "TestKoinotita";
-        var koinotita = new KoinotitaDtoBase
-        {
-            Name = koinotitaName,
-            TomeasName = "Tomeas1"
-        };
-        var stelexoi = new List<Omadarxis>
-        {
-            new()
-            {
-                Id = 1, LastName = "Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890" , FirstName ="John"
-            }
-        };
-
-        var stelexoiDtos = new List<StelexosDtoBase>
-        {
-            new() { LastName = "Doe", Age = 30,Tel  = "1234567890", FirstName ="John" }
-        };
-
-        _mockStelexiRepository.Setup(r => r.GetStelexoiAnaXwroInDb(koinotitaName, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(stelexoi);
-        _mockMapper.Setup(m => m.Map<IEnumerable<StelexosDtoBase>>(It.IsAny<IEnumerable<Omadarxis>>())).Returns(new List<StelexosResponse>()
-        {
-            new()
-            {
-                Id = 1, LastName = "Doe", Age = 30, Thesi = Thesi.Omadarxis, Tel = "1234567890" , FirstName ="John"
-            }
-        });
-
-        // Act
-        var result = await _stelexiService.GetStelexoiAnaXwro(koinotita.Name, new());
-
-        // Assert
-        Assert.Single(result);
-        Assert.Equal("Doe", result.First().LastName);
-        Assert.Equal("John", result.First().FirstName);
-
-        _mockStelexiRepository.Verify(r => r.GetStelexoiAnaXwroInDb(koinotitaName, It.IsAny<StelexosQueryParameters>()), Times.Once);
-        _mockMapper.Verify(m => m.Map<IEnumerable<StelexosResponse>>(stelexoi), Times.Once);
-    }
-
+    #endregion
+    
     [Fact]
     public async Task MoveOmadarxisToAnotherSkiniInService_ShouldReturnTrue_WhenMoveIsSuccessful()
     {
@@ -488,6 +506,7 @@ public class StaffServiceTests
         _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName), Times.Once);
     }
 
+    #region UPDATE
     [Theory]
     [InlineData(Thesi.Omadarxis)]
     [InlineData(Thesi.Koinotarxis)]
@@ -628,4 +647,16 @@ public class StaffServiceTests
         _mockMapper.Verify(m => m.Map<IStelexos>(createStelexosRequest), Times.Once);
         _mockMapper.Verify(m => m.Map(updateStelexosRequest, stelexos), Times.Once);
     }
+
+    [Fact]
+    public async Task UpdateStelexos_ShouldFail_WhenValidationFails()
+    {
+
+    }
+
+    public async Task UpdateStelexos_ShouldFail_WhenRepositoryReturnsFalse()
+    {
+
+    }
+    #endregion
 }

@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
-namespace StelexarasApp.Tests.ServicesTests;
+namespace StelexarasApp.Tests.ServicesUnitTests;
 
 public class ExpensesServiceTests
 {
