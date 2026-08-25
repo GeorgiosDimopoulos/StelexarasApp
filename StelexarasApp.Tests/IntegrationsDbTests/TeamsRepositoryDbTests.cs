@@ -14,7 +14,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public TeamsRepositoryDbTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-               .UseInMemoryDatabase(databaseName: "TestDatabase")
+               .UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
                .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                .Options;
             _dbContext = new AppDbContext(options);
@@ -295,7 +295,7 @@ namespace StelexarasApp.Tests.IntegrationDbTests
         public async Task GetTomeaByName_ShouldReturnTomea()
         {
             // Arrange
-            var tomeas = GetTomeas("Tomeas1", 1);
+            var tomeas = GetTomeas($"Tomeas1_{Guid.NewGuid().ToString()}", 1);
             await _dbContext.Tomeis!.AddAsync(tomeas);
             await _dbContext.SaveChangesAsync();
 

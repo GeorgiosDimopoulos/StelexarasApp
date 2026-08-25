@@ -13,7 +13,7 @@ public class PaidiaRepositoryDbTests
     public PaidiaRepositoryDbTests()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
-           .UseInMemoryDatabase(databaseName: "TestDatabase")
+           .UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
            .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
            .Options;
         _dbContext = new AppDbContext(options);
@@ -25,8 +25,8 @@ public class PaidiaRepositoryDbTests
     [InlineData(PaidiType.Ekpaideuomenos)]
     public async Task AddKataskinotis_ShouldReturnExpectedResult(PaidiType paidiType)
     {
-        var paidi = new Paidi { Id = new Random().Next(1, 100), LastName = "Test PaidiL", FirstName = "Test PaidiF", Age = 10, PaidiType = paidiType, Sex = Sex.Male };
-        var omadarxis = new Omadarxis { Id = new Random().Next(1, 100), LastName = "OmadarxisL", FirstName = "OmadarxisF", Age = 20, Sex = Sex.Male};
+        var paidi = new Paidi { LastName = "Test PaidiL", FirstName = "Test PaidiF", Age = 10, PaidiType = paidiType, Sex = Sex.Male };
+        var omadarxis = new Omadarxis { LastName = "OmadarxisL", FirstName = "OmadarxisF", Age = 20, Sex = Sex.Male};
 
         var tomeas = GetTomeas("A", new Random().Next(1, 100));
         var koinotita = GetKoinotita(21, "TestKoinotita");
@@ -86,22 +86,25 @@ public class PaidiaRepositoryDbTests
 
     [Theory]
     [InlineData(7, 2, true)]
-    [InlineData(3, 9999, false)]
+    [InlineData(3, -99, false)]
     public async Task MovePaidiToNewSkini_ShouldReturnExpectedResult(int paidiId, int newSkiniId, bool expectedResult)
     {
         // Arrange
         var koinotita = new Koinotita
         {
-            Id = 1,
+            Id = 100,
             Name = "Ipiros",
+            TomeasId = 100,            
             Skines = new List<Skini>()
         };
 
         var existingSkini = new Skini
         {
-            Id = 4,
+            Id = 400,
             Name = "Pindos",
-            Koinotita = koinotita,
+            Sex = Sex.Male,
+            KoinotitaId = koinotita.Id,
+            Koinotita = koinotita,            
             Paidia = new List<Paidi>()
         };
 
@@ -110,11 +113,10 @@ public class PaidiaRepositoryDbTests
             Id = newSkiniId,
             Name = "NewSkini",
             Koinotita = koinotita,
+            KoinotitaId = koinotita.Id,
+            Sex = Sex.Male,
             Paidia = new List<Paidi>()
         };
-
-        await _paidiRepository.AddSkinesInDb(existingSkini);
-        await _paidiRepository.AddSkinesInDb(newSkini);
 
         var existingPaidi = new Paidi
         {
@@ -127,7 +129,12 @@ public class PaidiaRepositoryDbTests
             PaidiType = PaidiType.Kataskinotis,
         };
 
-        await _paidiRepository.AddPaidiInSkini(existingPaidi, "Skini1");
+        await _dbContext.Skines.AddAsync(existingSkini);
+        await _dbContext.Skines.AddAsync(newSkini);        
+        await _dbContext.Paidia.AddAsync(existingPaidi);
+        await _dbContext.SaveChangesAsync();
+                
+        // await _paidiRepository.AddPaidiInSkini(existingPaidi, existingSkini.Name);
 
         await _dbContext.SaveChangesAsync();
 

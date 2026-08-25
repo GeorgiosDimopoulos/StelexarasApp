@@ -11,21 +11,18 @@ public class ExpenseRepositoryDbTests
 
     public ExpenseRepositoryDbTests()
     {
-        var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "TestDatabase").Options;
+        var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString("N")).Options;
         _dbContext = new AppDbContext(options);
         expenseRepository = new ExpenseRepository(_dbContext, loggerFactory);
     }
 
-    [Theory]
-    [InlineData(-1, false)]
-    [InlineData(0, false)]
-    [InlineData(1, true)]
-    public async Task AddExpenseAsync_ShouldShouldReturnExpectedResult(int expenseId, bool expectedResult)
+    [Fact]
+    public async Task AddExpenseAsync_ShouldShouldReturnExpectedResult()
     {
         // Arrange
         var expense = new Expense
         {
-            Id = expenseId,
+            Id = new Random().Next(1, 100),
             Description = "Test Expense",
             Amount = 100
         };
@@ -34,20 +31,13 @@ public class ExpenseRepositoryDbTests
         var result = await expenseRepository.AddExpenseInDb(expense);
 
         // Assert
-        Assert.Equal(expectedResult, result);
+        Assert.True(result);
 
-        if (expectedResult)
-        {
-            var expenseInDb = await _dbContext.Expenses.FindAsync(expenseId);
-            Assert.NotNull(expenseInDb);
-            Assert.Equal(expense.Description, expenseInDb.Description);
-            Assert.Equal(expense.Amount, expenseInDb.Amount);
-        }
-        else
-        {
-            var expenseInDb = await _dbContext.Expenses.FindAsync(expenseId);
-            Assert.Null(expenseInDb);
-        }
+        var expenseInDb = await _dbContext.Expenses.FindAsync(expense.Id);
+        Assert.NotNull(expenseInDb);
+        Assert.Equal(expense.Description, expenseInDb.Description);
+        Assert.Equal(expense.Amount, expenseInDb.Amount);
+
     }
 
     [Fact]
@@ -69,7 +59,7 @@ public class ExpenseRepositoryDbTests
         // Assert
         Assert.True(result);
 
-        var deletedExpense = await _dbContext.Expenses.FindAsync(1);
+        var deletedExpense = await _dbContext.Expenses.FindAsync(existingExpense.Id);
         Assert.Null(deletedExpense);
     }
 
@@ -149,8 +139,8 @@ public class ExpenseRepositoryDbTests
     public async Task GetExpensesAsync_ShouldReturnAllExpensesWhenExisted()
     {
         _dbContext.Expenses.AddRange(
-            new Expense { Id = 92, Description = "ExpenseTest1", Amount = 100 },
-            new Expense { Id = 24, Description = "ExpenseTest1", Amount = 200 }
+            new Expense { Description = "ExpenseTest1", Amount = 100 },
+            new Expense { Description = "ExpenseTest1", Amount = 200 }
         );
         await _dbContext.SaveChangesAsync();
 

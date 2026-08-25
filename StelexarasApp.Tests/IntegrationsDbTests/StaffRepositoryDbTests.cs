@@ -14,7 +14,7 @@ public class StaffRepositoryDbTests
     public StaffRepositoryDbTests()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
-           .UseInMemoryDatabase(databaseName: "TestDatabase")
+           .UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
            .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
            .Options;
         _dbContext = new AppDbContext(options);
@@ -43,12 +43,11 @@ public class StaffRepositoryDbTests
         // Arrange
         var stelexos = new Omadarxis
         {
-            Id = 96,
             Thesi = Thesi.Omadarxis,
-            LastName = "TestL",
-            FirstName = "TestF",
+            LastName = $"TestL_{Guid.NewGuid().ToString()}",
+            FirstName = $"TestF_{Guid.NewGuid().ToString()}",
             Sex = Sex.Male,
-            Tel = "1234567890",
+            Tel = $"123-456-789{Guid.NewGuid().ToString().Substring(0, 3)}",
         };
 
         await _dbContext.Omadarxes!.AddAsync(stelexos);
@@ -69,7 +68,6 @@ public class StaffRepositoryDbTests
         var koinotita = GetKoinotita(21, "TestKoinotita");
         var skini = new Skini
         {
-            Id = 41,
             Name = "TestSkini",
             Koinotita = koinotita,
             Sex = Sex.Female,
@@ -80,9 +78,9 @@ public class StaffRepositoryDbTests
         {
             Id = 18,
             Thesi = Thesi.Omadarxis,
-            LastName = "TestL",
-            FirstName = "TestF",
-            Tel = "123-456-7890",
+            LastName = $"TestL_{Guid.NewGuid().ToString()}",
+            FirstName = "TestF" + Guid.NewGuid().ToString(),
+            Tel = "123-456-789" + Guid.NewGuid().ToString().Substring(0, 3),
             Age = 30,
             XwrosName = "TestSkini",
             Sex = Sex.Male
