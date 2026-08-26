@@ -2,7 +2,7 @@
 
 namespace StelexarasApp.Tests.IntegrationTests;
 
-public class DatabaseFixture : IClassFixture<DatabaseFixture>
+public class DatabaseFixture
 {
     public DbContextOptions<AppDbContext> Options { get; }
 
@@ -15,5 +15,13 @@ public class DatabaseFixture : IClassFixture<DatabaseFixture>
         using var dbContext = new AppDbContext(Options);
 
         dbContext.Database.Migrate();
+    }
+
+    public async Task ResetDatabaseAsync()
+    {
+        await using var dbContext = new AppDbContext(Options);
+
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.MigrateAsync();
     }
 }

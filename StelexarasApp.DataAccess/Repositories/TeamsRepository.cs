@@ -508,7 +508,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
 
     public async Task<bool> AddSkiniInDb(Skini skini)
     {
-        if (skini == null || skini.Koinotita == null || (await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || _dbContext.Skines is null) // skini.Id <= 0 ||
+        if (skini == null || (await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skini.Name)) is not null || _dbContext.Skines is null) // skini.Id <= 0 ||
             return false;
 
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
@@ -520,10 +520,10 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             if (koinotites.Count == 0)            
                 return false;
             
-            if (!koinotites.Any(k => k.Id == skini.Koinotita.Id))
+            if (!koinotites.Any(k => k.Id == skini.KoinotitaId))
                 return false;
 
-            var existingKoinotita = koinotites.FirstOrDefault(t => t.Id == skini.Koinotita.Id);
+            var existingKoinotita = koinotites.FirstOrDefault(t => t.Id == skini.KoinotitaId);
             skini.Koinotita = existingKoinotita!;
 
             var existingSkini = await _dbContext.Skines.FirstOrDefaultAsync(t => t.Name.Equals(skini.Name));
