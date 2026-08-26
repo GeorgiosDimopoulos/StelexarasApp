@@ -253,9 +253,9 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         {
             koinotites = koinotites.Include(k => k.Skines!.Select(sk => sk.Omadarxis));
         }
-        
+
         var koinotita = await koinotites.FirstOrDefaultAsync(k => k.Id == id) ?? new Koinotita();
-        
+
         return koinotita;
     }
 
@@ -304,8 +304,9 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (koinotita is null || _dbContext.Koinotites is null)
+        if (koinotita is null || _dbContext.Koinotites is null || koinotita.TomeasId <= 0 || _dbContext.Koinotites.Count() == 0)
             return false;
+
         try
         {
             var existingKoinotita = await _dbContext.Koinotites.FindAsync(id);
@@ -315,8 +316,6 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
             existingKoinotita.Name = koinotita.Name;
             existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
             existingKoinotita.Skines = koinotita.Skines;
-
-            //existingKoinotita.Tomeas.Name = koinotita.Tomeas.Name;
             existingKoinotita.TomeasId = koinotita.TomeasId;
 
             await _dbContext.SaveChangesAsync();
@@ -341,7 +340,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (skini is null || _dbContext.Skines is null)
+        if (skini is null || _dbContext.Skines is null || skini.KoinotitaId <= 0 || _dbContext.Skines.Count() == 0)
             return false;
 
         try
@@ -517,9 +516,9 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
         try
         {
             var koinotites = await _dbContext.Koinotites.ToListAsync();
-            if (koinotites.Count == 0)            
+            if (koinotites.Count == 0)
                 return false;
-            
+
             if (!koinotites.Any(k => k.Id == skini.KoinotitaId))
                 return false;
 
