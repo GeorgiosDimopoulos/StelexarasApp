@@ -55,6 +55,12 @@
     protected override async Task OnInitializedAsync()
     {
         Skini = await XwroiApi.GetSkiniById(SkiniId, new() { IncludeStelexos = true });
+        if (Skini is null)
+        {
+            NavigationManager.NavigateTo("/");
+            return;
+        }
+
         Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new())).OrderBy(c => c.LastName).ToList();
     }
 
@@ -76,7 +82,7 @@
 
     private async Task OpenStelexos()
     {
-        if (Skini?.OmadarxisId < 0)
+        if (Skini.OmadarxisId < 0)
             return;
 
         var omadarxis = await StelexiApi.GetStelexosById(Skini.OmadarxisId, new());

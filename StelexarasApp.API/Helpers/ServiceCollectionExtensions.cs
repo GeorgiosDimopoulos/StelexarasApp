@@ -34,8 +34,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped<ITeamsRepository, TeamsRepository>();
 
-        services.AddScoped<IPaidiaService>();
-        services.AddScoped<IStaffService>();
+        services.AddScoped<IPaidiaService, PaidiaService>();
+        services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<IDutyService, DutyService>();
