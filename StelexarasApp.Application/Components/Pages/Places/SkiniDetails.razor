@@ -32,7 +32,7 @@
         <RowTemplate>
             <MudTd>@context.LastName @context.FirstName</MudTd>
             <MudTd>@context.Age</MudTd>
-            <MudTd>@context.ParentPhone</MudTd>
+            <MudTd>@context.ParentTel</MudTd>            
             <MudTd>@IsPresent(context.SeAdeia)</MudTd>
             <MudTd>
                 <MudButton Color="Color.Success"
@@ -54,14 +54,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Skini = await XwroiApi.GetSkiniById(SkiniId, new() { IncludeStelexos = true });
+        Skini = await XwroiApi.GetSkiniById(SkiniId, new() { IncludeStelexos = true});
         if (Skini is null)
         {
             NavigationManager.NavigateTo("/");
             return;
         }
 
-        Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new())).OrderBy(c => c.LastName).ToList();
+        Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new(){IncludeSkini = true})).OrderBy(c => c.LastName).ToList();
     }
 
     private async Task OpenPaidi(PaidiResponse context)

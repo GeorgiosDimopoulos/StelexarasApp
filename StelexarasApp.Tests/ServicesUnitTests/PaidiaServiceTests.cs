@@ -46,7 +46,7 @@ public class PaidiaServiceTests
     public async Task AddEkpaideuomenos_ShouldReturnTrue_WhenSuccessful()
     {
         // Arrange
-        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentPhone = "1234567290", SeAdeia = false, Sex = Sex.Male };
+        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentTel  = "1234567290", SeAdeia = false, Sex = Sex.Male };
         var paidi = new Ekpaideuomenos { Id = 1, LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, Sex = Sex.Male, SeAdeia = false, ParentTel = "1234567290", SkiniId = 1 };
 
         _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
@@ -65,7 +65,7 @@ public class PaidiaServiceTests
     public async Task CreatePaidi_ShouldFail_WhenValidationFails()
     {
         // Arrange
-        var newPaidiRequest = new CreatePaidiRequest { LastName = string.Empty, FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentPhone = "1234567890", SeAdeia = false, Sex = Sex.Male };
+        var newPaidiRequest = new CreatePaidiRequest { LastName = string.Empty, FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentTel  = "1234567890", SeAdeia = false, Sex = Sex.Male };
 
         _paidiValidatorMock.Setup(v => v.ValidateAsync(newPaidiRequest, It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult(
             [new ValidationFailure("LastName", "PaidiDto last Name is required")]));
@@ -88,7 +88,7 @@ public class PaidiaServiceTests
             FirstName = "John",
             Age = 16,
             PaidiType = PaidiType.Ekpaideuomenos,
-            ParentPhone = "1234567890",
+            ParentTel  = "1234567890",
             SeAdeia = false,
             Sex = Sex.Male,
             SkiniName = "Skini1",
@@ -128,7 +128,7 @@ public class PaidiaServiceTests
                        FirstName = p.FirstName,
                        LastName = p.LastName,
                        SeAdeia = p.SeAdeia,
-                       ParentPhone = p.ParentTel,
+                       ParentTel  = p.ParentTel,
                        SkiniName = p.Skini?.Name,
                        Sex = p.Sex,
                        Age = p.Age,
@@ -218,7 +218,7 @@ public class PaidiaServiceTests
                 SeAdeia = true,
                 Sex = Sex.Male,
                 PaidiType = PaidiType.Ekpaideuomenos,
-                ParentPhone = "1234567890",
+                ParentTel  = "1234567890",
                 SkiniName = "Skini1"
             };
 
@@ -230,7 +230,7 @@ public class PaidiaServiceTests
             SeAdeia = paidiRequest.SeAdeia,
             Age = paidiRequest.Age,
             PaidiType = paidiRequest.PaidiType,
-            ParentTel = paidiRequest.ParentPhone,
+            ParentTel = paidiRequest.ParentTel ,
             Sex = paidiRequest.Sex
         };
 
@@ -261,7 +261,7 @@ public class PaidiaServiceTests
             SeAdeia = true,
             Sex = Sex.Male,
             PaidiType = PaidiType.Ekpaideuomenos,
-            ParentPhone = "1234567290",
+            ParentTel  = "1234567290",
             SkiniName = "Skini11"
         };
 

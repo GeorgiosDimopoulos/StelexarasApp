@@ -15,7 +15,7 @@
             <MudTextField @bind-Value="PaidiToEdit.FirstName" Label="Όνομα" />
             <MudTextField @bind-Value="PaidiToEdit.LastName" Label="Επώνυμο" />
             <MudNumericField @bind-Value="PaidiToEdit.Age" Label="Ηλικία" />
-            <MudNumericField @bind-Value="PaidiToEdit.ParentPhone" Label="Τηλέφωνο" />
+            <MudNumericField @bind-Value="PaidiToEdit.ParentTel " Label="Τηλέφωνο" />
             <MudAutocomplete T="string"
                              Label="Χώρος"
                              @bind-Value="PaidiToEdit.SkiniName"
@@ -43,7 +43,7 @@
     [Parameter] public PaidiResponse Paidi { get; set; } = default!;
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
-    protected async override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         PaidiToEdit = new PaidiResponse()
         {
@@ -52,7 +52,7 @@
             SeAdeia = Paidi.SeAdeia,
             SkiniName = Paidi.SkiniName,
             LastName = Paidi.LastName,
-            ParentPhone = Paidi.ParentPhone
+            ParentTel  = Paidi.ParentTel 
         };
 
         var skines = await XwroiApi.GetSkinesAsync(new());
@@ -95,7 +95,7 @@
             LastName = PaidiToEdit.LastName,
             FirstName = PaidiToEdit.FirstName,
             Age = PaidiToEdit.Age,
-            ParentPhone = PaidiToEdit.ParentPhone,
+            ParentTel  = PaidiToEdit.ParentTel ,
             SeAdeia = PaidiToEdit.SeAdeia,
             SkiniName = PaidiToEdit.SkiniName,
             Sex = Paidi.Sex,
@@ -147,5 +147,4 @@
         var xwroi = _xwroiNames.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
         return Task.FromResult(xwroi);
     }
-
 }

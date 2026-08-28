@@ -87,7 +87,7 @@
             PaidiType = req.PaidiType,
             SeAdeia = req.SeAdeia,
             SkiniName = req.SkiniName,
-            ParentPhone = req.ParentPhone
+            ParentTel  = req.ParentTel
         };
 
         if (IsSomethingMissing(newPaidiRequest))
@@ -146,6 +146,6 @@
                string.IsNullOrWhiteSpace(newPaidiRequest.LastName) ||
                newPaidiRequest.Age <= 0 ||
                (newPaidiRequest.Sex != Sex.Female && newPaidiRequest.Sex != Sex.Female) ||
-               string.IsNullOrWhiteSpace(newPaidiRequest.ParentPhone);
+               string.IsNullOrWhiteSpace(newPaidiRequest.ParentTel );
     }
 }

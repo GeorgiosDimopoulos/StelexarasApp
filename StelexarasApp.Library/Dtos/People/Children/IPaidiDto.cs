@@ -8,6 +8,6 @@ public interface IPaidiDto
     Sex Sex { get; set; }
     bool SeAdeia { get; set; }
     string? SkiniName { get; set; }
-    string? ParentPhone { get; set; }
+    string? ParentTel { get; set; }
     PaidiType PaidiType { get; set; }
 }

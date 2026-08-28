@@ -5,6 +5,7 @@
 
 @inject ISnackbar Snackbar
 @inject IStelexiApi StelexiApi
+@inject IXwroiApi XwroiApi
 @inject IDialogService DialogService
 @inject NavigationManager Navigation
 
@@ -13,7 +14,16 @@
         <MudForm Spacing="2">
             <MudTextField @bind-Value="PersonToEdit.FirstName" Label="Όνομα" />
             <MudTextField @bind-Value="PersonToEdit.LastName" Label="Επώνυμο" />
-            <MudTextField @bind-Value="PersonToEdit.XwrosName" Label="Χώρος" />
+            @* <MudTextField @bind-Value="PersonToEdit.XwrosName" Label="Χώρος" /> *@
+            <MudAutocomplete T="string"
+                             Label="Χώρος"
+                             @bind-Value="PersonToEdit.XwrosName"
+                             SearchFunc="SearchXwroi"
+                             Clearable="true"
+                             ResetValueOnEmptyText="true"
+                             CoerceText="true"
+                             CoerceValue="true"
+                             Dense="true" />
             <MudNumericField @bind-Value="PersonToEdit.Tel" Label="Τηλέφωνο" />
             <MudSwitch @bind-Value="PersonToEdit.SeAdeia" Label="Σε άδεια" />
         </MudForm>
@@ -27,11 +37,12 @@
 
 @code {
     private StelexosResponse PersonToEdit = new();
+    private List<string> _xwroiNames = new();
 
     [Parameter] public StelexosResponse Stelexos { get; set; } = default!;
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         PersonToEdit = new StelexosResponse()
         {
@@ -41,11 +52,17 @@
             Tel = Stelexos.Tel,
             XwrosName = Stelexos.XwrosName
         };
+
+        var skines = await XwroiApi.GetSkinesAsync(new());
+        _xwroiNames = skines.Select(x => x.Name)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToList();
     }
 
     private void Cancel(MouseEventArgs args)
     {
-        Dialog.Cancel();
+        Dialog.Cancel(); 
     }
 
     private async Task Save(MouseEventArgs _)
@@ -72,6 +89,17 @@
         {
             Snackbar.Add("Αποτυχία ενημέρωσης του στελέχους.", Severity.Error);
         }
+    }
+
+    private Task<IEnumerable<string>> SearchXwroi(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return Task.FromResult(_xwroiNames.AsEnumerable());
+        }
+
+        var xwroi = _xwroiNames.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        return Task.FromResult(xwroi);
     }
 
     private async Task Delete()

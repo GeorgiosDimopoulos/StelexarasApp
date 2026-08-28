@@ -36,7 +36,7 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
                 Sex = sex,
                 FirstName = fullName.Split(' ').FirstOrDefault(),
                 LastName = fullName.Split(' ').LastOrDefault(),
-                ParentPhone = string.Empty,
+                ParentTel  = string.Empty,
             };
 
             paidi.LastName = fullName.Split(' ').LastOrDefault();
