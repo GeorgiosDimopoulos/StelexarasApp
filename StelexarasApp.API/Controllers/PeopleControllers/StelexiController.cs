@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace StelexarasApp.API.Controllers.PeopleControllers;
 
@@ -40,6 +41,7 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
         return Ok(result.Value);
     }
 
+    [Authorize]
     [HttpPost("Stelexos")]
     public async Task<ActionResult<bool>> PostStelexos([FromBody] CreateStelexosRequest request)
     {
@@ -49,6 +51,7 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPut("Stelexos")]
     public async Task<ActionResult<bool>> UpdateStelexos(int id, [FromBody] UpdateStelexosRequest request)
     {
@@ -58,6 +61,7 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpDelete("Stelexos")]
     public async Task<ActionResult<bool>> DeleteStelexos([FromQuery]int id)
     {

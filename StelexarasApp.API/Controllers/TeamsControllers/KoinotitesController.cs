@@ -65,6 +65,7 @@ public class KoinotitesController(ITeamsService teamsService) : ControllerBase
     /// </remarks>    
     /// <param name="koinotitaDto"></param>
     /// <returns></returns>
+    [Authorize]
     [HttpPost("Koinotita")]
     public async Task<ActionResult<bool>> PostKoinotita([FromQuery] CreateKoinotitaRequest koinotitaDto)
     {
