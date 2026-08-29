@@ -1,7 +1,9 @@
 ﻿@page "/login"
 @using Microsoft.AspNetCore.Authorization
+@using StelexarasApp.Application.ApiClients
 
 @inject NavigationManager Navigation
+@inject IAuthClient AuthClient
 
 @attribute [AllowAnonymous]
 
@@ -16,7 +18,7 @@
     }
     <MudPaper Elevation="6" Class="p-4" Style="max-width: 400px; margin: auto; margin-top: 100px;">
         <MudText>Stelexaras Login</MudText>
-        <MudTextField @bind-Value="password" Label="Password" Variant="Variant.Outlined"/>
+        <MudTextField @bind-Value="password" Label="Password" Variant="Variant.Outlined" />
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Login">
             Login
         </MudButton>
@@ -40,10 +42,12 @@
             return;
         }
 
-        if (password == "your_password")
+        var result = await AuthClient.AuthenticateAsync(new LoginRequest { Password = password });
+        if (result != null && !string.IsNullOrEmpty(result.Token))
         {
             showErrors = false;
             error = string.Empty;
+
             Navigation.NavigateTo("/");
         }
         else

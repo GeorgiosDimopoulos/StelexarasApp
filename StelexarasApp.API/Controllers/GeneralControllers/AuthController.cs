@@ -28,8 +28,7 @@ public class AuthController : ControllerBase
     {
         if (string.IsNullOrEmpty(request.Password))
             return BadRequest();
-
-        //var password = _configuration["Jwt:Key"];
+        
         var password = _configuration["Admin:Password"];
 
         if (request.Password.Equals(password))
