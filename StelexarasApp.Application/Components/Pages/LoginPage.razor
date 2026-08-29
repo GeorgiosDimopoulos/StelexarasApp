@@ -1,0 +1,55 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Authorization
+
+@inject NavigationManager Navigation
+
+@attribute [AllowAnonymous]
+
+<PageTitle>Stelexaras - Login</PageTitle>
+
+<div class="container">
+    @if (showErrors)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p>@error</p>
+        </div>
+    }
+    <MudPaper Elevation="6" Class="p-4" Style="max-width: 400px; margin: auto; margin-top: 100px;">
+        <MudText>Stelexaras Login</MudText>
+        <MudTextField @bind-Value="password" Label="Password" Variant="Variant.Outlined"/>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Login">
+            Login
+        </MudButton>
+        <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Elevation="6" Class="mt-2">
+            @error
+        </MudAlert>
+    </MudPaper>
+</div>
+
+@code {
+    private bool showErrors = false;
+    private string error = string.Empty;
+    private string password = string.Empty;
+
+    private async Task Login()
+    {
+        if (string.IsNullOrEmpty(password))
+        {
+            showErrors = true;
+            error = "Password cannot be empty.";
+            return;
+        }
+
+        if (password == "your_password")
+        {
+            showErrors = false;
+            error = string.Empty;
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            showErrors = true;
+            error = "Invalid password.";
+        }
+    }
+}
