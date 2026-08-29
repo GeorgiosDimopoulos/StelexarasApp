@@ -1,5 +1,6 @@
-﻿@page "/login"
+﻿@page "/"
 @using Microsoft.AspNetCore.Authorization
+@using Refit
 @using StelexarasApp.Application.ApiClients
 
 @inject NavigationManager Navigation
@@ -9,22 +10,21 @@
 
 <PageTitle>Stelexaras - Login</PageTitle>
 
-<div class="container">
+<div style="min-height:100vh; background: linear-gradient(135deg, #f8e1e7, #f5f7fa); background-color: #f7f2f4; display:flex; justify-content:center; align-items:center;">
     @if (showErrors)
     {
         <div class="alert alert-danger" role="alert">
             <p>@error</p>
         </div>
     }
-    <MudPaper Elevation="6" Class="p-4" Style="max-width: 400px; margin: auto; margin-top: 100px;">
+    <MudPaper Elevation="6" Class="p-4" Style="width: 300px; margin: auto; margin-top: 300px; text-align:center;">
         <MudText>Stelexaras Login</MudText>
-        <MudTextField @bind-Value="password" Label="Password" Variant="Variant.Outlined" />
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Login">
-            Login
-        </MudButton>
-        <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Elevation="6" Class="mt-2">
-            @error
-        </MudAlert>
+        <MudTextField @bind-Value="password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Login"> Login </MudButton>
+        @if (showErrors)
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Elevation="6" Class="mt-2"/>
+        }
     </MudPaper>
 </div>
 
@@ -32,6 +32,8 @@
     private bool showErrors = false;
     private string error = string.Empty;
     private string password = string.Empty;
+    private string PasswordInputIcon = Icons.Material.Filled.Visibility;
+    private InputType PasswordInput = InputType.Password;    
 
     private async Task Login()
     {
@@ -42,18 +44,40 @@
             return;
         }
 
-        var result = await AuthClient.AuthenticateAsync(new LoginRequest { Password = password });
-        if (result != null && !string.IsNullOrEmpty(result.Token))
+        try
         {
-            showErrors = false;
-            error = string.Empty;
+            var result = await AuthClient.AuthenticateAsync(new LoginRequest { Password = password });
+            if (result != null && !string.IsNullOrEmpty(result.Token))
+            {
+                showErrors = false;
+                error = string.Empty;
 
-            Navigation.NavigateTo("/");
+                Navigation.NavigateTo("/home");
+            }
+        }
+        catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            showErrors = true;
+            error = $"Invalid password";            
+        }
+        catch (Exception ex)
+        {
+            showErrors = true;
+            error = $"An error occurred: {ex.Message}";
+        }
+    }
+
+    private void TogglePasswordVisibility()
+    {
+        if (PasswordInput == InputType.Password)
+        {
+            PasswordInput = InputType.Text;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
         }
         else
         {
-            showErrors = true;
-            error = "Invalid password.";
+            PasswordInput = InputType.Password;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
         }
     }
 }

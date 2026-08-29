@@ -19,6 +19,8 @@ builder.Services.AddRefitClient<IXwroiApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
 builder.Services.AddRefitClient<IPaidiaApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
+builder.Services.AddRefitClient<IAuthClient>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
 builder.Services.AddRefitClient<IStelexiApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl)); 
 var app = builder.Build();
