@@ -97,3 +97,4 @@ TestResults/
 /StelexarasApp.Application/wwwroot/lib/bootstrap/dist
 /StelexarasApp.Application/Components/Pages/Children.razor
 /SQLQuery1.sql
+/.env

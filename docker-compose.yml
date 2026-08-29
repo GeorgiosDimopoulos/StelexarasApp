@@ -11,7 +11,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: "8080"
-      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=Lore3389!;TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
     ports:
       - "8080:8080"
   db:
@@ -19,7 +19,7 @@ services:
     container_name: stelexaras-sqlserver
     environment:      
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "Lore3389!"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD}"
       MSSQL_PID: "Developer"
     ports:
       - "1433:1433"
