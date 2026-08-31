@@ -7,8 +7,7 @@ namespace StelexarasApp.API.Controllers.GeneralControllers;
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
-{
-    private IAuthTokenProvider _authTokenProvider;
+{    private IAuthTokenProvider _authTokenProvider;
     private readonly IConfiguration _configuration;
 
     public AuthController(IAuthTokenProvider authTokenProvider, IConfiguration configuration)
