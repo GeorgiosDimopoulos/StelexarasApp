@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.Dtos.People.Staff
 @using StelexarasApp.Library.Models.Atoma
 @using StelexarasApp.Library.Models.Atoma.Staff
@@ -18,7 +19,7 @@
             <MudTextField @bind-Value="req.LastName" Label="Επίθετο" />
             <MudNumericField @bind-Value="req.Age" Label="Ηλικία" />
             <MudTextField @bind-Value="req.Tel" Label="Τηλέφωνο" />
-            <MudSelect T="Thesi" @bind-Value="req.Thesi" Label="Θέση">
+            <MudSelect T="Thesi" Value="req.Thesi" Label="Θέση" ValueChanged="OnThesiChanged">
                 @foreach (var thesi in Enum.GetValues<Thesi>())
                 {
                     <MudSelectItem T="Thesi" Value="thesi">
@@ -36,6 +37,7 @@
             </MudSelect>
             <MudAutocomplete T="string"
                              Label="Χώρος"
+                             MaxItems="null"
                              @bind-Value="req.XwrosName"
                              SearchFunc="SearchXwroi"
                              Clearable="true"
@@ -56,6 +58,10 @@
 @code {
     private CreateStelexosRequest req = new();
     private List<string> _xwroiNames = new();
+    private List<SkiniResponse> _skines = [];
+    private List<KoinotitaResponse> _koinotites = [];
+    private List<TomeasResponse> _tomeis = [];
+    private List<string> _anwtatoiXwroi = [];
 
     [CascadingParameter] IMudDialogInstance Dialog { get; set; } = default!;
 
@@ -63,15 +69,15 @@
     {
         await Task.Delay(200);
 
-        var skines = await XwroiApi.GetSkinesAsync(new());
-        var koinotites = await XwroiApi.GetKoinotitesAsync(new());
-        var tomeis = await XwroiApi.GetTomeisAsync(new());
-        var anwtatoiXwroi = await XwroiApi.GetAnwtatoiXwroiAsync();
+        _skines = await XwroiApi.GetSkinesAsync(new());
+        _koinotites = await XwroiApi.GetKoinotitesAsync(new());
+        _tomeis = await XwroiApi.GetTomeisAsync(new());
+        _anwtatoiXwroi = await XwroiApi.GetAnwtatoiXwroiAsync();
 
-        _xwroiNames = skines.Select(x => x.Name)
-                            .Concat(koinotites.Select(x => x.Name))
-                            .Concat(tomeis.Select(x => x.Name))
-                            .Concat(anwtatoiXwroi)
+        _xwroiNames = _skines.Select(x => x.Name)
+                            .Concat(_koinotites.Select(x => x.Name))
+                            .Concat(_tomeis.Select(x => x.Name))
+                            .Concat(_anwtatoiXwroi)
                             .Distinct()
                             .OrderBy(x => x)
                             .ToList();
@@ -132,7 +138,6 @@
         return Task.FromResult(xwroi);
     }
 
-    
     private bool IsSomethingMissing(CreateStelexosRequest request)
     {
         return string.IsNullOrWhiteSpace(request.FirstName) ||
@@ -142,5 +147,45 @@
                string.IsNullOrWhiteSpace(request.Tel) ||
                string.IsNullOrWhiteSpace(request.XwrosName) ||
                (request.Thesi != Thesi.Anwtatos && request.Thesi != Thesi.Omadarxis && request.Thesi != Thesi.Koinotarxis && request.Thesi != Thesi.Tomearxis && request.Thesi != Thesi.Ekpaideutis);
+    }
+
+    private async Task OnThesiChanged(Thesi thesi)
+    {
+        req.Thesi = thesi;
+        req.XwrosName = string.Empty;
+
+        if (thesi == Thesi.Anwtatos)
+        {
+            var anwtatoiXwroi = await XwroiApi.GetAnwtatoiXwroiAsync();
+            _xwroiNames = anwtatoiXwroi.Distinct().OrderBy(x => x).ToList();
+        }
+        else if (thesi == Thesi.Koinotarxis)
+        {
+            var koinotites = await XwroiApi.GetKoinotitesAsync(new());
+            _xwroiNames = koinotites.Select(x => x.Name)
+                                .Distinct()
+                                .OrderBy(x => x)
+                                .ToList();
+        }
+        else if (thesi == Thesi.Omadarxis)
+        {
+            var skines = await XwroiApi.GetSkinesAsync(new());
+            _xwroiNames = skines.Select(x => x.Name)
+                                .Distinct()
+                                .OrderBy(x => x)
+                                .ToList();
+        }
+        else if (thesi == Thesi.Tomearxis)
+        {
+            var tomeis = await XwroiApi.GetTomeisAsync(new());
+            _xwroiNames = tomeis.Select(x => x.Name)
+                                .Distinct()
+                                .OrderBy(x => x)
+                                .ToList();
+        }
+        else
+        {
+            _xwroiNames = new List<string>();
+        }
     }
 }
