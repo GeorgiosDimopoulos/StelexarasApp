@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Web
 @using Refit
 @using StelexarasApp.Application.ApiClients
 
@@ -11,10 +12,18 @@
 
 <PageTitle>Stelexaras - Login</PageTitle>
 
-<div style="min-height:100vh; background: linear-gradient(135deg, #f8e1e7, #f5f7fa); background-color: #f7f2f4; display:flex; justify-content:center; align-items:center;">   
+<div style="min-height:100vh; background: linear-gradient(135deg, #f8e1e7, #f5f7fa); background-color: #f7f2f4; display:flex; justify-content:center; align-items:center;">
     <MudPaper Elevation="6" Class="p-4" Style="width: 300px; margin: auto; margin-top: 300px; text-align:center;">
         <MudText>Stelexaras Login</MudText>
-        <MudTextField @bind-Value="password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" />
+        <MudTextField @bind-Value="password"
+                      Label="Password"
+                      Variant="Variant.Outlined"
+                      OnKeyDown="HandleKeyDown"
+                      InputType="@PasswordInput"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@PasswordInputIcon"
+                      OnAdornmentClick="TogglePasswordVisibility"
+                      AdornmentAriaLabel="Show Password" />
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Login"> Login </MudButton>
     </MudPaper>
 </div>
@@ -22,7 +31,7 @@
 @code {
     private string password = string.Empty;
     private string PasswordInputIcon = Icons.Material.Filled.Visibility;
-    private InputType PasswordInput = InputType.Password;    
+    private InputType PasswordInput = InputType.Password;
 
     private async Task Login()
     {
@@ -61,6 +70,14 @@
         {
             PasswordInput = InputType.Password;
             PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await Login();
         }
     }
 }
