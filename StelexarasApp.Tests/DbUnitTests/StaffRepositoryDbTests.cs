@@ -86,7 +86,7 @@ public class StaffRepositoryDbTests
         };
 
         // Act
-        await  _dbContext.Tomeis.AddAsync(tomeas);
+        await _dbContext.Tomeis.AddAsync(tomeas);
         await _dbContext.Koinotites.AddAsync(koinotita);
         await _dbContext.Skines.AddAsync(skini);
         await _dbContext.SaveChangesAsync();
@@ -179,6 +179,25 @@ public class StaffRepositoryDbTests
 
         // Assert
         Assert.NotNull(result);
+    }
+
+    [Fact]
+    public async Task HasPlaceAnotherStelexosInDb_ShouldReturnTrue_WhenAnotherOmadarxisExists()
+    {
+        // Arrange
+        var skiniName = "Test Skini";
+
+        var stelexos = new Omadarxis { Id = 3, Thesi = Thesi.Omadarxis, LastName = "Test Name", FirstName = "TestF", Tel = "123-456-7890", XwrosName = skiniName };
+        var stelexos2 = new Omadarxis { Id = 4, Thesi = Thesi.Omadarxis, LastName = "Test Name", FirstName = "TestF", Tel = "123-456-7890", XwrosName = skiniName };
+
+        await _dbContext.Omadarxes!.AddRangeAsync(stelexos, stelexos2);
+        await _dbContext.SaveChangesAsync();
+
+        // Act
+        var result1 = await _stelexiRepository.HasPlaceAnotherStelexosInDb(Thesi.Omadarxis, stelexos.Id, skiniName);
+        
+        // Assert
+        Assert.True(result1);
     }
 
     private static Tomeas GetTomeas(string name, int id)
