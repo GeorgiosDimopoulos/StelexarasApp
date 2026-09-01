@@ -30,7 +30,7 @@ public class StaffService : IStaffService
         }
         return stelexosInService;
     }
-        
+
     public async Task<IEnumerable<StelexosResponse>> GetStelexoiAnaXwro(string? xwros, StelexosQueryParameters? stelexosQueryParameters)
     {
         var stelexosInDb = await _stelexiRepository.GetStelexoiAnaXwroInDb(xwros, stelexosQueryParameters);
@@ -155,6 +155,17 @@ public class StaffService : IStaffService
             LogFileWriter.WriteToLog("Stelexos not found", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
             return Result.Fail("Stelexos not found");
         }
+
+        if (stelexosInDb.XwrosName != entity.XwrosName)
+        {
+            var canOmadarxisSkiniChange = await MoveStelexosToAnotherPlaceInService(stelexosInDb.Id, entity.Thesi, entity.XwrosName);
+            if (canOmadarxisSkiniChange.IsFailed)
+            {
+                LogFileWriter.WriteToLog($"Failed to move stelexos to another place: {canOmadarxisSkiniChange.Errors.First().Message}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+                return canOmadarxisSkiniChange;
+            }
+        }
+
         var stelexosEntity = _mapper.Map(entity, stelexosInDb);
         var result = await _stelexiRepository.UpdateStelexosInDb(id, stelexosEntity);
         if (result)
@@ -169,18 +180,13 @@ public class StaffService : IStaffService
         }
     }
 
-    public async Task<Result> MoveOmadarxisToAnotherSkiniInService(int id, string skiniName)
+    private async Task<Result> MoveStelexosToAnotherPlaceInService(int id, Thesi thesi, string skiniName)
     {
-        var result = await _stelexiRepository.MoveOmadarxisToAnotherSkiniInDb(id, skiniName);
-        if (result)
-        {
-            LogFileWriter.WriteToLog("Omadarxis moved successfully", System.Reflection.MethodBase.GetCurrentMethod()!.Name, CrudType.Update);
+        var occupied = await _stelexiRepository.HasPlaceAnotherStelexosInDb(thesi, id, skiniName);
+        if (!occupied)
             return Result.Ok();
-        }
-        else
-        {
-            LogFileWriter.WriteToLog("Failed to move Omadarxis", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
-            return Result.Fail("Failed to move Omadarxis");
-        }
+
+        LogFileWriter.WriteToLog("Failed to move Stelexos, already another Stelexos in the place", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
+        return Result.Fail("Failed to move Stelexos, already another Stelexos in the place");
     }
 }

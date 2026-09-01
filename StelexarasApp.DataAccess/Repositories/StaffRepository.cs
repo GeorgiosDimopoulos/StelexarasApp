@@ -212,45 +212,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             return false;
         }
     }
-
-    public async Task<bool> MoveOmadarxisToAnotherSkiniInDb(int id, string newSkiniName)
-    {
-        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-        if (_dbContext.Skines is null || _dbContext.Omadarxes is null)
-            return false;
-
-        try
-        {
-            var omadarxisInDb = await _dbContext.Omadarxes.Include(o => o.Skini).FirstOrDefaultAsync(o => o.Id == id);
-            var newSkini = await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name.Equals(newSkiniName));
-
-            if (newSkini == null || newSkini.Omadarxis == omadarxisInDb || omadarxisInDb == null)
-                return false;
-
-            var oldSkini = omadarxisInDb.Skini;
-            if (oldSkini != null)
-            {
-                newSkini.Omadarxis = omadarxisInDb;
-                oldSkini.Omadarxis = null!;
-                omadarxisInDb.Skini = newSkini;
-            }
-
-            await _dbContext.SaveChangesAsync();
-            if (transaction != null)
-                await transaction.CommitAsync();
-            return true;
-        }
-        catch (Exception ex)
-        {
-            if (transaction != null)
-                await transaction.RollbackAsync();
-            ExceptionHelper.HandleDatabaseExceptionAsync(ex, System.Reflection.MethodBase.GetCurrentMethod()!.Name, _logger);
-            return false;
-        }
-    }
-        
+            
     public async Task<bool> AddStelexosInDb(IStelexos stelexos)
     {
         var xwrosName = stelexos.XwrosName;
@@ -306,6 +268,23 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         await _dbContext.SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task<bool> HasPlaceAnotherStelexosInDb(Thesi thesi,int stelexosId, string placeName)
+    {
+        if (thesi == Thesi.Omadarxis)
+        {
+            return await _dbContext.Omadarxes.AnyAsync(o => o.XwrosName.Equals(placeName) && o.Id != stelexosId);
+        }
+        if (thesi == Thesi.Koinotarxis)
+        {
+            return await _dbContext.Koinotarxes.AnyAsync(o => o.XwrosName.Equals(placeName) && o.Id != stelexosId);
+        }
+        if (thesi == Thesi.Tomearxis)
+        {
+            return await _dbContext.Tomearxes.AnyAsync(o => o.XwrosName.Equals(placeName) && o.Id != stelexosId);
+        }
+        return false;
     }
 
     private async Task<IEnumerable<Omadarxis>> GetOmadarxesAnaXwro(string? xwrosName, OmadarxisQueryParameters? omadarxisQueryParameters)
@@ -376,7 +355,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                           .AsNoTracking()
                           .ToListAsync();
     }
-
+    
     private async Task<IEnumerable<Tomearxis>> GetTomearxes(TomearxisQueryParameters? tomearxisQueryParameters)
     {
         var query = _dbContext.Tomearxes.AsQueryable();

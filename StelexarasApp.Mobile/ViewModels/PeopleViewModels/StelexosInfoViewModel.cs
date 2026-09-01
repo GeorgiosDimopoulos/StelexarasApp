@@ -54,8 +54,8 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 
         public async Task OnSaveStelexos()
         {
-            if (skiniIsChanged)
-                await MoveOmadarxisToAnotherSkini();
+            //if (skiniIsChanged)
+            //    await MoveOmadarxisToAnotherSkini();
 
             var request = new UpdateStelexosRequest() { Id = Id };
             var result = await _stelexiService.UpdateStelexos(Id, request);
@@ -65,15 +65,15 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
 
         public async Task MoveOmadarxisToAnotherSkini()
         {
-            var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(Id, Stelexos.XwrosName);
-            if (result.IsSuccess)
-            {
-                StatusMessage = "Move successful";
-            }
-            else
-            {
-                StatusMessage = $"Move failed: {result.Errors.FirstOrDefault()?.Message}";
-            }
+            //var result = await _stelexiService.UpdateStelexos(Thesi.Omadarxis, Id, Stelexos.XwrosName);
+            //if (result.IsSuccess)
+            //{
+            //    StatusMessage = "Move successful";
+            //}
+            //else
+            //{
+            //    StatusMessage = $"Move failed: {result.Errors.FirstOrDefault()?.Message}";
+            //}
 
             OnPropertyChanged(nameof(Stelexos));
         }

@@ -11,5 +11,5 @@ public interface IStaffRepository
     Task<bool> UpdateStelexosInDb(int id, IStelexos stelexos);
     Task<bool> DeleteStelexosInDb(int id);
 
-    Task<bool> MoveOmadarxisToAnotherSkiniInDb(int id, string newSkiniName);
+    Task<bool> HasPlaceAnotherStelexosInDb(Thesi thesi, int id, string newSkiniName);
 }

@@ -12,5 +12,4 @@ public interface IStaffService
     Task<Result> CreateStelexos(CreateStelexosRequest entity);
     Task<Result> UpdateStelexos(int id, UpdateStelexosRequest entity);
     Task<Result> DeleteStelexos(int id);
-    Task<Result> MoveOmadarxisToAnotherSkiniInService(int id, string skiniName);
 }

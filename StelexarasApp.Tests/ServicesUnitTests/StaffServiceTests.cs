@@ -447,63 +447,79 @@ public class StaffServiceTests
         _mockStelexiRepository.Verify(r => r.DeleteStelexosInDb(id), Times.Once);
     }
     #endregion
-    
+
     [Fact]
     public async Task MoveOmadarxisToAnotherSkiniInService_ShouldReturnTrue_WhenMoveIsSuccessful()
     {
         // Arrange
-        var id = 1;
-        var thesi = Thesi.Omadarxis;
-        var skini = new Skini { Id = 2, Name = "TestSkini" };
-        var newSkini = new Skini { Id = 1, Name = "NewTestSkini" };
-        var omadarxis = new Omadarxis
+        var id = 1 + Random.Shared.Next(1, 100);
+        var newSkiniName = "NewTestSkini";
+        var existingOmadarxis = new Omadarxis
         {
             Id = id,
-            Thesi = thesi,
-            FirstName = "FirstName",
-            LastName = "LastName",
-            Tel = "1234567890",
-            Skini = skini
+            Thesi = Thesi.Omadarxis,
+            XwrosName = "OldSkini"
         };
-
-        _mockStelexiRepository.Setup(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Name)).ReturnsAsync(true);
-
-        // Act
-        var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(id, newSkini.Name);
-
-        // Assert
-        Assert.True(result.IsSuccess);
-        _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxis.Id, newSkini.Name), Times.Once);
-    }
-
-    [Fact]
-    public async Task MoveOmadarxisToAnotherSkiniInService_ShouldReturnFalse_WhenMoveFails()
-    {
-        // Arrange
-        var omadarxisId = 1;
-        var newSkiniName = "Skini2";
-
-        var omadarxis = new Omadarxis
+        var omadarxisRequest = new UpdateStelexosRequest
         {
-            Id = omadarxisId,
+            Id = id,
             Thesi = Thesi.Omadarxis,
             FirstName = "FirstName",
             LastName = "LastName",
             Tel = "1234567890",
+            XwrosName = newSkiniName,
             Age = 27,
-            Sex = Sex.Male,
-            XwrosName = "TestXwros",
-            Skini = new Skini()
+            Sex = Sex.Female
         };
 
-        _mockStelexiRepository.Setup(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName)).ReturnsAsync(false);
+        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(id)).ReturnsAsync(existingOmadarxis);
+        _mockStelexiRepository.Setup(r => r.HasPlaceAnotherStelexosInDb(Thesi.Omadarxis, id, newSkiniName)).ReturnsAsync(false);
+        _mockStelexiRepository.Setup(r => r.UpdateStelexosInDb(id, It.IsAny<IStelexos>())).ReturnsAsync(true);
 
         // Act
-        var result = await _stelexiService.MoveOmadarxisToAnotherSkiniInService(omadarxisId, newSkiniName);
+        var result = await _stelexiService.UpdateStelexos(id, omadarxisRequest);
 
         // Assert
-        Assert.False(result.IsSuccess);
-        _mockStelexiRepository.Verify(r => r.MoveOmadarxisToAnotherSkiniInDb(omadarxisId, newSkiniName), Times.Once);
+        Assert.True(result.IsSuccess);
+        _mockStelexiRepository.Verify(r => r.HasPlaceAnotherStelexosInDb(Thesi.Omadarxis, id, newSkiniName), Times.Once);
+        _mockStelexiRepository.Verify(r => r.UpdateStelexosInDb(id, It.IsAny<IStelexos>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task MoveOmadarxisToAnotherSkiniInService_ShouldReturnFalse_WhenSomeoneExists()
+    {
+        // Arrange
+        var omadarxisId = 1 + Random.Shared.Next(1, 100);
+        var newSkiniName = "NewTestSkini";
+        var existingOmadarxis = new Omadarxis
+        {
+            Id = omadarxisId,
+            Thesi = Thesi.Omadarxis,
+            XwrosName = "Skini1"
+        };
+        var omadarxis = new UpdateStelexosRequest
+        {
+            Id = omadarxisId,
+            Thesi = Thesi.Omadarxis,
+            FirstName = "FirstNaame",
+            LastName = "LastNaame",
+            Tel = "12345678290",
+            Age = 27,
+            Sex = Sex.Male,
+            XwrosName = newSkiniName
+        };
+
+        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(omadarxisId)).ReturnsAsync(existingOmadarxis);
+        _mockStelexiRepository.Setup(r => r.HasPlaceAnotherStelexosInDb(Thesi.Omadarxis, omadarxisId, newSkiniName)).ReturnsAsync(true);
+        _mockStelexiRepository.Setup(r => r.UpdateStelexosInDb(omadarxisId, It.IsAny<IStelexos>())).ReturnsAsync(true);
+
+        // Act
+        var result = await _stelexiService.UpdateStelexos(omadarxisId, omadarxis);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockStelexiRepository.Verify(r => r.HasPlaceAnotherStelexosInDb(Thesi.Omadarxis, omadarxisId, newSkiniName), Times.Once);
+        _mockStelexiRepository.Verify(r => r.UpdateStelexosInDb(It.IsAny<int>(), It.IsAny<IStelexos>()), Times.Never);
     }
 
     #region UPDATE
