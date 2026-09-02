@@ -153,3 +153,9 @@ DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:44
 DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:48
 DbError, Value cannot be null. (Parameter 'collection'), , 2026-08-14 13:20:57
 DbError, Thesi cannot be None! (Parameter 'Thesi'), , 2026-08-15 22:14:17
+DbError, Unique constraint error: The property 'Omadarxis.Id' is part of a key and so cannot be modified or marked as modified. To change the principal of an existing entity with an identifying foreign key, first delete the dependent and invoke 'SaveChanges', and then associate the dependent with the new principal.,  in MoveNext, 2026-09-02 17:04:42
+DbError, Failed to update Stelexos, 2026-09-02 17:04:42
+DbError, Unique constraint error: The property 'Omadarxis.Id' is part of a key and so cannot be modified or marked as modified. To change the principal of an existing entity with an identifying foreign key, first delete the dependent and invoke 'SaveChanges', and then associate the dependent with the new principal.,  in MoveNext, 2026-09-02 17:06:21
+DbError, Failed to update Stelexos, 2026-09-02 17:06:21
+DbError, Unique constraint error: The property 'Koinotarxis.Id' is part of a key and so cannot be modified or marked as modified. To change the principal of an existing entity with an identifying foreign key, first delete the dependent and invoke 'SaveChanges', and then associate the dependent with the new principal.,  in MoveNext, 2026-09-02 17:57:18
+DbError, Failed to update Stelexos, 2026-09-02 17:57:18

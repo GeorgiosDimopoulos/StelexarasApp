@@ -2,6 +2,7 @@ using MudBlazor.Services;
 using Refit;
 using StelexarasApp.Application.ApiClients;
 using StelexarasApp.Application.Components;
+using StelexarasApp.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseStaticWebAssets();
@@ -16,13 +17,20 @@ if (string.IsNullOrEmpty(apiBaseUrl))
 }
 
 builder.Services.AddRefitClient<IXwroiApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl))
+                .AddHttpMessageHandler<AuthHeaderHandler>();
 builder.Services.AddRefitClient<IPaidiaApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl))
+                .AddHttpMessageHandler<AuthHeaderHandler>();
+builder.Services.AddRefitClient<IStelexiApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl))
+                .AddHttpMessageHandler<AuthHeaderHandler>();
 builder.Services.AddRefitClient<IAuthClient>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl));
-builder.Services.AddRefitClient<IStelexiApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiBaseUrl)); 
+
+builder.Services.AddSingleton<TokenService>();
+builder.Services.AddTransient<AuthHeaderHandler>(); 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
