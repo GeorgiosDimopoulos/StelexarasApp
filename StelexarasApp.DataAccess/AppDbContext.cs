@@ -150,6 +150,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Koinotarxis>().HasKey(k => k.Id);
         modelBuilder.Entity<Tomearxis>().HasKey(t => t.Id);
         modelBuilder.Entity<Ekpaideutis>().HasKey(ek => ek.Id);
+        modelBuilder.Entity<Anwtatos>().HasKey(ek => ek.Id);
+        modelBuilder.Entity<EidikoStelexos>().HasKey(ek => ek.Id);
 
         modelBuilder.Entity<Skini>().HasKey(sk => sk.Id);
         modelBuilder.Entity<Koinotita>().HasKey(k => k.Id);
@@ -161,11 +163,13 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Skini>().Property(sk => sk.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Koinotita>().Property(k => k.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Tomeas>().Property(t => t.Id).ValueGeneratedOnAdd();
-
+        
         modelBuilder.Entity<Paidi>().Property(om => om.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Omadarxis>().Property(om => om.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Koinotarxis>().Property(k => k.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Tomearxis>().Property(t => t.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Ekpaideutis>().Property(ek => ek.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<Anwtatos>().Property(a => a.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<EidikoStelexos>().Property(e => e.Id).ValueGeneratedOnAdd();
     }
 }

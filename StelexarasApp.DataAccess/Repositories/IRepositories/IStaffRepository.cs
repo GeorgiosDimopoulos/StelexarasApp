@@ -4,8 +4,8 @@ public interface IStaffRepository
 {
     Task<IEnumerable<IStelexos>> GetStelexiInDb(Thesi? thesi, StelexosQueryParameters? queryParameters);
     Task<IEnumerable<IStelexos>> GetStelexoiAnaXwroInDb(string? xwrosName, StelexosQueryParameters? queryParameters);    
-    Task<IStelexos> GetStelexosByIdInDb(int id);
-    Task<IStelexos> GetStelexosByNameInDb(string name, StelexosQueryParameters? stelexosQueryParameters);
+    Task<IStelexos> GetStelexosByIdInDb(Thesi thesi, int id);
+    Task<IStelexos> GetStelexosByNameInDb(Thesi thesi, string name, StelexosQueryParameters? stelexosQueryParameters);
     
     Task<bool> AddStelexosInDb(IStelexos stelexos);
     Task<bool> UpdateStelexosInDb(int id, IStelexos stelexos);

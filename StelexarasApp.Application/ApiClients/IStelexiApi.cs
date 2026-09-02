@@ -15,10 +15,10 @@ public interface IStelexiApi
     Task<IEnumerable<StelexosResponse>> GetStelexiByXwro([FromQuery] string name, [Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Get("/Stelexi/Stelexos/{id}")]
-    Task<StelexosResponse> GetStelexosById(int id, [Query] StelexosQueryParameters stelexosQueryParameters);
+    Task<StelexosResponse> GetStelexosById([Query] Thesi thesi, int id, [Query] StelexosQueryParameters stelexosQueryParameters);
 
-    [Get("/Stelexi/Stelexos/{name}")]
-    Task<StelexosResponse> GetStelexosByName(string name, [Query] StelexosQueryParameters stelexosQueryParameters);
+    [Get("/Stelexi/StelexosByName")]
+    Task<StelexosResponse> GetStelexosByName([Query] Thesi thesi, [Query] string name, [Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Post("/Stelexi/Stelexos")]
     Task<bool> PostStelexos([Body] CreateStelexosRequest stelexosDto);

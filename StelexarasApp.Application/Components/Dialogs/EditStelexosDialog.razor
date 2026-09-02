@@ -49,7 +49,10 @@
             FirstName = Stelexos.FirstName,
             LastName = Stelexos.LastName,
             Tel = Stelexos.Tel,
-            XwrosName = Stelexos.XwrosName
+            XwrosName = Stelexos.XwrosName,
+            Thesi = Stelexos.Thesi,
+            SeAdeia = Stelexos.SeAdeia,
+            Sex = Stelexos.Sex
         };
 
         var skines = await XwroiApi.GetSkinesAsync(new());
@@ -61,7 +64,7 @@
 
     private void Cancel(MouseEventArgs args)
     {
-        Dialog.Cancel(); 
+        Dialog.Cancel();
     }
 
     private async Task Save(MouseEventArgs _)
@@ -72,9 +75,9 @@
             FirstName = PersonToEdit.FirstName,
             Age = PersonToEdit.Age,
             XwrosName = PersonToEdit.XwrosName,
-            Sex = Stelexos.Sex,
-            Thesi = Stelexos.Thesi,
-            SeAdeia = Stelexos.SeAdeia,
+            Sex = PersonToEdit.Sex,
+            Thesi = PersonToEdit.Thesi,
+            SeAdeia = PersonToEdit.SeAdeia,
             Tel = PersonToEdit.Tel
         };
 

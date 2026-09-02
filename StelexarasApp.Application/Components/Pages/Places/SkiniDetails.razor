@@ -5,13 +5,15 @@
 @using StelexarasApp.Library.Dtos.People.Children
 @using StelexarasApp.Library.Dtos.People.Staff
 @using StelexarasApp.Library.Models.Atoma
+@using StelexarasApp.Library.Models.Atoma.Staff
 
 @inject IXwroiApi XwroiApi
 @inject IPaidiaApi PaidiaApi
 @inject IStelexiApi StelexiApi
 @inject IDialogService DialogService
-
 @inject NavigationManager NavigationManager
+
+<PageTitle>Stelexaras - @Skini?.Name</PageTitle>
 
 <h1 style="text-align:center;">@Skini.Name (@SexOfSKini(@Skini.Sex)): @Paidia.Count δύναμη</h1>
 <h2 style="padding-block-start:10px;">
@@ -85,7 +87,7 @@
         if (Skini.OmadarxisId < 0)
             return;
 
-        var omadarxis = await StelexiApi.GetStelexosById(Skini.OmadarxisId, new());
+        var omadarxis = await StelexiApi.GetStelexosById(Thesi.Omadarxis, Skini.OmadarxisId, new());
         if (omadarxis is null)
             return;
 

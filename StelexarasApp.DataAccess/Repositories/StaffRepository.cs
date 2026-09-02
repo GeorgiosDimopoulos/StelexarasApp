@@ -7,7 +7,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
 {
     private readonly AppDbContext _dbContext = dbContext;
     private readonly ILogger<StaffRepository> _logger = loggerFactory.CreateLogger<StaffRepository>();
-         
+
     public async Task<IEnumerable<IStelexos>> GetStelexiInDb(Thesi? thesi, StelexosQueryParameters? queryParameters)
     {
         try
@@ -78,34 +78,80 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         }
     }
 
-    public async Task<IStelexos> GetStelexosByIdInDb(int id)
+    public async Task<IStelexos> GetStelexosByIdInDb(Thesi thesi, int id)
     {
-        var omadarxis = await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.Id == id);
-        if (omadarxis != null)
-            return omadarxis;
-        var koinotarxis = await _dbContext.Koinotarxes!.FirstOrDefaultAsync(k => k.Id == id);
-        if (koinotarxis != null)
-            return koinotarxis;
-        var tomearxis = await _dbContext.Tomearxes!.FirstOrDefaultAsync(t => t.Id == id);
-        if (tomearxis != null)
-            return tomearxis;
-        var ekpaideutis = await _dbContext.Ekpaideutes!.FirstOrDefaultAsync(e => e.Id == id);
-        if (ekpaideutis != null)
-            return ekpaideutis;
+        if (thesi == Thesi.Ekpaideutis)
+        {
+            var ekpaideutis = await _dbContext.Ekpaideutes!.FirstOrDefaultAsync(e => e.Id == id);
+            if (ekpaideutis != null)
+                return ekpaideutis;
+        }
+        if (thesi == Thesi.Anwtatos)
+        {
+            var anwtatos = await _dbContext.Anwtata!.FirstOrDefaultAsync(e => e.Id == id);
+            if (anwtatos != null)
+                return anwtatos;
+        }
+        if (thesi == Thesi.Omadarxis)
+        {
+            var omadarxis = await _dbContext.Omadarxes!.FirstOrDefaultAsync(o => o.Id == id);
+            if (omadarxis != null)
+                return omadarxis;
+        }
+        if (thesi == Thesi.Koinotarxis)
+        {
+            var koinotarxis = await _dbContext.Koinotarxes!.FirstOrDefaultAsync(k => k.Id == id);
+            if (koinotarxis != null)
+                return koinotarxis;
+        }
+        if (thesi == Thesi.Tomearxis)
+        {
+            var tomearxis = await _dbContext.Tomearxes!.FirstOrDefaultAsync(t => t.Id == id);
+            if (tomearxis != null)
+                return tomearxis;
+        }
 
         return null!;
     }
 
-    public async Task<IStelexos> GetStelexosByNameInDb(string name, StelexosQueryParameters stelexosQueryParameters)
+    public async Task<IStelexos> GetStelexosByNameInDb(Thesi thesi, string name, StelexosQueryParameters? stelexosQueryParameters)
     {
         try
         {
-            if (string.IsNullOrEmpty(name))
-                return null!;
-
             // ToDo: implement it
-            if (stelexosQueryParameters.IncludeXwros)
+            if (stelexosQueryParameters?.IncludeXwros == true)
             {
+            }
+
+            switch (thesi)
+            {
+                case Thesi.Omadarxis:
+                    var omadarxis = await _dbContext.Omadarxes!.FirstOrDefaultAsync(e => e.LastName == name);
+                    if (omadarxis != null)
+                        return omadarxis;
+                    break;
+                case Thesi.Koinotarxis:
+                    var koinotarxis = await _dbContext.Koinotarxes!.FirstOrDefaultAsync(e => e.LastName == name);
+                    if (koinotarxis != null)
+                        return koinotarxis;
+                    break;
+                case Thesi.Tomearxis:
+                    var tomearxis = await _dbContext.Tomearxes!.FirstOrDefaultAsync(e => e.LastName == name);
+                    if (tomearxis != null)
+                        return tomearxis;
+                    break;
+                case Thesi.Ekpaideutis:
+                    var ekpaideutis = await _dbContext.Ekpaideutes!.FirstOrDefaultAsync(e => e.LastName == name);
+                    if (ekpaideutis != null)
+                        return ekpaideutis;
+                    break;
+                case Thesi.Anwtatos:
+                    var anwtatos = await _dbContext.Anwtata!.FirstOrDefaultAsync(e => e.LastName == name);
+                    if (anwtatos != null)
+                        return anwtatos;
+                    break;
+                default:
+                    break;
             }
 
             IQueryable<IStelexos> query = _dbContext.Omadarxes!.Cast<IStelexos>()
@@ -159,7 +205,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        var existingStelexos = await GetStelexosByIdInDb(id);
+        var existingStelexos = await GetStelexosByIdInDb(stelexos.Thesi, id);
         if (existingStelexos == null)
             return false;
 
@@ -212,7 +258,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
             return false;
         }
     }
-            
+
     public async Task<bool> AddStelexosInDb(IStelexos stelexos)
     {
         var xwrosName = stelexos.XwrosName;
@@ -270,7 +316,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
         return true;
     }
 
-    public async Task<bool> HasPlaceAnotherStelexosInDb(Thesi thesi,int stelexosId, string placeName)
+    public async Task<bool> HasPlaceAnotherStelexosInDb(Thesi thesi, int stelexosId, string placeName)
     {
         if (thesi == Thesi.Omadarxis)
         {
@@ -355,7 +401,7 @@ public class StaffRepository(AppDbContext dbContext, ILoggerFactory loggerFactor
                           .AsNoTracking()
                           .ToListAsync();
     }
-    
+
     private async Task<IEnumerable<Tomearxis>> GetTomearxes(TomearxisQueryParameters? tomearxisQueryParameters)
     {
         var query = _dbContext.Tomearxes.AsQueryable();

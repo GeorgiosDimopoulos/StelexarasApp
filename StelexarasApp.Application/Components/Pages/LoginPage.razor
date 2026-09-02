@@ -6,8 +6,10 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Refit
 @using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Application.Services
 
 @inject NavigationManager Navigation
+@inject TokenService TokenService
 @inject IAuthClient AuthClient
 
 @attribute [AllowAnonymous]
@@ -64,6 +66,8 @@
             {
                 showErrors = false;
                 error = string.Empty;
+
+                TokenService.SaveToken(result.Token);
                 Navigation.NavigateTo("/home");
             }
         }

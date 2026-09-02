@@ -40,7 +40,7 @@ public class StaffServiceTests
             Sex = Sex.Male,
         };
 
-        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(id)).ReturnsAsync(stelexos);
+        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(thesi, id)).ReturnsAsync(stelexos);
         _mockMapper.Setup(m => m.Map<StelexosResponse>(stelexos)).Returns(new StelexosResponse()
         {
             Id = id,
@@ -51,11 +51,11 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexosById(id, new());
+        var result = await _stelexiService.GetStelexosById(thesi, id, new());
 
         // Assert
         Assert.NotNull(result);
-        _mockStelexiRepository.Verify(r => r.GetStelexosByIdInDb(id), Times.Once);
+        _mockStelexiRepository.Verify(r => r.GetStelexosByIdInDb(thesi, id), Times.Once);
         _mockMapper.Verify(m => m.Map<StelexosResponse>(stelexos), Times.Once);
     }
 
@@ -116,7 +116,7 @@ public class StaffServiceTests
                 break;
         }
 
-        _mockStelexiRepository.Setup(r => r.GetStelexosByNameInDb(name, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(stelexos);
+        _mockStelexiRepository.Setup(r => r.GetStelexosByNameInDb(thesi, name, It.IsAny<StelexosQueryParameters>())).ReturnsAsync(stelexos);
         _mockMapper.Setup(m => m.Map<StelexosResponse>(stelexos)).Returns(new StelexosResponse()
         {
             LastName = name.Split(' ')[1],
@@ -128,14 +128,14 @@ public class StaffServiceTests
         });
 
         // Act
-        var result = await _stelexiService.GetStelexosByName(name, new());
+        var result = await _stelexiService.GetStelexosByName(thesi, name, new());
 
         // Assert
         Assert.NotNull(result);
         Assert.Equal(name.Split(' ')[1], result.Value.LastName);
         Assert.Equal(name.Split(' ')[0], result.Value.FirstName);
 
-        _mockStelexiRepository.Verify(r => r.GetStelexosByNameInDb(name, It.IsAny<StelexosQueryParameters>()), Times.Once);
+        _mockStelexiRepository.Verify(r => r.GetStelexosByNameInDb(thesi, name, It.IsAny<StelexosQueryParameters>()), Times.Once);
         _mockMapper.Verify(m => m.Map<StelexosResponse>(stelexos), Times.Once);
     }
 
@@ -472,7 +472,7 @@ public class StaffServiceTests
             Sex = Sex.Female
         };
 
-        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(id)).ReturnsAsync(existingOmadarxis);
+        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(Thesi.Omadarxis, id)).ReturnsAsync(existingOmadarxis);
         _mockStelexiRepository.Setup(r => r.HasPlaceAnotherStelexosInDb(Thesi.Omadarxis, id, newSkiniName)).ReturnsAsync(false);
         _mockStelexiRepository.Setup(r => r.UpdateStelexosInDb(id, It.IsAny<IStelexos>())).ReturnsAsync(true);
 
@@ -509,7 +509,7 @@ public class StaffServiceTests
             XwrosName = newSkiniName
         };
 
-        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(omadarxisId)).ReturnsAsync(existingOmadarxis);
+        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(Thesi.Omadarxis, omadarxisId)).ReturnsAsync(existingOmadarxis);
         _mockStelexiRepository.Setup(r => r.HasPlaceAnotherStelexosInDb(Thesi.Omadarxis, omadarxisId, newSkiniName)).ReturnsAsync(true);
         _mockStelexiRepository.Setup(r => r.UpdateStelexosInDb(omadarxisId, It.IsAny<IStelexos>())).ReturnsAsync(true);
 
@@ -634,7 +634,7 @@ public class StaffServiceTests
                                                                              s.Thesi == createStelexosRequest.Thesi)))
                               .ReturnsAsync(true)
                               .Verifiable();
-        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(id))
+        _mockStelexiRepository.Setup(r => r.GetStelexosByIdInDb(thesi, id))
                               .ReturnsAsync(stelexos);
         _mockStelexiRepository.Setup(r => r.UpdateStelexosInDb(id, stelexos))
                               .ReturnsAsync(true);

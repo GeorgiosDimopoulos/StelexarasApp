@@ -45,9 +45,9 @@ public class StaffService : IStaffService
         return stelexosInService;
     }
 
-    public async Task<Result<StelexosResponse>> GetStelexosById(int id, StelexosQueryParameters stelexosQueryParameters)
+    public async Task<Result<StelexosResponse>> GetStelexosById(Thesi thesi, int id, StelexosQueryParameters stelexosQueryParameters)
     {
-        var stelexosInDb = await _stelexiRepository.GetStelexosByIdInDb(id);
+        var stelexosInDb = await _stelexiRepository.GetStelexosByIdInDb(thesi, id);
         if (stelexosInDb is null)
             return Result.Fail("Stelexos not found");
 
@@ -60,9 +60,9 @@ public class StaffService : IStaffService
         return Result.Ok(stelexosInService);
     }
 
-    public async Task<Result<StelexosResponse>> GetStelexosByName(string n, StelexosQueryParameters stelexosQueryParameters)
+    public async Task<Result<StelexosResponse>> GetStelexosByName(Thesi thesi, string n, StelexosQueryParameters stelexosQueryParameters)
     {
-        var stelexosInDb = await _stelexiRepository.GetStelexosByNameInDb(n, stelexosQueryParameters);
+        var stelexosInDb = await _stelexiRepository.GetStelexosByNameInDb(thesi, n, stelexosQueryParameters);
         if (stelexosInDb is null)
             return Result.Fail("Stelexos not found");
 
@@ -74,7 +74,6 @@ public class StaffService : IStaffService
         }
         return Result.Ok(stelexosInService);
     }
-
 
     public async Task<Result> CreateStelexos(CreateStelexosRequest stelexosDto)
     {
@@ -149,7 +148,7 @@ public class StaffService : IStaffService
     public async Task<Result> UpdateStelexos(int id, UpdateStelexosRequest entity)
     {
         _stelexosValidator.ValidateAndThrow(entity);
-        var stelexosInDb = await _stelexiRepository.GetStelexosByIdInDb(id);
+        var stelexosInDb = await _stelexiRepository.GetStelexosByIdInDb(entity.Thesi, id);
         if (stelexosInDb == null)
         {
             LogFileWriter.WriteToLog("Stelexos not found", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);

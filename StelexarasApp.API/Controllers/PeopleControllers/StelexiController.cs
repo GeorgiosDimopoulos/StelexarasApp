@@ -26,16 +26,16 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
     }
 
     [HttpGet("StelexosByName")]
-    public async Task<ActionResult<StelexosResponse>> GetStelexosByName(string name, [FromQuery] StelexosQueryParameters stelexosQueryParameters)
+    public async Task<ActionResult<StelexosResponse>> GetStelexosByName(Thesi thesi, string name, [FromQuery] StelexosQueryParameters stelexosQueryParameters)
     {
-        var result = await _stelexiService.GetStelexosByName(name, stelexosQueryParameters);
+        var result = await _stelexiService.GetStelexosByName(thesi, name, stelexosQueryParameters);
         return Ok(result);
     }
 
     [HttpGet("Stelexos/{id:int}")]
-    public async Task<ActionResult<StelexosResponse>> GetStelexosById(int id, [FromQuery] StelexosQueryParameters stelexosQueryParameters)
+    public async Task<ActionResult<StelexosResponse>> GetStelexosById(Thesi thesi, int id, [FromQuery] StelexosQueryParameters stelexosQueryParameters)
     {
-        var result = await _stelexiService.GetStelexosById(id, stelexosQueryParameters);
+        var result = await _stelexiService.GetStelexosById(thesi, id, stelexosQueryParameters);
         if (result.IsFailed)
             return NotFound();
         return Ok(result.Value);
@@ -52,7 +52,7 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("Stelexos")]
+    [HttpPut("Stelexos/{id:int}")]
     public async Task<ActionResult<bool>> UpdateStelexos(int id, [FromBody] UpdateStelexosRequest request)
     {
         var result = await _stelexiService.UpdateStelexos(id, request);
@@ -62,8 +62,8 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("Stelexos")]
-    public async Task<ActionResult<bool>> DeleteStelexos([FromQuery]int id)
+    [HttpDelete("Stelexos/{id:int}")]
+    public async Task<ActionResult<bool>> DeleteStelexos(int id)
     {
         var result = await _stelexiService.DeleteStelexos(id);
         if (result.IsFailed)

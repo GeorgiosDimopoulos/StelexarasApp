@@ -10,8 +10,9 @@
 @inject IXwroiApi XwroiApi
 @inject IStelexiApi StelexiApi
 @inject IDialogService DialogService
-
 @inject NavigationManager NavigationManager
+
+<PageTitle>Stelexaras - @Koinotita?.Name</PageTitle>
 
 <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
 <h2>
@@ -86,7 +87,7 @@
             }
             else if (Koinotita.KoinotarxisId > 0)
             {
-                koinotarxis = await StelexiApi.GetStelexosById(Koinotita.KoinotarxisId, new() { IncludeXwros = true });
+                koinotarxis = await StelexiApi.GetStelexosById(Thesi.Koinotarxis, Koinotita.KoinotarxisId, new() { IncludeXwros = true });
                 Koinotita.KoinotarxisName = koinotarxis is not null
                     ? $"{koinotarxis.FirstName} {koinotarxis.LastName}"
                     : "Δεν υπάρχει στέλεχος";

@@ -30,7 +30,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexosByIdInDb(stelexos.Id);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(Thesi.Omadarxis, stelexos.Id);
 
         // Assert
         Assert.Equal(stelexos, result);
@@ -53,7 +53,7 @@ public class StaffRepositoryDbTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _stelexiRepository.GetStelexosByIdInDb(2);
+        var result = await _stelexiRepository.GetStelexosByIdInDb(Thesi.Omadarxis, 2);
 
         // Assert
         Assert.Null(result);
