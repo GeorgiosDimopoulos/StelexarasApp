@@ -1,5 +1,0 @@
-﻿@StelexarasApp.Web_HostAddress = http://localhost:5030
-
-# GET all personal
-GET {{StelexarasApp.Web_HostAddress}}/personalstaff/
-Accept: application/json
