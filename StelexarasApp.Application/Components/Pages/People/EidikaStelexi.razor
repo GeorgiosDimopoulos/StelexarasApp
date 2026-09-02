@@ -1,13 +1,59 @@
-﻿@page "/specialStaff"
+﻿@page "/eidikastelexi"
 
 @using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.People.Staff
+@using StelexarasApp.Library.Models.Atoma.Staff
 
-@inject NavigationManager Navigation
-@inject ISnackbar Snackbar
 @inject IAuthClient AuthClient
+@inject IStelexiApi StelexiApi
+@inject IDialogService DialogService
+@inject NavigationManager Navigation
 
 <PageTitle>Stelexaras - Special Staff</PageTitle>
 
+<div class="organogram">
+    <MudText style="text-align:center; text-decoration:underline" Class="mt-6">ΥΠΑΡΧΗΓΟΙ</MudText>
+    <MudGrid Justify="Justify.Center" Class="mb-20">
+        <MudItem xs="12" sm="5">
+            @foreach (var eidiko in eidika)
+            {
+                <MudItem xs="12" sm="6" md="1" Class="pa-1">
+                    <MudCard onclick="@(() => OpenStelexos(eidiko))" Style="cursor:pointer; transition:0.2s;">
+                        <MudCardContent>
+                            <MudText Typo="Typo.h6">@eidiko.LastName @eidiko.FirstName</MudText>
+                            <MudText Typo="Typo.subtitle2">@eidiko.XwrosName</MudText>
+                            <MudText Typo="Typo.subtitle2">@eidiko.Tel</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudItem>
+    </MudGrid>
+</div>
 @code {
+    private IEnumerable<StelexosResponse> eidika = new List<StelexosResponse>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        eidika = await StelexiApi.GetStelexi(Thesi.Eidiko, new());       
+    }
+
+    private async Task OpenStelexos(StelexosResponse stelexos)
+    {
+        if (stelexos is null || stelexos.Id <= 0)
+            return;
+
+        var parameters = new DialogParameters<EditStelexosDialog>
+        {
+            { x => x.Stelexos, stelexos }
+        };
+
+        var dialog = await DialogService.ShowAsync<EditStelexosDialog>("Επεξεργασία Στελέχους", parameters);
+
+        var result = await dialog.Result;
+        if (result is not null && !result.Canceled)
+        {
+            Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        }
+    }
 }
