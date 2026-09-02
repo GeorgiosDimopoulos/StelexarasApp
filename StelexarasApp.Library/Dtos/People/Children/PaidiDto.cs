@@ -15,10 +15,7 @@ public record PaidiDtoBase : IPaidiDto
 
 public record CreatePaidiRequest : PaidiDtoBase { }
 
-public record UpdatePaidiRequest : PaidiDtoBase
-{
-    public int Id { get; set; }
-}
+public record UpdatePaidiRequest : PaidiDtoBase { }
 
 public record PaidiResponse : PaidiDtoBase
 {

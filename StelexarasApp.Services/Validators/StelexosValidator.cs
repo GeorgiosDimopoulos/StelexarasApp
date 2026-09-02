@@ -41,9 +41,6 @@ public class UpdateStelexosValidator : AbstractValidator<UpdateStelexosRequest>
     public UpdateStelexosValidator()
     {
         Include(new StelexosValidator());
-
-        RuleFor(x => x.Id)
-            .GreaterThan(0);
     }
 }
 

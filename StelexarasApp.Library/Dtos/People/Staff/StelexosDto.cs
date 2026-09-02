@@ -14,10 +14,7 @@ public record StelexosDtoBase : IStelexosDto
 
 public record CreateStelexosRequest : StelexosDtoBase { }
 
-public record UpdateStelexosRequest : StelexosDtoBase
-{
-    public int Id { get; set; }
-}
+public record UpdateStelexosRequest : StelexosDtoBase { }
 
 public record StelexosResponse : StelexosDtoBase
 {

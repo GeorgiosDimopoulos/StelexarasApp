@@ -52,6 +52,5 @@ public class UpdatePaidiValidator : AbstractValidator<UpdatePaidiRequest>
     public UpdatePaidiValidator()
     {
         Include(new PaidiValidator());
-        RuleFor(x => x.Id).GreaterThan(0);
     }
 }

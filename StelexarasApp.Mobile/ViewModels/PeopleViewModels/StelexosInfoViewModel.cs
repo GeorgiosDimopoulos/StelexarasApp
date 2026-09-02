@@ -57,7 +57,7 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
             //if (skiniIsChanged)
             //    await MoveOmadarxisToAnotherSkini();
 
-            var request = new UpdateStelexosRequest() { Id = Id };
+            var request = new UpdateStelexosRequest();
             var result = await _stelexiService.UpdateStelexos(Id, request);
             StatusMessage = result.IsSuccess ? "Save successful" : $"Save failed: {result.Errors.FirstOrDefault()?.Message}";
             OnPropertyChanged(nameof(Stelexos));
