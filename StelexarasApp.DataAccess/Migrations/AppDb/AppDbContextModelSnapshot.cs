@@ -108,7 +108,46 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.HasIndex("Tel")
                         .IsUnique();
 
-                    b.ToTable("Anwtata");
+                    b.ToTable("Anwtatos");
+                });
+
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.EidikoStelexos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tel")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Thesi")
+                        .HasColumnType("int");
+
+                    b.Property<string>("XwrosName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EidikoStelexos");
                 });
 
             modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Ekpaideutis", b =>

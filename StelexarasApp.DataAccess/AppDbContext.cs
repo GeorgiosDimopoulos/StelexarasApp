@@ -14,12 +14,13 @@ public class AppDbContext : DbContext
     public virtual DbSet<Tomearxis> Tomearxes { get; set; }
     public DbSet<Ekpaideutis> Ekpaideutes { get; set; }
     public DbSet<Anwtatos> Anwtata { get; set; }
+    public DbSet<Anwtatos> EidikoStelexos { get; set; }
     public DbSet<Paidi> Paidia { get; set; }
 
     public DbSet<Koinotita> Koinotites { get; set; }
     public DbSet<Skini> Skines { get; set; }
     public DbSet<Tomeas> Tomeis { get; set; }
-    public DbSet<AnwtatosXwros> AnwtatosXwroi { get; set; }    
+    public DbSet<AnwtatosXwros> AnwtatosXwroi { get; set; }
 
     public string? ConnectionString { get; set; }
 
@@ -73,19 +74,22 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Koinotita>().HasIndex(k => k.Name).IsUnique();
         modelBuilder.Entity<Tomeas>().HasIndex(k => k.Name).IsUnique();
         modelBuilder.Entity<Duty>().HasIndex(k => k.Name).IsUnique();
-        modelBuilder.Entity<AnwtatosXwros>().HasIndex(k => k.Name).IsUnique(); 
+        modelBuilder.Entity<AnwtatosXwros>().HasIndex(k => k.Name).IsUnique();
+        modelBuilder.Entity<EidikoStelexos>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
 
         modelBuilder.Entity<Omadarxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Koinotarxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Tomearxis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Ekpaideutis>().HasIndex(k => k.Tel).IsUnique();
         modelBuilder.Entity<Anwtatos>().HasIndex(k => k.Tel).IsUnique();
+        modelBuilder.Entity<EidikoStelexos>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
 
         modelBuilder.Entity<Omadarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Koinotarxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Tomearxis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Ekpaideutis>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Anwtatos>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
+        modelBuilder.Entity<EidikoStelexos>().Property(o => o.Tel).IsRequired().HasMaxLength(100);
 
         modelBuilder.Entity<Paidi>().Property(o => o.Sex).IsRequired();
         modelBuilder.Entity<Paidi>().Property(o => o.PaidiType).IsRequired();
@@ -110,8 +114,8 @@ public class AppDbContext : DbContext
             .HasForeignKey<Skini>(s => s.OmadarxisId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        modelBuilder.Entity<Skini>()    
-            .Property(s => s.Sex)    
+        modelBuilder.Entity<Skini>()
+            .Property(s => s.Sex)
             .IsRequired(false);
 
         modelBuilder.Entity<Koinotita>()
@@ -128,7 +132,7 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Koinotita>()
             .HasOne(k => k.Tomeas)
-            .WithMany(t => t.Koinotites)                
+            .WithMany(t => t.Koinotites)
             .HasForeignKey(k => k.TomeasId)
             .OnDelete(DeleteBehavior.Restrict);
 
@@ -162,6 +166,6 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Omadarxis>().Property(om => om.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Koinotarxis>().Property(k => k.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Tomearxis>().Property(t => t.Id).ValueGeneratedOnAdd();
-        // modelBuilder.Entity<Ekpaideutis>().Property(ek => ek.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<Ekpaideutis>().Property(ek => ek.Id).ValueGeneratedOnAdd();
     }
 }

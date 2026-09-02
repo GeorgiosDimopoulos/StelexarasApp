@@ -27,4 +27,7 @@ public enum Thesi
 
     [Display(Name = "Ανώτατος")] // arxhgos and uparxhgoi
     Anwtatos = 5,
+
+    [Display(Name = "Ειδικό")]
+    Eidiko = 6
 }
