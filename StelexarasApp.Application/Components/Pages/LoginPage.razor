@@ -15,19 +15,26 @@
 
 <PageTitle>Stelexaras - Login</PageTitle>
 
-<div style="min-height:100vh; background: linear-gradient(135deg, #f8e1e7, #f5f7fa); background-color: #f7f2f4; display:flex; justify-content:center; align-items:center;">
+<div style="min-height:100vh;
+    background: linear-gradient(rgba(0,0,0,0.20), rgba(0,0,0,0.20)), url('/images/pool.jpg') center center / cover no-repeat;
+                        background-color: #f7f2f4;
+                        display:flex; justify-content:center;
+                        align-items:center;">
     <MudPaper Elevation="6" Class="p-4" Style="width: 300px; margin: auto; margin-top: 300px; text-align:center;">
-        <MudText>Stelexaras Login</MudText>
+        <MudText style="color:white">ΤΥΠΕΤ ΣΤΕΛΕΧΑΡΑΣ</MudText>
         <MudTextField @bind-Value="password"
                       Label="Password"
+                      style="background-color:white"
+                      Immediate="true"
                       Variant="Variant.Outlined"
-                      OnKeyDown="HandleKeyDown"
                       InputType="@PasswordInput"
                       Adornment="Adornment.End"
+                      OnKeyUp="HandleKeyUp"
                       AdornmentIcon="@PasswordInputIcon"
+                      AdornmentColor="Color.Default"
                       OnAdornmentClick="TogglePasswordVisibility"
                       AdornmentAriaLabel="Show Password" />
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Login"> Login </MudButton>
+        <MudButton style="color:white; background-color:orange" Variant="Variant.Filled" Color="Color.Primary" OnClick="Login"> Είσοδος </MudButton>
     </MudPaper>
 </div>
 
@@ -76,11 +83,9 @@
         }
     }
 
-    private async Task HandleKeyDown(KeyboardEventArgs e)
+    private async Task HandleKeyUp(KeyboardEventArgs e)
     {
         if (e.Key == "Enter")
-        {
             await Login();
-        }
     }
 }
