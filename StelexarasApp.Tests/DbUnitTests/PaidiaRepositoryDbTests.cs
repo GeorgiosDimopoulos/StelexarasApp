@@ -26,7 +26,7 @@ public class PaidiaRepositoryDbTests
     public async Task AddKataskinotis_ShouldReturnExpectedResult(PaidiType paidiType)
     {
         var paidi = new Paidi { LastName = "Test PaidiL", FirstName = "Test PaidiF", Age = 10, PaidiType = paidiType, Sex = Sex.Male };
-        var omadarxis = new Omadarxis { LastName = "OmadarxisL", FirstName = "OmadarxisF", Age = 20, Sex = Sex.Male};
+        var omadarxis = new Omadarxis { LastName = "OmadarxisL", FirstName = "OmadarxisF", Age = 20, Sex = Sex.Male };
 
         var tomeas = GetTomeas("A", new Random().Next(1, 100));
         var koinotita = GetKoinotita(21, "TestKoinotita");
@@ -94,7 +94,7 @@ public class PaidiaRepositoryDbTests
         {
             Id = 100,
             Name = "Ipiros",
-            TomeasId = 100,            
+            TomeasId = 100,
             Skines = new List<Skini>()
         };
 
@@ -104,7 +104,7 @@ public class PaidiaRepositoryDbTests
             Name = "Pindos",
             Sex = Sex.Male,
             KoinotitaId = koinotita.Id,
-            Koinotita = koinotita,            
+            Koinotita = koinotita,
             Paidia = new List<Paidi>()
         };
 
@@ -130,10 +130,10 @@ public class PaidiaRepositoryDbTests
         };
 
         await _dbContext.Skines.AddAsync(existingSkini);
-        await _dbContext.Skines.AddAsync(newSkini);        
+        await _dbContext.Skines.AddAsync(newSkini);
         await _dbContext.Paidia.AddAsync(existingPaidi);
         await _dbContext.SaveChangesAsync();
-                
+
         // await _paidiRepository.AddPaidiInSkini(existingPaidi, existingSkini.Name);
 
         await _dbContext.SaveChangesAsync();
@@ -177,7 +177,7 @@ public class PaidiaRepositoryDbTests
             paidi = null;
 
         // Act
-        var result = await _paidiRepository.UpdatePaidiInDb(paidi);
+        var result = await _paidiRepository.UpdatePaidiInDb(id, paidi);
 
         // Assert
         Assert.Equal(expectedResult, result);

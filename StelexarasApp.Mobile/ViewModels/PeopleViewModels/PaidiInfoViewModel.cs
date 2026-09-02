@@ -41,14 +41,13 @@ namespace StelexarasApp.Mobile.ViewModels.PeopleViewModels
         {
             var paidiToUpdate = new UpdatePaidiRequest
             {
-                Id = PaidiDto.Id,
                 FirstName = PaidiDto.FirstName,
                 Sex = PaidiDto.Sex,
                 LastName = PaidiDto.LastName,
                 Age = PaidiDto.Age,
                 SkiniName = SkiniName
             };
-            var result = await _paidiaService.UpdatePaidiInService(paidiToUpdate);
+            var result = await _paidiaService.UpdatePaidiInService(PaidiDto.Id, paidiToUpdate);
             if (!result.IsSuccess)
             {
                 StatusMessage = result.Errors.FirstOrDefault()?.Message ?? "Save failed";

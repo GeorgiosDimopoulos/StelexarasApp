@@ -33,7 +33,7 @@ public class PaidiaController : ControllerBase
         var paidia = await _paidiService.GetPaidiaByNameInService(name, paidiQueryParameters);
         return Ok(paidia);
     }
-    
+
     [HttpGet("Kataskinotes")]
     public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetKataskinotes([FromQuery] PaidiQueryParameters paidiQueryParameters)
     {
@@ -78,7 +78,7 @@ public class PaidiaController : ControllerBase
             return NotFound(result.Errors.First().Message);
 
         return result.Value;
-    }    
+    }
 
     [HttpGet("Koinotita/ById/{id:int}")]
     public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidiaByKoinotitaId(int id, [FromQuery] PaidiQueryParameters paidiQueryParameters)
@@ -133,11 +133,10 @@ public class PaidiaController : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("{id:int}")]
+    [HttpPut("Paidi/{id:int}")]
     public async Task<ActionResult> UpdatePaidi(int id, [FromBody] UpdatePaidiRequest request)
     {
-        request.Id = id;
-        var result = await _paidiService.UpdatePaidiInService(request);
+        var result = await _paidiService.UpdatePaidiInService(id, request);
 
         if (!result.IsSuccess)
             return BadRequest(result.Errors.Select(e => e.Message));

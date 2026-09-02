@@ -462,7 +462,6 @@ public class StaffServiceTests
         };
         var omadarxisRequest = new UpdateStelexosRequest
         {
-            Id = id,
             Thesi = Thesi.Omadarxis,
             FirstName = "FirstName",
             LastName = "LastName",
@@ -499,7 +498,6 @@ public class StaffServiceTests
         };
         var omadarxis = new UpdateStelexosRequest
         {
-            Id = omadarxisId,
             Thesi = Thesi.Omadarxis,
             FirstName = "FirstNaame",
             LastName = "LastNaame",

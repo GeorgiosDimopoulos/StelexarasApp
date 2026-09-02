@@ -46,7 +46,7 @@ public class PaidiaServiceTests
     public async Task AddEkpaideuomenos_ShouldReturnTrue_WhenSuccessful()
     {
         // Arrange
-        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentTel  = "1234567290", SeAdeia = false, Sex = Sex.Male };
+        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentTel = "1234567290", SeAdeia = false, Sex = Sex.Male };
         var paidi = new Ekpaideuomenos { Id = 1, LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, Sex = Sex.Male, SeAdeia = false, ParentTel = "1234567290", SkiniId = 1 };
 
         _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
@@ -65,7 +65,7 @@ public class PaidiaServiceTests
     public async Task CreatePaidi_ShouldFail_WhenValidationFails()
     {
         // Arrange
-        var newPaidiRequest = new CreatePaidiRequest { LastName = string.Empty, FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentTel  = "1234567890", SeAdeia = false, Sex = Sex.Male };
+        var newPaidiRequest = new CreatePaidiRequest { LastName = string.Empty, FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentTel = "1234567890", SeAdeia = false, Sex = Sex.Male };
 
         _paidiValidatorMock.Setup(v => v.ValidateAsync(newPaidiRequest, It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult(
             [new ValidationFailure("LastName", "PaidiDto last Name is required")]));
@@ -88,7 +88,7 @@ public class PaidiaServiceTests
             FirstName = "John",
             Age = 16,
             PaidiType = PaidiType.Ekpaideuomenos,
-            ParentTel  = "1234567890",
+            ParentTel = "1234567890",
             SeAdeia = false,
             Sex = Sex.Male,
             SkiniName = "Skini1",
@@ -128,7 +128,7 @@ public class PaidiaServiceTests
                        FirstName = p.FirstName,
                        LastName = p.LastName,
                        SeAdeia = p.SeAdeia,
-                       ParentTel  = p.ParentTel,
+                       ParentTel = p.ParentTel,
                        SkiniName = p.Skini?.Name,
                        Sex = p.Sex,
                        Age = p.Age,
@@ -211,26 +211,25 @@ public class PaidiaServiceTests
         var paidiRequest =
             new UpdatePaidiRequest
             {
-                Id = 123,
                 LastName = "UpdatedLastName",
                 FirstName = "UpdatedFirstName",
                 Age = 10,
                 SeAdeia = true,
                 Sex = Sex.Male,
                 PaidiType = PaidiType.Ekpaideuomenos,
-                ParentTel  = "1234567890",
+                ParentTel = "1234567890",
                 SkiniName = "Skini1"
             };
 
         var mappedPaidi = new Paidi
         {
-            Id = paidiRequest.Id,
             FirstName = paidiRequest.FirstName,
             LastName = paidiRequest.LastName,
             SeAdeia = paidiRequest.SeAdeia,
             Age = paidiRequest.Age,
             PaidiType = paidiRequest.PaidiType,
-            ParentTel = paidiRequest.ParentTel ,
+            ParentTel = paidiRequest.ParentTel,
+            Id = 1,
             Sex = paidiRequest.Sex
         };
 
@@ -238,15 +237,15 @@ public class PaidiaServiceTests
                            .ReturnsAsync(new ValidationResult());
         _mockMapper.Setup(m => m.Map<Paidi>(paidiRequest))
                    .Returns(mappedPaidi);
-        _mockPaidiRepository.Setup(repo => repo.UpdatePaidiInDb(mappedPaidi))
+        _mockPaidiRepository.Setup(repo => repo.UpdatePaidiInDb(mappedPaidi.Id, mappedPaidi))
                             .ReturnsAsync(false);
 
         // Act
-        var result = await _paidiService.UpdatePaidiInService(paidiRequest);
+        var result = await _paidiService.UpdatePaidiInService(mappedPaidi.Id, paidiRequest);
 
         // Assert
         Assert.True(result.IsFailed);
-        _mockPaidiRepository.Verify(repo => repo.UpdatePaidiInDb(mappedPaidi), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.UpdatePaidiInDb(mappedPaidi.Id, mappedPaidi), Times.Once);
     }
 
     [Fact]
@@ -254,14 +253,13 @@ public class PaidiaServiceTests
     {
         var updatePaidiRequest = new UpdatePaidiRequest()
         {
-            Id = 124,
             LastName = "UpdateddLastName",
             FirstName = "UpdateddFirstName",
             Age = 10,
             SeAdeia = true,
             Sex = Sex.Male,
             PaidiType = PaidiType.Ekpaideuomenos,
-            ParentTel  = "1234567290",
+            ParentTel = "1234567290",
             SkiniName = "Skini11"
         };
 
@@ -270,11 +268,11 @@ public class PaidiaServiceTests
 
 
         // Act
-        var result = await _paidiService.UpdatePaidiInService(updatePaidiRequest);
+        var result = await _paidiService.UpdatePaidiInService(1, updatePaidiRequest);
 
         // Assert
         Assert.True(result.IsFailed);
-        _mockPaidiRepository.Verify(repo => repo.UpdatePaidiInDb(It.IsAny<Paidi>()), Times.Never);
+        _mockPaidiRepository.Verify(repo => repo.UpdatePaidiInDb(It.IsAny<int>(), It.IsAny<Paidi>()), Times.Never);
     }
     #endregion
 

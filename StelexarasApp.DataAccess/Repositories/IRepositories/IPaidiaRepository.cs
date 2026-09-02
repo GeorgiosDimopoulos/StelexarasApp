@@ -18,7 +18,7 @@ public interface IPaidiaRepository
 
     Task<bool> DeletePaidiInDb(int id);
 
-    Task<bool> UpdatePaidiInDb(Paidi paidi);
+    Task<bool> UpdatePaidiInDb(int id, Paidi paidi);
 
     Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId);
 }

@@ -80,8 +80,8 @@ public class PaidiaService : IPaidiaService
 
         var paidia = await _paidiRepository.GetPaidiaInSkiniIdFromDb(skiniId, paidiQueryParameters);
         if (paidia is null)
-            return Enumerable.Empty<PaidiResponse>(); 
-        
+            return Enumerable.Empty<PaidiResponse>();
+
         var kataskinotesResponse = _mapper.Map<IEnumerable<PaidiResponse>>(paidia);
         if (kataskinotesResponse is null)
             return null!;
@@ -154,7 +154,7 @@ public class PaidiaService : IPaidiaService
             return Result.Fail("Invalid Paidi data");
         if (string.IsNullOrEmpty(paidiDto.SkiniName))
             return Result.Fail("Skini name is required");
-        
+
         var validationResult = await _paidiValidator.ValidateAsync(paidiDto);
         if (!validationResult.IsValid)
         {
@@ -191,7 +191,7 @@ public class PaidiaService : IPaidiaService
         return Result.Ok();
     }
 
-    public async Task<Result> UpdatePaidiInService(UpdatePaidiRequest paidiDto)
+    public async Task<Result> UpdatePaidiInService(int id, UpdatePaidiRequest paidiDto)
     {
         if (paidiDto == null)
             return Result.Fail("PaidiDto was null");
@@ -202,7 +202,7 @@ public class PaidiaService : IPaidiaService
             return Result.Fail(validationResult.Errors.Select(x => x.ErrorMessage));
 
         var paidi = _mapper.Map<Paidi>(paidiDto);
-        var result = await _paidiRepository.UpdatePaidiInDb(paidi);
+        var result = await _paidiRepository.UpdatePaidiInDb(id, paidi);
 
         if (!result)
             return Result.Fail("Failed to update Paidi");

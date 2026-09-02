@@ -242,13 +242,15 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         }
     }
 
-    public async Task<bool> UpdatePaidiInDb(Paidi paidi)
+    public async Task<bool> UpdatePaidiInDb(int id, Paidi paidi)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
         if (paidi is null || _dbContext.Paidia is null)
             return false;
+
+        var paidiInDb = await _dbContext.Paidia.FindAsync(id);
 
         try
         {

@@ -15,7 +15,7 @@ public interface IPaidiaService
     Task<IEnumerable<PaidiResponse>> GetPaidiaByNameInService(string name, PaidiQueryParameters paidiQueryParameters);
 
     Task<Result> CreatePaidiInService(CreatePaidiRequest request);
-    Task<Result> UpdatePaidiInService(UpdatePaidiRequest request);
+    Task<Result> UpdatePaidiInService(int id, UpdatePaidiRequest request);
     Task<Result> DeletePaidiInService(int id);
     Task<Result> MovePaidiToNewSkiniInService(int paidiId, int skiniId);
 }
