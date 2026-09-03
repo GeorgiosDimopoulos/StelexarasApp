@@ -48,7 +48,7 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
         var result = await _stelexiService.CreateStelexos(request);
         if (result.IsFailed)
             return BadRequest(result.Errors.Select(e => e.Message));
-        return Ok(result);
+        return Ok(true);
     }
 
     [Authorize]
@@ -58,7 +58,7 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
         var result = await _stelexiService.UpdateStelexos(id, request);
         if (result.IsFailed)
             return BadRequest(result.Errors.Select(e => e.Message));
-        return Ok(result);
+        return Ok(true);
     }
 
     [Authorize]
@@ -68,6 +68,6 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
         var result = await _stelexiService.DeleteStelexos(id);
         if (result.IsFailed)
             return BadRequest(result.Errors.Select(e => e.Message));
-        return Ok(result);
+        return Ok(true);
     }
 }

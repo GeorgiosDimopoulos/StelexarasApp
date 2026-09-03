@@ -9,65 +9,73 @@
 
 @inject IXwroiApi XwroiApi
 @inject IStelexiApi StelexiApi
+@inject IPaidiaApi PaidiaApi
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Stelexaras - @Koinotita?.Name</PageTitle>
 
-<h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
-<h2>
-    Στέλεχος:
-    @if (Koinotita != null && Koinotita.Name.Contains("Σχολή"))
-    {
-        @foreach (var ekp in ekpaideutes)
+<div style="background: linear-gradient(rgba(255,255,255,0.68),rgba(225,245,242,0.68)), url('/images/pool.jpg') center/cover no-repeat;">
+
+    <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
+    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΔΥΝΑΜΗ: @dunamhPaidia</h3>
+    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΣΕ ΑΔΕΙΑ: @seAdeiaPaidia</h3>
+    <h2>
+        Στέλεχος:
+        @if (Koinotita != null && Koinotita.Name.Contains("Σχολή"))
         {
-            <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos(ekp))">
-                @ekp.FirstName @ekp.LastName
+            @foreach (var ekp in ekpaideutes)
+            {
+                <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos(ekp))">
+                    @ekp.FirstName @ekp.LastName
+                </MudChip>
+            }
+        }
+        else
+        {
+            <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos(koinotarxis))">
+                @Koinotita?.KoinotarxisName
             </MudChip>
         }
-    }
-    else
-    {
-        <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos(koinotarxis))">
-            @Koinotita?.KoinotarxisName
-        </MudChip>
-    }
-</h2>
-
-<MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
-    <MudItem xs="12" sm="4">
-        <MudStack AlignItems="AlignItems.Center"
-                  Spacing="10">
-            @if (Skines.Count > 6)
-            {
-                @foreach (var sk in Skines.OrderBy(s => s.Name))
+    </h2>
+    <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 10vh);  align-items:center;">
+        <MudItem xs="12" sm="4">
+            <MudStack AlignItems="AlignItems.Center"
+                      Spacing="10">
+                @if (Skines.Count > 6)
                 {
-                    <MudButton Href="@($"/skines/{sk.Id}")" Style="height:50px; width:450px; border-radius:15px; overflow:hidden; color:white; background-color:#58B98D">
-                        @sk.Name - @sk.PaidiaNumber
-                    </MudButton>
+                    @foreach (var sk in Skines.OrderBy(s => s.Name))
+                    {
+                        <MudButton Href="@($"/skines/{sk.Id}")" Style="height:50px; width:450px; border-radius:15px; overflow:hidden; color:white; background-color:#58B98D">
+                            @sk.Name - @sk.PaidiaNumber
+                        </MudButton>
+                    }
                 }
-            }
-            else
-            {
-                @foreach (var sk in Skines.OrderBy(s => s.Name))
+                else
                 {
-                    <MudButton Href="@($"/skines/{sk.Id}")" Style="height:80px; width:500px; border-radius:15px; overflow:hidden; color:white; background-color:#58B98D">
-                        @sk.Name - @sk.PaidiaNumber
-                    </MudButton>
+                    @foreach (var sk in Skines.OrderBy(s => s.Name))
+                    {
+                        <MudButton Href="@($"/skines/{sk.Id}")" Style="height:80px; width:500px; border-radius:15px; overflow:hidden; color:white; background-color:#58B98D">
+                            @sk.Name - @sk.PaidiaNumber
+                        </MudButton>
+                    }
                 }
-            }
-        </MudStack>
-    </MudItem>
-</MudGrid>
-
+            </MudStack>
+        </MudItem>
+    </MudGrid>
+</div>
 @code {
     [Parameter]
     public int KoinotitaId { get; set; }
 
+    private int? seAdeiaPaidia;
+    private int? dunamhPaidia;
+    private int? allPaidia;
     private string? errorMessage;
-    public KoinotitaResponse Koinotita { get; set; } = default!;
 
+    public KoinotitaResponse Koinotita { get; set; } = default!;
     private StelexosResponse koinotarxis { get; set; } = new StelexosResponse();
+
     private IEnumerable<StelexosResponse> ekpaideutes { get; set; } = new List<StelexosResponse>();
     private List<SkiniResponse> Skines { get; set; } = new();
 
@@ -96,6 +104,15 @@
             {
                 Koinotita.KoinotarxisName = "Δεν υπάρχει στέλεχος";
             }
+
+            foreach (var skini in Skines)
+            {
+                var paidiaSkinis = await PaidiaApi.GetPaidiaBySkiniId(skini.Id, new() { IncludeSkini = true });
+                seAdeiaPaidia += paidiaSkinis.Count(p => p.SeAdeia);
+            }
+
+            allPaidia = Skines.Sum(sk => sk.PaidiaNumber);
+            dunamhPaidia = allPaidia - seAdeiaPaidia;
         }
         catch (Exception ex)
         {

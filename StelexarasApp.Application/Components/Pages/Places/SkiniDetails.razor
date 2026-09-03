@@ -15,14 +15,16 @@
 
 <PageTitle>Stelexaras - @Skini?.Name</PageTitle>
 
-<h1 style="text-align:center;">@Skini.Name (@SexOfSKini(@Skini.Sex)): @Paidia.Count δύναμη</h1>
-<h2 style="padding-block-start:10px;">
-    Στέλεχος:
-    <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos())">
-        @Skini?.OmadarxisName
-    </MudChip>
-</h2>
-<div style="padding:0px 30px;">
+<div style="background: linear-gradient(rgba(255,255,255,0.68),rgba(225,245,242,0.68)), center/cover no-repeat;">
+    <h1 style="text-align:center;">@Skini.Name (@SexOfSKini(@Skini.Sex)): @Paidia.Count δύναμη</h1>
+    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΔΥΝΑΜΗ: @Paidia.Where(p => p.SeAdeia == false)</h3>
+    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΣΕ ΑΔΕΙΑ: @Paidia.Where(p => p.SeAdeia)</h3>
+    <h2 style="padding-block-start:10px;">
+        Στέλεχος:
+        <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos())">
+            @Skini?.OmadarxisName
+        </MudChip>
+    </h2>
     <MudTable Items="Paidia">
         <HeaderContent>
             <MudTh Style="font-weight:bold;">Όνομα</MudTh>
@@ -34,7 +36,7 @@
         <RowTemplate>
             <MudTd>@context.LastName @context.FirstName</MudTd>
             <MudTd>@context.Age</MudTd>
-            <MudTd>@context.ParentTel</MudTd>            
+            <MudTd>@context.ParentTel</MudTd>
             <MudTd>@IsPresent(context.SeAdeia)</MudTd>
             <MudTd>
                 <MudButton Color="Color.Success"
@@ -47,6 +49,7 @@
         </RowTemplate>
     </MudTable>
 </div>
+
 @code {
     [Parameter]
     public int SkiniId { get; set; }
@@ -56,20 +59,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Skini = await XwroiApi.GetSkiniById(SkiniId, new() { IncludeStelexos = true});
+        Skini = await XwroiApi.GetSkiniById(SkiniId, new() { IncludeStelexos = true });
         if (Skini is null)
         {
             NavigationManager.NavigateTo("/");
             return;
         }
 
-        Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new(){IncludeSkini = true})).OrderBy(c => c.LastName).ToList();
+        Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new() { IncludeSkini = true })).OrderBy(c => c.LastName).ToList();
     }
 
     private async Task OpenPaidi(PaidiResponse context)
     {
         var parameters = new DialogParameters<EditPaidiDialog>
-        {                 
+        {
             { x => x.Paidi, context }
         };
 
