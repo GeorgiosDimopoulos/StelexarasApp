@@ -15,7 +15,7 @@
 
 <PageTitle>Stelexaras - @Koinotita?.Name</PageTitle>
 
-<div style="background: linear-gradient(rgba(255,255,255,0.68),rgba(225,245,242,0.68)), url('/images/pool.jpg') center/cover no-repeat;">
+<div style="background: linear-gradient(rgba(255,255,255,0.68),rgba(225,245,242,0.68)), url('/images/@BackgroundImage') center/cover no-repeat;">
 
     <h1 style="text-align:center; padding-block-start:30px;">@Koinotita?.Name?.ToUpper() - Παιδιά: @Skines.Sum(sk => sk.PaidiaNumber)</h1>
     <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΔΥΝΑΜΗ: @dunamhPaidia</h3>
@@ -72,6 +72,7 @@
     private int? dunamhPaidia;
     private int? allPaidia;
     private string? errorMessage;
+    private string BackgroundImage = "pool.jpg";
 
     public KoinotitaResponse Koinotita { get; set; } = default!;
     private StelexosResponse koinotarxis { get; set; } = new StelexosResponse();
@@ -92,6 +93,7 @@
                 Koinotita.KoinotarxisName = ekpaideutes.Count() > 0
                     ? string.Join(", ", ekpaideutes.Select(e => $"{e.FirstName} {e.LastName}"))
                     : "Δεν υπάρχουν εκπαιδευτές";
+                BackgroundImage = "eot.jpg";
             }
             else if (Koinotita.KoinotarxisId > 0)
             {
@@ -105,6 +107,7 @@
                 Koinotita.KoinotarxisName = "Δεν υπάρχει στέλεχος";
             }
 
+            seAdeiaPaidia = 0;
             foreach (var skini in Skines)
             {
                 var paidiaSkinis = await PaidiaApi.GetPaidiaBySkiniId(skini.Id, new() { IncludeSkini = true });

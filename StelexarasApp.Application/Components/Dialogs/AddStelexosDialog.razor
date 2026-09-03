@@ -35,17 +35,20 @@
                     </MudSelectItem>
                 }
             </MudSelect>
-            <MudAutocomplete T="string"
-                             Label="Χώρος"
-                             MaxItems="null"
-                             @bind-Value="req.XwrosName"
-                             SearchFunc="SearchXwroi"
-                             Clearable="true"
-                             ResetValueOnEmptyText="true"
-                             CoerceText="true"
-                             CoerceValue="true"
-                             Dense="true" />
-            <MudSwitch @bind-Value="req.Thesi" Label="Σε άδεια" />
+            @if (req.Thesi != Thesi.Ekpaideutis)
+            {
+                <MudAutocomplete T="string"
+                                 Label="Χώρος"
+                                 MaxItems="null"
+                                 @bind-Value="req.XwrosName"
+                                 SearchFunc="SearchXwroi"
+                                 Clearable="true"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true"
+                                 CoerceValue="true"
+                                 Dense="true" />
+            }
+            <MudSwitch T="bool" @bind-Value="req.SeAdeia" Label="Σε άδεια" />
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -97,8 +100,8 @@
             Age = req.Age,
             Sex = req.Sex,
             Tel = req.Tel,
-            XwrosName = req.XwrosName,
-            Thesi = req.Thesi
+            Thesi = req.Thesi,
+            XwrosName = req.Thesi == Thesi.Ekpaideutis ? "Ήπειρος - Σχολή" : req.XwrosName,
         };
 
         if (IsSomethingMissing(newStelexosRequest))
@@ -144,9 +147,9 @@
                string.IsNullOrWhiteSpace(request.LastName) ||
                request.Age <= 0 ||
                (request.Sex != Sex.Female && request.Sex != Sex.Male) ||
-               string.IsNullOrWhiteSpace(request.Tel) ||
                string.IsNullOrWhiteSpace(request.XwrosName) ||
-               (request.Thesi != Thesi.Anwtatos && request.Thesi != Thesi.Omadarxis && request.Thesi != Thesi.Koinotarxis && request.Thesi != Thesi.Tomearxis && request.Thesi != Thesi.Ekpaideutis);
+               string.IsNullOrWhiteSpace(request.Tel) ||
+               (request.Thesi != Thesi.Anwtatos && request.Thesi != Thesi.Omadarxis && request.Thesi != Thesi.Koinotarxis && request.Thesi != Thesi.Tomearxis && request.Thesi != Thesi.Ekpaideutis && request.Thesi != Thesi.Eidiko);
     }
 
     private async Task OnThesiChanged(Thesi thesi)

@@ -17,8 +17,8 @@
 
 <div style="background: linear-gradient(rgba(255,255,255,0.68),rgba(225,245,242,0.68)), center/cover no-repeat;">
     <h1 style="text-align:center;">@Skini.Name (@SexOfSKini(@Skini.Sex)): @Paidia.Count δύναμη</h1>
-    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΔΥΝΑΜΗ: @Paidia.Where(p => p.SeAdeia == false)</h3>
-    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΣΕ ΑΔΕΙΑ: @Paidia.Where(p => p.SeAdeia)</h3>
+    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΔΥΝΑΜΗ: @dunamhPaidia</h3>
+    <h3 style="text-align:center; margin-bottom:10px; color:dimgray">ΣΕ ΑΔΕΙΑ: @seAdeiaPaidia</h3>
     <h2 style="padding-block-start:10px;">
         Στέλεχος:
         <MudChip T="StelexosResponse" Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(() => OpenStelexos())">
@@ -53,6 +53,9 @@
 @code {
     [Parameter]
     public int SkiniId { get; set; }
+    
+    private int? seAdeiaPaidia;
+    private int? dunamhPaidia;
 
     private SkiniResponse Skini = new SkiniResponse();
     private List<PaidiResponse> Paidia = new List<PaidiResponse>();
@@ -67,6 +70,9 @@
         }
 
         Paidia = (await PaidiaApi.GetPaidiaBySkiniId(SkiniId, new() { IncludeSkini = true })).OrderBy(c => c.LastName).ToList();
+
+        seAdeiaPaidia = Paidia.Count(p => p.SeAdeia);
+        dunamhPaidia = Paidia.Count(p => p.SeAdeia == false);
     }
 
     private async Task OpenPaidi(PaidiResponse context)
