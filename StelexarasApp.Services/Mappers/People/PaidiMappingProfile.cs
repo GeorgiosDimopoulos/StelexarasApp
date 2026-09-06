@@ -14,5 +14,9 @@ public class PaidiMappingProfile : Profile
 
         CreateMap<Kataskinotis, PaidiResponse>();
         CreateMap<Ekpaideuomenos, PaidiResponse>();
+
+        CreateMap<UpdatePaidiRequest, Paidi>();
+        CreateMap<UpdatePaidiRequest, Kataskinotis>();
+        CreateMap<UpdatePaidiRequest, Ekpaideuomenos>();
     }
 }

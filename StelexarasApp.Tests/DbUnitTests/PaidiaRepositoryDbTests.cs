@@ -138,7 +138,7 @@ public class PaidiaRepositoryDbTests
 
         await _dbContext.SaveChangesAsync();
 
-        var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
+        var result = await _paidiRepository.UpdatePaidiInDb(paidiId, existingPaidi);
 
         Assert.Equal(expectedResult, result);
 

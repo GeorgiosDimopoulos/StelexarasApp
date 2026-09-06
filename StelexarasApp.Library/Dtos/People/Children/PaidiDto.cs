@@ -8,8 +8,8 @@ public record PaidiDtoBase : IPaidiDto
     public int Age { get; set; }
     public Sex Sex { get; set; }
     public bool SeAdeia { get; set; }
-    public string? SkiniName { get; set; } = string.Empty;
-    public string? ParentTel { get; set; } = string.Empty;
+    public string SkiniName { get; set; } = string.Empty;
+    public string ParentTel { get; set; } = string.Empty;
     public PaidiType PaidiType { get; set; }
 }
 

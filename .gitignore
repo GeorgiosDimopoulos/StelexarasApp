@@ -98,3 +98,4 @@ TestResults/
 /StelexarasApp.Application/Components/Pages/Children.razor
 /SQLQuery1.sql
 /.env
+/StelexarasApp.API/StelexarasApp/Logs/applicationLogs.txt

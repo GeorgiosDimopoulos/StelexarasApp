@@ -134,20 +134,6 @@ public class PaidiaService : IPaidiaService
         return Result.Ok(_mapper.Map<PaidiResponse>(paidi));
     }
 
-    public async Task<Result> MovePaidiToNewSkiniInService(int paidiId, int newSkiniId)
-    {
-        if (paidiId <= 0 || newSkiniId <= 0)
-            return Result.Fail("paidiId and newSkiniId must be greater than 0");
-
-        var result = await _paidiRepository.MovePaidiToNewSkiniInDb(paidiId, newSkiniId);
-        if (!result)
-            return Result.Fail("Failed to move Paidi to new Skini");
-
-        return Result.Ok();
-    }
-
-
-
     public async Task<Result> CreatePaidiInService(CreatePaidiRequest paidiDto)
     {
         if (paidiDto is null)
@@ -200,6 +186,12 @@ public class PaidiaService : IPaidiaService
 
         if (!validationResult.IsValid)
             return Result.Fail(validationResult.Errors.Select(x => x.ErrorMessage));
+
+        var skini = await _paidiRepository.GetPaidiSkiniByNameIdFromDb(paidiDto.SkiniName);
+        if (paidiDto.SkiniName.Equals(skini.Name) == false)
+        {
+            paidiDto.SkiniName = skini.Name;
+        }
 
         var paidi = _mapper.Map<Paidi>(paidiDto);
         var result = await _paidiRepository.UpdatePaidiInDb(id, paidi);
