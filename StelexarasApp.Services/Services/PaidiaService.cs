@@ -188,12 +188,9 @@ public class PaidiaService : IPaidiaService
             return Result.Fail(validationResult.Errors.Select(x => x.ErrorMessage));
 
         var skini = await _paidiRepository.GetPaidiSkiniByNameIdFromDb(paidiDto.SkiniName);
-        if (paidiDto.SkiniName.Equals(skini.Name) == false)
-        {
-            paidiDto.SkiniName = skini.Name;
-        }
-
+        paidiDto.SkiniName = skini.Name;
         var paidi = _mapper.Map<Paidi>(paidiDto);
+        paidi.SkiniId = skini.Id;
         var result = await _paidiRepository.UpdatePaidiInDb(id, paidi);
 
         if (!result)

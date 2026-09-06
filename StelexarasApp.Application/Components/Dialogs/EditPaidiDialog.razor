@@ -27,7 +27,7 @@
                              Dense="true" />
             <MudText Typo="Typo.h6">ΦΥΛΟ: @PaidiToEdit.Sex</MudText>
             <MudSwitch @bind-Value="PaidiToEdit.SeAdeia" Label="Σε αδεια;" />
-        </MudForm>
+            </MudForm>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Error" Variant="Variant.Text" OnClick="Delete">ΔΙΑΓΡΑΦΗ</MudButton>
@@ -111,6 +111,7 @@
         {
             Snackbar.Add("Το παιδί ενημερώθηκε επιτυχώς!", Severity.Success);
             Dialog?.Close(DialogResult.Ok(result));
+            Navigation.NavigateTo("/xwroi");
         }
         else
         {
