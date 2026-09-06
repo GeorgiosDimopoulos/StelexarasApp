@@ -15,7 +15,7 @@
             <MudTextField @bind-Value="PaidiToEdit.FirstName" Label="Όνομα" />
             <MudTextField @bind-Value="PaidiToEdit.LastName" Label="Επώνυμο" />
             <MudNumericField @bind-Value="PaidiToEdit.Age" Label="Ηλικία" />
-            <MudNumericField @bind-Value="PaidiToEdit.ParentTel " Label="Τηλέφωνο" />
+            <MudNumericField @bind-Value="PaidiToEdit.ParentTel" Label="Τηλέφωνο" />
             <MudAutocomplete T="string"
                              Label="Χώρος"
                              @bind-Value="PaidiToEdit.SkiniName"
@@ -25,8 +25,8 @@
                              CoerceText="true"
                              CoerceValue="true"
                              Dense="true" />
+            <MudText Typo="Typo.h6">ΦΥΛΟ: @PaidiToEdit.Sex</MudText>
             <MudSwitch @bind-Value="PaidiToEdit.SeAdeia" Label="Σε αδεια;" />
-            <MudSwitch @bind-Value="PaidiToEdit.Sex" Label="Φύλο" />
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -52,7 +52,10 @@
             SeAdeia = Paidi.SeAdeia,
             SkiniName = Paidi.SkiniName,
             LastName = Paidi.LastName,
-            ParentTel  = Paidi.ParentTel 
+            Id = Paidi.Id,
+            Sex = Paidi.Sex,
+            PaidiType = Paidi.PaidiType,
+            ParentTel = Paidi.ParentTel
         };
 
         var skines = await XwroiApi.GetSkinesAsync(new());
@@ -81,6 +84,7 @@
         {
             Snackbar.Add("Το παιδί διαγράφηκε επιτυχώς.", Severity.Success);
             Dialog?.Close(DialogResult.Ok("delete"));
+            Navigation.NavigateTo("/xwroi");
         }
         else
         {
@@ -95,11 +99,11 @@
             LastName = PaidiToEdit.LastName,
             FirstName = PaidiToEdit.FirstName,
             Age = PaidiToEdit.Age,
-            ParentTel  = PaidiToEdit.ParentTel ,
+            ParentTel = PaidiToEdit.ParentTel,
             SeAdeia = PaidiToEdit.SeAdeia,
             SkiniName = PaidiToEdit.SkiniName,
-            Sex = Paidi.Sex,
-            PaidiType = Paidi.PaidiType,
+            Sex = PaidiToEdit.Sex,
+            PaidiType = PaidiToEdit.PaidiType
         };
 
         var result = await PaidiaApi.UpdatePaidi(Paidi.Id, paidiUpdateRequest);
@@ -122,13 +126,13 @@
     //         Snackbar.Add("Δεν υπάρχουν διαθέσιμες σκηνές για αλλαγή.", Severity.Warning);
     //         return;
     //     }
-        
+
     //     var parameters = new DialogParameters
     //     {
     //         { "Skines", skines },
     //         { "CurrentSkini", PaidiToEdit.SkiniName }
     //     };
-        
+
     //     var dialog = DialogService.Show<ChangeSkiniDialog>("Αλλαγή Σκηνής", parameters);
     //     var result = await dialog.Result;
     //     if (!result.Cancelled)

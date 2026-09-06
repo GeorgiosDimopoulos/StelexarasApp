@@ -17,5 +17,4 @@ public interface IPaidiaService
     Task<Result> CreatePaidiInService(CreatePaidiRequest request);
     Task<Result> UpdatePaidiInService(int id, UpdatePaidiRequest request);
     Task<Result> DeletePaidiInService(int id);
-    Task<Result> MovePaidiToNewSkiniInService(int paidiId, int skiniId);
 }

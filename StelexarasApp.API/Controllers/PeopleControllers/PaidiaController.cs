@@ -118,7 +118,7 @@ public class PaidiaController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> PostPaidi([FromBody] CreatePaidiRequest createPaidiRequest)
+    public async Task<ActionResult<bool>> PostPaidi([FromBody] CreatePaidiRequest createPaidiRequest)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -129,24 +129,24 @@ public class PaidiaController : ControllerBase
         if (result.IsFailed)
             return BadRequest(result.Errors.Select(e => e.Message));
 
-        return Ok();
+        return Ok(true);
     }
 
     [Authorize]
     [HttpPut("Paidi/{id:int}")]
-    public async Task<ActionResult> UpdatePaidi(int id, [FromBody] UpdatePaidiRequest request)
+    public async Task<ActionResult<bool>> UpdatePaidi(int id, [FromBody] UpdatePaidiRequest request)
     {
         var result = await _paidiService.UpdatePaidiInService(id, request);
 
         if (!result.IsSuccess)
             return BadRequest(result.Errors.Select(e => e.Message));
 
-        return Ok();
+        return Ok(true);
     }
 
     [Authorize]
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeletePaidi(int id)
+    public async Task<ActionResult<bool>> DeletePaidi(int id)
     {
         if (!ModelState.IsValid)
             return BadRequest();
@@ -154,6 +154,6 @@ public class PaidiaController : ControllerBase
         var result = await _paidiService.DeletePaidiInService(id);
         if (result.IsSuccess == false)
             return BadRequest(result.Errors.Select(e => e.Message));
-        return Ok();
+        return Ok(true);
     }
 }

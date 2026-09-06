@@ -1,39 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using StelexarasApp.Library.QueryParameters.Domi;
+﻿using StelexarasApp.Library.QueryParameters.Domi;
 
-namespace StelexarasApp.DataAccess.Repositories.IRepositories
+namespace StelexarasApp.DataAccess.Repositories.IRepositories;
+
+public interface ITeamsRepository
 {
-    public interface ITeamsRepository
-    {
-        Task<bool> HasData();
+    Task<bool> HasData();
 
-        Task<bool> AddSkiniInDb(Skini skini);
-        Task<bool> AddKoinotitaInDb(Koinotita koinotita);
-        Task<bool> AddTomeasInDb(Tomeas tomeas);
+    Task<bool> AddSkiniInDb(Skini skini);
+    Task<bool> AddKoinotitaInDb(Koinotita koinotita);
+    Task<bool> AddTomeasInDb(Tomeas tomeas);
 
-        Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters? parameters);
-        Task<IEnumerable<Koinotita>> GetKoinotitesInDb(KoinotitaQueryParameters? parameters);
-        Task<IEnumerable<Tomeas>> GetTomeisInDb(TomeasQueryParameters? parameters);
+    Task<IEnumerable<Skini>> GetSkinesInDb(SkiniQueryParameters? parameters);
+    Task<IEnumerable<Koinotita>> GetKoinotitesInDb(KoinotitaQueryParameters? parameters);
+    Task<IEnumerable<Tomeas>> GetTomeisInDb(TomeasQueryParameters? parameters);
 
-        Task<Skini> GetSkiniByNameInDb(SkiniQueryParameters? parameters, string name);
-        Task<Skini> GetSkiniByIdInDb(SkiniQueryParameters? parameters, int id);
-        Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? parameters, string name);
-        Task<Koinotita> GetKoinotitaByNameInDb(KoinotitaQueryParameters? parameters, string name);
-        Task<Koinotita> GetKoinotitaByIdInDb(int id, KoinotitaQueryParameters? parameters);
+    Task<Skini> GetSkiniByNameInDb(SkiniQueryParameters? parameters, string name);
+    Task<Skini> GetSkiniByIdInDb(SkiniQueryParameters? parameters, int id);
+    Task<Tomeas> GetTomeaByNameInDb(TomeasQueryParameters? parameters, string name);
+    Task<Koinotita> GetKoinotitaByNameInDb(KoinotitaQueryParameters? parameters, string name);
+    Task<Koinotita> GetKoinotitaByIdInDb(int id, KoinotitaQueryParameters? parameters);
 
-        Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaNameInDb(SkiniQueryParameters? parameters, string Koinotitaname);
-        Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaIdInDb(SkiniQueryParameters? parameters, int id);
-        Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(KoinotitaQueryParameters? parameters, int tomeaId);
-        Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb(SkiniQueryParameters? parameters);
+    Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaNameInDb(SkiniQueryParameters? parameters, string Koinotitaname);
+    Task<IEnumerable<Skini>> GetSkinesAnaKoinotitaIdInDb(SkiniQueryParameters? parameters, int id);
+    Task<IEnumerable<Koinotita>> GetKoinotitesAnaTomeaInDb(KoinotitaQueryParameters? parameters, int tomeaId);
+    Task<IEnumerable<Skini>> GetSkinesEkpaideuomenonInDb(SkiniQueryParameters? parameters);
 
-        Task<IEnumerable<string>> GetAnwtatoiXwroiInDb();
+    Task<IEnumerable<string>> GetAnwtatoiXwroiInDb();
 
-        Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita);
-        Task<bool> UpdateSkiniInDb(int id, Skini skini);
-        Task<bool> UpdateTomeasInDb(string id, Tomeas tomeas);
+    Task<bool> UpdateKoinotitaInDb(int id, Koinotita koinotita);
+    Task<bool> UpdateSkiniInDb(int id, Skini skini);
+    Task<bool> UpdateTomeasInDb(string id, Tomeas tomeas);
 
-        Task<bool> DeleteSkiniInDb(int id);
-        Task<bool> DeleteKoinotitaInDb(int id);
-        Task<bool> DeleteTomeasInDb(string n);
-    }
+    Task<bool> DeleteSkiniInDb(int id);
+    Task<bool> DeleteKoinotitaInDb(int id);
+    Task<bool> DeleteTomeasInDb(string n);
 }

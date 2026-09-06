@@ -33,6 +33,6 @@ public interface IPaidiaApi
     [Delete("/Paidia/{id}")]
     Task<bool> DeletePaidi(int id);
 
-    [Put("/Paidia/{id}")]
+    [Put("/Paidia/Paidi/{id}")]
     Task<bool> UpdatePaidi(int id, [Body] UpdatePaidiRequest paidiDto);
 }
