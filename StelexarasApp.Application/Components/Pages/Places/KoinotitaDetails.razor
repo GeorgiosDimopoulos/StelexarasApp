@@ -3,6 +3,7 @@
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.Dtos.People.Staff
+@using StelexarasApp.Library.Models.Atoma
 @using StelexarasApp.Library.Models.Atoma.Staff
 @using StelexarasApp.Library.QueryParameters.Domi
 @using StelexarasApp.Library.QueryParameters.People
@@ -47,7 +48,7 @@
                     @foreach (var sk in Skines.OrderBy(s => s.Name))
                     {
                         <MudButton Href="@($"/skines/{sk.Id}")" Style="height:50px; width:450px; border-radius:15px; overflow:hidden; color:white; background-color:#58B98D">
-                            @sk.Name - @sk.PaidiaNumber
+                            @sk.Name - @sk.PaidiaNumber - @ShowSkiniFulo(@sk.Sex)
                         </MudButton>
                     }
                 }
@@ -56,7 +57,7 @@
                     @foreach (var sk in Skines.OrderBy(s => s.Name))
                     {
                         <MudButton Href="@($"/skines/{sk.Id}")" Style="height:80px; width:500px; border-radius:15px; overflow:hidden; color:white; background-color:#58B98D">
-                            @sk.Name - @sk.PaidiaNumber
+                            @sk.Name - @sk.PaidiaNumber - @ShowSkiniFulo(@sk.Sex)
                         </MudButton>
                     }
                 }
@@ -140,5 +141,12 @@
         {
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
+    }
+
+    private string ShowSkiniFulo(Sex sex)
+    {
+        if (sex == Sex.Female)
+            return "Κορίτσια";
+        else return "Αγόρια";
     }
 }

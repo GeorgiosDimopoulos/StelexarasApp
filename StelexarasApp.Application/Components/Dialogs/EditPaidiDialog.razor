@@ -19,6 +19,7 @@
             <MudAutocomplete T="string"
                              Label="Χώρος"
                              @bind-Value="PaidiToEdit.SkiniName"
+                             MaxItems="null"
                              SearchFunc="SearchXwroi"
                              Clearable="true"
                              ResetValueOnEmptyText="true"
@@ -118,29 +119,6 @@
             Snackbar.Add("Αποτυχία ενημέρωσης του παιδιού.", Severity.Error);
         }
     }
-
-    // private async Task ChangeSkini()
-    // {
-    //     var skines = await XwroiApi.GetSkinesAsync(new(){});
-    //     if (skines == null || skines.Count == 0)
-    //     {
-    //         Snackbar.Add("Δεν υπάρχουν διαθέσιμες σκηνές για αλλαγή.", Severity.Warning);
-    //         return;
-    //     }
-
-    //     var parameters = new DialogParameters
-    //     {
-    //         { "Skines", skines },
-    //         { "CurrentSkini", PaidiToEdit.SkiniName }
-    //     };
-
-    //     var dialog = DialogService.Show<ChangeSkiniDialog>("Αλλαγή Σκηνής", parameters);
-    //     var result = await dialog.Result;
-    //     if (!result.Cancelled)
-    //     {
-    //         PaidiToEdit.SkiniName = result.Data.ToString();
-    //     }
-    // }
 
     private Task<IEnumerable<string>> SearchXwroi(string value, CancellationToken token)
     {
