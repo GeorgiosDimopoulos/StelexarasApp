@@ -141,6 +141,8 @@ public class AppDbContext : DbContext
            .WithMany(k => k.Skines)
            .HasForeignKey(sk => sk.KoinotitaId)
            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Paidi>().ToTable(t => t.HasCheckConstraint("CK_Paidia_Sex", "[Sex] IN (0, 1)"));
     }
 
     private static void OnModelsRulesCreating(ModelBuilder modelBuilder)
@@ -163,7 +165,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Skini>().Property(sk => sk.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Koinotita>().Property(k => k.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Tomeas>().Property(t => t.Id).ValueGeneratedOnAdd();
-        
+
         modelBuilder.Entity<Paidi>().Property(om => om.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Omadarxis>().Property(om => om.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Koinotarxis>().Property(k => k.Id).ValueGeneratedOnAdd();

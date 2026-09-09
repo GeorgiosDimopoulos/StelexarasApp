@@ -66,7 +66,10 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
 
                     b.HasIndex("SkiniId");
 
-                    b.ToTable("Paidia");
+                    b.ToTable("Paidia", t =>
+                        {
+                            t.HasCheckConstraint("CK_Paidia_Sex", "[Sex] IN (0, 1)");
+                        });
                 });
 
             modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Anwtatos", b =>
