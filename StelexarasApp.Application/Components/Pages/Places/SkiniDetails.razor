@@ -93,7 +93,7 @@
 
     private async Task OpenStelexos()
     {
-        if (Skini.OmadarxisId < 0)
+        if (Skini.OmadarxisId <= 0)
             return;
 
         var omadarxis = await StelexiApi.GetStelexosById(Thesi.Omadarxis, Skini.OmadarxisId, new());

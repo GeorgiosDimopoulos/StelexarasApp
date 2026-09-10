@@ -120,6 +120,7 @@
         {
             Snackbar.Add("Το στέλεχος αποθηκεύτηκε επιτυχώς.", Severity.Success);
             Dialog?.Close(DialogResult.Ok(newStelexosRequest));
+            Navigation.NavigateTo("/xwroi");
         }
     }
 
@@ -172,7 +173,7 @@
         }
         else if (thesi == Thesi.Omadarxis)
         {
-            var skines = await XwroiApi.GetSkinesAsync(new());
+            var skines = (await XwroiApi.GetSkinesAsync(new())).Where(sk => sk.OmadarxisId == 0);
             _xwroiNames = skines.Select(x => x.Name)
                                 .Distinct()
                                 .OrderBy(x => x)

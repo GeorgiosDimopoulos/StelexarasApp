@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureJwtAuthenticationAndSwagger(builder.Configuration);
 builder.Services.ConfigureServices(builder.Configuration);
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -48,7 +49,6 @@ else
 }
 
 // Use Middleware
-app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthentication();
@@ -56,6 +56,8 @@ app.UseAuthorization();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 app.MapControllers();
+
+app.MapHub<MyHub>("/myHub");
 
 // Use Health Checks
 app.MapHealthChecks("/health", new HealthCheckOptions
