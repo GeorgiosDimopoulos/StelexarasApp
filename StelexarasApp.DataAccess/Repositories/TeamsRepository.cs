@@ -100,14 +100,10 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
     {
         try
         {
-            var skines = _dbContext.Skines!.Where(sk => sk.Koinotita.Id == koinotitaId).AsQueryable();
+            var skines = _dbContext.Skines.Where(sk => sk.KoinotitaId == koinotitaId);
             if (skiniQueryParameters is not null && skiniQueryParameters.IncludePaidia)
             {
                 skines = skines.Include(s => s.Paidia);
-            }
-            if (skiniQueryParameters is not null && skiniQueryParameters.IncludeStelexos)
-            {
-                skines = skines.Include(s => s.Omadarxis);
             }
             return await skines.ToListAsync();
         }

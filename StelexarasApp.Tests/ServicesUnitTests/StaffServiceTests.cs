@@ -583,7 +583,6 @@ public class StaffServiceTests
                     XwrosName = createStelexosRequest.XwrosName,
                     Sex = Sex.Female,
                     Koinotita = new Koinotita { Name = "TestKoinotita" },
-                    Omadarxes = []
                 };
                 _mockMapper.Setup(m => m.Map<Koinotarxis>(createStelexosRequest))
                            .Returns((Koinotarxis)stelexos);

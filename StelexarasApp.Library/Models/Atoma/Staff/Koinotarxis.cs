@@ -8,7 +8,6 @@ public class Koinotarxis : IStelexos
     public int Id { get; set; }
     public bool SeAdeia { get; set; }
     public Koinotita Koinotita { get; set; } = default!;
-    public IEnumerable<Omadarxis> Omadarxes { get; set; } = default!;
     public string LastName { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string Tel { get; set; } = string.Empty;

@@ -260,9 +260,6 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("KoinotarxisId")
-                        .HasColumnType("int");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -283,8 +280,6 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("KoinotarxisId");
 
                     b.HasIndex("Tel")
                         .IsUnique();
@@ -520,13 +515,6 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                         .HasForeignKey("TomearxisId");
                 });
 
-            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Omadarxis", b =>
-                {
-                    b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", null)
-                        .WithMany("Omadarxes")
-                        .HasForeignKey("KoinotarxisId");
-                });
-
             modelBuilder.Entity("StelexarasApp.Library.Models.Domi.AnwtatosXwros", b =>
                 {
                     b.HasOne("StelexarasApp.Library.Models.Atoma.Staff.Anwtatos", "Anwtatos")
@@ -586,8 +574,6 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                 {
                     b.Navigation("Koinotita")
                         .IsRequired();
-
-                    b.Navigation("Omadarxes");
                 });
 
             modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Omadarxis", b =>
