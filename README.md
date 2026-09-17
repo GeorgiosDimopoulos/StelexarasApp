@@ -4,6 +4,9 @@
 
 **StelexarasApp** is a robust application designed to streamline the management of summer camps. It offers a comprehensive suite of tools tailored for team leaders, allowing them to efficiently manage their tasks, track child information, and ensure smooth camp operations. The app is built with a clean architecture, leveraging DTOs, service layers, and the repository pattern for optimal performance and maintainability.
 
+<img width="948" height="713" alt="Screenshot 2026-09-16 195355" src="https://github.com/user-attachments/assets/2f22994a-ffb9-405d-a36f-5522e65663cf" />
+
+
 ## Features
 
 - **To-Do List Management**:  
