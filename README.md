@@ -56,20 +56,14 @@ Follow these steps to get the project up and running on your local machine.
 
 ## Project Structure
 
-- **Controllers**:  
-  Handle incoming HTTP requests, invoke the necessary services, and return appropriate responses.
-
-- **Services**:  
-  Contain the business logic of the application and handle interactions with repositories for data persistence.
-
-- **Repositories**:  
-  Manage data access using Entity Framework, interacting directly with the database to perform CRUD operations.
-
-- **DTOs (Data Transfer Objects)**:  
-  Used in controllers and services to securely transfer data between layers, ensuring only the necessary fields are exposed.
-
-- **AutoMapper Profiles**:  
-  Define mappings between entities and DTOs, simplifying the process of transforming data between different shapes.
+- **Application** – Blazor web UI that communicates with the API through Refit.
+- **Mobile** – .NET MAUI mobile client for Android and iOS.
+- **API** – Exposes HTTP endpoints and handles authentication and Swagger.
+- **Services** – Contains application workflows and business logic.
+- **DataAccess** – Handles EF Core repositories, database access and migrations.
+- **Library** – Contains shared entities, DTOs, enums and contracts.
+- **Tests** – Contains unit and integration tests using xUnit and Moq.
+- **AI** – Experimental local-AI integration using Ollama.
 
 ## Contributing
 
