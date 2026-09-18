@@ -104,69 +104,22 @@ To maintain the quality of the codebase, we encourage the use of unit and integr
     ```bash
     dotnet test
     ```
-Here is a sample JSON representation of a **Child** (Paidi in greek) entity used in StelexarasApp:
+## API Response Example
 
+Example JSON representation of a child (`Paidi`):
 ```json
 {
-  "fullName": "string",
-  "age": 0,
+  "id": 1,
+  "firstName": "Maria",
+  "lastName": "Papadopoulou",
+  "parentTel": "6912345678",
+  "age": 12,
+  "seAdeia": false,
   "sex": 0,
+  "paidiType": 0,
+  "skiniId": 3,
   "skini": {
-    "name": "string",
-    "omadarxis": "string",
-    "omadarxisId": 0,
-    "paidia": [
-      {
-        "fullName": "string",
-        "age": 0,
-        "seAdeia": true,
-        "sex": 0,
-        "paidiType": 0,
-        "skini": "string"
-      }
-    ],
-    "koinotita": {
-      "name": "string",
-      "koinotarxis": {
-        "fullName": "string",
-        "age": 0,
-        "sex": 0,
-        "koinotita": "string",
-        "thesi": 0,
-        "omadarxes": [
-          "string"
-        ]
-      },
-      "tomeas": {
-        "name": "string",
-        "tomearxis": {
-          "fullName": "string",
-          "id": 0,
-          "age": 0,
-          "sex": 0,
-          "tomeas": "string",
-          "thesi": 0,
-          "koinotarxes": [
-            {
-              "fullName": "string",
-              "age": 0,
-              "sex": 0,
-              "koinotita": "string",
-              "thesi": 0,
-              "omadarxes": [
-                "string"
-              ]
-            }
-          ]
-        },
-        "koinotites": [
-          "string"
-        ]
-      },
-      "skines": [
-        "string"
-      ]
-    }
-  },
-  "thesi": 0
+    "id": 3,
+    "name": "Skini A"
+  }
 }
