@@ -499,8 +499,8 @@ public class StaffServiceTests
         var omadarxis = new UpdateStelexosRequest
         {
             Thesi = Thesi.Omadarxis,
-            FirstName = "FirstNaame",
-            LastName = "LastNaame",
+            FirstName = "FirstName",
+            LastName = "LastName",
             Tel = "12345678290",
             Age = 27,
             Sex = Sex.Male,

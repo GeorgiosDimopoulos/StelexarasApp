@@ -228,7 +228,7 @@ public class TeamsRepositoryDbTests
     public async Task UpdateTomeasInDbAsync_ShouldReturnTrue()
     {
         // Arrange
-        var firstName = "FistTomeasName";
+        var firstName = "FirstTomeasName";
         var tomeas = GetTomeas(firstName, 1);
         Assert.NotNull(tomeas);
 
