@@ -29,10 +29,10 @@ jobs:
       run: dotnet build StelexarasApp.CI.slnf --configuration Release --no-restore
 
     - name: Run tests
-      run: dotnet test --configuration Release --no-build --filter "Category!=IntegrationTests"
+      run: dotnet test StelexarasApp.CI.slnf --configuration Release --no-build --filter "FullyQualifiedName!~StelexarasApp.Tests.IntegrationTests"
 
     - name: Run integration tests      
       env:
         RUN_INTEGRATION_TESTS: 1
       if: env.RUN_INTEGRATION_TESTS == '1'  
-      run: dotnet test --configuration Release --no-build --filter "Category=IntegrationTests"
+      run: dotnet test StelexarasApp.CI.slnf --configuration Release --no-build --filter "FullyQualifiedName~StelexarasApp.Tests.IntegrationTests"
