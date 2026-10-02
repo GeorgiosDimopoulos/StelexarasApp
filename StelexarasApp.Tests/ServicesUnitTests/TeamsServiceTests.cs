@@ -5,15 +5,15 @@ namespace StelexarasApp.Tests.ServicesUnitTests;
 
 public class TeamsServiceTests
 {
-    private readonly Mock<ITeamsRepository> _mockdteamsRepository;
+    private readonly Mock<ITeamsRepository> _mockTeamsRepository;
     private readonly ITeamsService _teamsService;
     private readonly Mock<IMapper> _mockMapper;
 
     public TeamsServiceTests()
     {
-        _mockdteamsRepository = new Mock<ITeamsRepository>();
+        _mockTeamsRepository = new Mock<ITeamsRepository>();
         _mockMapper = new Mock<IMapper>();
-        _teamsService = new TeamsService(_mockMapper.Object, _mockdteamsRepository.Object);
+        _teamsService = new TeamsService(_mockMapper.Object, _mockTeamsRepository.Object);
     }
 
     [Fact]
@@ -21,14 +21,14 @@ public class TeamsServiceTests
     {
         // Arrange
         var team = new CreateSkiniRequest { Name = "TestTeam", KoinotitaId = 1, Sex = Sex.Female };
-        _mockdteamsRepository.Setup(m => m.AddSkiniInDb(It.IsAny<Skini>())).ReturnsAsync(true);
+        _mockTeamsRepository.Setup(m => m.AddSkiniInDb(It.IsAny<Skini>())).ReturnsAsync(true);
 
         // Act
         var result = await _teamsService.AddSkiniInService(team);
 
         // Assert
         Assert.True(result.IsSuccess);
-        _mockdteamsRepository.Verify(m => m.AddSkiniInDb(It.IsAny<Skini>()), Times.Once);
+        _mockTeamsRepository.Verify(m => m.AddSkiniInDb(It.IsAny<Skini>()), Times.Once);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class TeamsServiceTests
     {
         // Arrange
         var team = new Skini { Id = 1, Name = "TestTeam" };
-        _mockdteamsRepository.Setup(m => m.DeleteSkiniInDb(It.IsAny<int>())).ReturnsAsync(true);
+        _mockTeamsRepository.Setup(m => m.DeleteSkiniInDb(It.IsAny<int>())).ReturnsAsync(true);
 
         // Act
         var result = await _teamsService.DeleteSkiniInService(team.Id);
@@ -54,7 +54,7 @@ public class TeamsServiceTests
             new Skini { Id = 1, Name = "TestTeam1"},
             new Skini { Id = 2, Name = "TestTeam2" }
         };
-        _mockdteamsRepository.Setup(m => m.GetSkinesInDb(new())).ReturnsAsync(teams);
+        _mockTeamsRepository.Setup(m => m.GetSkinesInDb(new())).ReturnsAsync(teams);
 
         // Act
         var result = await _teamsService.GetAllSkinesInService(new());
@@ -72,7 +72,7 @@ public class TeamsServiceTests
             new Tomeas { Id = 1, Name = "TestTomeas1" },
             new Tomeas { Id = 2, Name = "TestTomeas2" }
         };
-        _mockdteamsRepository.Setup(m => m.GetTomeisInDb(new())).ReturnsAsync(teams);
+        _mockTeamsRepository.Setup(m => m.GetTomeisInDb(new())).ReturnsAsync(teams);
 
         // Act
         var result = await _teamsService.GetAllTomeisInService(new());
@@ -101,7 +101,7 @@ public class TeamsServiceTests
             }
             }
         };
-        _mockdteamsRepository.Setup(m => m.GetKoinotitesInDb(new())).ReturnsAsync(teams);
+        _mockTeamsRepository.Setup(m => m.GetKoinotitesInDb(new())).ReturnsAsync(teams);
 
         // Act
         var result = await _teamsService.GetAllKoinotitesInService(new());
@@ -135,7 +135,7 @@ public class TeamsServiceTests
         var tomeas = new Tomeas { Id = 1, Name = "TestTomeas", Koinotites = new List<Koinotita>() };
         tomeas.Koinotites = teams;
 
-        _mockdteamsRepository.Setup(m => m.GetKoinotitesAnaTomeaInDb(new(), tomeasId)).ReturnsAsync(teams);
+        _mockTeamsRepository.Setup(m => m.GetKoinotitesAnaTomeaInDb(new(), tomeasId)).ReturnsAsync(teams);
 
         // Act
         var result = await _teamsService.GetAllKoinotitesInService(new());
@@ -149,7 +149,7 @@ public class TeamsServiceTests
     {
         // Arrange
         var team = new UpdateSkiniRequest { Name = "TestTeam" };
-        _mockdteamsRepository.Setup(m => m.UpdateSkiniInDb(1, It.IsAny<Skini>())).ReturnsAsync(true);
+        _mockTeamsRepository.Setup(m => m.UpdateSkiniInDb(1, It.IsAny<Skini>())).ReturnsAsync(true);
 
         // Act
         var result = await _teamsService.UpdateSkiniInService(1, team);
@@ -163,7 +163,7 @@ public class TeamsServiceTests
     {
         // Arrange
         var team = new UpdateSkiniRequest { Name = "TestTeam" };
-        _mockdteamsRepository.Setup(m => m.UpdateSkiniInDb(1, It.IsAny<Skini>())).ReturnsAsync(true);
+        _mockTeamsRepository.Setup(m => m.UpdateSkiniInDb(1, It.IsAny<Skini>())).ReturnsAsync(true);
 
         // Act
         var result = await _teamsService.UpdateSkiniInService(1, team);

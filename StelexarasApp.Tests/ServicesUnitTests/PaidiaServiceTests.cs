@@ -253,8 +253,8 @@ public class PaidiaServiceTests
     {
         var updatePaidiRequest = new UpdatePaidiRequest()
         {
-            LastName = "UpdateddLastName",
-            FirstName = "UpdateddFirstName",
+            LastName = "UpdatedLastName",
+            FirstName = "UpdatedFirstName",
             Age = 10,
             SeAdeia = true,
             Sex = Sex.Male,
@@ -283,8 +283,8 @@ public class PaidiaServiceTests
         var paidiToDelete = new Paidi
         {
             Id = 1,
-            LastName = "Deoe",
-            FirstName = "Joohn",
+            LastName = "Doe",
+            FirstName = "John",
             ParentTel = "1233567890",
             SeAdeia = false,
             SkiniId = 1,
@@ -309,8 +309,8 @@ public class PaidiaServiceTests
         var paidiToDelete = new Paidi
         {
             Id = 1,
-            LastName = "Deoe",
-            FirstName = "Joohn",
+            LastName = "Doe",
+            FirstName = "John",
             ParentTel = "1233567890",
             SeAdeia = false,
             SkiniId = 1,
@@ -335,8 +335,8 @@ public class PaidiaServiceTests
         var paidiToDelete = new Paidi
         {
             Id = 1,
-            LastName = "Deoe",
-            FirstName = "Joohn",
+            LastName = "Doe",
+            FirstName = "John",
             ParentTel = "1233567890",
             SeAdeia = false,
             SkiniId = 1,
