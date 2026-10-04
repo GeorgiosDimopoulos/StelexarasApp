@@ -1,0 +1,16 @@
+{
+  "solution": {
+    "path": "StelexarasApp.sln",
+    "projects": [
+      "StelexarasApp.AI\\StelexarasApp.AI.csproj",
+      "StelexarasApp.API\\StelexarasApp.API.csproj",
+      "StelexarasApp.Application\\StelexarasApp.Application.csproj",
+      "StelexarasApp.ClientApp\\StelexarasApp.ClientApp.csproj",
+      "StelexarasApp.DataAccess\\StelexarasApp.DataAccess.csproj",
+      "StelexarasApp.Library\\StelexarasApp.Library.csproj",
+      "StelexarasApp.LogsDashboard\\StelexarasApp.LogsDashboard.csproj",
+      "StelexarasApp.Services\\StelexarasApp.Services.csproj",
+      "StelexarasApp.Tests\\StelexarasApp.Tests.csproj"
+    ]
+  }
+}

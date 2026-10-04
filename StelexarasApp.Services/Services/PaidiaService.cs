@@ -199,7 +199,7 @@ public class PaidiaService : IPaidiaService
         }
         paidiDto.SkiniName = newSkini.Name;
         var paidi = _mapper.Map<Paidi>(paidiDto);
-        paidi.SkiniId = newSkini.Id;
+        paidi.SkiniId = newSkini.Id;        
         var result = await _paidiRepository.UpdatePaidiInDb(id, paidi);
 
         if (!result)

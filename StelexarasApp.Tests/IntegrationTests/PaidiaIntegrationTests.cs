@@ -2,7 +2,8 @@
 
 namespace StelexarasApp.Tests.IntegrationTests;
 
-public class PaidiaIntegrationTests : IClassFixture<DatabaseFixture>, IDisposable
+[Collection(DatabaseCollection.Name)]
+public class PaidiaIntegrationTests : IDisposable
 {
     private readonly AppDbContext _dbContext;    
     private readonly PaidiaRepository _repository;

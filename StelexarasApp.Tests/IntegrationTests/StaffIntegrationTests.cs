@@ -2,7 +2,8 @@
 
 namespace StelexarasApp.Tests.IntegrationTests;
 
-public class StaffIntegrationTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
+[Collection(DatabaseCollection.Name)]
+public class StaffIntegrationTests : IAsyncLifetime
 {
     private readonly DatabaseFixture _fixture;
     private readonly AppDbContext _dbContext;
@@ -282,11 +283,11 @@ public class StaffIntegrationTests : IClassFixture<DatabaseFixture>, IAsyncLifet
         await _dbContext.Koinotites.AddAsync(koinotita);
         await _dbContext.SaveChangesAsync();
 
-        var skini = new Skini { Name = "Skiniii", KoinotitaId = koinotita.Id };
+        var skini = new Skini { Name = "Skini1", KoinotitaId = koinotita.Id };
         await _dbContext.Skines.AddAsync(skini);
         await _dbContext.SaveChangesAsync();
 
-        var omadarxis = new Omadarxis { XwrosName = skini.Name, Age = 40, Thesi = Thesi.Omadarxis, Tel = "123132112", LastName = "Doee", Skini = skini, FirstName = "Johny", Sex = Sex.Male };
+        var omadarxis = new Omadarxis { XwrosName = skini.Name, Age = 40, Thesi = Thesi.Omadarxis, Tel = "123132112", LastName = "Doe", Skini = skini, FirstName = "Johnny", Sex = Sex.Male };
         await _dbContext.Omadarxes.AddAsync(omadarxis);
         await _dbContext.SaveChangesAsync();
 
