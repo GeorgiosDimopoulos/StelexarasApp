@@ -13,7 +13,7 @@ public class DatabaseFixture : IAsyncLifetime
     public DatabaseFixture()
     {        
         _connectionString = Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING")
-            ?? "Server=localhost,1433;Database=StelexarasTests;User Id=sa;Password=Lore3389!;TrustServerCertificate=True";
+            ?? "Server=localhost,1433;Database=StelexarasTests;Integrated Security=True;TrustServerCertificate=True";
         Options = new DbContextOptionsBuilder<AppDbContext>()
             .UseSqlServer(_connectionString)
             .Options;
