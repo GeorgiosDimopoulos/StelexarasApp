@@ -17,10 +17,6 @@ public class DatabaseFixture : IAsyncLifetime
         Options = new DbContextOptionsBuilder<AppDbContext>()
             .UseSqlServer(_connectionString)
             .Options;
-
-        using var dbContext = new AppDbContext(Options);
-
-        dbContext.Database.Migrate();
     }
 
     public async Task InitializeAsync()
@@ -36,6 +32,9 @@ public class DatabaseFixture : IAsyncLifetime
         {
             await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
+
+            using var dbContext = new AppDbContext(Options);
+            dbContext.Database.Migrate();
         }
         catch (SqlException ex)
         {

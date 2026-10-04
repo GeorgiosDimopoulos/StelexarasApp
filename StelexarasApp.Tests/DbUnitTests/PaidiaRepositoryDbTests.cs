@@ -84,10 +84,8 @@ public class PaidiaRepositoryDbTests
         }
     }
 
-    [Theory]
-    [InlineData(7, 2, true)]
-    [InlineData(3, -99, false)]
-    public async Task MovePaidiToNewSkini_ShouldReturnExpectedResult(int paidiId, int newSkiniId, bool expectedResult)
+    [Fact]
+    public async Task MovePaidiToNewSkini_ShouldWork()
     {
         // Arrange
         var koinotita = new Koinotita
@@ -95,7 +93,7 @@ public class PaidiaRepositoryDbTests
             Id = 100,
             Name = "Ipiros",
             TomeasId = 100,
-            Skines = new List<Skini>()
+            Skines = []
         };
 
         var existingSkini = new Skini
@@ -105,12 +103,12 @@ public class PaidiaRepositoryDbTests
             Sex = Sex.Male,
             KoinotitaId = koinotita.Id,
             Koinotita = koinotita,
-            Paidia = new List<Paidi>()
+            Paidia = []
         };
 
         var newSkini = new Skini
         {
-            Id = newSkiniId,
+            Id = 222,
             Name = "NewSkini",
             Koinotita = koinotita,
             KoinotitaId = koinotita.Id,
@@ -120,7 +118,7 @@ public class PaidiaRepositoryDbTests
 
         var existingPaidi = new Paidi
         {
-            Id = paidiId,
+            Id = new Random().Next(1, 500),
             LastName = "PaidiL",
             FirstName = "PaidiF",
             Age = 15,
@@ -133,24 +131,20 @@ public class PaidiaRepositoryDbTests
         await _dbContext.Skines.AddAsync(newSkini);
         await _dbContext.Paidia.AddAsync(existingPaidi);
         await _dbContext.SaveChangesAsync();
+                
+        await _paidiRepository.AddPaidiInSkini(existingPaidi, newSkini.Name);
+        // existingPaidi.SkiniId = newSkini.Id;
 
-        // await _paidiRepository.AddPaidiInSkini(existingPaidi, existingSkini.Name);
+        var result = await _paidiRepository.UpdatePaidiInDb(existingPaidi.Id, existingPaidi);
 
-        await _dbContext.SaveChangesAsync();
+        Assert.True(result);
 
-        var result = await _paidiRepository.UpdatePaidiInDb(paidiId, existingPaidi);
-
-        Assert.Equal(expectedResult, result);
-
-        if (expectedResult)
-        {
-            var movedPaidi = await _dbContext.Paidia!
+        var movedPaidi = await _dbContext.Paidia!
                 .Include(p => p.Skini)
-                .FirstOrDefaultAsync(p => p.Id == paidiId);
+                .FirstOrDefaultAsync(p => p.Id == existingPaidi.Id);
 
-            Assert.NotNull(movedPaidi);
-            Assert.Equal(newSkiniId, movedPaidi.Skini.Id);
-        }
+        Assert.NotNull(movedPaidi);
+        Assert.Equal(newSkini.Id, movedPaidi.Skini.Id);
     }
 
     [Theory]

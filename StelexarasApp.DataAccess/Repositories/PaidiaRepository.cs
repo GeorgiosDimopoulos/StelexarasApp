@@ -132,7 +132,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
                 return false;
             }
 
-            var existingSkini = await _dbContext.Skines.Include(sk => sk.Paidia).FirstOrDefaultAsync(sk => sk.Name.Equals(skiniName));
+            var existingSkini = await _dbContext.Skines.Include(sk => sk.Paidia).Include(sk=>sk.Omadarxis).FirstOrDefaultAsync(sk => sk.Name.Equals(skiniName));
             if (existingSkini == null)
             {
                 _logger.LogWarning("Skini with the given Id doesnt exist.");
@@ -140,7 +140,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             }
 
 
-            if (paidi.PaidiType == PaidiType.Kataskinotis && (existingSkini.OmadarxisId == null || existingSkini.OmadarxisId < 0))
+            if (existingSkini.OmadarxisId < 0)
             {
                 _logger.LogWarning("Skini has no Omadarxis");
                 return false;
@@ -188,6 +188,8 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             return false;
 
         var paidiInDb = await _dbContext.Paidia.FindAsync(id);
+        if (paidiInDb is null)
+            return false;
 
         try
         {
