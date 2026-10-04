@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RunSettings>
-  <RunConfiguration>
-    <EnvironmentVariables>
-      <RUN_INTEGRATION_TESTS_LOCAL>1</RUN_INTEGRATION_TESTS_LOCAL>
-    </EnvironmentVariables>
-  </RunConfiguration>
-</RunSettings>

@@ -2,7 +2,8 @@
 
 namespace StelexarasApp.Tests.IntegrationTests;
 
-public class StaffIntegrationTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
+[Collection(DatabaseCollection.Name)]
+public class StaffIntegrationTests : IAsyncLifetime
 {
     private readonly DatabaseFixture _fixture;
     private readonly AppDbContext _dbContext;

@@ -21,8 +21,7 @@ public class DatabaseFixture : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        var runIntegration = Environment.GetEnvironmentVariable("RUN_INTEGRATION_TESTS")
-            ?? Environment.GetEnvironmentVariable("RUN_INTEGRATION_TESTS_LOCAL");
+        var runIntegration = Environment.GetEnvironmentVariable("RUN_INTEGRATION_TESTS") ?? Environment.GetEnvironmentVariable("RUN_INTEGRATION_TESTS_LOCAL");
         if (!string.Equals(runIntegration, "1", StringComparison.OrdinalIgnoreCase))
         {
             throw SkipException.ForSkip("Integration tests are disabled in this environment.");
@@ -30,7 +29,6 @@ public class DatabaseFixture : IAsyncLifetime
 
         try
         {
-            // Connect to master: the test database may not exist until Migrate() creates it.
             var masterConnectionString = new SqlConnectionStringBuilder(_connectionString)
             {
                 InitialCatalog = "master"
@@ -39,6 +37,9 @@ public class DatabaseFixture : IAsyncLifetime
             await connection.OpenAsync();
 
             using var dbContext = new AppDbContext(Options);
+
+            await dbContext.Database.EnsureDeletedAsync();
+
             dbContext.Database.Migrate();
         }
         catch (SqlException ex)
@@ -48,8 +49,16 @@ public class DatabaseFixture : IAsyncLifetime
     }
 
     public async Task DisposeAsync()
-    {                
-        await Task.CompletedTask;
+    {
+        try
+        {
+            await using var dbContext = new AppDbContext(Options);
+            await dbContext.Database.EnsureDeletedAsync();
+        }
+        catch (SqlException)
+        {
+            // Ignore cleanup errors
+        }
     }
 
     public async Task ResetDatabaseAsync()
