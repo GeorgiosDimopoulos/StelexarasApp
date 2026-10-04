@@ -66,6 +66,7 @@ public class DatabaseFixture : IAsyncLifetime
         await using var dbContext = new AppDbContext(Options);
 
         await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.EnsureCreatedAsync(); 
         await dbContext.Database.MigrateAsync();
     }
 }
