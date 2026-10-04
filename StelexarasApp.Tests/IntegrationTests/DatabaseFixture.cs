@@ -30,7 +30,12 @@ public class DatabaseFixture : IAsyncLifetime
 
         try
         {
-            await using var connection = new SqlConnection(_connectionString);
+            // Connect to master: the test database may not exist until Migrate() creates it.
+            var masterConnectionString = new SqlConnectionStringBuilder(_connectionString)
+            {
+                InitialCatalog = "master"
+            }.ConnectionString;
+            await using var connection = new SqlConnection(masterConnectionString);
             await connection.OpenAsync();
 
             using var dbContext = new AppDbContext(Options);
