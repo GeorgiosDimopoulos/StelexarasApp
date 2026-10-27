@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.2.1" />
     <PackageReference Include="AutoMapper" Version="16.2.0" />
     <PackageReference Include="FluentResults" Version="4.0.0" />
-    <PackageReference Include="KubernetesClient" Version="19.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
-    <PackageReference Include="MudBlazor" Version="8.13.0" />
-    <PackageReference Include="Refit" Version="13.1.0" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="13.1.0" />
+    <PackageReference Include="KubernetesClient" Version="21.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.14" />
+    <PackageReference Include="MudBlazor" Version="9.11.0" />
+    <PackageReference Include="Refit" Version="16.4.0" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="16.4.0" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
   </ItemGroup>
 

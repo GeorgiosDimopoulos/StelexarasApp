@@ -109,7 +109,7 @@
     private async Task Delete()
     {
         string confirmationMessage = "Είστε σίγουροι ότι θέλετε να διαγράψετε το στέλεχος; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
-        bool? confirmed = await DialogService.ShowMessageBox("Επιβεβαίωση Διαγραφής", confirmationMessage, yesText: "Ναι", noText: "Όχι");
+        bool? confirmed = await DialogService.ShowMessageBoxAsync("Επιβεβαίωση Διαγραφής", confirmationMessage, yesText: "Ναι", noText: "Όχι");
 
         if (confirmed != true)
             return;
