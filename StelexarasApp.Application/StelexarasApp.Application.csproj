@@ -15,6 +15,8 @@
     <PackageReference Include="MudBlazor" Version="9.11.0" />
     <PackageReference Include="Refit" Version="16.4.0" />
     <PackageReference Include="Refit.HttpClientFactory" Version="16.4.0" />
+    <PackageReference Include="Refit.Reflection" Version="16.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App.Internal.Assets" Version="10.0.14" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
   </ItemGroup>
 
