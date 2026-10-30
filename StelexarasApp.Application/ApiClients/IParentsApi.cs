@@ -1,6 +1,5 @@
 ﻿using Refit;
 using StelexarasApp.Library.Dtos.People;
-using StelexarasApp.Library.Dtos.People.Children;
 using StelexarasApp.Library.QueryParameters.People;
 
 namespace StelexarasApp.Application.ApiClients;

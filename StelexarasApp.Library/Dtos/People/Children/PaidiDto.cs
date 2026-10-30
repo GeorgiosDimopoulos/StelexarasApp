@@ -9,7 +9,7 @@ public record PaidiDtoBase : IPaidiDto
     public Sex Sex { get; set; }
     public bool SeAdeia { get; set; }
     public string SkiniName { get; set; } = string.Empty;
-    public IParentDto Parent { get; set; } = null!; ADD MIGRATION;
+    public IParentDto Parent { get; set; } = null!;
     public PaidiType PaidiType { get; set; }
 }
 
