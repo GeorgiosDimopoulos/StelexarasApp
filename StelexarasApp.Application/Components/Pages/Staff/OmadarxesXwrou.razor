@@ -1,0 +1,59 @@
+﻿@page "/omadarxesXwrou"
+@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.People.Staff
+@using StelexarasApp.Library.Models.Atoma.Staff
+
+@inject IStelexiApi StelexiApi
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+
+<h3>OmadarxesXwrou</h3>
+
+<div class="col-12">
+    <MudText style="text-align:center; text-decoration:underline" Class="mt-6">ΟΜΑΔΑΡΧΕΣ ΧΩΡΟΥ</MudText>
+    <MudTable Items="_omadarxesXwrou">
+        <HeaderContent>
+            <MudTh Style="font-weight:bold;">Όνομα</MudTh>
+            <MudTh Style="font-weight:bold;">Ηλικία</MudTh>
+            <MudTh Style="font-weight:bold;">Σε άδεια;</MudTh>
+            <MudTh Style="font-weight:bold;">Επεξεργασία</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.LastName @context.FirstName</MudTd>
+            <MudTd>@context.Age</MudTd>
+            <MudTd>@context.SeAdeia</MudTd>
+            <MudTd>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenStelexos(context)">Επεξεργασία</MudButton>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+</div>
+
+@code {
+    private string _searchText = string.Empty;
+    private IEnumerable<StelexosResponse> _omadarxesXwrou = new List<StelexosResponse>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _omadarxesXwrou = await StelexiApi.GetStelexi(Thesi.Omadarxis, new());
+    }
+
+    private async Task OpenStelexos(StelexosResponse stelexos)
+    {
+        if (stelexos is null || stelexos.Id <= 0)
+            return;
+
+        var parameters = new DialogParameters<EditStelexosDialog>
+        {
+            { x => x.Stelexos, stelexos }
+        };
+
+        var dialog = await DialogService.ShowAsync<EditStelexosDialog>("Επεξεργασία Στελέχους", parameters);
+
+        var result = await dialog.Result;
+        if (result is not null && !result.Canceled)
+        {
+            Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        }
+    }
+}
