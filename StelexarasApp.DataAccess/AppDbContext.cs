@@ -114,6 +114,12 @@ public class AppDbContext : DbContext
             .HasForeignKey(p => p.SkiniId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<Paidi>()
+            .HasOne(p => p.Parent)
+            .WithMany()
+            .HasForeignKey(p => p.ParentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Skini>()
             .HasOne(s => s.Omadarxis)
             .WithOne(o => o.Skini)

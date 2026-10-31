@@ -17,7 +17,7 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -46,10 +46,8 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                     b.Property<int>("PaidiType")
                         .HasColumnType("int");
 
-                    b.Property<string>("ParentTel")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("SeAdeia")
                         .ValueGeneratedOnAdd()
@@ -64,12 +62,52 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ParentId");
+
                     b.HasIndex("SkiniId");
 
                     b.ToTable("Paidia", t =>
                         {
                             t.HasCheckConstraint("CK_Paidia_Sex", "[Sex] IN (0, 1)");
                         });
+                });
+
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Parent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AFM")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Parents");
                 });
 
             modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Anwtatos", b =>
@@ -499,11 +537,19 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
 
             modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Children.Paidi", b =>
                 {
+                    b.HasOne("StelexarasApp.Library.Models.Atoma.Parent", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("StelexarasApp.Library.Models.Domi.Skini", "Skini")
                         .WithMany("Paidia")
                         .HasForeignKey("SkiniId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Parent");
 
                     b.Navigation("Skini");
                 });
