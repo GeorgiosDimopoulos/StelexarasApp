@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using StelexarasApp.Library.Dtos.People;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -36,7 +37,12 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
                 Sex = sex,
                 FirstName = fullName.Split(' ').FirstOrDefault(),
                 LastName = fullName.Split(' ').LastOrDefault(),
-                ParentTel  = string.Empty,
+                Parent = new ParentDtoBase
+                {
+                    Phone = string.Empty,
+                    Email = string.Empty,
+                    LastName = string.Empty,
+                }
             };
 
             paidi.LastName = fullName.Split(' ').LastOrDefault();

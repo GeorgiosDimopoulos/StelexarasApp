@@ -145,7 +145,7 @@
         return string.IsNullOrWhiteSpace(newPaidiRequest.FirstName) ||
                string.IsNullOrWhiteSpace(newPaidiRequest.LastName) ||
                newPaidiRequest.Age <= 0 ||
-               (newPaidiRequest.Sex != Sex.Female && newPaidiRequest.Sex != Sex.Female) ||
-               string.IsNullOrWhiteSpace(newPaidiRequest.ParentTel );
+               (newPaidiRequest.Sex != Sex.Female && newPaidiRequest.Sex != Sex.Male) ||
+               string.IsNullOrWhiteSpace(newPaidiRequest.ParentTel);
     }
 }

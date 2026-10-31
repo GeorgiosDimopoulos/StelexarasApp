@@ -7,6 +7,6 @@ public class Parent : IPerson
     public int Id { get ; set; } = default!;
     public int Age { get ; set; } = default!;
     public Sex Sex { get ; set; } = default!;
-    public int Phone { get; set; } = default!;
+    public string Phone { get; set; } = string.Empty;
     public string AFM { get; set; } = string.Empty;
 }

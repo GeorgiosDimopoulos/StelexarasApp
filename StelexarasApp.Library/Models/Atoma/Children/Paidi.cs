@@ -6,7 +6,8 @@ public class Paidi : IPerson
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
-    public string ParentTel { get; set; } = string.Empty;
+    public int ParentId { get; set; } = 0;
+    public Parent Parent { get; set; } = null!;
 
     [Key]
     public int Id { get; set; }

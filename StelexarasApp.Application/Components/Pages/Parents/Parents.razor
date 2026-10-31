@@ -22,9 +22,10 @@
             <MudTh Style="font-weight:bold;">Τηλέφωνο</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.LastName @context.LastName</MudTd>
+            <MudTd>@context.FirstName @context.FirstName</MudTd>
             <MudTd>@context.Email</MudTd>
-            <MudTd>@context.PhoneNumber</MudTd>
+            <MudTd>@context.Phone</MudTd>
         </RowTemplate>
     </MudTable>
 </div>

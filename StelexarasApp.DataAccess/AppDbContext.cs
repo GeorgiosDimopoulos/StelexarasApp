@@ -99,7 +99,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Paidi>().Property(o => o.SeAdeia).IsRequired().HasDefaultValue(false);
         modelBuilder.Entity<Paidi>().Property(o => o.FirstName).IsRequired().HasMaxLength(20);
         modelBuilder.Entity<Paidi>().Property(o => o.LastName).IsRequired().HasMaxLength(100);
-        modelBuilder.Entity<Paidi>().Property(o => o.ParentTel).IsRequired().HasMaxLength(20);
+        modelBuilder.Entity<Paidi>().Property(o => o.ParentId).IsRequired();
 
         modelBuilder.Entity<Parent>().Property(o => o.Phone).IsRequired().HasMaxLength(20);
         modelBuilder.Entity<Parent>().Property(o => o.FirstName).IsRequired().HasMaxLength(20);

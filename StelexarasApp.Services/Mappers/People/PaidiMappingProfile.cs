@@ -6,17 +6,22 @@ public class PaidiMappingProfile : Profile
 {
     public PaidiMappingProfile()
     {
-        CreateMap<Paidi,PaidiResponse>()
+        CreateMap<Paidi, PaidiDtoBase>();
+
+        CreateMap<Paidi, PaidiResponse>()
             .Include<Kataskinotis, PaidiResponse>()
-            .Include<Ekpaideuomenos, PaidiResponse>();
-        CreateMap<CreatePaidiRequest, Kataskinotis>();
-        CreateMap<CreatePaidiRequest, Ekpaideuomenos>();
+            .Include<Ekpaideuomenos, PaidiResponse>()
+            .ForMember(d => d.Parent, o => o.MapFrom(s => s.Parent));
 
         CreateMap<Kataskinotis, PaidiResponse>();
         CreateMap<Ekpaideuomenos, PaidiResponse>();
 
-        CreateMap<UpdatePaidiRequest, Paidi>();
-        CreateMap<UpdatePaidiRequest, Kataskinotis>();
-        CreateMap<UpdatePaidiRequest, Ekpaideuomenos>();
+        CreateMap<UpdatePaidiRequest, Paidi>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.Parent.Phone));
+        CreateMap<UpdatePaidiRequest, Kataskinotis>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.Parent.Phone));
+        CreateMap<UpdatePaidiRequest, Ekpaideuomenos>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.Parent.Phone));
+
+        CreateMap<CreatePaidiRequest, Paidi>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.Parent.Phone));
+        CreateMap<CreatePaidiRequest, Kataskinotis>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.Parent.Phone));
+        CreateMap<CreatePaidiRequest, Ekpaideuomenos>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.Parent.Phone));
     }
 }

@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Moq;
+using StelexarasApp.Library.Dtos.People;
 using StelexarasApp.Library.QueryParameters.People;
 
 namespace StelexarasApp.Tests.ServicesUnitTests;
@@ -13,18 +14,18 @@ public class PaidiaServiceTests
     private readonly PaidiaService _paidiService;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<ILoggerFactory> _loggerFactory;
-    private readonly Mock<IValidator<IPaidiDto>> _paidiValidatorMock;
+    private readonly Mock<IValidator<PaidiDtoBase>> _paidiValidatorMock;
 
     public PaidiaServiceTests()
     {
         _loggerFactory = new Mock<ILoggerFactory>();
         _mockPaidiRepository = new Mock<IPaidiaRepository>();
         _mockMapper = new Mock<IMapper>();
-        _paidiValidatorMock = new Mock<IValidator<IPaidiDto>>();
+        _paidiValidatorMock = new Mock<IValidator<PaidiDtoBase>>();
         _paidiService = new PaidiaService(_mockPaidiRepository.Object, _mockMapper.Object, _loggerFactory.Object.CreateLogger<PaidiaService>(), _paidiValidatorMock.Object);
 
-        _mockMapper.Setup(m => m.Map<Ekpaideuomenos>(It.IsAny<IPaidiDto>()))
-          .Returns((IPaidiDto dto) => new Ekpaideuomenos
+        _mockMapper.Setup(m => m.Map<Ekpaideuomenos>(It.IsAny<PaidiDtoBase>()))
+          .Returns((PaidiDtoBase dto) => new Ekpaideuomenos
           {
               LastName = dto.LastName,
               FirstName = dto.FirstName,
@@ -46,8 +47,8 @@ public class PaidiaServiceTests
     public async Task AddEkpaideuomenos_ShouldReturnTrue_WhenSuccessful()
     {
         // Arrange
-        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentTel = "1234567290", SeAdeia = false, Sex = Sex.Male };
-        var paidi = new Ekpaideuomenos { Id = 1, LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, Sex = Sex.Male, SeAdeia = false, ParentTel = "1234567290", SkiniId = 1 };
+        var paidiDto = new CreatePaidiRequest { LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, SkiniName = "Skini1", ParentTel = "1234567890", SeAdeia = false, Sex = Sex.Male };
+        var paidi = new Ekpaideuomenos { Id = 1, LastName = "Doe", FirstName = "John", Age = 16, PaidiType = PaidiType.Ekpaideuomenos, Sex = Sex.Male, SeAdeia = false, ParentId = 1, SkiniId = 1 };
 
         _mockMapper.Setup(m => m.Map<Paidi>(paidiDto)).Returns(paidi);
         _mockPaidiRepository.Setup(repo => repo.AddPaidiInSkini(paidi, "Skini1")).ReturnsAsync(true);
@@ -113,8 +114,8 @@ public class PaidiaServiceTests
         // Arrange
         var expectedPaidia = new List<Paidi>
         {
-            new Ekpaideuomenos { Id = 1, LastName = "Doe", FirstName = "Georg", Sex = Sex.Male, Age = 16, PaidiType = PaidiType.Ekpaideuomenos, ParentTel = "1234567890", SeAdeia = false, SkiniId = 1 },
-            new Ekpaideuomenos { Id = 2, LastName = "Smith", FirstName = "Georg",Sex = Sex.Female, Age = 16, PaidiType = PaidiType.Ekpaideuomenos, ParentTel = "0987654321", SeAdeia = true, SkiniId = 2 }
+            new Ekpaideuomenos { Id = 1, LastName = "Doe", FirstName = "Georg", Sex = Sex.Male, Age = 16, PaidiType = PaidiType.Ekpaideuomenos, ParentId = 1, SeAdeia = false, SkiniId = 1 },
+            new Ekpaideuomenos { Id = 2, LastName = "Smith", FirstName = "Georg",Sex = Sex.Female, Age = 16, PaidiType = PaidiType.Ekpaideuomenos, ParentId = 2, SeAdeia = true, SkiniId = 2 }
         };
 
         _mockPaidiRepository
@@ -128,7 +129,7 @@ public class PaidiaServiceTests
                        FirstName = p.FirstName,
                        LastName = p.LastName,
                        SeAdeia = p.SeAdeia,
-                       ParentTel = p.ParentTel,
+                       ParentTel = p.Parent.Phone,
                        SkiniName = p.Skini?.Name,
                        Sex = p.Sex,
                        Age = p.Age,
@@ -217,7 +218,12 @@ public class PaidiaServiceTests
                 SeAdeia = true,
                 Sex = Sex.Male,
                 PaidiType = PaidiType.Ekpaideuomenos,
-                ParentTel = "1234567890",
+                Parent = new ParentDtoBase
+                {
+                    FirstName = "UpdatedParentFirstName",
+                    LastName = "UpdatedParentLastName",
+                    Phone = "1234567890"
+                },
                 SkiniName = "Skini1"
             };
 
@@ -228,7 +234,7 @@ public class PaidiaServiceTests
             SeAdeia = paidiRequest.SeAdeia,
             Age = paidiRequest.Age,
             PaidiType = paidiRequest.PaidiType,
-            ParentTel = paidiRequest.ParentTel,
+            ParentId = 11, // Fix it to: paidiRequest.Parent.Id,
             Id = 1,
             Sex = paidiRequest.Sex
         };
@@ -259,7 +265,12 @@ public class PaidiaServiceTests
             SeAdeia = true,
             Sex = Sex.Male,
             PaidiType = PaidiType.Ekpaideuomenos,
-            ParentTel = "1234567290",
+            Parent = new ParentDtoBase
+            {
+                FirstName = "UpdatedParentFirstName",
+                LastName = "UpdatedParentLastName",
+                Phone = "1234567890"
+            },
             SkiniName = "Skini11"
         };
 
@@ -285,7 +296,7 @@ public class PaidiaServiceTests
             Id = 1,
             LastName = "Deoe",
             FirstName = "Joohn",
-            ParentTel = "1233567890",
+            ParentId = 1,
             SeAdeia = false,
             SkiniId = 1,
             Sex = Sex.Female,
@@ -311,7 +322,7 @@ public class PaidiaServiceTests
             Id = 1,
             LastName = "Deoe",
             FirstName = "Joohn",
-            ParentTel = "1233567890",
+            ParentId = 1,
             SeAdeia = false,
             SkiniId = 1,
             Sex = Sex.Female,
@@ -337,7 +348,7 @@ public class PaidiaServiceTests
             Id = 1,
             LastName = "Deoe",
             FirstName = "Joohn",
-            ParentTel = "1233567890",
+            ParentId = 1,
             SeAdeia = false,
             SkiniId = 1,
             Sex = Sex.Female,

@@ -1,4 +1,5 @@
 ﻿@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.People
 @using StelexarasApp.Library.Dtos.People.Children
 
 @inherits ComponentBase
@@ -55,7 +56,7 @@
             Id = Paidi.Id,
             Sex = Paidi.Sex,
             PaidiType = Paidi.PaidiType,
-            ParentTel = Paidi.ParentTel
+            ParentTel = Paidi.Parent.Phone
         };
 
         var skines = await XwroiApi.GetSkinesAsync(new());
@@ -99,7 +100,7 @@
             LastName = PaidiToEdit.LastName,
             FirstName = PaidiToEdit.FirstName,
             Age = PaidiToEdit.Age,
-            ParentTel = PaidiToEdit.ParentTel,
+            ParentTel = PaidiToEdit.Parent.Phone,
             SeAdeia = PaidiToEdit.SeAdeia,
             SkiniName = PaidiToEdit.SkiniName,
             Sex = PaidiToEdit.Sex,
