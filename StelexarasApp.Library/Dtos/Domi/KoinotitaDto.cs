@@ -10,6 +10,7 @@ public record KoinotitaDtoBase : IXwrosDto
     [RegularExpression("^[AB]$", ErrorMessage = "TomeasName must be only A or B.")]
     [Required]
     public string TomeasName { get; set; } = string.Empty;
+    public HlikiaKoinotitas Hlikia { get; set; }
 }
 
 public record CreateKoinotitaRequest : KoinotitaDtoBase;
