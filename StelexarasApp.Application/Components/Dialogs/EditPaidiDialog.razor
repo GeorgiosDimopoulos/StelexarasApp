@@ -28,7 +28,7 @@
                              CoerceValue="true"
                              Dense="true" />
             <MudSwitch @bind-Value="PaidiToEdit.SeAdeia" Label="Σε αδεια;" />
-            </MudForm>
+        </MudForm>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Error" Variant="Variant.Text" OnClick="Delete">ΔΙΑΓΡΑΦΗ</MudButton>
@@ -56,7 +56,7 @@
             Id = Paidi.Id,
             Sex = Paidi.Sex,
             PaidiType = Paidi.PaidiType,
-            ParentTel = Paidi.Parent.Phone
+            ParentTel = Paidi.ParentTel
         };
 
         var skines = await XwroiApi.GetSkinesAsync(new());
@@ -100,7 +100,7 @@
             LastName = PaidiToEdit.LastName,
             FirstName = PaidiToEdit.FirstName,
             Age = PaidiToEdit.Age,
-            ParentTel = PaidiToEdit.Parent.Phone,
+            ParentTel = PaidiToEdit.ParentTel,
             SeAdeia = PaidiToEdit.SeAdeia,
             SkiniName = PaidiToEdit.SkiniName,
             Sex = PaidiToEdit.Sex,

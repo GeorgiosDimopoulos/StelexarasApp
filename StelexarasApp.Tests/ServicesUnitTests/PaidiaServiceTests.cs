@@ -218,12 +218,7 @@ public class PaidiaServiceTests
                 SeAdeia = true,
                 Sex = Sex.Male,
                 PaidiType = PaidiType.Ekpaideuomenos,
-                Parent = new ParentDtoBase
-                {
-                    FirstName = "UpdatedParentFirstName",
-                    LastName = "UpdatedParentLastName",
-                    Phone = "1234567890"
-                },
+                ParentTel = "1234567890",
                 SkiniName = "Skini1"
             };
 
@@ -265,12 +260,7 @@ public class PaidiaServiceTests
             SeAdeia = true,
             Sex = Sex.Male,
             PaidiType = PaidiType.Ekpaideuomenos,
-            Parent = new ParentDtoBase
-            {
-                FirstName = "UpdatedParentFirstName",
-                LastName = "UpdatedParentLastName",
-                Phone = "1234567890"
-            },
+            ParentTel = "1234567890",
             SkiniName = "Skini11"
         };
 

@@ -35,18 +35,13 @@ namespace StelexarasApp.Mobile.ViewModels.TeamsViewModels
                 Age = age,
                 SeAdeia = false,
                 Sex = sex,
-                FirstName = fullName.Split(' ').FirstOrDefault(),
-                LastName = fullName.Split(' ').LastOrDefault(),
-                Parent = new ParentDtoBase
-                {
-                    Phone = string.Empty,
-                    Email = string.Empty,
-                    LastName = string.Empty,
-                }
+                FirstName = fullName?.Split(' ').FirstOrDefault() ?? string.Empty,
+                LastName = fullName?.Split(' ').LastOrDefault() ?? string.Empty,
+                ParentTel = string.Empty
             };
 
-            paidi.LastName = fullName.Split(' ').LastOrDefault();
-            paidi.FirstName = fullName.Substring(0, fullName.Length - paidi.LastName.Length).Trim();
+            paidi.LastName = fullName?.Split(' ').LastOrDefault() ?? string.Empty;
+            paidi.FirstName = fullName?.Substring(0, fullName.Length - paidi.LastName.Length).Trim() ?? string.Empty;
 
             if (paidiType == PaidiType.Ekpaideuomenos)
             {
