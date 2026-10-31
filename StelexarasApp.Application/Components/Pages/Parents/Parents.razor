@@ -1,14 +1,45 @@
 ﻿@page "/parents"
+@using StelexarasApp.Application.ApiClients
+@using StelexarasApp.Library.Dtos.People
+@using StelexarasApp.Library.Dtos.People.Children
+@using StelexarasApp.Library.QueryParameters.People
+
+@inject IPaidiaApi PaidiaApi
+@inject IParentsApi ParentsApi
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
 
 <h3>Stelexaras - ΓΟΝΕΙΣ</h3>
 
 <h2 style="text-align:center; margin-bottom:10px; color:dimgray">ΓΟΝΕΊΣ: @allParents</h2>
 <h2 style="text-align:center; margin-bottom:10px; color:dimgray">ΠΑΙΔΙΆ: @allKids</h2>
-<h2 style="text-align:center; margin-bottom:10px; color:dimgray">ΕΛΛΕΊΨΕΙΣ: @allIssues</h2>
+
+<div>
+    <MudTable Items="_parents">
+        <HeaderContent>
+            <MudTh Style="font-weight:bold;">Όνομα</MudTh>
+            <MudTh Style="font-weight:bold;">Email</MudTh>
+            <MudTh Style="font-weight:bold;">Τηλέφωνο</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.Email</MudTd>
+            <MudTd>@context.PhoneNumber</MudTd>
+        </RowTemplate>
+    </MudTable>
+</div>
 
 @code {
-    private string allIssues = "0";
     private string allKids = "0";
     private string allParents = "0";
+    
+    private IEnumerable<ParentResponse> _parents = new List<ParentResponse>();
+    private IEnumerable<PaidiResponse> _kids = new List<PaidiResponse>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        _parents = await ParentsApi.GetParentsAsync(new ParentQueryParameters());
+        allParents = _parents.Count().ToString();
+        _kids = await PaidiaApi.GetPaidiaAsync(new PaidiQueryParameters());
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using StelexarasApp.Library.Models.Atoma;
 
 namespace StelexarasApp.DataAccess;
 
@@ -16,6 +17,7 @@ public class AppDbContext : DbContext
     public DbSet<Anwtatos> Anwtata { get; set; }
     public DbSet<Anwtatos> EidikoStelexos { get; set; }
     public DbSet<Paidi> Paidia { get; set; }
+    public DbSet<Parent> Parents { get; set; }
 
     public DbSet<Koinotita> Koinotites { get; set; }
     public DbSet<Skini> Skines { get; set; }
@@ -98,6 +100,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Paidi>().Property(o => o.FirstName).IsRequired().HasMaxLength(20);
         modelBuilder.Entity<Paidi>().Property(o => o.LastName).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<Paidi>().Property(o => o.ParentTel).IsRequired().HasMaxLength(20);
+
+        modelBuilder.Entity<Parent>().Property(o => o.Phone).IsRequired().HasMaxLength(20);
+        modelBuilder.Entity<Parent>().Property(o => o.FirstName).IsRequired().HasMaxLength(20);
+        modelBuilder.Entity<Parent>().Property(o => o.LastName).IsRequired().HasMaxLength(20);
     }
 
     private static void OnModelsRelationsCreating(ModelBuilder modelBuilder)
