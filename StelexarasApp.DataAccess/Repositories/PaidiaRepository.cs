@@ -10,7 +10,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
 
     public async Task<IEnumerable<Paidi>> GetPaidiaInSkiniIdFromDb(int id, PaidiQueryParameters queryParameters)
     {
-        IQueryable<Paidi> query = _dbContext.Paidia;
+        IQueryable<Paidi> query = _dbContext.Paidia.Include(p => p.Parent);
 
         if (queryParameters.IncludeSkini)
             query = query.Include(p => p.Skini);
@@ -26,7 +26,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             return null!;
         }
 
-        IQueryable<Paidi> query = _dbContext.Paidia;
+        IQueryable<Paidi> query = _dbContext.Paidia.Include(p => p.Parent);
         if (queryParameters.IncludeSkini)
         {
             query = query.Include(p => p.Skini);
@@ -43,7 +43,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             return null!;
         }
 
-        IQueryable<Paidi> query = _dbContext.Paidia;
+        IQueryable<Paidi> query = _dbContext.Paidia.Include(p => p.Parent);
         if (queryParameters.IncludeSkini)
         {
             query = query.Include(p => p.Skini);
@@ -59,7 +59,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         if (_dbContext.Paidia == null)
             return Enumerable.Empty<Paidi>();
 
-        IQueryable<Paidi> query = _dbContext.Paidia.Where(p => p.LastName.Contains(name) || p.FirstName.Contains(name));
+        IQueryable<Paidi> query = _dbContext.Paidia.Include(p => p.Parent).Where(p => p.LastName.Contains(name) || p.FirstName.Contains(name));
 
         if (queryParameters.IncludeSkini)
             query = query.Include(p => p.Skini);
@@ -72,7 +72,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         if (_dbContext.Paidia == null)
             return null!;
 
-        IQueryable<Paidi> query = _dbContext.Paidia;
+        IQueryable<Paidi> query = _dbContext.Paidia.Include(p => p.Parent);
         if (queryParameters.IncludeSkini)
             query = query.Include(p => p.Skini);
 
@@ -86,12 +86,12 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         var skini = await _dbContext.Skines
             .Include(s => s.Paidia)
             .FirstAsync(s => s.Name == skiniName);
-        return await _dbContext.Paidia.Where(p => p.SkiniId == skini.Id).ToListAsync();
+        return await _dbContext.Paidia.Include(p => p.Parent).Where(p => p.SkiniId == skini.Id).ToListAsync();
     }
 
     public async Task<IEnumerable<Paidi>> GetPaidiaInSxoliFromDb(PaidiQueryParameters queryParameters)
     {
-        IQueryable<Paidi> query = _dbContext.Paidia;
+        IQueryable<Paidi> query = _dbContext.Paidia.Include(p => p.Parent);
 
         if (queryParameters.IncludeSkini)
             query = query.Include(p => p.Skini);
@@ -102,7 +102,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
 
     public async Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaNameFromDb(string n, PaidiQueryParameters queryParameters)
     {
-        IQueryable<Paidi> query = _dbContext.Paidia;
+        IQueryable<Paidi> query = _dbContext.Paidia.Include(p => p.Parent);
         if (queryParameters.IncludeSkini)
             query = query.Include(p => p.Skini);
         query = query.Where(p => p.Skini.Koinotita.Name == n);
@@ -112,7 +112,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
 
     public async Task<IEnumerable<Paidi>> GetPaidiaInKoinotitaIdFromDb(int id, PaidiQueryParameters queryParameters)
     {
-        IQueryable<Paidi> query = _dbContext.Paidia;
+        IQueryable<Paidi> query = _dbContext.Paidia.Include(p => p.Parent);
         if (queryParameters.IncludeSkini)
             query = query.Include(p => p.Skini);
         query = query.Where(p => p.Skini.Koinotita.Id == id);
@@ -158,6 +158,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             }
 
             paidi.SkiniId = existingSkini.Id;
+            await UseExistingParentIfAny(paidi);
 
             await _dbContext!.Paidia!.AddAsync(paidi);
             await _dbContext.SaveChangesAsync();
@@ -187,10 +188,13 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         if (paidi is null || _dbContext.Paidia is null)
             return false;
 
-        var paidiInDb = await _dbContext.Paidia.FindAsync(id);
-
         try
         {
+            if (!await _dbContext.Paidia.AnyAsync(p => p.Id == id))
+                return false;
+
+            paidi.Id = id;
+            await UseExistingParentIfAny(paidi);
             _dbContext.Paidia.Update(paidi);
             await _dbContext.SaveChangesAsync();
             if (transaction != null)
@@ -209,6 +213,21 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             return false;
         }
     }
+
+    private async Task UseExistingParentIfAny(Paidi paidi)
+    {
+        var phone = paidi.Parent?.Phone;
+        if (string.IsNullOrWhiteSpace(phone))
+            return;
+
+        var existingParent = await _dbContext.Parents.FirstOrDefaultAsync(p => p.Phone == phone);
+        if (existingParent is not null)
+        {
+            paidi.Parent = existingParent;
+            paidi.ParentId = existingParent.Id;
+        }
+    }
+
     public async Task<bool> AddSkinesInDb(Skini skini)
     {
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";

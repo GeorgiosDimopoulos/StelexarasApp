@@ -129,7 +129,7 @@ public class PaidiaServiceTests
                        FirstName = p.FirstName,
                        LastName = p.LastName,
                        SeAdeia = p.SeAdeia,
-                       ParentTel = p.Parent.Phone,
+                       ParentTel = p.Parent?.Phone ?? string.Empty,
                        SkiniName = p.Skini?.Name,
                        Sex = p.Sex,
                        Age = p.Age,
