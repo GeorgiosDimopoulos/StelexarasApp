@@ -32,8 +32,8 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             query = query.Include(p => p.Skini);
         }
 
-        var paidi = await query.FirstAsync(p => p.Id == id);
-        return paidi;
+        var paidi = await query.FirstOrDefaultAsync(p => p.Id == id);
+        return paidi ?? null!;
     }
 
     public async Task<Paidi> GetPaidiByNameFromDb(string fullName, PaidiQueryParameters queryParameters)
@@ -193,6 +193,23 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
             if (!await _dbContext.Paidia.AnyAsync(p => p.Id == id))
                 return false;
 
+            var oldSkiniId = await _dbContext.Paidia.Where(p => p.Id == id).Select(p => (int?)p.SkiniId).FirstOrDefaultAsync();
+            if (oldSkiniId == null)
+            {
+                _logger.LogWarning("Skini with the given Id doesnt exist.");
+                return false;
+            }
+
+            if (oldSkiniId != paidi.SkiniId && !await _dbContext.Paidia.AnyAsync(p => p.SkiniId == oldSkiniId))
+            {
+                var oldSkini = await _dbContext.Skines.FindAsync(oldSkiniId);
+                if (oldSkini?.Paidia.Count == 0)
+                {
+                    oldSkini.Sex = null;
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+
             paidi.Id = id;
             await UseExistingParentIfAny(paidi);
             _dbContext.Paidia.Update(paidi);
@@ -306,7 +323,7 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         }
     }
 
-    public async Task<Skini> GetSkiniByNameIdFromDb(string skiniName)
+    public async Task<Skini> GetPaidiSkiniByNameFromDb(string skiniName)
     {
         return await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skiniName) ?? null!;
     }

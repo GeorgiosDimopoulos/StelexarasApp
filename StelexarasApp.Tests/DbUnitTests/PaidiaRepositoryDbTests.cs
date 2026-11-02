@@ -94,7 +94,7 @@ public class PaidiaRepositoryDbTests
             Id = 100,
             Name = "Ipiros",
             TomeasId = 100,
-            Skines = new List<Skini>()
+            Skines = []
         };
 
         var existingSkini = new Skini
@@ -104,7 +104,7 @@ public class PaidiaRepositoryDbTests
             Sex = Sex.Male,
             KoinotitaId = koinotita.Id,
             Koinotita = koinotita,
-            Paidia = new List<Paidi>()
+            Paidia = []
         };
 
         var newSkini = new Skini
@@ -125,7 +125,7 @@ public class PaidiaRepositoryDbTests
             Age = 15,
             Sex = Sex.Male,
             Skini = existingSkini,
-            SkiniId = newSkini.Id,
+            SkiniId = existingSkini.Id,
             PaidiType = PaidiType.Kataskinotis,
         };
 
@@ -134,10 +134,8 @@ public class PaidiaRepositoryDbTests
         await _dbContext.Paidia.AddAsync(paidi);
         await _dbContext.SaveChangesAsync();
 
-        // await _paidiRepository.AddPaidiInSkini(paidi, existingSkini.Name);
-
-        await _dbContext.SaveChangesAsync();
-
+        paidi.Skini = newSkini;
+        paidi.SkiniId = newSkini.Id;
         var result = await _paidiRepository.UpdatePaidiInDb(paidi.Id, paidi);
 
         var movedPaidi = await _dbContext.Paidia!
@@ -146,6 +144,12 @@ public class PaidiaRepositoryDbTests
 
         Assert.NotNull(movedPaidi);
         Assert.Equal(newSkini.Id, movedPaidi.Skini.Id);
+    }
+
+    [Fact]
+    public async Task MovePaidiToNewSkini_ShouldNotWork_ForDifferentSex()
+    {
+
     }
 
     [Theory]

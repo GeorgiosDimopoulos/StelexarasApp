@@ -209,18 +209,19 @@ public class PaidiaServiceTests
     public async Task UpdatePaidi_ShouldFail_WhenRepositoryReturnsFalse()
     {
         // Arrange
-        var paidiRequest =
-            new UpdatePaidiRequest
-            {
-                LastName = "UpdatedLastName",
-                FirstName = "UpdatedFirstName",
-                Age = 10,
-                SeAdeia = true,
-                Sex = Sex.Male,
-                PaidiType = PaidiType.Ekpaideuomenos,
-                ParentTel = "1234567890",
-                SkiniName = "Skini1"
-            };
+        var paidiRequest = new UpdatePaidiRequest
+        {
+            LastName = "UpdatedLastName",
+            FirstName = "UpdatedFirstName",
+            Age = 10,
+            SeAdeia = true,
+            Sex = Sex.Male,
+            PaidiType = PaidiType.Ekpaideuomenos,
+            ParentTel = "1234567890",
+            SkiniName = "Skini1"
+        };
+
+        var skini = new Skini { Id = 1, Name = "Skini1", Sex = Sex.Male };
 
         var mappedPaidi = new Paidi
         {
@@ -230,23 +231,27 @@ public class PaidiaServiceTests
             Age = paidiRequest.Age,
             PaidiType = paidiRequest.PaidiType,
             ParentId = 11, // Fix it to: paidiRequest.Parent.Id,
-            Id = 1,
+            Id = 1, 
+            Skini = skini,
+            SkiniId = skini.Id,
+            Parent = new Parent { Id = 11, Phone = paidiRequest.ParentTel },
             Sex = paidiRequest.Sex
         };
+                
+        _mockPaidiRepository.Setup(v => v.GetPaidiByIdFromDb(mappedPaidi.Id, It.IsAny<PaidiQueryParameters>())).ReturnsAsync(mappedPaidi);
+        _mockPaidiRepository.Setup(v => v.GetPaidiSkiniByNameFromDb(skini.Name)).ReturnsAsync(skini);
 
-        _paidiValidatorMock.Setup(v => v.ValidateAsync(paidiRequest, It.IsAny<CancellationToken>()))
-                           .ReturnsAsync(new ValidationResult());
-        _mockMapper.Setup(m => m.Map<Paidi>(paidiRequest))
-                   .Returns(mappedPaidi);
-        _mockPaidiRepository.Setup(repo => repo.UpdatePaidiInDb(mappedPaidi.Id, mappedPaidi))
-                            .ReturnsAsync(false);
+        _mockPaidiRepository.Setup(repo => repo.UpdatePaidiInDb(mappedPaidi.Id, mappedPaidi)).ReturnsAsync(false);
+
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(paidiRequest, It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult());        
+        _mockMapper.Setup(m => m.Map<Paidi>(paidiRequest)).Returns(mappedPaidi);        
 
         // Act
         var result = await _paidiService.UpdatePaidiInService(mappedPaidi.Id, paidiRequest);
 
         // Assert
         Assert.True(result.IsFailed);
-        _mockPaidiRepository.Verify(repo => repo.UpdatePaidiInDb(mappedPaidi.Id, mappedPaidi), Times.Once);
+        _mockPaidiRepository.Verify(repo => repo.UpdatePaidiInDb(mappedPaidi.Id, mappedPaidi), Times.Never);
     }
 
     [Fact]

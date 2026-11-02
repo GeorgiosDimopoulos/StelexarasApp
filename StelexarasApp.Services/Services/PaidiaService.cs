@@ -191,26 +191,34 @@ public class PaidiaService : IPaidiaService
         if (paidiInDb == null)
             return Result.Fail("Paidi not found");
 
-        var newSkini = await _paidiRepository.GetSkiniByNameIdFromDb(paidiDto.SkiniName);
+        var newSkini = await _paidiRepository.GetPaidiSkiniByNameFromDb(paidiDto.SkiniName);
         if (newSkini == null)
             return Result.Fail("Paidi new skini not found");
 
-        if (newSkini.Name.Equals(paidiInDb.Skini.Name) == false)
+        if (paidiInDb.Skini.Name.Equals(newSkini.Name))
         {
-            if (newSkini.Sex != null && newSkini.Sex != paidiDto.Sex)
-            {
-                return Result.Fail("Paidi should have same sex with the new skini");
-            }
-            newSkini.Sex = paidiDto.Sex;
+            return Result.Fail("Paidi is already in the specified skini");
         }
-        
+
+        if (newSkini.Sex != null && newSkini.Sex != paidiDto.Sex)
+        {
+            return Result.Fail("Paidi should have same sex with the new skini");
+        }
+        newSkini.Sex = paidiDto.Sex;
+
+        if (paidiInDb.PaidiType == PaidiType.Kataskinotis && (newSkini.OmadarxisId == null || newSkini.OmadarxisId < 0))
+        {
+            // _logger.LogWarning("Skini has no Omadarxis");
+            return Result.Fail("Skini has no Omadarxis");
+        }
+
         paidiDto.SkiniName = newSkini.Name;
         var paidi = _mapper.Map<Paidi>(paidiDto);
         paidi.SkiniId = newSkini.Id;
-        var result = await _paidiRepository.UpdatePaidiInDb(id, paidi);
 
+        var result = await _paidiRepository.UpdatePaidiInDb(id, paidi);
         if (!result)
-            return Result.Fail("Failed to update Paidi");
+            return Result.Fail("Failed to update Paidi");        
         return Result.Ok();
     }
 }

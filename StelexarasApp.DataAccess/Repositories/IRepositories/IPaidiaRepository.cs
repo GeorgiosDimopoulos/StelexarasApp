@@ -4,7 +4,7 @@ public interface IPaidiaRepository
 {
     Task<Paidi> GetPaidiByIdFromDb(int id, PaidiQueryParameters queryParameters);
     Task<Paidi> GetPaidiByNameFromDb(string name, PaidiQueryParameters queryParameters);
-    Task<Skini> GetSkiniByNameIdFromDb(string skiniName);
+    Task<Skini> GetPaidiSkiniByNameFromDb(string skiniName);
 
     Task<IEnumerable<Paidi>> GetPaidiaInSkiniFromDb(string n, PaidiQueryParameters paidiQueryParameters);
     Task<IEnumerable<Paidi>> GetPaidiaInSkiniIdFromDb(int id, PaidiQueryParameters paidiQueryParameters); 
