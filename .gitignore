@@ -20,6 +20,8 @@ Logs.txt
 # Auto-generated files
 *.designer.cs
 *.designer.vb
+# EF Core migration designer files carry the [Migration] attribute, so they must be committed
+!**/Migrations/**/*.Designer.cs
 Generated_Code/
 *.g.cs
 *.g.vb
