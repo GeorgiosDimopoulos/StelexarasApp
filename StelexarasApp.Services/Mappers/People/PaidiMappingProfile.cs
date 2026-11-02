@@ -6,22 +6,31 @@ public class PaidiMappingProfile : Profile
 {
     public PaidiMappingProfile()
     {
-        CreateMap<Paidi, PaidiDtoBase>();
-
         CreateMap<Paidi, PaidiResponse>()
+            .ForMember(d => d.ParentTel, o => o.MapFrom(s => s.Parent != null ? s.Parent.Phone : string.Empty))
             .Include<Kataskinotis, PaidiResponse>()
-            .Include<Ekpaideuomenos, PaidiResponse>()
-            .ForMember(d => d.ParentTel, o => o.MapFrom(s => s.Parent.Phone));
-
+            .Include<Ekpaideuomenos, PaidiResponse>();
         CreateMap<Kataskinotis, PaidiResponse>();
         CreateMap<Ekpaideuomenos, PaidiResponse>();
 
-        CreateMap<UpdatePaidiRequest, Paidi>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.ParentTel));
-        CreateMap<UpdatePaidiRequest, Kataskinotis>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.ParentTel));
-        CreateMap<UpdatePaidiRequest, Ekpaideuomenos>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.ParentTel));
+        CreateMap<CreatePaidiRequest, Kataskinotis>().ForPaidiRequestMembers();
+        CreateMap<CreatePaidiRequest, Ekpaideuomenos>().ForPaidiRequestMembers();
+        CreateMap<UpdatePaidiRequest, Paidi>().ForPaidiRequestMembers();
+    }
+}
 
-        CreateMap<CreatePaidiRequest, Paidi>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.ParentTel));
-        CreateMap<CreatePaidiRequest, Kataskinotis>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.ParentTel));
-        CreateMap<CreatePaidiRequest, Ekpaideuomenos>().ForMember(d => d.Parent.Phone, o => o.MapFrom(s => s.ParentTel));
+internal static class PaidiMappingExtensions
+{
+    public static IMappingExpression<TSource, TPaidi> ForPaidiRequestMembers<TSource, TPaidi>(
+        this IMappingExpression<TSource, TPaidi> map)
+        where TSource : PaidiDtoBase
+        where TPaidi : Paidi
+    {
+        return map
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.SkiniId, o => o.Ignore())
+            .ForMember(d => d.Skini, o => o.Ignore())
+            .ForMember(d => d.ParentId, o => o.Ignore())
+            .ForMember(d => d.Parent, o => o.MapFrom(s => new Parent { Phone = s.ParentTel.Trim() }));
     }
 }

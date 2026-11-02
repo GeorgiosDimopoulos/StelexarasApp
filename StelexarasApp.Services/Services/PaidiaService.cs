@@ -188,15 +188,22 @@ public class PaidiaService : IPaidiaService
             return Result.Fail(validationResult.Errors.Select(x => x.ErrorMessage));
 
         var paidiInDb = await _paidiRepository.GetPaidiByIdFromDb(id, new() { IncludeSkini = true });
-        var newSkini = await _paidiRepository.GetPaidiSkiniByNameIdFromDb(paidiDto.SkiniName);
+        if (paidiInDb == null)
+            return Result.Fail("Paidi not found");
+
+        var newSkini = await _paidiRepository.GetSkiniByNameIdFromDb(paidiDto.SkiniName);
+        if (newSkini == null)
+            return Result.Fail("Paidi new skini not found");
+
         if (newSkini.Name.Equals(paidiInDb.Skini.Name) == false)
         {
-            if (newSkini.Sex != paidiDto.Sex)
+            if (newSkini.Sex != null && newSkini.Sex != paidiDto.Sex)
             {
                 return Result.Fail("Paidi should have same sex with the new skini");
             }
-
+            newSkini.Sex = paidiDto.Sex;
         }
+        
         paidiDto.SkiniName = newSkini.Name;
         var paidi = _mapper.Map<Paidi>(paidiDto);
         paidi.SkiniId = newSkini.Id;

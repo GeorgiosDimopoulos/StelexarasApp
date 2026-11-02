@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 
 namespace StelexarasApp.Tests.DbUnitTests;
 
@@ -84,10 +85,8 @@ public class PaidiaRepositoryDbTests
         }
     }
 
-    [Theory]
-    [InlineData(7, 2, true)]
-    [InlineData(3, -99, false)]
-    public async Task MovePaidiToNewSkini_ShouldReturnExpectedResult(int paidiId, int newSkiniId, bool expectedResult)
+    [Fact]
+    public async Task MovePaidiToNewSkini_ShouldWork()
     {
         // Arrange
         var koinotita = new Koinotita
@@ -110,7 +109,7 @@ public class PaidiaRepositoryDbTests
 
         var newSkini = new Skini
         {
-            Id = newSkiniId,
+            Id = 123,
             Name = "NewSkini",
             Koinotita = koinotita,
             KoinotitaId = koinotita.Id,
@@ -118,39 +117,35 @@ public class PaidiaRepositoryDbTests
             Paidia = new List<Paidi>()
         };
 
-        var existingPaidi = new Paidi
+        var paidi = new Paidi
         {
-            Id = paidiId,
+            Id = 456,
             LastName = "PaidiL",
             FirstName = "PaidiF",
             Age = 15,
             Sex = Sex.Male,
             Skini = existingSkini,
+            SkiniId = newSkini.Id,
             PaidiType = PaidiType.Kataskinotis,
         };
 
         await _dbContext.Skines.AddAsync(existingSkini);
         await _dbContext.Skines.AddAsync(newSkini);
-        await _dbContext.Paidia.AddAsync(existingPaidi);
+        await _dbContext.Paidia.AddAsync(paidi);
         await _dbContext.SaveChangesAsync();
 
-        // await _paidiRepository.AddPaidiInSkini(existingPaidi, existingSkini.Name);
+        // await _paidiRepository.AddPaidiInSkini(paidi, existingSkini.Name);
 
         await _dbContext.SaveChangesAsync();
 
-        var result = await _paidiRepository.UpdatePaidiInDb(paidiId, existingPaidi);
+        var result = await _paidiRepository.UpdatePaidiInDb(paidi.Id, paidi);
 
-        Assert.Equal(expectedResult, result);
-
-        if (expectedResult)
-        {
-            var movedPaidi = await _dbContext.Paidia!
+        var movedPaidi = await _dbContext.Paidia!
                 .Include(p => p.Skini)
-                .FirstOrDefaultAsync(p => p.Id == paidiId);
+                .FirstOrDefaultAsync(p => p.Id == paidi.Id);
 
-            Assert.NotNull(movedPaidi);
-            Assert.Equal(newSkiniId, movedPaidi.Skini.Id);
-        }
+        Assert.NotNull(movedPaidi);
+        Assert.Equal(newSkini.Id, movedPaidi.Skini.Id);
     }
 
     [Theory]

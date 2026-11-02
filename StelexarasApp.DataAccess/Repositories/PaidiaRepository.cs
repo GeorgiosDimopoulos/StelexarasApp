@@ -306,71 +306,8 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         }
     }
 
-    public async Task<Skini> GetPaidiSkiniByNameIdFromDb(string skiniName)
+    public async Task<Skini> GetSkiniByNameIdFromDb(string skiniName)
     {
-        return await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skiniName) ?? new();
-    }
-
-    private async Task<bool> MovePaidiToNewSkiniInDb(int paidiId, int newSkiniId)
-    {
-        var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-        using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
-
-        if (_dbContext.Paidia is null || !_dbContext.Paidia.Any() || _dbContext.Skines is null || !_dbContext.Skines.Any() || paidiId < 0 || newSkiniId < 0)
-            return false;
-
-        try
-        {
-            var paidi = await _dbContext.Paidia
-            .Include(p => p.Skini)
-            .FirstOrDefaultAsync(p => p.Id == paidiId);
-
-            if (paidi == null)
-            {
-                return false;
-            }
-
-            var newSkini = await _dbContext.Skines
-                .Include(s => s.Paidia)
-                .FirstOrDefaultAsync(s => s.Id == newSkiniId);
-
-            if (newSkini == null)
-            {
-                return false;
-            }
-
-            if (newSkini.Paidia.Contains(paidi))
-            {
-                return false;
-            }
-
-            var oldSkini = paidi.Skini;
-
-            if (oldSkini != null)
-            {
-                oldSkini.Paidia.Remove(paidi);
-            }
-
-            newSkini.Paidia.Add(paidi);
-            paidi.Skini = newSkini;
-
-            await _dbContext.SaveChangesAsync();
-            if (transaction != null)
-            {
-                await transaction.CommitAsync();
-            }
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            LogFileWriter.WriteToLog($"{ex.Message}, {ex.InnerException}", System.Reflection.MethodBase.GetCurrentMethod()!.Name, ErrorType.DbError);
-            if (transaction != null)
-            {
-                await transaction.RollbackAsync();
-            }
-
-            return false;
-        }
+        return await _dbContext.Skines.FirstOrDefaultAsync(s => s.Name == skiniName) ?? null!;
     }
 }
