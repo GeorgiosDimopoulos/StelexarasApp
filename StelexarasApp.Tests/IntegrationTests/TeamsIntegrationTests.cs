@@ -2,7 +2,8 @@
 
 namespace StelexarasApp.Tests.IntegrationTests;
 
-public class TeamsIntegrationTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
+[Collection(DatabaseCollection.Name)]
+public class TeamsIntegrationTests : IAsyncLifetime
 {
     private readonly AppDbContext _dbContext;
     private readonly TeamsRepository _repository;

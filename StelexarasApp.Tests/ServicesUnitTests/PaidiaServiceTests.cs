@@ -255,6 +255,93 @@ public class PaidiaServiceTests
     }
 
     [Fact]
+    public async Task UpdatePaidi_ShouldFail_WhenPaidiNotFound()
+    {
+        // Arrange
+        var paidiRequest = new UpdatePaidiRequest
+        {
+            LastName = "UpdatedLastName",
+            FirstName = "UpdatedFirstName",
+            Age = 10,
+            Sex = Sex.Male,
+            PaidiType = PaidiType.Ekpaideuomenos,
+            ParentTel = "1234567890",
+            SkiniName = "Skini1"
+        };
+
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(paidiRequest, It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult());
+        _mockPaidiRepository.Setup(r => r.GetPaidiByIdFromDb(1, It.IsAny<PaidiQueryParameters>())).ReturnsAsync((Paidi)null!);
+
+        // Act
+        var result = await _paidiService.UpdatePaidiInService(1, paidiRequest);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(r => r.UpdatePaidiInDb(It.IsAny<int>(), It.IsAny<Paidi>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdatePaidi_ShouldFail_WhenNewSkiniNotFound()
+    {
+        // Arrange
+        var paidiRequest = new UpdatePaidiRequest
+        {
+            LastName = "UpdatedLastName",
+            FirstName = "UpdatedFirstName",
+            Age = 10,
+            Sex = Sex.Male,
+            PaidiType = PaidiType.Ekpaideuomenos,
+            ParentTel = "1234567890",
+            SkiniName = "NoSuchSkini"
+        };
+
+        var skini = new Skini { Id = 1, Name = "Skini1", Sex = Sex.Male };
+        var paidiInDb = new Paidi { Id = 1, Sex = Sex.Male, SkiniId = skini.Id, Skini = skini };
+
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(paidiRequest, It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult());
+        _mockPaidiRepository.Setup(r => r.GetPaidiByIdFromDb(1, It.IsAny<PaidiQueryParameters>())).ReturnsAsync(paidiInDb);
+        _mockPaidiRepository.Setup(r => r.GetPaidiSkiniByNameFromDb("NoSuchSkini")).ReturnsAsync((Skini)null!);
+
+        // Act
+        var result = await _paidiService.UpdatePaidiInService(1, paidiRequest);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(r => r.UpdatePaidiInDb(It.IsAny<int>(), It.IsAny<Paidi>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdatePaidi_ShouldFail_WhenNewSkiniHasDifferentSex()
+    {
+        // Arrange
+        var paidiRequest = new UpdatePaidiRequest
+        {
+            LastName = "UpdatedLastName",
+            FirstName = "UpdatedFirstName",
+            Age = 10,
+            Sex = Sex.Male,
+            PaidiType = PaidiType.Ekpaideuomenos,
+            ParentTel = "1234567890",
+            SkiniName = "GirlsSkini"
+        };
+
+        var oldSkini = new Skini { Id = 1, Name = "Skini1", Sex = Sex.Male };
+        var girlsSkini = new Skini { Id = 2, Name = "GirlsSkini", Sex = Sex.Female };
+        var paidiInDb = new Paidi { Id = 1, Sex = Sex.Male, SkiniId = oldSkini.Id, Skini = oldSkini };
+
+        _paidiValidatorMock.Setup(v => v.ValidateAsync(paidiRequest, It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult());
+        _mockPaidiRepository.Setup(r => r.GetPaidiByIdFromDb(1, It.IsAny<PaidiQueryParameters>())).ReturnsAsync(paidiInDb);
+        _mockPaidiRepository.Setup(r => r.GetPaidiSkiniByNameFromDb("GirlsSkini")).ReturnsAsync(girlsSkini);
+
+        // Act
+        var result = await _paidiService.UpdatePaidiInService(1, paidiRequest);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        _mockPaidiRepository.Verify(r => r.UpdatePaidiInDb(It.IsAny<int>(), It.IsAny<Paidi>()), Times.Never);
+    }
+
+    [Fact]
     public async Task UpdatePaidi_ShouldFail_WhenValidationFails()
     {
         var updatePaidiRequest = new UpdatePaidiRequest()
