@@ -8,6 +8,7 @@ using StelexarasApp.DataAccess;
 using StelexarasApp.DataAccess.Repositories;
 using StelexarasApp.DataAccess.Repositories.IRepositories;
 using StelexarasApp.Library.Dtos;
+using StelexarasApp.Library.Dtos.People;
 using StelexarasApp.Services.Interfaces;
 using StelexarasApp.Services.Mappers;
 using StelexarasApp.Services.Services;
@@ -56,6 +57,7 @@ public static class ServiceCollectionExtensions
         // Register Validators
         services.AddTransient<IValidator<StelexosDtoBase>, StelexosValidator>();
         services.AddTransient<IValidator<PaidiDtoBase>, PaidiValidator>();
+        services.AddTransient<IValidator<ParentDtoBase>, ParentValidator>();
         services.AddTransient<IValidator<ExpenseDtoBase>, ExpenseValidator>();
 
         // Add Controllers
