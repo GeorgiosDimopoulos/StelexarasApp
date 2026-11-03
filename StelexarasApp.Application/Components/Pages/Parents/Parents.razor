@@ -20,11 +20,23 @@
             <MudTh Style="font-weight:bold;">Όνομα</MudTh>
             <MudTh Style="font-weight:bold;">Email</MudTh>
             <MudTh Style="font-weight:bold;">Τηλέφωνο</MudTh>
+            <MudTh Style="font-weight:bold;">Παιδιά</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd>@context.LastName @context.LastName + @context.FirstName</MudTd>
             <MudTd>@context.Email</MudTd>
             <MudTd>@context.Phone</MudTd>
+            <MudTd>
+                @if (context.Paidia.Count() > 0)
+                {
+                    @foreach (var paidi in context.Paidia)
+                    {
+                        <MudSelectItem T="PaidiResponse" Value="paidi">
+                            @paidi
+                        </MudSelectItem>
+                    }
+                }
+            </MudTd>
         </RowTemplate>
     </MudTable>
 </div>
@@ -32,15 +44,15 @@
 @code {
     private string allKids = "0";
     private string allParents = "0";
-    
+
     private IEnumerable<ParentResponse> _parents = new List<ParentResponse>();
     private IEnumerable<PaidiResponse> _kids = new List<PaidiResponse>();
 
     protected override async Task OnInitializedAsync()
     {
-        _parents = await ParentsApi.GetParentsAsync(new ParentQueryParameters());        
+        _parents = await ParentsApi.GetParentsAsync(new ParentQueryParameters());
         allParents = _parents.Count().ToString();
-        
+
         _kids = await PaidiaApi.GetPaidiaAsync(new PaidiQueryParameters());
         allKids = _kids.Count().ToString();
     }

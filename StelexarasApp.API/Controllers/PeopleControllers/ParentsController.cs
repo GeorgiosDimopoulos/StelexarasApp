@@ -10,15 +10,15 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
     private readonly IParentsService _parentsService = parentsService;
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ParentResponse>>> GetParents(ParentQueryParameters parentQueryParameters)
+    public async Task<ActionResult<IEnumerable<ParentResponse>>> GetParents([FromQuery] ParentQueryParameters parentQueryParameters)
     {
         var parents = await _parentsService.GetParentsInService(parentQueryParameters);
         return Ok(parents);
     }
 
 
-    [HttpGet]
-    public async Task<ActionResult<ParentResponse>> GetParentById(int id, ParentQueryParameters parentQueryParameters)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<ParentResponse>> GetParentById(int id, [FromQuery] ParentQueryParameters parentQueryParameters)
     {
         if (id <= 0)
             return BadRequest("Invalid parent id.");
@@ -27,50 +27,61 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
         return Ok(parents);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<ParentResponse>> GetParentByName(string name, ParentQueryParameters parentQueryParameters)
+    [HttpGet("{name}")]
+    public async Task<ActionResult<ParentResponse>> GetParentByName(string name, [FromQuery] ParentQueryParameters parentQueryParameters)
     {
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrWhiteSpace(name))
             return BadRequest("Invalid parent name.");
 
         var parents = await _parentsService.GetParentByNameInService(name, parentQueryParameters);
+        if (parents.IsFailed)
+            return NotFound(parents.Errors.First().Message);
         return Ok(parents);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<ParentResponse>> GetParentByChildId(int id, ParentQueryParameters parentQueryParameters)
+    [HttpGet("ByChild/{id:int}")]
+    public async Task<ActionResult<ParentResponse>> GetParentByChildId(int id, [FromQuery] ParentQueryParameters parentQueryParameters)
     {
         if (id <= 0)
             return BadRequest("Invalid parent id.");
 
         var parents = await _parentsService.GetParentByChildIdInService(id, parentQueryParameters);
+        if (parents.IsFailed)
+            return NotFound(parents.Errors.First().Message);
         return Ok(parents);
     }
 
     [HttpPost]
-    public async Task<ActionResult<ParentResponse>> CreateParent(CreateParentRequest createParentRequest)
+    public async Task<ActionResult<bool>> CreateParent(CreateParentRequest createParentRequest)
     {
-        var parents = await _parentsService.CreateParentInService(createParentRequest);
-        return Ok(parents);
+        var parentCreated = await _parentsService.CreateParentInService(createParentRequest);
+        if (parentCreated.IsFailed)
+            return BadRequest(parentCreated.Errors.Select(e => e.Message));
+        return Ok(true);
     }
 
-    [HttpPut]
-    public async Task<ActionResult<ParentResponse>> UpdateParent(int id, UpdateParentRequest parentUpdateRequest)
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<bool>> UpdateParent(int id, UpdateParentRequest parentUpdateRequest)
     {
         if (id <= 0)
             return BadRequest("Invalid parent id.");
 
-        var parents = await _parentsService.UpdateParentInService(id, parentUpdateRequest);
-        return Ok(parents);
+        var parentUpdated = await _parentsService.UpdateParentInService(id, parentUpdateRequest);
+        if (parentUpdated.IsFailed)
+            return BadRequest(parentUpdated.Errors.Select(e => e.Message));
+
+        return Ok(true);
     }
 
-    [HttpDelete]
-    public async Task<ActionResult<ParentResponse>> DeleteParent(int id)
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<bool>> DeleteParent(int id)
     {
         if (id <= 0)
             return BadRequest("Invalid parent id.");
 
-        var parents = await _parentsService.DeleteParentInService(id);
-        return Ok(parents);
+        var parentDeleted = await _parentsService.DeleteParentInService(id);
+        if (parentDeleted.IsFailed)
+            return NotFound(parentDeleted.Errors.First().Message);
+        return Ok(true);
     }
 }

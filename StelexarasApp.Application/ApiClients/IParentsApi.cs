@@ -11,6 +11,12 @@ public interface IParentsApi
 
     [Get("/Parents/{id}")]
     Task<ParentResponse> GetParent(int id, [Query] ParentQueryParameters parentQueryParameters);
+    
+    [Get("/Parents/{name}")]
+    Task<ParentResponse> GetParentByName(string name, [Query] ParentQueryParameters parentQueryParameters);
+    
+    [Get("/Parents/{childId}")]
+    Task<ParentResponse> GetParentByChildId(int childId, [Query] ParentQueryParameters parentQueryParameters);
 
     [Post("/Parents")]
     Task<bool> PostParent([Body] CreateParentRequest parentDto);
