@@ -13,9 +13,10 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
     public async Task<ActionResult<IEnumerable<ParentResponse>>> GetParents([FromQuery] ParentQueryParameters parentQueryParameters)
     {
         var parents = await _parentsService.GetParentsInService(parentQueryParameters);
-        return Ok(parents);
+        if (parents.IsFailed)
+            return BadRequest(parents.Errors.Select(e => e.Message));
+        return Ok(parents.Value);
     }
-
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ParentResponse>> GetParentById(int id, [FromQuery] ParentQueryParameters parentQueryParameters)
@@ -24,10 +25,12 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
             return BadRequest("Invalid parent id.");
 
         var parents = await _parentsService.GetParentByIdInService(id, parentQueryParameters);
-        return Ok(parents);
+        if (parents.IsFailed)
+            return NotFound(parents.Errors.First().Message);
+        return Ok(parents.Value);
     }
 
-    [HttpGet("{name}")]
+    [HttpGet("ByName/{name}")]
     public async Task<ActionResult<ParentResponse>> GetParentByName(string name, [FromQuery] ParentQueryParameters parentQueryParameters)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -36,7 +39,7 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
         var parents = await _parentsService.GetParentByNameInService(name, parentQueryParameters);
         if (parents.IsFailed)
             return NotFound(parents.Errors.First().Message);
-        return Ok(parents);
+        return Ok(parents.Value);
     }
 
     [HttpGet("ByChild/{id:int}")]
@@ -48,11 +51,11 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
         var parents = await _parentsService.GetParentByChildIdInService(id, parentQueryParameters);
         if (parents.IsFailed)
             return NotFound(parents.Errors.First().Message);
-        return Ok(parents);
+        return Ok(parents.Value);
     }
 
     [HttpPost]
-    public async Task<ActionResult<bool>> CreateParent(CreateParentRequest createParentRequest)
+    public async Task<ActionResult<bool>> CreateParent([FromBody] CreateParentRequest createParentRequest)
     {
         var parentCreated = await _parentsService.CreateParentInService(createParentRequest);
         if (parentCreated.IsFailed)
@@ -61,7 +64,7 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<bool>> UpdateParent(int id, UpdateParentRequest parentUpdateRequest)
+    public async Task<ActionResult<bool>> UpdateParent(int id, [FromBody] UpdateParentRequest parentUpdateRequest)
     {
         if (id <= 0)
             return BadRequest("Invalid parent id.");

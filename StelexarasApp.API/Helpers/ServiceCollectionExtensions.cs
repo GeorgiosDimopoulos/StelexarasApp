@@ -33,12 +33,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDutyRepository, DutyRepository>();
         services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped<ITeamsRepository, TeamsRepository>();
+        services.AddScoped<IParentsRepository, ParentsRepository>();
 
         services.AddScoped<IPaidiaService, PaidiaService>();
         services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<IDutyService, DutyService>();
+        services.AddScoped<IParentsService, ParentsService>();
 
         services.AddScoped<IAuthTokenProvider, AuthTokenProvider>();
 
