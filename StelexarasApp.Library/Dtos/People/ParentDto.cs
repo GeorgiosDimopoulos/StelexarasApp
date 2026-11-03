@@ -1,4 +1,6 @@
-﻿namespace StelexarasApp.Library.Dtos.People;
+﻿using StelexarasApp.Library.Dtos.People.Children;
+
+namespace StelexarasApp.Library.Dtos.People;
 
 public record ParentDtoBase
 {
@@ -18,4 +20,5 @@ public record UpdateParentRequest : ParentDtoBase { }
 public record ParentResponse : ParentDtoBase
 {
     public int Id { get; set; }
+    public IEnumerable<PaidiResponse> Paidia { get; set; } = [];
 }

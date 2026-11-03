@@ -5,14 +5,9 @@ namespace StelexarasApp.API.Controllers.PeopleControllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PaidiaController : ControllerBase
+public class PaidiaController(IPaidiaService paidiService) : ControllerBase
 {
-    private readonly IPaidiaService _paidiService;
-
-    public PaidiaController(IPaidiaService paidiService)
-    {
-        _paidiService = paidiService;
-    }
+    private readonly IPaidiaService _paidiService = paidiService;
 
     [HttpGet("Paidia")]
     public async Task<ActionResult<IEnumerable<PaidiResponse>>> GetPaidia([FromQuery] PaidiQueryParameters paidiQueryParameters)

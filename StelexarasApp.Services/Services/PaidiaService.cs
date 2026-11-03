@@ -166,10 +166,6 @@ public class PaidiaService : IPaidiaService
 
     public async Task<Result> DeletePaidiInService(int id)
     {
-        var paidi = await _paidiRepository.GetPaidiByIdFromDb(id, new PaidiQueryParameters { IncludeSkini = true });
-        if (paidi == null)
-            return Result.Fail("Paidi not found");
-
         var res = await _paidiRepository.DeletePaidiInDb(id);
         if (!res)
             return Result.Fail("Failed to delete Paidi");
@@ -214,6 +210,8 @@ public class PaidiaService : IPaidiaService
 
         paidiDto.SkiniName = newSkini.Name;
         var paidi = _mapper.Map<Paidi>(paidiDto);
+        if (paidi == null)
+            return Result.Fail("Failed to map PaidiDto to Paidi");
         paidi.SkiniId = newSkini.Id;
 
         var result = await _paidiRepository.UpdatePaidiInDb(id, paidi);

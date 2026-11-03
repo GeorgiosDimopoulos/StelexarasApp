@@ -116,7 +116,7 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Paidi>()
             .HasOne(p => p.Parent)
-            .WithMany()
+            .WithMany(p => p.Paidia)
             .HasForeignKey(p => p.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
 

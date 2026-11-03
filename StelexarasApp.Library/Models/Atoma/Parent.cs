@@ -9,4 +9,5 @@ public class Parent : IPerson
     public Sex Sex { get ; set; } = default!;
     public string Phone { get; set; } = string.Empty;
     public string AFM { get; set; } = string.Empty;
+    public IEnumerable<Paidi> Paidia { get; set; } = [];
 }

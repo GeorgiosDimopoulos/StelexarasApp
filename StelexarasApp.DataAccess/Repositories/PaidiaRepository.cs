@@ -185,9 +185,6 @@ public class PaidiaRepository(AppDbContext dbContext, ILoggerFactory loggerFacto
         var isInMemoryDatabase = _dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         using var transaction = isInMemoryDatabase ? null : await _dbContext.Database.BeginTransactionAsync();
 
-        if (paidi is null || _dbContext.Paidia is null)
-            return false;
-
         try
         {
             if (!await _dbContext.Paidia.AnyAsync(p => p.Id == id))

@@ -538,7 +538,7 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
             modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Children.Paidi", b =>
                 {
                     b.HasOne("StelexarasApp.Library.Models.Atoma.Parent", "Parent")
-                        .WithMany()
+                        .WithMany("Paidia")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -614,6 +614,11 @@ namespace StelexarasApp.DataAccess.Migrations.AppDb
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Tomearxis");
+                });
+
+            modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Parent", b =>
+                {
+                    b.Navigation("Paidia");
                 });
 
             modelBuilder.Entity("StelexarasApp.Library.Models.Atoma.Staff.Koinotarxis", b =>
