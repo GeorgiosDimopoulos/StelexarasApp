@@ -78,7 +78,7 @@ public class SkinesController(ITeamsService teamsService) : ControllerBase
 
     [Authorize]
     [HttpPut("Skini/{id}")]
-    public async Task<ActionResult> PutSkini(int id, [FromQuery] UpdateSkiniRequest skiniDto)
+    public async Task<ActionResult> PutSkini(int id, [FromBody] UpdateSkiniRequest skiniDto)
     {
         var result = await _teamsService.UpdateSkiniInService(id, skiniDto);
 

@@ -55,16 +55,16 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<bool>> CreateParent([FromBody] CreateParentRequest createParentRequest)
+    public async Task<ActionResult> CreateParent([FromBody] CreateParentRequest createParentRequest)
     {
         var parentCreated = await _parentsService.CreateParentInService(createParentRequest);
         if (parentCreated.IsFailed)
             return BadRequest(parentCreated.Errors.Select(e => e.Message));
-        return Ok(true);
+        return Ok();
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<bool>> UpdateParent(int id, [FromBody] UpdateParentRequest parentUpdateRequest)
+    public async Task<ActionResult> UpdateParent(int id, [FromBody] UpdateParentRequest parentUpdateRequest)
     {
         if (id <= 0)
             return BadRequest("Invalid parent id.");
@@ -73,11 +73,11 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
         if (parentUpdated.IsFailed)
             return BadRequest(parentUpdated.Errors.Select(e => e.Message));
 
-        return Ok(true);
+        return Ok();
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult<bool>> DeleteParent(int id)
+    public async Task<ActionResult> DeleteParent(int id)
     {
         if (id <= 0)
             return BadRequest("Invalid parent id.");
@@ -85,6 +85,6 @@ public class ParentsController(IParentsService parentsService) : ControllerBase
         var parentDeleted = await _parentsService.DeleteParentInService(id);
         if (parentDeleted.IsFailed)
             return NotFound(parentDeleted.Errors.First().Message);
-        return Ok(true);
+        return Ok();
     }
 }

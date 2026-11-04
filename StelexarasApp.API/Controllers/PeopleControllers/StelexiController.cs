@@ -43,31 +43,31 @@ public class StelexiController(IStaffService stelexiService) : ControllerBase
 
     [Authorize]
     [HttpPost("Stelexos")]
-    public async Task<ActionResult<bool>> PostStelexos([FromBody] CreateStelexosRequest request)
+    public async Task<ActionResult> PostStelexos([FromBody] CreateStelexosRequest request)
     {
         var result = await _stelexiService.CreateStelexos(request);
         if (result.IsFailed)
             return BadRequest(result.Errors.Select(e => e.Message));
-        return Ok(true);
+        return Ok();
     }
 
     [Authorize]
     [HttpPut("Stelexos/{id:int}")]
-    public async Task<ActionResult<bool>> UpdateStelexos(int id, [FromBody] UpdateStelexosRequest request)
+    public async Task<ActionResult> UpdateStelexos(int id, [FromBody] UpdateStelexosRequest request)
     {
         var result = await _stelexiService.UpdateStelexos(id, request);
         if (result.IsFailed)
             return BadRequest(result.Errors.Select(e => e.Message));
-        return Ok(true);
+        return Ok();
     }
 
     [Authorize]
     [HttpDelete("Stelexos/{id:int}")]
-    public async Task<ActionResult<bool>> DeleteStelexos(int id)
+    public async Task<ActionResult> DeleteStelexos(int id)
     {
         var result = await _stelexiService.DeleteStelexos(id);
         if (result.IsFailed)
             return BadRequest(result.Errors.Select(e => e.Message));
-        return Ok(true);
+        return Ok();
     }
 }

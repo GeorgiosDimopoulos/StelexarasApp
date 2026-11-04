@@ -6,27 +6,12 @@ services:
     restart: always
     networks:
       - app-network
-    depends_on:
-      - db
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: "8080"
-      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Stelexaras;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: "${AZURE_SQL_CONNECTION}"
     ports:
-      - "8080:8080"
-  db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: stelexaras-sqlserver
-    environment:      
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD}"
-      MSSQL_PID: "Developer"
-    ports:
-      - "1433:1433"
-    networks:
-      - app-network
-    volumes:
-    - sqlserver_data:/var/opt/mssql
+      - "8080:8080"  
   frontend:
     build:
       context: .
@@ -70,4 +55,3 @@ networks:
     driver: bridge    
 volumes:
   portainer_data:
-  sqlserver_data:
