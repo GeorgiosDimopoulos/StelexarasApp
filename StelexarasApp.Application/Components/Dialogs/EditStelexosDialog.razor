@@ -82,17 +82,19 @@
             Tel = PersonToEdit.Tel
         };
 
-        var result = await StelexiApi.UpdateStelexos(Stelexos.Id, personToUpdateRequest);
-        if (result != false)
+        try
         {
-            Snackbar.Add("Το στελέχος ενημερώθηκε επιτυχώς!", Severity.Success);
-            Dialog?.Close(DialogResult.Ok(result));
-            Navigation.NavigateTo("/xwroi");
+            await StelexiApi.UpdateStelexos(Stelexos.Id, personToUpdateRequest);
         }
-        else
+        catch (Refit.ApiException)
         {
             Snackbar.Add("Αποτυχία ενημέρωσης του στελέχους.", Severity.Error);
+            return;
         }
+
+        Snackbar.Add("Το στελέχος ενημερώθηκε επιτυχώς!", Severity.Success);
+        Dialog?.Close(DialogResult.Ok(personToUpdateRequest));
+        Navigation.NavigateTo("/xwroi");
     }
 
     private Task<IEnumerable<string>> SearchXwroi(string value, CancellationToken token)
@@ -114,16 +116,17 @@
         if (confirmed != true)
             return;
 
-        var result = await StelexiApi.DeleteStelexos(Stelexos.Id);
-
-        if (result)
+        try
         {
-            Snackbar.Add("Το στέλεχος διαγράφηκε επιτυχώς.", Severity.Success);
-            Dialog?.Close(DialogResult.Ok("delete"));
+            await StelexiApi.DeleteStelexos(Stelexos.Id);
         }
-        else
+        catch (Refit.ApiException)
         {
             Snackbar.Add("Σφάλμα κατά τη διαγραφή του στελέχους.", Severity.Error);
+            return;
         }
+
+        Snackbar.Add("Το στέλεχος διαγράφηκε επιτυχώς.", Severity.Success);
+        Dialog?.Close(DialogResult.Ok("delete"));
     }
 }

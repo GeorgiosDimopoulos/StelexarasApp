@@ -74,12 +74,12 @@
         catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             showErrors = true;
-            error = "ΛΑΘΟΣ ΚΩΔΙΚΟΣ";
+            error = "ΑΠΟΤΥΧΙΑ"  + ex.Message;
         }
         catch (Exception ex)
         {
             showErrors = true;
-            error = "ΛΑΘΟΣ ΚΩΔΙΚΟΣ, " + ex.Message;
+            error = "ΑΠΟΤΥΧΙΑ"  + ex.Message;
         }
     }
 

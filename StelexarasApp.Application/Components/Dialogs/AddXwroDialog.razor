@@ -90,18 +90,17 @@
                     KoinotitaId = model.KoinotitaId ?? 0
                 };
 
-                var result = await XwroiApi.PostSkini(skini);
-                if (result == false)
+                try
+                {
+                    await XwroiApi.PostSkini(skini);
+                }
+                catch (Refit.ApiException)
                 {
                     Snackbar.Add("Σφάλμα κατά την αποθήκευση της σκηνής.", Severity.Error);
                     return;
                 }
-                else
-                {
-                    Snackbar.Add("Η σκηνή αποθηκεύτηκε επιτυχώς.", Severity.Success);
-                    Dialog?.Close(DialogResult.Ok(result));
-                }
 
+                Snackbar.Add("Η σκηνή αποθηκεύτηκε επιτυχώς.", Severity.Success);
                 Dialog?.Close(DialogResult.Ok(skini));
                 break;
             case XwrosType.Koinotita:
@@ -111,19 +110,17 @@
                     TomeasName = model.Tomeasname ?? string.Empty
                 };
 
-                var kresult = await XwroiApi.PostKoinotita(koinotita);
-                if (kresult == false)
+                try
+                {
+                    await XwroiApi.PostKoinotita(koinotita);
+                }
+                catch (Refit.ApiException)
                 {
                     Snackbar.Add("Σφάλμα κατά την αποθήκευση της κοινότητας.", Severity.Error);
                     return;
                 }
-                else
-                {
-                    Snackbar.Add("Η κοινότητα αποθηκεύτηκε επιτυχώς.", Severity.Success);
 
-                    Dialog?.Close(DialogResult.Ok(kresult));
-                }
-
+                Snackbar.Add("Η κοινότητα αποθηκεύτηκε επιτυχώς.", Severity.Success);
                 Dialog?.Close(DialogResult.Ok(koinotita));
                 break;
             case XwrosType.Tomeas:
@@ -133,20 +130,18 @@
 
                 };
 
-                var tresult = await XwroiApi.PostTomea(tomeas);
-                if (tresult == null)
+                try
+                {
+                    await XwroiApi.PostTomea(tomeas);
+                }
+                catch (Refit.ApiException)
                 {
                     Snackbar.Add("Σφάλμα κατά την αποθήκευση του τομέα.", Severity.Error);
                     return;
                 }
-                else
-                {
-                    Snackbar.Add("Ο τομέας αποθηκεύτηκε επιτυχώς.", Severity.Success);
 
-                    Dialog?.Close(DialogResult.Ok(tresult));
-                }
-
-                Dialog?.Close(DialogResult.Ok(tresult));
+                Snackbar.Add("Ο τομέας αποθηκεύτηκε επιτυχώς.", Severity.Success);
+                Dialog?.Close(DialogResult.Ok(tomeas));
                 break;
         }
     }

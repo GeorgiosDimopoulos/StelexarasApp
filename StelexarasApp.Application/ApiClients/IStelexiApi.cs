@@ -21,11 +21,11 @@ public interface IStelexiApi
     Task<StelexosResponse> GetStelexosByName([Query] Thesi thesi, [Query] string name, [Query] StelexosQueryParameters stelexosQueryParameters);
 
     [Post("/Stelexi/Stelexos")]
-    Task<bool> PostStelexos([Body] CreateStelexosRequest stelexosDto);
+    Task PostStelexos([Body] CreateStelexosRequest stelexosDto);
 
-    [Delete("/Stelexi/Stelexos")]
-    Task<bool> DeleteStelexos([Query] int id);
+    [Delete("/Stelexi/Stelexos/{id}")]
+    Task DeleteStelexos(int id);
 
     [Put("/Stelexi/Stelexos/{id}")]
-    Task<bool> UpdateStelexos(int id, [Body] UpdateStelexosRequest stelexosDto);
+    Task UpdateStelexos(int id, [Body] UpdateStelexosRequest stelexosDto);
 }

@@ -110,18 +110,19 @@
             return;
         }
 
-        var result = await StelexiApi.PostStelexos(newStelexosRequest);
-        if (result == false)
+        try
+        {
+            await StelexiApi.PostStelexos(newStelexosRequest);
+        }
+        catch (Refit.ApiException)
         {
             Snackbar.Add("Σφάλμα κατά την αποθήκευση του στελέχους.", Severity.Error);
             return;
         }
-        else
-        {
-            Snackbar.Add("Το στέλεχος αποθηκεύτηκε επιτυχώς.", Severity.Success);
-            Dialog?.Close(DialogResult.Ok(newStelexosRequest));
-            Navigation.NavigateTo("/xwroi");
-        }
+
+        Snackbar.Add("Το στέλεχος αποθηκεύτηκε επιτυχώς.", Severity.Success);
+        Dialog?.Close(DialogResult.Ok(newStelexosRequest));
+        Navigation.NavigateTo("/xwroi");
     }
 
     private string GetDisplayName(Enum sex)

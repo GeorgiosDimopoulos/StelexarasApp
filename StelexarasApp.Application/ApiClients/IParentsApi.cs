@@ -19,11 +19,11 @@ public interface IParentsApi
     Task<ParentResponse> GetParentByChildId(int childId, [Query] ParentQueryParameters parentQueryParameters);
 
     [Post("/Parents")]
-    Task<bool> PostParent([Body] CreateParentRequest parentDto);
+    Task PostParent([Body] CreateParentRequest parentDto);
 
     [Delete("/Parents/{id}")]
-    Task<bool> DeleteParent(int id);
+    Task DeleteParent(int id);
 
     [Put("/Parents/{id}")]
-    Task<bool> UpdateParent(int id, [Body] UpdateParentRequest parentDto);
+    Task UpdateParent(int id, [Body] UpdateParentRequest parentDto);
 }

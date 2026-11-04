@@ -79,18 +79,19 @@
         if (confirmed != true)
             return;
 
-        var result = await PaidiaApi.DeletePaidi(Paidi.Id);
-
-        if (result)
+        try
         {
-            Snackbar.Add("Το παιδί διαγράφηκε επιτυχώς.", Severity.Success);
-            Dialog?.Close(DialogResult.Ok("delete"));
-            Navigation.NavigateTo("/xwroi");
+            await PaidiaApi.DeletePaidi(Paidi.Id);
         }
-        else
+        catch (Refit.ApiException)
         {
             Snackbar.Add("Σφάλμα κατά τη διαγραφή του παιδιού.", Severity.Error);
+            return;
         }
+
+        Snackbar.Add("Το παιδί διαγράφηκε επιτυχώς.", Severity.Success);
+        Dialog?.Close(DialogResult.Ok("delete"));
+        Navigation.NavigateTo("/xwroi");
     }
 
     private async Task Save(MouseEventArgs _)
@@ -107,17 +108,19 @@
             PaidiType = PaidiToEdit.PaidiType
         };
 
-        var result = await PaidiaApi.UpdatePaidi(Paidi.Id, paidiUpdateRequest);
-        if (result != false)
+        try
         {
-            Snackbar.Add("Το παιδί ενημερώθηκε επιτυχώς!", Severity.Success);
-            Dialog?.Close(DialogResult.Ok(result));
-            Navigation.NavigateTo("/xwroi");
+            await PaidiaApi.UpdatePaidi(Paidi.Id, paidiUpdateRequest);
         }
-        else
+        catch (Refit.ApiException)
         {
             Snackbar.Add("Αποτυχία ενημέρωσης του παιδιού.", Severity.Error);
+            return;
         }
+
+        Snackbar.Add("Το παιδί ενημερώθηκε επιτυχώς!", Severity.Success);
+        Dialog?.Close(DialogResult.Ok(paidiUpdateRequest));
+        Navigation.NavigateTo("/xwroi");
     }
 
     private Task<IEnumerable<string>> SearchXwroi(string value, CancellationToken token)

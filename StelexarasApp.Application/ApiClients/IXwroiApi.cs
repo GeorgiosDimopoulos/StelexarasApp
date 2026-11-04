@@ -25,13 +25,13 @@ public interface IXwroiApi
     Task<List<SkiniResponse>> GetSkinesEkpaideuomenon();
 
     [Post("/Skines/Skini")]
-    Task<bool> PostSkini([Body] CreateSkiniRequest skiniDto);
+    Task PostSkini([Body] CreateSkiniRequest skiniDto);
 
     [Delete("/Skines/Skini/{id}")]
-    Task<bool> DeleteSkini(int id);
+    Task DeleteSkini(int id);
 
     [Put("/Skines/Skini/{id}")]
-    Task<bool> PutSkini(int id, [Body] UpdateSkiniRequest skiniDto);
+    Task PutSkini(int id, [Body] UpdateSkiniRequest skiniDto);
 
 
     [Get("/Koinotites/Koinotites")]
@@ -47,13 +47,13 @@ public interface IXwroiApi
     Task<KoinotitaResponse> GetKoinotitaById(int id, [Query] KoinotitaQueryParameters koinotitaQueryParameters);
 
     [Post("/Koinotites/Koinotita")]
-    Task<bool> PostKoinotita([Body] CreateKoinotitaRequest dto);
+    Task PostKoinotita([Body] CreateKoinotitaRequest dto);
 
     [Delete("/Koinotites/Koinotita/{id}")]
-    Task<bool> DeleteKoinotita(int id);
+    Task DeleteKoinotita(int id);
 
     [Put("/Koinotites/Koinotita/{id}")]
-    Task<bool> PutKoinotita(int id, [Body] UpdateKoinotitaRequest dto);
+    Task PutKoinotita(int id, [Body] UpdateKoinotitaRequest dto);
 
 
     [Get("/Tomeis/Tomeis")]
@@ -67,7 +67,7 @@ public interface IXwroiApi
 
 
     [Post("/Tomeis/Tomea")]
-    Task<TomeasResponse> PostTomea([Query] CreateTomeasRequest tomeasDto);
+    Task PostTomea([Body] CreateTomeasRequest tomeasDto);
 
     [Delete("/Tomeis/Tomea/{name}")]
     Task DeleteTomea(string name);
