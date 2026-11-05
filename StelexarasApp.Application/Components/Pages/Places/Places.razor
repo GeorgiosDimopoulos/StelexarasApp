@@ -16,33 +16,25 @@
     <h2 style="text-align:center; padding-block-start:50px; color:dimgray">ΚΟΙΝΟΤΗΤΕΣ</h2>
 
     <MudGrid Justify="Justify.Center" Style="height:calc(100vh - 15vh);">
-        <MudItem xs="12" sm="4">
-            <h2 style="text-align:center;margin-bottom:20px;">Α ΤΟΜΕΑΣ</h2>
-            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="5">
-                @foreach (var koinotita in Koinotites.Where(k => k.TomeasName == "A").OrderBy(k => k.Name))
-                {
-                    <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:70px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:#58B98D">
-                        @koinotita.Name - @KoinotitaPaidia[koinotita.Id]
-                    </MudButton>
-                }
-            </MudStack>
-        </MudItem>
-        <MudItem xs="12" sm="4">
-            <h2 style="text-align:center;margin-bottom:20px;">B ΤΟΜΕΑΣ</h2>
-            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="5">
-                @foreach (var koinotita in Koinotites.Where(k => k.TomeasName == "B").OrderBy(k => k.Name))
-                {
-                    var backgroundColor = koinotita.Name.ToUpper().Contains("ΣΧΟΛΉ") ? "#83CBD4" : "#58B98D";
-                    <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="@($"height:70px; padding:30px; width:500px; border-radius:16px; overflow:hidden; color:white; background-color:{backgroundColor};")">
-                        @koinotita.Name - @KoinotitaPaidia[koinotita.Id]
-                    </MudButton>
-                }
-            </MudStack>
-        </MudItem>
+        @foreach (var tomeas in Tomeis)
+        {
+            <MudItem xs="12" sm="4">
+                <h2 style="text-align:center;margin-bottom:20px;">"ΤΟΜΕΑΣ" @tomeas.Name</h2>
+                <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="5">
+                    @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Contains(tomeas.Name)).OrderBy(k => k.Name))
+                    {
+                        <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:70px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:white; background-color:#58B98D">
+                            @koinotita.Name - @KoinotitaPaidia[koinotita.Id]
+                        </MudButton>
+                    }
+                </MudStack>
+            </MudItem>
+        }
     </MudGrid>
 </div>
 @code
 {
+    private List<TomeasResponse> Tomeis = new List<TomeasResponse>();
     private List<KoinotitaResponse> Koinotites = new List<KoinotitaResponse>();
     private Dictionary<int, int> KoinotitaPaidia = new();
     private int allPaidia;
@@ -51,6 +43,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Tomeis = await XwroiApi.GetTomeisAsync(new TomeasQueryParameters() { IncludeStelexos = true });
         Koinotites = await XwroiApi.GetKoinotitesAsync(new KoinotitaQueryParameters() { IncludeStelexos = true });
         seAdeiaPaidia = 0;
 

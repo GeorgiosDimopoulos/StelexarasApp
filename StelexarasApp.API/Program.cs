@@ -5,7 +5,6 @@ using StelexarasApp.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services for API layer
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureJwtAuthenticationAndSwagger(builder.Configuration);
 builder.Services.ConfigureServices(builder.Configuration);
@@ -16,7 +15,35 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    const int maxAttempts = 6;
+    for (var attempt = 1; ; attempt++)
+    {
+        try
+        {
+            db.Database.Migrate();
+            break;
+        }
+        catch (Exception ex) when (attempt < maxAttempts && IsTransientSqlError(ex))
+        {
+            logger.LogWarning("Database not ready (attempt {Attempt}/{Max}): {Message}. Retrying in 15s...",
+                attempt, maxAttempts, ex.Message);
+            Thread.Sleep(TimeSpan.FromSeconds(15));
+        }
+    }
+}
+
+static bool IsTransientSqlError(Exception ex)
+{
+    int[] transient = [40613, 40197, 40501, 49918, 49919, 49920, 4060, 10928, 10929];
+    for (var e = ex; e != null; e = e.InnerException!)
+    {
+        if (e is Microsoft.Data.SqlClient.SqlException sql && sql.Errors.Cast<Microsoft.Data.SqlClient.SqlError>().Any(x => transient.Contains(x.Number)))
+            return true;
+        if (e.InnerException == null) break;
+    }
+    return false;
 }
 
 var isDocker = app.Environment.IsEnvironment("Docker");

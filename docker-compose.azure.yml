@@ -1,0 +1,4 @@
+services:
+  api:
+    environment:
+      ConnectionStrings__DefaultConnection: "${AZURE_SQL_CONNECTION}"
