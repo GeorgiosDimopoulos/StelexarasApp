@@ -87,7 +87,7 @@
             PaidiType = req.PaidiType,
             SeAdeia = req.SeAdeia,
             SkiniName = req.SkiniName,
-            ParentTel  = req.ParentTel
+            ParentTel = req.ParentTel
         };
 
         if (IsSomethingMissing(newPaidiRequest))
@@ -108,6 +108,7 @@
 
         Snackbar.Add("Το παιδι αποθηκεύτηκε επιτυχώς.", Severity.Success);
         Dialog?.Close(DialogResult.Ok(newPaidiRequest));
+        Navigation.NavigateTo("/places");
     }
 
     private Task<IEnumerable<string>> SearchXwroi(string value, CancellationToken token)
