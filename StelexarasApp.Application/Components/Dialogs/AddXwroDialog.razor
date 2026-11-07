@@ -2,6 +2,7 @@
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
 @using StelexarasApp.Library.Models.Atoma
+@using StelexarasApp.Library.Models.Domi
 @using StelexarasApp.Library.QueryParameters.Domi
 
 @inherits ComponentBase
@@ -45,6 +46,14 @@
                     }
                 </MudSelect>
             }
+            <MudSelect T="HlikiaKoinotitas" Label="Ηλικία">
+                @foreach (var age in Enum.GetValues<HlikiaKoinotitas>())
+                {
+                    <MudSelectItem T="HlikiaKoinotitas" Value="age">
+                        @GetDisplayName(age)
+                    </MudSelectItem>
+                }
+            </MudSelect>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -54,6 +63,7 @@
 </MudDialog>
 
 @code {
+    private HlikiaKoinotitas ages;
     private AddXwrosModel model = new();
     private List<KoinotitaResponse> koinotites = new();
     private List<TomeasResponse> tomeis = new();
@@ -107,6 +117,7 @@
                 var koinotita = new CreateKoinotitaRequest
                 {
                     Name = model.Name,
+                    Hlikia = model.Age ?? HlikiaKoinotitas.Megala,
                     TomeasName = model.Tomeasname ?? string.Empty
                 };
 
@@ -144,7 +155,7 @@
                 Dialog?.Close(DialogResult.Ok(tomeas));
                 break;
         }
-                
+
         Navigation.NavigateTo("/places");
     }
 
@@ -154,6 +165,7 @@
         public XwrosType XwrosType { get; set; }
         public string? Tomeasname { get; set; }
         public int? KoinotitaId { get; set; }
+        public HlikiaKoinotitas? Age { get; set; }
     }
 
     public enum XwrosType
@@ -181,7 +193,7 @@
         var xwrosFilled = model.XwrosType != XwrosType.Koinotita && model.XwrosType != XwrosType.Skini && model.XwrosType != XwrosType.Tomeas;
 
         bool fuloFilled = false;
-        
+
         return nameFilled && xwrosFilled && fuloFilled;
     }
 }

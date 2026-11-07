@@ -310,6 +310,7 @@ public class TeamsRepository(AppDbContext appDbContext, ILoggerFactory loggerFac
                 return false;
 
             existingKoinotita.Name = koinotita.Name;
+            existingKoinotita.Hlikia = koinotita.Hlikia;
             existingKoinotita.Koinotarxis = koinotita.Koinotarxis;
             existingKoinotita.Skines = koinotita.Skines;
             existingKoinotita.TomeasId = koinotita.TomeasId;
