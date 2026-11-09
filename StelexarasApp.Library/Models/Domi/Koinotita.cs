@@ -22,4 +22,5 @@ public enum HlikiaKoinotitas
     Mikra = 0,
     Mesaia = 1,
     Megala = 2,
+    Sxoli = 3,
 }

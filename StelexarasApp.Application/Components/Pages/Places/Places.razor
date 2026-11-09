@@ -1,6 +1,7 @@
 ﻿@page "/places"
 @using StelexarasApp.Application.ApiClients
 @using StelexarasApp.Library.Dtos.Domi
+@using StelexarasApp.Library.Models.Domi
 @using StelexarasApp.Library.QueryParameters.Domi
 
 @inject IXwroiApi XwroiApi
@@ -22,7 +23,7 @@
                 <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="5">
                     @foreach (var koinotita in Koinotites.Where(k => k.TomeasName.Contains(tomeas.Name)).OrderBy(k => k.Name))
                     {
-                        @if (koinotita.Name.ToLower().Contains("ήπειρος"))
+                        @if (koinotita.Hlikia == HlikiaKoinotitas.Sxoli)
                         {
                             <MudButton Href="@($"/koinotites/{koinotita.Id}")" Style="height:70px; padding:30px;width:500px; border-radius:16px; overflow:hidden; color:#1f3b4d; background-color:lightblue">
                                 @koinotita.Name - @KoinotitaPaidia[koinotita.Id]
