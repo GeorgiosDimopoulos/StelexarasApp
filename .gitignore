@@ -103,3 +103,4 @@ TestResults/
 /StelexarasApp.API/StelexarasApp/Logs/applicationLogs.txt
 /StelexarasApp.Application/heimdall/config
 /.github/copilot-instructions.md
+/heimdall/config
